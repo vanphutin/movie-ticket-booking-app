@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài liệu dự án — Movie Ticket Booking</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand" id="btn-brand" title="Về trang tổng quan">
+      <span class="brand-icon">🎬</span>
+      <div>
+        <div class="brand-title">Tài liệu dự án</div>
+        <div class="brand-subtitle">Movie Ticket Booking • Education Backend</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="doc-count-badge" id="doc-count-badge"></span>
+      <button class="btn-ghost" id="btn-home" title="Trang tổng quan">🏠 Tổng quan</button>
+      <button class="search-trigger" id="btn-search" title="Tìm kiếm toàn văn (Ctrl+K)">
+        <span>🔍 Tìm kiếm tài liệu...</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="btn-ghost" id="btn-theme" title="Đổi giao diện sáng/tối">🌙</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-filter">
+        <input type="text" id="sidebar-filter-input" placeholder="Lọc theo tên file, tiêu đề...">
+      </div>
+      <nav class="sidebar-tree" id="sidebar-tree"></nav>
+    </aside>
+
+    <main class="main-pane">
+
+      <!-- ===== Trang tổng quan ===== -->
+      <section class="view" id="view-home">
+        <div class="home-hero">
+          <h1>📚 Trung tâm tài liệu dự án</h1>
+          <p>Toàn bộ contract, policy, roadmap, thiết kế database và product backlog của
+             Movie Ticket Booking Backend — gom về một chỗ, tìm kiếm và điều hướng trực quan.</p>
+          <div class="stats-row" id="stats-row"></div>
+        </div>
+
+        <div class="home-grid">
+          <div class="home-col">
+            <div class="panel-card">
+              <h2>🧭 Thứ tự đọc bắt buộc (AI Contracts)</h2>
+              <ol class="reading-order" id="reading-order-list"></ol>
+            </div>
+            <div class="panel-card">
+              <h2>🕘 Cập nhật gần đây</h2>
+              <ul class="recent-list" id="recent-list"></ul>
+            </div>
+          </div>
+          <div class="home-col">
+            <div id="group-cards"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Trang đọc tài liệu ===== -->
+      <section class="view" id="view-reader" hidden>
+        <div class="reader-topbar">
+          <div class="breadcrumb" id="breadcrumb"></div>
+          <div class="reader-actions">
+            <button class="btn-ghost btn-sm" id="btn-copy-path" title="Copy đường dẫn file">📋 Copy path</button>
+            <button class="btn-ghost btn-sm" id="btn-raw-toggle" title="Xem nguồn thô">💻 Raw</button>
+          </div>
+        </div>
+
+        <div class="reader-layout">
+          <article class="reader-article">
+            <div class="doc-meta" id="doc-meta"></div>
+            <h1 class="doc-title" id="doc-title"></h1>
+            <div class="markdown-body" id="doc-content"></div>
+            <pre class="raw-view" id="doc-raw" hidden></pre>
+
+            <div class="prev-next">
+              <button class="pn-btn" id="btn-prev" hidden></button>
+              <button class="pn-btn pn-next" id="btn-next" hidden></button>
+            </div>
+          </article>
+
+          <aside class="reader-toc" id="reader-toc">
+            <div class="toc-title">Trong trang này</div>
+            <ul class="toc-list" id="toc-list"></ul>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===== Modal tìm kiếm ===== -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-dialog">
+      <div class="search-head">
+        <span>🔍</span>
+        <input type="text" id="search-input" placeholder="Tìm nội dung, contract ID (BUS-009), ticket (TKT-W04-D01)...">
+        <span class="kbd">ESC</span>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+
+  <script src="docs-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
