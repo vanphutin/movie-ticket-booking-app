@@ -1019,10 +1019,12 @@ sessions:
       - "Reviewer (Van Phu Tin) approve CCR-001, CCR-002, CCR-003 ngày 2026-07-27."
       - "PC-2026.2 trở thành effective baseline; ADR-001 chuyển ACCEPTED; state/README/project-contract đồng bộ."
       - "Tạo docs-viewer/ (HTML/CSS/JS thuần) xem toàn bộ 104 tài liệu; test parser 14/14 pass."
+      - "Tạo 4 initial commits trên main: baseline gốc (4cce10e), AI-contracts (d275f18), docs (71c81af), docs-viewer (7728308)."
     commands_run:
       - "node AI-contracts/viewer/build-data.js"
       - "node docs-viewer/build-data.js"
       - "node --check + parser smoke tests"
+      - "git add/commit (4 commits, main)"
     files_changed:
       - AI-contracts/
       - docs-viewer/
@@ -1031,9 +1033,10 @@ sessions:
       - "QLT-002→QLT-005 reference audit sạch; TEST-004 tồn tại trong 14-testing-rules."
       - "contract-status.yml: 4 CCR APPROVED, open_change_requests rỗng, DRIFT-001..008 resolved/reconciled."
       - "Không runtime state nào chuyển VERIFIED; learning/optimization state không claim interaction."
+      - "git log --oneline: 4 commits; git status sạch sau commit."
     unresolved:
       - "Foundation Gate FG-001 chưa có observed evidence."
-      - "Repository chưa có initial commit."
+      - "Chưa có git remote; chưa push."
     final_review_state: BLOCKED
     next_single_action: Thu thập evidence FG-001; nếu VERIFIED thì authorize TKT-W04-D01 và mở LG-TKT-W04-D01 theory-first.
 ```
