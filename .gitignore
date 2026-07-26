@@ -1,0 +1,41 @@
+# Dependencies and builds
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.nx/
+
+# Runtime and local state
+*.log
+logs/
+tmp/
+temp/
+*.pid
+*.sqlite
+*.sqlite3
+*.db
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Test and tooling caches
+.eslintcache
+.cache/
+.vite/
+test-results/
+playwright-report/
+
+# Evidence must be intentionally curated and redacted
+evidence/raw/
