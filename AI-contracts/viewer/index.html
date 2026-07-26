@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Control Plane - Movie Ticket Booking Interactive Workbench v2</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Mermaid.js for Dynamic Architecture Diagram Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-icon">🎬</div>
+      <div>
+        <div class="brand-title">AI Control Plane Workbench v2</div>
+        <div class="brand-subtitle">Movie Ticket Booking • Education Backend</div>
+      </div>
+    </div>
+
+    <!-- Live Status Pills -->
+    <div class="header-status-pills">
+      <div class="status-pill">
+        <span class="dot-indicator dot-green"></span>
+        <span>Baseline: <strong id="lbl-effective-baseline">PC-2026.1</strong></span>
+      </div>
+      <div class="status-pill">
+        <span class="dot-indicator dot-amber"></span>
+        <span>Proposed: <strong id="lbl-proposed-baseline">PC-2026.2</strong></span>
+      </div>
+      <div class="status-pill">
+        <span class="dot-indicator dot-blue"></span>
+        <span>Candidate Ticket: <strong id="lbl-current-ticket">TKT-W04-D01</strong></span>
+      </div>
+      <div class="status-pill">
+        <span class="dot-indicator dot-rose"></span>
+        <span>Gate FG-001: <strong id="lbl-fg001-status">MISSING</strong></span>
+      </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button class="search-trigger-btn" id="btn-search-trigger" title="Search all files (Ctrl+K)">
+        <span>🔍 Search contracts...</span>
+        <span class="kbd-badge">Ctrl K</span>
+      </button>
+      <button class="theme-toggle-btn" id="btn-theme-toggle" title="Toggle Light/Dark Theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Sidebar Navigator -->
+    <aside class="app-sidebar">
+      <div class="sidebar-filter">
+        <input type="text" id="sidebar-search-input" class="sidebar-input" placeholder="Filter files (e.g., api, ticket, 05)...">
+      </div>
+      <div class="sidebar-tree" id="sidebar-tree-container">
+        <!-- Dynamically rendered categories & files -->
+      </div>
+    </aside>
+
+    <!-- Main Content View Pane -->
+    <main class="main-pane">
+
+      <!-- View Navigation Tabs -->
+      <nav class="view-tabs-bar">
+        <div class="tabs-group">
+          <button class="tab-btn active" data-tab="reader">📄 Reader</button>
+          <button class="tab-btn" data-tab="roadmap">🗺️ Roadmap</button>
+          <button class="tab-btn" data-tab="state">⚡ State Studio</button>
+          <button class="tab-btn" data-tab="arch">🕸️ Architecture Graph</button>
+          <button class="tab-btn" data-tab="api">🧪 API Console</button>
+          <button class="tab-btn" data-tab="mentor">🎓 Mentor Review & Drills</button>
+          <button class="tab-btn" data-tab="raw">💻 Raw Source</button>
+        </div>
+        <div style="font-size: 12px; color: var(--text-dim);" id="file-count-badge">49 Documents Loaded</div>
+      </nav>
+
+      <!-- Tab Content Area -->
+      <div class="tab-content-area">
+
+        <!-- Panel 1: Document Reader -->
+        <div class="tab-panel active" id="panel-reader">
+          <div class="reader-container">
+            <div class="reader-main" id="reader-main-content">
+              <div class="doc-header-banner">
+                <div class="doc-path-badge" id="doc-path-label">AI-contracts/README.md</div>
+                <h1 class="doc-main-title" id="doc-title-label">AI control plane — Movie Ticket Booking delivery</h1>
+              </div>
+              <div class="markdown-body" id="markdown-render-output">
+                <!-- Rendered Markdown HTML goes here -->
+              </div>
+            </div>
+            <!-- Table of Contents -->
+            <div class="reader-toc">
+              <div class="toc-title">On This Page</div>
+              <ul class="toc-list" id="toc-list-container">
+                <!-- Dynamically generated TOC links -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Roadmap & Tickets Explorer -->
+        <div class="tab-panel" id="panel-roadmap">
+          <div class="roadmap-container">
+            <div class="roadmap-header">
+              <div class="roadmap-title-area">
+                <h2>Weeks 4–10 Training & Project Roadmap</h2>
+                <p style="color: var(--text-muted); font-size: 13px;">35 Daily Tickets across Phase 0 (Control Plane) to Phase 4 (Production Ready)</p>
+              </div>
+              <div class="roadmap-filters">
+                <select class="filter-select" id="roadmap-filter-week">
+                  <option value="ALL">All Weeks (4–10)</option>
+                  <option value="W04">Week 4: Control Plane & Gateway</option>
+                  <option value="W05">Week 5: Identity Service</option>
+                  <option value="W06">Week 6: Catalog Service</option>
+                  <option value="W07">Week 7: Booking Service Core</option>
+                  <option value="W08">Week 8: Payment & Transaction</option>
+                  <option value="W09">Week 9: Worker & Outbox</option>
+                  <option value="W10">Week 10: Production Readiness</option>
+                </select>
+                <select class="filter-select" id="roadmap-filter-status">
+                  <option value="ALL">All Statuses</option>
+                  <option value="NOT_STARTED">Not Started</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="BLOCKED">Blocked</option>
+                  <option value="VERIFIED">Verified</option>
+                </select>
+              </div>
+            </div>
+            <div class="tickets-grid" id="tickets-grid-container">
+              <!-- Dynamically populated ticket cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Live State Editor & Gate Validation Studio -->
+        <div class="tab-panel" id="panel-state">
+          <div style="padding: 32px; width: 100%; overflow-y: auto;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+              <div>
+                <h2 style="font-size: 22px; font-weight: 800;">Live State Editor & Gate Validation Studio</h2>
+                <p style="color: var(--text-muted); font-size: 13px;">Review, validate, and patch AI Control Plane runtime state in real-time.</p>
+              </div>
+              <button class="action-btn-primary" id="btn-open-patch-modal">⚡ Generate Safe JSON Patch</button>
+            </div>
+            
+            <!-- Gate Validation Summary Banner -->
+            <div class="callout callout-warning" style="margin-bottom: 24px;" id="gate-validation-banner">
+              <div class="callout-title">⚠️ Gate Rule Alert: FG-001 Foundation Gate Unverified</div>
+              <div>Baseline effective is <strong>PC-2026.1</strong>. Ticket <code>TKT-W04-D01</code> cannot transition to <code>IN_PROGRESS</code> until Foundation Gate <code>FG-001</code> evidence is verified.</div>
+            </div>
+
+            <div class="state-container" id="state-cards-container" style="padding: 0;">
+              <!-- Dynamically populated YAML state cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 4: Interactive Microservices Architecture Graph -->
+        <div class="tab-panel" id="panel-arch">
+          <div style="padding: 32px; width: 100%; height: 100%; display: flex; flex-direction: column;">
+            <div style="margin-bottom: 16px;">
+              <h2 style="font-size: 22px; font-weight: 800;">Microservices Topology & Data Flow Graph</h2>
+              <p style="color: var(--text-muted); font-size: 13px;">Progressive Microservices Topology (Weeks 4-10): Gateway, Identity, Catalog, Booking, Worker & Outbox.</p>
+            </div>
+            
+            <div class="arch-graph-container" style="flex: 1; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; overflow: auto; display: flex; align-items: center; justify-content: center;">
+              <div class="mermaid" id="arch-mermaid-graph">
+                graph TD
+                  GW["API Gateway Service (Port 3000)"]
+                  ID["Identity Service (JWT Auth)"]
+                  CAT["Catalog Service (Movies Shows)"]
+                  BK["Booking Service (Holds Seats)"]
+                  PAY["Payment Service (Stripe MoMo)"]
+                  WRK["Worker Service (Outbox Inbox)"]
+
+                  GW --> ID
+                  GW --> CAT
+                  GW --> BK
+                  BK --> PAY
+                  PAY --> WRK
+                  WRK --> ID
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 5: Live API & Event Contract Playground -->
+        <div class="tab-panel" id="panel-api">
+          <div style="padding: 32px; width: 100%; overflow-y: auto;">
+            <div style="margin-bottom: 24px;">
+              <h2 style="font-size: 22px; font-weight: 800;">API & Event Contracts Console</h2>
+              <p style="color: var(--text-muted); font-size: 13px;">Test endpoints, view JSON schemas, and inspect error contracts defined in <code>api-contracts.md</code> & <code>event-contracts.md</code>.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 320px 1fr; gap: 24px;">
+              <!-- Endpoint Selector List -->
+              <div class="api-endpoint-list" id="api-endpoint-list">
+                <!-- Populated dynamically -->
+              </div>
+              
+              <!-- Endpoint Interactive Inspector -->
+              <div class="api-inspector-pane" id="api-inspector-pane">
+                <div class="callout callout-note">
+                  <div class="callout-title">👈 Select an API Endpoint</div>
+                  <div>Select an endpoint from the left menu to view headers, request payload, response schema, and test mock execution.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 6: Mentor Review & Knowledge Drills -->
+        <div class="tab-panel" id="panel-mentor">
+          <div style="padding: 32px; width: 100%; overflow-y: auto;">
+            <div style="margin-bottom: 24px;">
+              <h2 style="font-size: 22px; font-weight: 800;">Mentor Review & Interview Knowledge Drills</h2>
+              <p style="color: var(--text-muted); font-size: 13px;">Review weekly deliverables against scoring rubric, generate mentor feedback, and take practice interview drills.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              
+              <!-- Review Report Generator -->
+              <div class="state-card">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">✍️ Mentor Feedback Generator</h3>
+                <form id="mentor-feedback-form" style="display: flex; flex-direction: column; gap: 12px;">
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Week</label>
+                    <select class="filter-select" style="width: 100%;" id="mentor-week-select">
+                      <option value="4">Week 4: Gateway & Control Plane</option>
+                      <option value="5">Week 5: Identity Service</option>
+                      <option value="6">Week 6: Catalog Service</option>
+                      <option value="7">Week 7: Booking Service Core</option>
+                      <option value="8">Week 8: Payment & Transaction</option>
+                      <option value="9">Week 9: Worker & Outbox</option>
+                      <option value="10">Week 10: Production Readiness</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Score (1–10)</label>
+                    <input type="number" min="1" max="10" value="8" class="sidebar-input" id="mentor-score-input">
+                  </div>
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Strengths</label>
+                    <textarea class="sidebar-input" rows="3" id="mentor-strengths-input" placeholder="- Clean architecture separation..."></textarea>
+                  </div>
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Needs Improvement</label>
+                    <textarea class="sidebar-input" rows="3" id="mentor-improvement-input" placeholder="- Need test coverage for edge cases..."></textarea>
+                  </div>
+                  <button type="button" class="action-btn-primary" id="btn-generate-feedback">Generate Mentor Feedback Markdown</button>
+                </form>
+
+                <div style="margin-top: 16px; display: none;" id="feedback-output-area">
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Generated Markdown Output:</div>
+                  <pre class="yaml-viewer" id="mentor-markdown-result"></pre>
+                </div>
+              </div>
+
+              <!-- Knowledge Drill Simulator -->
+              <div class="state-card">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">🧠 Interview Drill Simulator</h3>
+                <div id="drill-question-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px;">
+                  <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 600;" id="drill-topic-label">Topic: Microservices & Outbox Pattern (Week 9)</div>
+                  <div style="font-size: 15px; font-weight: 700; margin-top: 6px;" id="drill-question-text">Tại sao không nên gọi trực tiếp API gửi email trong cùng 1 DB transaction tạo đơn hàng? Khái niệm Transactional Outbox giải quyết vấn đề này thế nào?</div>
+                </div>
+
+                <button class="tab-btn active" style="width: 100%; justify-content: center;" id="btn-toggle-answer">👁️ View Expected Key Points & Tradeoffs</button>
+                <div id="drill-answer-box" style="display: none; margin-top: 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid var(--accent-emerald); padding: 16px; border-radius: var(--radius-md); font-size: 13px; color: var(--text-muted);">
+                  <strong>Key Points:</strong>
+                  <ul style="padding-left: 20px; margin-top: 6px;">
+                    <li>Gọi API bên ngoài (Network I/O) trong DB Transaction sẽ gây giữ lock lâu, làm cạn kiệt connection pool.</li>
+                    <li>Nếu API bên ngoài thất bại hoặc timeout, rollback DB sẽ bị ảnh hưởng, gây bất đồng bộ dữ liệu.</li>
+                    <li><strong>Transactional Outbox</strong>: Ghi tin nhắn vào bảng `outbox` trong cùng DB transaction, sau đó Worker bất đồng bộ mới đọc và đẩy event đi.</li>
+                  </ul>
+                </div>
+                
+                <button type="button" class="search-trigger-btn" style="width: 100%; margin-top: 16px; justify-content: center;" id="btn-next-drill">➡️ Next Question</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 7: Raw Source View -->
+        <div class="tab-panel" id="panel-raw">
+          <div style="padding: 24px; width: 100%; height: 100%; overflow-y: auto;">
+            <pre class="yaml-viewer" id="raw-source-output" style="height: 100%;"></pre>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-dialog">
+      <div class="search-modal-header">
+        <span style="font-size: 18px;">🔍</span>
+        <input type="text" class="search-modal-input" id="search-modal-input" placeholder="Search files, contracts, ticket IDs, rules..." autofocus>
+        <span class="kbd-badge">ESC to close</span>
+      </div>
+      <div class="search-modal-results" id="search-modal-results">
+        <!-- Results rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON Patch Modal -->
+  <div class="modal-backdrop" id="patch-modal">
+    <div class="modal-dialog">
+      <div class="search-modal-header">
+        <span style="font-size: 18px;">⚡</span>
+        <span style="font-weight: 700; font-size: 15px;">Generate Safe JSON Patch</span>
+        <span class="kbd-badge" id="btn-close-patch-modal" style="cursor: pointer;">ESC / Close</span>
+      </div>
+      <div style="padding: 20px;">
+        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Select target path and operation to produce a safe JSON patch compatible with <code>/api/mentor/apply</code>:
+        </div>
+        <pre class="yaml-viewer" id="json-patch-preview">{
+  "baseVersion": 1,
+  "reason": "Mentor review for week 4 baseline",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/state/current_ticket",
+      "value": "TKT-W04-D01"
+    }
+  ]
+}</pre>
+        <button class="action-btn-primary" style="margin-top: 16px; width: 100%;" id="btn-copy-patch">📋 Copy JSON Patch to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Compiled Data & Main JS App -->
+  <script src="contracts-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

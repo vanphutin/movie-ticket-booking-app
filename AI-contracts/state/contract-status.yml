@@ -1,0 +1,47 @@
+schema_version: 1
+effective_baseline: PC-2026.2
+effective_status: APPROVED_FOR_TRAINING
+superseded_baseline: PC-2026.1
+proposed_baseline: null
+proposed_status: null
+approved_change_requests:
+  - id: CCR-001
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-27"
+  - id: CCR-002
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-27"
+  - id: CCR-003
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-27"
+  - id: CCR-004
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-26"
+open_change_requests: []
+drift_findings:
+  - id: DRIFT-001
+    description: "Some canonical documents referenced non-existent AI/* paths."
+    disposition: "Resolved: PC-2026.2 effective per CCR-001 approved 2026-07-27."
+  - id: DRIFT-002
+    description: "AI-contracts README described validator scripts that do not exist."
+    disposition: "Removed runnable claim; automation remains NOT_AVAILABLE."
+  - id: DRIFT-003
+    description: "CODEX-CONTEXT projects TKT-W04-D01 as current while canonical runtime state has no authorized ticket."
+    disposition: "Reconciled by projecting TKT-W04-D01 as candidate only; FG-001 remains unverified."
+  - id: DRIFT-004
+    description: "Learning outcome existed without a canonical theory-first gate or resumable state."
+    disposition: "Resolved by CCR-002 approved 2026-07-27; learning state remains independent, no learner interaction claimed."
+  - id: DRIFT-005
+    description: "MVP VERIFIED could be misread as optimized; module-level post-MVP disposition was missing."
+    disposition: "Resolved by CCR-003 approved 2026-07-27; all optimization modules remain NOT_ELIGIBLE."
+  - id: DRIFT-006
+    description: "Contracts carry no pricing: no price entity fields, no amount-source business rule, no price in the published showtime snapshot, while BUS-005 requires amount verification."
+    disposition: "Resolved by CCR-004 approved 2026-07-26: BUS-009 added; DATA-CAT-001/DATA-BKG-001 and EVT-CAT-001 amended."
+  - id: DRIFT-007
+    description: "API inventory misses Must backlog endpoints: public seat map, admin screen creation, admin seat layout, customer hold release."
+    disposition: "Resolved by CCR-004 approved 2026-07-26: API-CAT-008/009 and API-BKG-004/005 added."
+  - id: DRIFT-008
+    description: "Referenced-but-undefined policies: ticket CHECKED_IN/VOID has no actor/endpoint, showtime cancellation impact on holds/bookings is unspecified, DATA-006 retention is documented nowhere."
+    disposition: "Resolved by CCR-004 approved 2026-07-26: DATA-SM-006 annotated post-MVP, BUS-010 defines cancellation impact, DATA-008 requires retention strategy."
+updated_at: "2026-07-27"
+updated_by: "Claude Code"

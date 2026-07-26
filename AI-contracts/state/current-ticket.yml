@@ -1,0 +1,36 @@
+schema_version: 1
+ticket_id: null
+candidate_ticket_id: TKT-W04-D01
+phase_id: P0
+milestone_id: M0
+capability_ids:
+  - CAP-CON-01
+contract_ids:
+  - BUS-001
+  - ARCH-001
+  - ARCH-009
+definition_of_ready_status: BLOCKED
+execution_status: NOT_STARTED
+review_status: NOT_REVIEWED
+evidence_status: MISSING
+evidence_confidence: LOW
+learning:
+  gate_id: null
+  status: NOT_EVALUATED
+  mode: null
+  topics_presented: []
+  observed_gaps: []
+  remediation_focus: []
+  design_unlocked: false
+  skeleton_unlocked: false
+  last_observation: null
+blockers:
+  - id: FG-001
+    reason: "Foundation Gate has not been verified in this control plane."
+    evidence_status: MISSING
+  - id: CCR-001
+    reason: "PC-2026.2 is in review; effective baseline remains PC-2026.1."
+    evidence_status: MISSING
+remediation_action: null
+updated_at: "2026-07-26"
+updated_by: Codex

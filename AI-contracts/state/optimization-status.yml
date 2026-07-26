@@ -1,0 +1,34 @@
+schema_version: 1
+modules:
+  identity_auth:
+    optimization_gate_id: OPT-W04-IDN
+    source_mvp_ticket: TKT-W04-D05
+    status: NOT_ELIGIBLE
+  catalog:
+    optimization_gate_id: OPT-W05-CAT
+    source_mvp_ticket: TKT-W05-D05
+    status: NOT_ELIGIBLE
+  scheduling_events:
+    optimization_gate_id: OPT-W06-SCH-EVT
+    source_mvp_ticket: TKT-W06-D05
+    status: NOT_ELIGIBLE
+  booking_concurrency:
+    optimization_gate_id: OPT-W07-BKG
+    source_mvp_ticket: TKT-W07-D05
+    status: NOT_ELIGIBLE
+  payment_worker:
+    optimization_gate_id: OPT-W08-PAY-WRK
+    source_mvp_ticket: TKT-W08-D05
+    status: NOT_ELIGIBLE
+  operations:
+    optimization_gate_id: OPT-W09-OPS
+    source_mvp_ticket: TKT-W09-D05
+    status: NOT_ELIGIBLE
+  release_system:
+    optimization_gate_id: OPT-W10-REL
+    source_mvp_ticket: TKT-W10-D05
+    status: NOT_ELIGIBLE
+active_optimization_review_id: null
+active_optimization_ticket_id: null
+updated_at: "2026-07-26"
+updated_by: Codex

@@ -1,0 +1,26 @@
+schema_version: 1
+baseline_id:
+optimization_review_id:
+source_mvp_ticket:
+workload_model:
+environment:
+dataset_profile:
+warmup_policy:
+concurrency:
+duration_or_iterations:
+metrics: []
+acceptance_thresholds: []
+correctness_invariants: []
+security_invariants: []
+prediction:
+command:
+working_directory:
+exit_code:
+artifact_paths: []
+observations: []
+limitations: []
+confidence:
+source: MISSING
+recorded_at:
+recorded_by:
+

@@ -1,0 +1,13 @@
+schema_version: 1
+decision_status: BLOCKED
+next_ticket_id: null
+candidate_ticket_id: TKT-W04-D01
+action: "Obtain reviewer-observed evidence for Foundation Gate FG-001; if verified, authorize TKT-W04-D01 and start its learning gate (LG-TKT-W04-D01) theory-first."
+priority_reason: "All CCRs (001-004) are APPROVED and PC-2026.2 is effective, but the Foundation Gate has no observed evidence and no ticket may open before it is VERIFIED."
+blocking_ids:
+  - FG-001
+source_evidence:
+  - "AI-contracts/state/contract-status.yml"
+  - "AI-contracts/changes/CCR-001-control-plane-and-architecture-rebaseline.md"
+decided_at: "2026-07-27"
+decided_by: "Claude Code (per reviewer approval by Van Phu Tin)"
