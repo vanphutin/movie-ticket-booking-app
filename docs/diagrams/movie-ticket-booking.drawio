@@ -1,0 +1,986 @@
+<mxfile host="app.diagrams.net" agent="claude" pages="8">
+  <diagram id="page-overview" name="1. Tổng quan và Actors">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a-title" value="Movie Ticket Booking — Microservices Backend (thiết kế theo contract, tuần 4–10)" style="text;html=1;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1460" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="a-status" value="Trạng thái 26/07/2026: repository chỉ có tài liệu — chưa scaffold source code (apps/client và apps/server trống); Foundation Gate FG-001 chưa VERIFIED; ADR-001 đang PROPOSED. Toàn bộ diagram là THIẾT KẾ DỰ KIẾN tổng hợp từ AI-contracts/ và docs/, không phải hệ thống đã chạy." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1460" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a-h-actors" value="Actors" style="text;html=1;align=left;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act1" value="&lt;b&gt;Guest&lt;/b&gt;&lt;hr&gt;Xem catalog/suất chiếu đã publish; đăng ký, đăng nhập" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="175" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act2" value="&lt;b&gt;Customer&lt;/b&gt;&lt;hr&gt;Quản lý profile/session; giữ ghế, booking, thanh toán; xem vé của mình" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="285" y="175" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act3" value="&lt;b&gt;Staff&lt;/b&gt;&lt;hr&gt;Tra cứu vé bằng ticket code; check-in vé (theo MVP scope)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="530" y="175" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act4" value="&lt;b&gt;Admin&lt;/b&gt;&lt;hr&gt;Quản lý movie, cinema, screen, seat, showtime; không đọc credential/payment secret" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="775" y="175" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act5" value="&lt;b&gt;Service identity&lt;/b&gt;&lt;hr&gt;Gọi internal boundary tối thiểu, được authenticate và audit" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="175" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-act6" value="&lt;b&gt;Operator&lt;/b&gt;&lt;hr&gt;Quan sát health/metrics/DLQ/reconciliation; không sửa business state trực tiếp" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1265" y="175" width="235" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-h-mvp" value="MVP Scope (10 nhóm tính năng)" style="text;html=1;align=left;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="290" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp1" value="&lt;b&gt;Public Catalog&lt;/b&gt;&lt;hr&gt;Danh sách/chi tiết phim, trailer published, rạp, suất chiếu theo phim/rạp/ngày, seat map (AVAILABLE/HELD/SOLD)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="325" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp2" value="&lt;b&gt;Auth và RBAC&lt;/b&gt;&lt;hr&gt;Register/login (email + password, bcrypt), JWT access + refresh token rotation, logout revoke, RBAC Guest/Customer/Staff/Admin" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="336" y="325" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp3" value="&lt;b&gt;Seat Hold và Booking&lt;/b&gt;&lt;hr&gt;Giữ nhiều ghế/suất chiếu; SELECT … FOR UPDATE chống double-booking; hold hết hạn 5 phút; booking hết hạn 15 phút; hủy khi PENDING" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="632" y="325" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp4" value="&lt;b&gt;Payment (payOS)&lt;/b&gt;&lt;hr&gt;Tạo payment link; webhook verify chữ ký; idempotent; đối soát amount/orderCode/paymentLinkId; PAID → booking CONFIRMED + ghế SOLD + tạo ticket" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="928" y="325" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp5" value="&lt;b&gt;Ticket và Check-in&lt;/b&gt;&lt;hr&gt;Ticket tự động khi CONFIRMED (1 ghế = 1 vé); customer xem vé; staff tra cứu theo code và check-in" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1224" y="325" width="276" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp6" value="&lt;b&gt;Admin Management&lt;/b&gt;&lt;hr&gt;CRUD phim/trailer/rạp/phòng/ghế; tạo suất chiếu (snapshot seat map); publish/hủy suất chiếu; xem bookings/payments; sync payment thủ công" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="455" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp7" value="&lt;b&gt;Background Jobs&lt;/b&gt;&lt;hr&gt;BullMQ: expire seat hold (5 phút), expire pending booking (15 phút); retry strategy + error logging cho mọi job" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="336" y="455" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp8" value="&lt;b&gt;Logging và Operations&lt;/b&gt;&lt;hr&gt;Audit log (ai/làm gì/lúc nào), integration log (payOS, AI), error envelope thống nhất, request-id tracking xuyên suốt" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="632" y="455" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp9" value="&lt;b&gt;Infrastructure&lt;/b&gt;&lt;hr&gt;Docker Compose (Gateway, 3 service, Worker, PostgreSQL tách theo service, Redis); GitHub Actions CI; Swagger/OpenAPI; migrations (cấm synchronize:true); seed demo" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="928" y="455" width="278" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-mvp10" value="&lt;b&gt;AI (stretch)&lt;/b&gt;&lt;hr&gt;NLP movie search (pgvector embeddings), AI content draft cho admin (human-in-the-loop), recommendations + feedback — không thuộc release gate nếu core chưa xong" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1224" y="455" width="276" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="a-h-oos" value="Out of scope" style="text;html=1;align=left;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="590" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a-oos" value="Frontend/mobile UI • email/SMS notification • nhiều payment gateway (chỉ payOS) • social login • avatar upload • i18n • WebSocket seat map realtime (dùng polling) • coupon/promotion/loyalty • refund automation • real payment settlement • semantic search/recommendation ngoài stretch • multi-region • Kubernetes/cloud (chỉ Docker Compose local) • WAF/rate-limit nâng cao • admin UI (chỉ API + Swagger) • reporting/analytics • seat pricing tiers • multi-chain rạp • không domain mới trong tuần 10 (feature freeze)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="625" width="1460" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a-src" value="Nguồn: AI-contracts/contracts/ (product, architecture, api, event), AI-contracts/decisions/ADR-001, docs/database/01–12, docs/product-backlog/, AI-contracts/roadmap/. Các trang tiếp theo: 2-Kiến trúc • 3-ERD • 4-Luồng Booking/Payment • 5-State machines • 6-Roadmap • 7-AWS 1 AZ • 8-AWS Multi-AZ." style="text;html=1;align=left;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="730" width="1460" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-architecture" name="2. Kiến trúc hệ thống">
+    <mxGraphModel dx="2355" dy="1183" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b-title" parent="1" style="text;html=1;align=left;fontSize=18;fontStyle=1;" value="Kiến trúc Microservices (ARCH-001…026, ADR-001 — topology dự kiến)" vertex="1">
+          <mxGeometry height="30" width="1000" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="b-note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="Broker cụ thể chưa được chọn trong contract; mỗi service theo clean architecture: transport/adapters → application → domain (ARCH-006/017/018). Mọi trust boundary (client→Gateway, Gateway→service, broker→consumer, provider→webhook, operator→ops) đều authenticate/validate/authorize (ARCH-008)." vertex="1">
+          <mxGeometry height="50" width="1460" x="40" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="b-guest" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;fontSize=11;" value="Guest / Customer" vertex="1">
+          <mxGeometry height="70" width="50" x="220" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="b-admin" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;fontSize=11;" value="Admin" vertex="1">
+          <mxGeometry height="70" width="50" x="450" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="b-staff" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;fontSize=11;" value="Staff" vertex="1">
+          <mxGeometry height="70" width="50" x="680" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="b-operator" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;fontSize=11;" value="Operator" vertex="1">
+          <mxGeometry height="70" width="50" x="1370" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="b-gateway" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="&lt;b&gt;API Gateway (ARCH-001)&lt;/b&gt; — điểm vào duy nhất /api/v1&lt;br&gt;Routing • edge validation • Bearer auth context propagation • correlation-id • rate limit • error envelope chuẩn (code/message/requestId).&lt;br&gt;&lt;b&gt;KHÔNG&lt;/b&gt; business logic, &lt;b&gt;KHÔNG&lt;/b&gt; database (ARCH-013)." vertex="1">
+          <mxGeometry height="100" width="760" x="160" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="b-payos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;dashed=1;" value="&lt;b&gt;payOS (external provider)&lt;/b&gt;&lt;br&gt;Checkout page, payment link, webhook có chữ ký" vertex="1">
+          <mxGeometry height="90" width="220" x="1300" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="b-identity" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="&lt;b&gt;Identity Service (ARCH-002)&lt;/b&gt;&lt;hr&gt;users, roles (CUSTOMER/STAFF/ADMIN), refresh sessions — token lifecycle: rotation + reuse detection; bcrypt password hash.&lt;br&gt;&lt;br&gt;Không sở hữu: catalog/booking/payment state." vertex="1">
+          <mxGeometry height="180" width="280" x="100" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="b-catalog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" value="&lt;b&gt;Catalog Service (ARCH-003)&lt;/b&gt;&lt;hr&gt;movie, trailer, cinema, screen, seat definition, showtime lifecycle/publication; AI content draft + embeddings (stretch).&lt;br&gt;&lt;br&gt;Không sở hữu: hold/booking/payment." vertex="1">
+          <mxGeometry height="180" width="300" x="430" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="b-booking" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="&lt;b&gt;Booking Service (ARCH-004)&lt;/b&gt;&lt;hr&gt;showtime snapshot, seat availability (showtime_seats), seat hold, booking, payment và ticket workflow; inbox/outbox.&lt;br&gt;&lt;br&gt;Không sở hữu: credential/catalog truth." vertex="1">
+          <mxGeometry height="180" width="330" x="780" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="b-worker" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="&lt;b&gt;Worker (ARCH-005)&lt;/b&gt;&lt;hr&gt;Outbox relay, hold/booking expiry, retry + backoff/jitter, DLQ.&lt;br&gt;&lt;br&gt;Chỉ thao tác qua contract/port — KHÔNG truy cập trực tiếp database nghiệp vụ (ARCH-013)." vertex="1">
+          <mxGeometry height="180" width="290" x="1230" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="b-iddb" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="identity_db&lt;br&gt;(PostgreSQL)" vertex="1">
+          <mxGeometry height="100" width="180" x="150" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="b-catdb" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" value="catalog_db&lt;br&gt;(PostgreSQL + pgvector)" vertex="1">
+          <mxGeometry height="100" width="200" x="480" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="b-bkgdb" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="booking_db&lt;br&gt;(PostgreSQL — ACID, FOR UPDATE)" vertex="1">
+          <mxGeometry height="100" width="200" x="845" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="b-redis" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="Redis / BullMQ&lt;br&gt;(delayed jobs: hold 5 phút, booking 15 phút)" vertex="1">
+          <mxGeometry height="100" width="200" x="1275" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="b-broker" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="&lt;b&gt;Message Broker (chưa chọn cụ thể)&lt;/b&gt; — versioned events, at-least-once, dedup theo eventId, retry + backoff/jitter, poison message → DLQ. Producer ghi state + outbox atomic; consumer dùng inbox/idempotency (ARCH-008/010, EVT-COM)." vertex="1">
+          <mxGeometry height="80" width="1420" x="100" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="b-rules" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;dashed=1;" value="&lt;b&gt;Ràng buộc cứng:&lt;/b&gt; cấm shared database/schema/credential (ARCH-011) • cấm cross-service FK / ORM relation / SQL join (ARCH-012) • cấm giữ DB transaction qua network call và distributed transaction chưa duyệt (ARCH-014) • không tin actor header do client gửi (ARCH-015) • không lưu/log plaintext password/token/secret (ARCH-016) • cross-service chỉ dùng opaque ID, minimal snapshot, API hoặc event (ARCH-009) • mỗi service tự build/test/migrate/deploy (ARCH-023) • cấm synchronize:true." vertex="1">
+          <mxGeometry height="100" width="1420" x="100" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e1" edge="1" parent="1" source="b-guest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e2" edge="1" parent="1" source="b-admin" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e3" edge="1" parent="1" source="b-staff" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-gateway" value="HTTPS /api/v1 (Bearer JWT)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e4" edge="1" parent="1" source="b-gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-identity" value="sync HTTP, versioned API port, timeout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e5" edge="1" parent="1" source="b-gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-catalog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e6" edge="1" parent="1" source="b-gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-booking">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e7" edge="1" parent="1" source="b-identity" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-iddb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e8" edge="1" parent="1" source="b-catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-catdb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e9" edge="1" parent="1" source="b-booking" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-bkgdb" value="migration riêng, own credential">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e10" edge="1" parent="1" source="b-worker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" target="b-redis" value="delayed jobs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e11" edge="1" parent="1" source="b-booking" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.25;entryX=0.5;entryY=1;" target="b-payos" value="tạo payment link (outbound, timeout)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e12" edge="1" parent="1" source="b-payos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="b-gateway" value="webhook POST /api/v1/webhooks/payments/payos — verify chữ ký raw body + timestamp">
+          <mxGeometry relative="1" x="0.6585" y="20" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b-e13" edge="1" parent="1" source="b-catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.25;exitY=1;" target="b-broker" value="publish (outbox): catalog.showtime.published.v1 / cancelled.v1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e14" edge="1" parent="1" source="b-broker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitY=0;entryX=0.42;entryY=1;dashed=1;" target="b-booking" value="consume + inbox dedup → snapshot ghế">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e15" edge="1" parent="1" source="b-booking" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=1;" target="b-broker" value="publish (outbox): booking.confirmed.v1 • payment.succeeded.v1 • booking.hold.expired.v1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e16" edge="1" parent="1" source="b-broker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;entryX=0.5;entryY=1;dashed=1;" target="b-worker" value="consume at-least-once">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e17" edge="1" parent="1" source="b-worker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="b-booking" value="gọi expiry/relay port qua contract (không chạm DB)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-e18" edge="1" parent="1" source="b-operator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;entryX=0.5;entryY=0;" target="b-worker" value="health / metrics / DLQ / reconciliation (least privilege)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-erd" name="3. ERD — 3 database">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c-title" value="ERD theo service — FK chỉ tồn tại TRONG một database; tham chiếu xuyên service là opaque UUID + snapshot" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="0" width="1400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c-iddb" value="identity_db — Identity Service" style="swimlane;html=1;startSize=30;fontSize=13;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="400" height="540" as="geometry" />
+        </mxCell>
+        <mxCell id="c-users" value="&lt;b&gt;users&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;email «UQ»&lt;br&gt;password_hash (bcrypt)&lt;br&gt;full_name&lt;br&gt;role_id → roles «FK»&lt;br&gt;is_active&lt;br&gt;created_at / updated_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="c-iddb">
+          <mxGeometry x="20" y="45" width="360" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c-roles" value="&lt;b&gt;roles&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;name «UQ» (CUSTOMER | STAFF | ADMIN)&lt;br&gt;description — seed khi init, không tạo qua API" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="c-iddb">
+          <mxGeometry x="20" y="235" width="360" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="c-rtokens" value="&lt;b&gt;refresh_tokens&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;user_id → users «FK, CASCADE»&lt;br&gt;token_hash (SHA-256, không lưu token gốc)&lt;br&gt;is_revoked&lt;br&gt;expires_at&lt;br&gt;replaced_by_id → refresh_tokens (rotation chain, reuse detection)&lt;br&gt;created_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="c-iddb">
+          <mxGeometry x="20" y="365" width="360" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c-catdb" value="catalog_db — Catalog Service (PostgreSQL + pgvector cho AI stretch)" style="swimlane;html=1;startSize=30;fontSize=13;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="40" width="800" height="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="c-movies" value="&lt;b&gt;movies&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;title / original_title&lt;br&gt;genre (VARCHAR — MVP)&lt;br&gt;duration_minutes (0–600)&lt;br&gt;age_rating, release_date&lt;br&gt;status (DRAFT | COMING_SOON | NOW_SHOWING | ENDED | ARCHIVED)&lt;br&gt;mood_tags (AI search)&lt;br&gt;poster_url, synopsis, cast, language" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="20" y="40" width="360" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c-cinemas" value="&lt;b&gt;cinemas&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;name, address&lt;br&gt;city «UQ(name, city)»&lt;br&gt;phone&lt;br&gt;is_active" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="20" y="260" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="c-screens" value="&lt;b&gt;screens&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;cinema_id → cinemas «FK, CASCADE»&lt;br&gt;name «UQ(cinema_id, name)»&lt;br&gt;capacity (&gt; 0)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="20" y="420" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c-seats" value="&lt;b&gt;seats&lt;/b&gt; (master data — ghế vật lý)&lt;hr&gt;id : UUID «PK»&lt;br&gt;screen_id → screens «FK, CASCADE»&lt;br&gt;row / number «UQ(screen_id, row, number)»&lt;br&gt;seat_type (STANDARD | VIP | COUPLE — MVP chỉ STANDARD)&lt;br&gt;→ snapshot sang booking_db.showtime_seats khi tạo suất chiếu" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="20" y="560" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="c-showtimes" value="&lt;b&gt;showtimes&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;movie_id → movies «FK, RESTRICT»&lt;br&gt;screen_id → screens «FK, RESTRICT»&lt;br&gt;start_time / end_time (CHECK end &gt; start)&lt;br&gt;base_price (INTEGER VND — không float)&lt;br&gt;status (SCHEDULED | CANCELLED)&lt;br&gt;Không overlap trong cùng screen (app-level)&lt;br&gt;Publish event sau commit" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="20" y="720" width="360" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c-trailers" value="&lt;b&gt;movie_trailers&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;movie_id → movies «FK, UQ» (1 phim 1 trailer)&lt;br&gt;url&lt;br&gt;status (DRAFT | PUBLISHED | UNPUBLISHED)&lt;br&gt;published_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="40" width="370" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c-embed" value="&lt;b&gt;movie_embedding_documents&lt;/b&gt; (AI stretch)&lt;hr&gt;id : UUID «PK»&lt;br&gt;movie_id → movies «FK, CASCADE»&lt;br&gt;document_type (MOVIE_PROFILE | TRAILER_METADATA | REVIEW_SUMMARY)&lt;br&gt;content + content_hash (SHA-256, skip rebuild)&lt;br&gt;embedding : vector(1536) — pgvector&lt;br&gt;provider / model / dimensions&lt;br&gt;status (PENDING | READY | FAILED)&lt;br&gt;HNSW index chỉ khi data lớn" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="190" width="370" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c-drafts" value="&lt;b&gt;movie_ai_content_drafts&lt;/b&gt; (AI stretch)&lt;hr&gt;id : UUID «PK»&lt;br&gt;movie_id → movies «FK, CASCADE»&lt;br&gt;draft_type (SYNOPSIS | TRAILER_DESCRIPTION | TAGS | FULL_CONTENT)&lt;br&gt;content : JSONB&lt;br&gt;status (DRAFT | APPLIED | REJECTED)&lt;br&gt;applied_by / rejected_by (opaque → users)&lt;br&gt;ai_request_log_id → ai_request_logs «FK»&lt;br&gt;Human-in-the-loop: chỉ Admin apply, không auto" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="400" width="370" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c-ailogs" value="&lt;b&gt;ai_request_logs&lt;/b&gt; (append-only)&lt;hr&gt;id : UUID «PK»&lt;br&gt;provider / model (openai, mock / gpt-4o-mini)&lt;br&gt;request_type (CONTENT_DRAFT | EMBEDDING | SEARCH)&lt;br&gt;prompt / response (truncated, sanitized, no PII)&lt;br&gt;tokens_input / tokens_output / latency_ms&lt;br&gt;status (SUCCESS | FAILED | TIMEOUT)&lt;br&gt;movie_id?, user_id? (opaque), request_id" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="610" width="370" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c-prefs" value="&lt;b&gt;user_movie_preferences&lt;/b&gt; (AI stretch)&lt;hr&gt;id : UUID «PK»&lt;br&gt;user_id «UQ» (opaque → identity users)&lt;br&gt;preferred_genres / preferred_moods / disliked_genres" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="800" width="370" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c-fdbk" value="&lt;b&gt;ai_recommendation_feedback&lt;/b&gt; (append-only, stretch)&lt;hr&gt;id : UUID «PK»&lt;br&gt;user_id (opaque), movie_id → movies «FK»&lt;br&gt;feedback_type (LIKED | DISLIKED | IRRELEVANT)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="c-catdb">
+          <mxGeometry x="410" y="940" width="370" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c-bkgdb" value="booking_db — Booking Service (ACID, chống bán trùng ghế)" style="swimlane;html=1;startSize=30;fontSize=13;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="40" width="440" height="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="c-stseats" value="&lt;b&gt;showtime_seats&lt;/b&gt; — inventory, bảng bị lock nhiều nhất&lt;hr&gt;id : UUID «PK»&lt;br&gt;showtime_id (opaque → catalog.showtimes) «UQ(showtime, seat)»&lt;br&gt;seat_id (opaque → catalog.seats)&lt;br&gt;row / number / seat_type (snapshot copy từ seats)&lt;br&gt;price (snapshot từ base_price, override được)&lt;br&gt;status (AVAILABLE | HELD | SOLD | BLOCKED)&lt;br&gt;held_by_user_id (opaque → users), held_until&lt;br&gt;Hold ghế bắt buộc SELECT … FOR UPDATE" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="40" width="400" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="c-holds" value="&lt;b&gt;seat_holds&lt;/b&gt; (1 hold = nhóm ghế qua held_by_user_id)&lt;hr&gt;id : UUID «PK»&lt;br&gt;user_id (opaque → users)&lt;br&gt;showtime_id (opaque → showtimes)&lt;br&gt;status (ACTIVE | EXPIRED | CANCELLED | CONVERTED_TO_BOOKING)&lt;br&gt;expires_at = now + 5 phút; partial index WHERE ACTIVE" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="270" width="400" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c-bookings" value="&lt;b&gt;bookings&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;user_id (opaque → users)&lt;br&gt;showtime_id (opaque → showtimes)&lt;br&gt;seat_hold_id → seat_holds «FK, SET NULL»&lt;br&gt;total_amount (server tính — không trust client)&lt;br&gt;status (PENDING_PAYMENT | CONFIRMED | CANCELLED | EXPIRED)&lt;br&gt;expires_at = now + 15 phút&lt;br&gt;confirmed_at / cancelled_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="440" width="400" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c-bseats" value="&lt;b&gt;booking_seats&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;booking_id → bookings «FK»&lt;br&gt;showtime_seat_id → showtime_seats «FK»&lt;br&gt;price (snapshot giá lúc booking)&lt;br&gt;«UQ(booking_id, showtime_seat_id)»&lt;br&gt;«UQ(showtime_seat_id) khi CONFIRMED» — chốt DB cuối chống double-booking" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="650" width="400" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c-payments" value="&lt;b&gt;payments&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;booking_id → bookings «FK, UQ» (1 booking 1 payment)&lt;br&gt;amount (server tính = SUM booking_seats.price)&lt;br&gt;status (PENDING | PAID | FAILED | CANCELLED | EXPIRED)&lt;br&gt;order_code : BIGINT «UQ» (payOS)&lt;br&gt;payment_link_id / checkout_url&lt;br&gt;provider = PAYOS; paid_at / expired_at&lt;br&gt;Webhook: FOR UPDATE + idempotent (PAID → skip replay)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="830" width="400" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c-tickets" value="&lt;b&gt;tickets&lt;/b&gt;&lt;hr&gt;id : UUID «PK»&lt;br&gt;booking_id → bookings «FK»&lt;br&gt;booking_seat_id → booking_seats «FK, UQ» (1 ghế = tối đa 1 vé)&lt;br&gt;ticket_code «UQ» (vd TKT-A1B2C3D4 — QR/tra cứu)&lt;br&gt;status (ACTIVE | CHECKED_IN | CANCELLED)&lt;br&gt;checked_in_at, checked_in_by (opaque → staff user)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="c-bkgdb">
+          <mxGeometry x="20" y="1050" width="400" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="c-logsdb" value="Operations logs (per-service, append-only)" style="swimlane;html=1;startSize=30;fontSize=13;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="400" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c-audit" value="&lt;b&gt;audit_logs&lt;/b&gt; (chỉ INSERT — fail không block main op)&lt;hr&gt;id : UUID «PK»&lt;br&gt;actor_id (opaque, null = system job)&lt;br&gt;actor_role (role tại thời điểm thực hiện)&lt;br&gt;action (CREATE_MOVIE, HOLD_SEAT, CONFIRM_PAYMENT…)&lt;br&gt;resource_type / resource_id&lt;br&gt;details : JSONB (không password/token/card)&lt;br&gt;ip_address, request_id (correlation)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="c-logsdb">
+          <mxGeometry x="20" y="40" width="360" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="c-intlogs" value="&lt;b&gt;integration_logs&lt;/b&gt; (append-only)&lt;hr&gt;id : UUID «PK»&lt;br&gt;provider (PAYOS | OPENAI | MOCK_AI)&lt;br&gt;method / url&lt;br&gt;request_body / response_body (truncated ≤ 10KB, mask secrets)&lt;br&gt;response_status, latency_ms, error_message&lt;br&gt;request_id (correlation)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="c-logsdb">
+          <mxGeometry x="20" y="240" width="360" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c-note" value="&lt;b&gt;Quy tắc cross-service (ARCH-009/012):&lt;/b&gt; đường nét đứt xám = opaque UUID + snapshot, KHÔNG có FK vật lý, KHÔNG JOIN xuyên database. Gồm: booking_db → catalog_db (showtime_id, seat_id), booking_db → identity_db (user_id, held_by_user_id, checked_in_by), catalog_db → identity_db (applied_by, user_id…). Lưu ý: docs/database 02–07 vẽ như một logical model duy nhất — khi tách DB các FK xuyên boundary phải chuyển thành opaque ID (ghi chú P1 trong tài liệu)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1080" width="400" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e1" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-roles" target="c-users">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e2" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-users" target="c-rtokens">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e3" value="1 — 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-movies" target="c-trailers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e4" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c-movies" target="c-showtimes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e5" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-cinemas" target="c-screens">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e6" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-screens" target="c-seats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e7" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.75;entryX=1;entryY=0.25;" edge="1" parent="1" source="c-screens" target="c-showtimes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e8" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="c-movies" target="c-embed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e9" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.9;entryX=0;entryY=0.2;" edge="1" parent="1" source="c-movies" target="c-drafts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e10" value="1 — N (truy vết)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="c-ailogs" target="c-drafts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e11" value="1 — 0..1 (convert)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-holds" target="c-bookings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e12" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-bookings" target="c-bseats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e13" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.9;entryX=1;entryY=0.1;" edge="1" parent="1" source="c-stseats" target="c-bseats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e14" value="1 — 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0;exitY=0.75;entryX=0;entryY=0.25;" edge="1" parent="1" source="c-bookings" target="c-payments">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e15" value="1 — N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.5;entryX=1;entryY=0.3;" edge="1" parent="1" source="c-bookings" target="c-tickets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-e16" value="1 — 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="c-bseats" target="c-tickets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-x1" value="opaque ID + snapshot (không FK)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.2;entryX=1;entryY=0.2;" edge="1" parent="1" source="c-stseats" target="c-showtimes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-x2" value="opaque ID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.45;entryX=1;entryY=0.4;" edge="1" parent="1" source="c-stseats" target="c-seats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-x3" value="opaque user_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.1;entryX=1;entryY=0.8;" edge="1" parent="1" source="c-bookings" target="c-users">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-x4" value="opaque actor_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="c-audit" target="c-rtokens">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-flow" name="4. Luồng Booking và Payment">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="d-title" value="Luồng end-to-end: publish suất chiếu → giữ ghế → booking → thanh toán payOS → phát hành vé → check-in" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="d-legend" value="Màu theo service sở hữu bước: &lt;font color=&quot;#d79b00&quot;&gt;■ Catalog&lt;/font&gt;   &lt;font color=&quot;#6c8ebf&quot;&gt;■ Customer qua Gateway&lt;/font&gt;   &lt;font color=&quot;#b85450&quot;&gt;■ Booking&lt;/font&gt;   &lt;font color=&quot;#666666&quot;&gt;■ payOS&lt;/font&gt;   &lt;font color=&quot;#9673a6&quot;&gt;■ Worker&lt;/font&gt;" style="text;html=1;align=left;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="45" width="1300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s0" value="&lt;b&gt;0. Admin publish suất chiếu&lt;/b&gt; — POST /api/v1/admin/showtimes/{id}/publish (API-CAT-007). Catalog ghi DB + outbox trong cùng một transaction (state + event atomic)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="85" width="820" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s1" value="&lt;b&gt;1. Phát event catalog.showtime.published.v1&lt;/b&gt; (EVT-CAT-001, key showtimeId) → Booking consume (inbox dedup theo eventId) → tạo snapshot showtime_seats trạng thái AVAILABLE. Duplicate ignored; version mới thắng." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="195" width="820" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s2" value="&lt;b&gt;2. Customer giữ ghế&lt;/b&gt; — POST /api/v1/holds (API-BKG-001, Idempotency-Key bắt buộc). Booking: SELECT … FOR UPDATE (ORDER BY id chống deadlock) → tất cả ghế phải AVAILABLE → ghế HELD, seat_holds ACTIVE, hết hạn +5 phút. Ghế đã bị giữ → 409 (không lộ thông tin actor khác)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="315" width="820" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s3" value="&lt;b&gt;3. Tạo booking từ hold&lt;/b&gt; — POST /api/v1/bookings (API-BKG-002, chỉ hold owner, idempotent). Validate hold ACTIVE + chưa hết hạn (FOR UPDATE); total_amount do server tính; booking PENDING_PAYMENT hết hạn +15 phút; hold → CONVERTED_TO_BOOKING." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="445" width="820" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s4" value="&lt;b&gt;4. Khởi tạo thanh toán&lt;/b&gt; — POST /api/v1/bookings/{id}/payments (API-PAY-001, Idempotency-Key, 202). Booking tạo payOS payment link: order_code «UQ», payment_link_id, checkout_url. Outbound call có timeout." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="575" width="820" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s5" value="&lt;b&gt;5. Customer thanh toán trên trang payOS checkout&lt;/b&gt; (ngoài hệ thống)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="695" width="820" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s6" value="&lt;b&gt;6. payOS gửi webhook&lt;/b&gt; — POST /api/v1/webhooks/payments/payos (API-PAY-002). Verify chữ ký raw body + timestamp + đối soát amount / orderCode / paymentLinkId TRƯỚC khi gây effect; idempotent theo provider event ID (đã PAID → trả 200, skip). Mismatch → reject + log." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="795" width="820" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s7" value="&lt;b&gt;7. Transaction xác nhận (atomic trong booking_db):&lt;/b&gt; payments PENDING → PAID → bookings PENDING_PAYMENT → CONFIRMED → showtime_seats HELD → SOLD → INSERT tickets (1 vé/ghế, UQ trên booking_seat_id chặn duplicate) + outbox: payment.succeeded.v1, booking.confirmed.v1. Race 2 webhook: FOR UPDATE trên payments → webhook 2 thấy PAID → skip." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="925" width="820" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s8" value="&lt;b&gt;8. Worker consume&lt;/b&gt; (at-least-once, inbox dedup) → relay/side effect. Duplicate command/event không lặp business effect (BUS-007); một paid booking phát hành tối đa một ticket (BUS-008)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1065" width="820" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d-s9" value="&lt;b&gt;9. Nhận vé và soát vé&lt;/b&gt; — Customer: GET /api/v1/bookings/{id}/ticket (API-TKT-001). Staff: GET /staff/tickets/{code} tra cứu, POST /staff/tickets/{id}/check-in → ticket ACTIVE → CHECKED_IN (validate đúng suất chiếu ±2 giờ, idempotent)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1185" width="820" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d-br1" value="&lt;b&gt;Nhánh hết hạn hold (5 phút):&lt;/b&gt; Worker/BullMQ delayed job → Booking verify state/version (FOR UPDATE) → seat_holds EXPIRED, ghế HELD → AVAILABLE → emit booking.hold.expired.v1 (EVT-BKG-002). Worker không tự sửa DB." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="315" width="340" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="d-br2" value="&lt;b&gt;Nhánh hết hạn booking (15 phút):&lt;/b&gt; chưa thanh toán → bookings EXPIRED, payments EXPIRED, release ghế về AVAILABLE. Webhook đến sau khi booking EXPIRED → reject + log warning." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="575" width="340" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="d-br3" value="&lt;b&gt;Nhánh hủy suất chiếu:&lt;/b&gt; Catalog emit catalog.showtime.cancelled.v1 (EVT-CAT-002) → Booking áp dụng booking policy cho các booking bị ảnh hưởng; DLQ/replay được audit." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="195" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="d-note" value="Cross-cutting: mọi endpoint qua /api/v1 + Bearer (API-COM); event envelope eventId / correlationId / causationId (EVT-COM-001); retry backoff + jitter, poison → DLQ (EVT-COM-004)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="925" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s0" target="d-s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s1" target="d-s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s2" target="d-s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s3" target="d-s4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s4" target="d-s5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s5" target="d-s6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s6" target="d-s7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s7" target="d-s8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-f8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="d-s8" target="d-s9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-fb1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#9673a6;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="d-s2" target="d-br1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-fb2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#9673a6;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="d-s4" target="d-br2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-fb3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;strokeColor=#d79b00;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="d-s1" target="d-br3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-states" name="5. State machines">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1750" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="e-title" value="State machines (docs/database/08-state-machines.md)" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h1" value="showtime_seats.status" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-sa" value="AVAILABLE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-sh" value="HELD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="120" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ss" value="SOLD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="280" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-sb" value="BLOCKED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="280" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-se1" value="customer hold ghế" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.25;entryX=0;entryY=0.25;" edge="1" parent="1" source="e-sa" target="e-sh">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-se2" value="hết hạn 5 phút / hủy hold" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0;exitY=0.75;entryX=1;entryY=0.75;" edge="1" parent="1" source="e-sh" target="e-sa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-se3" value="payment confirmed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="e-sh" target="e-ss">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-se4" value="admin block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.25;exitY=1;entryX=0.25;entryY=0;" edge="1" parent="1" source="e-sa" target="e-sb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-se5" value="admin unblock" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=0;entryX=0.75;entryY=1;" edge="1" parent="1" source="e-sb" target="e-sa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h2" value="seat_holds.status" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ha" value="ACTIVE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="640" y="180" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-he" value="EXPIRED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="100" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-hc" value="CANCELLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="180" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-hv" value="CONVERTED_TO_BOOKING" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="260" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-he1" value="timeout 5 phút (job)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-ha" target="e-he">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-he2" value="customer hủy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-ha" target="e-hc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-he3" value="tạo booking thành công" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-ha" target="e-hv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h3" value="bookings.status" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="60" width="300 " height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-bp" value="PENDING_PAYMENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="180" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-bc" value="CONFIRMED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="100" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-bx" value="CANCELLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="180" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-be" value="EXPIRED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-be1" value="webhook PAID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-bp" target="e-bc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-be2" value="customer hủy (chỉ khi PENDING)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-bp" target="e-bx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-be3" value="timeout 15 phút (job)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-bp" target="e-be">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h4" value="payments.status" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pp" value="PENDING" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="640" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pd" value="PAID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="530" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pf" value="FAILED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="610" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pc" value="CANCELLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="690" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pe" value="EXPIRED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="770" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pe1" value="webhook success" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-pp" target="e-pd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pe2" value="webhook failed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-pp" target="e-pf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pe3" value="webhook cancelled" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-pp" target="e-pc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-pe4" value="booking expire job" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-pp" target="e-pe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h5" value="tickets.status" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="620" y="480" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ta" value="ACTIVE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="640" y="600" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ti" value="CHECKED_IN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="550" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-tc" value="CANCELLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="650" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-te1" value="staff check-in (đúng suất chiếu)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-ta" target="e-ti">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-te2" value="admin cancel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-ta" target="e-tc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-h6" value="movie_ai_content_drafts.status (stretch)" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="480" width="360" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="e-da" value="DRAFT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="600" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dp" value="APPLIED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="550" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dr" value="REJECTED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="650" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-de1" value="admin duyệt → copy vào movies + rebuild embedding" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-da" target="e-dp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-de2" value="admin từ chối" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="e-da" target="e-dr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-note" value="Bất biến liên quan: BUS-003 một seat/showtime tối đa một active hold hoặc confirmed booking • BUS-004 hold hết hạn không thể confirm • BUS-006 payment success phải verify chữ ký/amount/currency • BUS-007 duplicate không lặp effect • BUS-008 một paid booking tối đa một ticket." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="1650" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-roadmap" name="6. Roadmap tuần 4–10">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1750" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="f-title" value="Roadmap 8 phase — 35 daily ticket, tuần 4–10 (AI-contracts/roadmap/)" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1000" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p0" value="&lt;b&gt;P0 — Contract và Foundation Gate&lt;/b&gt;&lt;br&gt;(W4/D1)&lt;hr&gt;Freeze baseline, chứng minh foundation; FG-001 phải VERIFIED trước khi code. ← ĐANG Ở ĐÂY (BLOCKED)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p1" value="&lt;b&gt;P1 — Identity, Gateway, AuthN/Z&lt;/b&gt;&lt;br&gt;(W4)&lt;hr&gt;Customer authenticate an toàn; boundary admin/customer được enforce." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="255" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p2" value="&lt;b&gt;P2 — Catalog và Scheduling&lt;/b&gt;&lt;br&gt;(W5–6)&lt;hr&gt;Guest tìm được nội dung published; Admin quản lý lịch chiếu hợp lệ." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="470" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p3" value="&lt;b&gt;P3 — Reliable Event Contract&lt;/b&gt;&lt;br&gt;(W6)&lt;hr&gt;Booking nhận showtime facts tin cậy; replay fixture verified." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="685" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p4" value="&lt;b&gt;P4 — Booking và Concurrency&lt;/b&gt;&lt;br&gt;(W7)&lt;hr&gt;Customer giữ ghế không oversell; race/replay verified — exactly one winner." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="900" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p5" value="&lt;b&gt;P5 — Payment, Ticket và Worker&lt;/b&gt;&lt;br&gt;(W8)&lt;hr&gt;Customer thanh toán và nhận đúng một vé; webhook verify, retry/DLQ." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1115" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p6" value="&lt;b&gt;P6 — Observability và Operations&lt;/b&gt;&lt;br&gt;(W9)&lt;hr&gt;Operator chẩn đoán, degrade và phục hồi hệ thống; runbook." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-p7" value="&lt;b&gt;P7 — Release và Handover&lt;/b&gt;&lt;br&gt;(W10)&lt;hr&gt;Reviewer reproduce được; learner defend hệ thống; feature freeze, không domain mới." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1545" y="80" width="195" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p0" target="f-p1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p1" target="f-p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p2" target="f-p3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p3" target="f-p4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p4" target="f-p5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p5" target="f-p6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-a7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="f-p6" target="f-p7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f-ms" value="&lt;b&gt;Milestones:&lt;/b&gt;&lt;br&gt;M0 Contract baseline (P0): effective contract map, ticket graph, FG-001 VERIFIED&lt;br&gt;M1 Trusted identity edge (P1): auth/profile qua Gateway; deny/replay/trace evidence&lt;br&gt;M2 Movie catalog (P2): movie/trailer migration, API, query evidence&lt;br&gt;M3 Scheduling và publication (P2/P3): showtime hợp lệ + atomic versioned event&lt;br&gt;M4 Safe booking (P4): snapshot/hold/confirm — exactly one winner&lt;br&gt;M5 Reliable payment/ticket (P5): verified webhook, một ticket, retry/DLQ&lt;br&gt;M6 Operable system (P6): traces, bounded failure, restore/runbook&lt;br&gt;M7 Release evidence (P7): clean release, traceability, demo/interview" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="290" width="830" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="f-gates" value="&lt;b&gt;Cơ chế gate:&lt;/b&gt;&lt;br&gt;• Mỗi tuần có weekly gate; ticket chỉ mở khi mọi prerequisite VERIFIED (không suy đoán từ checkbox/DONE).&lt;br&gt;• Learning-first: mỗi ticket phải qua learning gate (teach → hỏi 3–5 câu → PASSED) trước design/code.&lt;br&gt;• Sau mỗi vertical-slice D05: post-MVP optimization gate (baseline → review → NOT_REQUIRED / OPTIMIZATION_REQUIRED / DEFERRED_WITH_BUDGET); BLOCKER/HIGH khóa dependency.&lt;br&gt;• Trạng thái review: BLOCKED / CHANGES_REQUIRED / CONDITIONAL_PASS / VERIFIED; DONE không đồng nghĩa VERIFIED.&lt;br&gt;• Tuần theo tuần: W4 contract + Identity/Security → W5 Catalog → W6 scheduling/events → W7 Booking/concurrency → W8 payment/ticket/worker → W9 operations → W10 release." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="900" y="290" width="840" height="220" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-aws-1az" name="7. AWS — 1 AZ (dev/staging)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="g-title" value="AWS Deployment — 1 Availability Zone (dev / staging / demo)" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="15" width="1000" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="g-note" value="Lưu ý phạm vi: product backlog ghi Kubernetes/cloud deployment là OUT-OF-SCOPE cho MVP (Docker Compose local đủ cho portfolio). Trang này là phương án triển khai AWS hậu-MVP để tham khảo. Broker trong contract chưa chốt — Amazon MQ / MSK / SQS-SNS là các lựa chọn." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="1620" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="g-users" value="Người dùng (Guest / Customer / Staff / Admin)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#232F3E;fillColor=#232F3E;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.users;" vertex="1" parent="1">
+          <mxGeometry x="100" y="120" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-payos" value="&lt;b&gt;payOS&lt;/b&gt;&lt;br&gt;checkout + webhook có chữ ký" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="130" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g-ci" value="&lt;b&gt;GitHub Actions CI&lt;/b&gt;&lt;br&gt;lint → test → build image" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="130" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g-cloud" value="AWS Cloud — Region (vd ap-southeast-1)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=0;pointerEvents=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="230" width="1620" height="880" as="geometry" />
+        </mxCell>
+        <mxCell id="g-r53" value="Route 53 (DNS)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="300" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-ecr" value="ECR — container images" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="440" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-cw" value="CloudWatch — logs / metrics / alarms" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="580" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-secrets" value="Secrets Manager — DB creds, JWT keys, payOS checksum" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="720" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-s3" value="S3 — poster / trailer assets (tùy chọn)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_storage_service;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="860" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-vpc" value="VPC 10.0.0.0/16" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=0;pointerEvents=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="290" width="1320" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="g-igw" value="Internet Gateway" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.internet_gateway;" vertex="1" parent="1">
+          <mxGeometry x="620" y="310" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-az" value="Availability Zone A — 1 AZ duy nhất (không HA)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="410" width="1240" height="650" as="geometry" />
+        </mxCell>
+        <mxCell id="g-pub" value="Public subnet 10.0.1.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E9F3E6;strokeColor=#7AA116;verticalAlign=top;align=left;spacing=8;fontColor=#248814;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="450" width="1160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="g-alb" value="Application Load Balancer" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;" vertex="1" parent="1">
+          <mxGeometry x="520" y="478" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-nat" value="NAT Gateway" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.nat_gateway;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="478" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="g-app" value="Private subnet — app 10.0.11.0/24 · ECS Fargate cluster (không quản lý EC2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="620" width="1160" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="g-gw" value="&lt;b&gt;Gateway&lt;/b&gt;&lt;br&gt;ECS service + task" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="680" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g-id" value="&lt;b&gt;Identity&lt;/b&gt;&lt;br&gt;ECS service + task" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="425" y="680" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g-cat" value="&lt;b&gt;Catalog&lt;/b&gt;&lt;br&gt;ECS service + task" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="650" y="680" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g-bkg" value="&lt;b&gt;Booking&lt;/b&gt;&lt;br&gt;ECS service + task" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="875" y="680" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g-wrk" value="&lt;b&gt;Worker&lt;/b&gt;&lt;br&gt;ECS service + task" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="680" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g-data" value="Private subnet — data 10.0.21.0/24 (không route ra internet)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="840" width="1160" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="g-rds1" value="RDS PostgreSQL&lt;br&gt;identity_db" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="220" y="880" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g-rds2" value="RDS PostgreSQL&lt;br&gt;catalog_db (+ pgvector)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="400" y="880" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g-rds3" value="RDS PostgreSQL&lt;br&gt;booking_db" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="580" y="880" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g-redis" value="ElastiCache Redis&lt;br&gt;(BullMQ jobs)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticache;" vertex="1" parent="1">
+          <mxGeometry x="800" y="880" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g-mq" value="Amazon MQ / MSK&lt;br&gt;(broker chưa chốt trong contract)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.mq;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="880" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g-char" value="&lt;b&gt;Đặc điểm 1 AZ:&lt;/b&gt; chi phí thấp nhất, vận hành đơn giản — phù hợp dev/staging/demo. Rủi ro: sự cố AZ = downtime toàn hệ thống; RDS single instance không auto-failover (chỉ backup/snapshot + restore); ALB/NAT đơn lẻ. Tiết kiệm: có thể gộp 1 RDS instance chứa 3 database với credential riêng mỗi service (vẫn giữ ownership logic theo ARCH-011) — sơ đồ vẽ 3 icon để rõ ownership; production nên tách instance. Deploy: GitHub Actions → push ECR → ECS rolling update." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1130" width="1620" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-users" target="g-igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e2" value="webhook payOS (chữ ký raw body)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;" edge="1" parent="1" source="g-payos" target="g-igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e21" value="alias A record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="g-r53" target="g-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-igw" target="g-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e4" value="target group" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-alb" target="g-gw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.35;entryX=0;entryY=0.35;" edge="1" parent="1" source="g-gw" target="g-id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e6" value="HTTP nội bộ (service discovery / Cloud Map)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.1;entryX=0;entryY=0.1;" edge="1" parent="1" source="g-gw" target="g-cat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.9;entryX=0;entryY=0.9;" edge="1" parent="1" source="g-gw" target="g-bkg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-id" target="g-rds1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-cat" target="g-rds2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="g-bkg" target="g-rds3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e11" value="publish showtime events (outbox)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=1;entryX=0.25;entryY=0;" edge="1" parent="1" source="g-cat" target="g-mq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e12" value="outbox / inbox" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="g-bkg" target="g-mq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e13" value="consume at-least-once" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="g-mq" target="g-wrk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e14" value="BullMQ delayed jobs (hold 5 phút, booking 15 phút)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.25;exitY=1;entryX=0.75;entryY=0;" edge="1" parent="1" source="g-wrk" target="g-redis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e15" value="outbound payOS API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=1;exitY=0.2;entryX=0.5;entryY=1;" edge="1" parent="1" source="g-bkg" target="g-nat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e16" value="tạo payment link" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=0.5;exitY=0;entryX=1;entryY=0.5;" edge="1" parent="1" source="g-nat" target="g-payos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e17" value="docker push image" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="g-ci" target="g-ecr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e18" value="pull image khi deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.5;entryX=1;entryY=0.3;" edge="1" parent="1" source="g-ecr" target="g-app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e19" value="logs • metrics • alarms" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="g-app" target="g-cw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g-e20" value="inject secrets runtime" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.5;entryX=1;entryY=0.7;" edge="1" parent="1" source="g-secrets" target="g-app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-aws-multiaz" name="8. AWS — Multi-AZ (production)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1380" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h-title" value="AWS Deployment — Multi-AZ (production, high availability)" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="15" width="1000" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="h-note" value="Bản production HA: nhân đôi hạ tầng qua 2 Availability Zone trong cùng Region — mục tiêu chịu được sự cố trọn một AZ. Cùng lưu ý phạm vi như trang 7: thiết kế tham khảo hậu-MVP, không thuộc release gate tuần 10 của contract." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="1720" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="h-users" value="Người dùng" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#232F3E;fillColor=#232F3E;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.users;" vertex="1" parent="1">
+          <mxGeometry x="100" y="115" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-payos" value="&lt;b&gt;payOS&lt;/b&gt;&lt;br&gt;checkout + webhook" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="125" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h-ci" value="&lt;b&gt;GitHub Actions CI&lt;/b&gt;&lt;br&gt;lint → test → build image" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="125" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h-cloud" value="AWS Cloud — Region (vd ap-southeast-1)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=0;pointerEvents=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="1720" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="h-r53" value="Route 53 (DNS)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="290" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-ecr" value="ECR — container images" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="430" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-cw" value="CloudWatch — logs / metrics / alarms" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="570" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-secrets" value="Secrets Manager" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="710" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-s3" value="S3 — assets (tùy chọn)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_storage_service;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="850" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-vpc" value="VPC 10.0.0.0/16" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=0;pointerEvents=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="1440" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="h-igw" value="Internet Gateway" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.internet_gateway;" vertex="1" parent="1">
+          <mxGeometry x="560" y="320" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-alb" value="Application Load Balancer — spans AZ A + B, health checks" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;" vertex="1" parent="1">
+          <mxGeometry x="770" y="320" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-aza" value="Availability Zone A" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="440" width="670" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="h-azb" value="Availability Zone B" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="440" width="670" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="h-puba" value="Public subnet A 10.0.1.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E9F3E6;strokeColor=#7AA116;verticalAlign=top;align=left;spacing=8;fontColor=#248814;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="480" width="610" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="h-pubb" value="Public subnet B 10.0.2.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E9F3E6;strokeColor=#7AA116;verticalAlign=top;align=left;spacing=8;fontColor=#248814;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="480" width="610" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="h-nata" value="NAT Gateway A" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.nat_gateway;" vertex="1" parent="1">
+          <mxGeometry x="390" y="500" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="h-natb" value="NAT Gateway B" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.nat_gateway;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="500" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="h-appsuba" value="Private subnet — app A 10.0.11.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="630" width="610" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="h-appsubb" value="Private subnet — app B 10.0.12.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="630" width="610" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="h-appbox-a" value="&lt;b&gt;ECS Fargate tasks (auto scaling)&lt;/b&gt;&lt;br&gt;Gateway • Identity • Catalog • Booking • Worker&lt;br&gt;desired count trải đều 2 AZ (spread placement)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="180" y="680" width="550" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="h-appbox-b" value="&lt;b&gt;ECS Fargate tasks (auto scaling)&lt;/b&gt;&lt;br&gt;Gateway • Identity • Catalog • Booking • Worker&lt;br&gt;desired count trải đều 2 AZ (spread placement)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="680" width="550" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="h-datasuba" value="Private subnet — data A 10.0.21.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="860" width="610" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="h-datasubb" value="Private subnet — data B 10.0.22.0/24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F2F8;strokeColor=#147EBA;verticalAlign=top;align=left;spacing=8;fontColor=#147EBA;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="860" width="610" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="h-rds-a" value="RDS PostgreSQL&lt;br&gt;PRIMARY" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="210" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-redis-a" value="ElastiCache Redis&lt;br&gt;primary" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticache;" vertex="1" parent="1">
+          <mxGeometry x="410" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-mq-a" value="Amazon MQ&lt;br&gt;active" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.mq;" vertex="1" parent="1">
+          <mxGeometry x="600" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-nota" value="identity_db • catalog_db • booking_db — database/credential riêng mỗi service (chuẩn contract: mỗi service một instance riêng)" style="text;html=1;align=left;fontSize=10;fontColor=#666666;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1040" width="570" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="h-rds-b" value="RDS PostgreSQL&lt;br&gt;STANDBY" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="910" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-redis-b" value="ElastiCache Redis&lt;br&gt;replica" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticache;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-mq-b" value="Amazon MQ&lt;br&gt;standby" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.mq;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="905" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="h-notb" value="Standby/replica đồng bộ — không nhận traffic ứng dụng cho tới khi failover (RDS tự đổi DNS endpoint)" style="text;html=1;align=left;fontSize=10;fontColor=#666666;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="870" y="1040" width="570" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="h-char" value="&lt;b&gt;Đặc điểm Multi-AZ:&lt;/b&gt; chịu được sự cố trọn một AZ. RDS Multi-AZ: standby đồng bộ ở AZ B, tự failover ~60–120 giây, RPO ≈ 0; ElastiCache replication group auto-failover; Amazon MQ active/standby; ALB health check loại task lỗi và route sang AZ còn lại; NAT Gateway mỗi AZ tránh phụ thuộc chéo AZ; ECS trải task đều 2 AZ. Chi phí ≈ gấp đôi 1 AZ + phí truyền dữ liệu cross-AZ. Chuẩn contract (ARCH-011/023): production nên tách 3 RDS instance riêng — mỗi service một instance Multi-AZ; sơ đồ gộp một cặp PRIMARY/STANDBY cho gọn." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1240" width="1720" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="h-users" target="h-igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e2" value="webhook payOS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;" edge="1" parent="1" source="h-payos" target="h-igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e17" value="alias A record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="h-r53" target="h-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="h-igw" target="h-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e4" value="target group AZ A" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="h-alb" target="h-appbox-a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e5" value="target group AZ B" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="h-alb" target="h-appbox-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e6" value="primary endpoint" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="h-appbox-a" target="h-rds-a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e7" value="ghi về PRIMARY (cross-AZ)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=0;exitY=0.75;entryX=1;entryY=0.25;" edge="1" parent="1" source="h-appbox-b" target="h-rds-a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e8" value="đồng bộ synchronous • auto failover ~60–120s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#C925D1;fontColor=#C925D1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="h-rds-a" target="h-rds-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e9" value="replication • auto failover" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#C925D1;fontColor=#C925D1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="h-redis-a" target="h-redis-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e10" value="active / standby" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#E7157B;fontColor=#E7157B;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="h-mq-a" target="h-mq-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e11" value="outbound payOS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="h-appbox-a" target="h-nata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="h-appbox-b" target="h-natb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e13" value="docker push" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="h-ci" target="h-ecr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e14" value="pull image khi deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.5;entryX=1;entryY=0.2;" edge="1" parent="1" source="h-ecr" target="h-appbox-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e15" value="logs • metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="h-appbox-b" target="h-cw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-e16" value="inject secrets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;endArrow=block;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.75;entryX=1;entryY=0.5;" edge="1" parent="1" source="h-secrets" target="h-appbox-b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
