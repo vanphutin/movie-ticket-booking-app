@@ -9,10 +9,27 @@
 `API-COM-005`: Collection pagination bounded (`limit<=100`), stable sort + cursor/page contract; filter/sort allowlist.  
 `API-COM-006`: Breaking response/request change cần new version/CCR; additive optional field allowed sau consumer review.  
 `API-IDN-001`: Mutating retryable endpoint khai báo `Idempotency-Key`; same key+same payload returns same logical outcome, same key+different payload `409`.
+`API-COM-007`: `AI-contracts/traceability/backlog-contract-map.yml` là phần quy phạm của
+contract này và là inventory đầy đủ gồm đúng 55 endpoint. Mỗi row khóa `endpoint_id`,
+backlog source, method, canonical path, owner, priority, delivery disposition, auth,
+idempotency, capability và delivery ticket. Không được triển khai endpoint không có row.
+`API-COM-008`: `CORE_REQUIRED` là release scope bắt buộc; `CORE_OPTIONAL` chỉ được mở sau
+core và không chặn release; `STRETCH` và `POST_MVP` là contracted nhưng không được
+authorize trong roadmap MVP. Priority của backlog không tự động thay đổi disposition.
+`API-COM-009`: Canonical path dùng resource/ownership semantics của registry. Alias cũ
+trong backlog không tạo thêm endpoint. Đổi method/path/owner/disposition cần CCR và cập
+nhật đồng thời registry, backlog projection, API contract và ticket traceability.
+`API-COM-010`: Mỗi endpoint phải có reviewed OpenAPI component cho request/response,
+status/failure matrix và authorization denies trước implementation. Tên schema trong
+profile dưới đây là baseline; endpoint mới trong registry dùng cùng quy tắc và được khóa
+chi tiết ở ticket thiết kế tương ứng.
 
-## Endpoint inventory
+## Detailed baseline profiles
 
 Mỗi row kế thừa common error/validation/security/compatibility/OpenAPI contract. Request/response schema là tên component bắt buộc trong OpenAPI; detailed fields được thiết kế/review trong ticket trước implementation.
+
+Danh sách dưới đây là các profile chi tiết đã tồn tại trước CCR-005. Inventory quy phạm
+đầy đủ không giới hạn ở bảng này mà là 55 rows trong registry theo `API-COM-007`.
 
 | Contract ID | Actor | Method path | Authz | Request → response | Status/failure | Idempotency |
 |---|---|---|---|---|---|---|
@@ -30,13 +47,25 @@ Mỗi row kế thừa common error/validation/security/compatibility/OpenAPI con
 | API-CAT-007 | Admin | `POST /api/v1/admin/showtimes/{id}/publish` | Admin | none → `ShowtimeResponse` | 200; 404/409 | required |
 | API-CAT-008 | Admin | `POST /api/v1/admin/cinemas/{id}/screens` | Admin | `ScreenWrite → ScreenResponse` | 201; 400/404/409 | required |
 | API-CAT-009 | Admin | `POST /api/v1/admin/screens/{id}/seats` | Admin | `SeatLayoutWrite → SeatLayoutResponse` | 201; 400/404/409 duplicate label | required |
-| API-BKG-001 | Customer | `POST /api/v1/holds` | authenticated actor | `HoldRequest → HoldResponse` | 201; 400/401/404/409 | required |
+| API-BKG-001 | Customer | `POST /api/v1/showtimes/{id}/holds` | authenticated actor | `HoldRequest → HoldResponse` | 201; 400/401/404/409 | required |
 | API-BKG-002 | Customer | `POST /api/v1/bookings` | hold owner | `BookingRequest → BookingResponse` | 201; 400/401/404/409 | required |
 | API-BKG-003 | Customer | `GET /api/v1/bookings/{id}` | owner/Admin | none → `BookingResponse` | 200; 401/403/404 | safe |
 | API-BKG-004 | Guest | `GET /api/v1/showtimes/{id}/seats` | published only | none → `ShowtimeSeatMapResponse` | 200; 400/404 | safe |
 | API-BKG-005 | Customer | `DELETE /api/v1/holds/{id}` | hold owner | none → `Empty` | 204; 401/403/404/409 | replay safe |
 | API-PAY-001 | Customer | `POST /api/v1/bookings/{id}/payments` | booking owner | `PaymentStart → PaymentResponse` | 202; 400/401/404/409/503 | required |
-| API-PAY-002 | Provider | `POST /api/v1/webhooks/payments/{provider}` | verified signature | raw provider body → ack | 200; 400/401 | provider event ID |
+| API-PAY-002 | payOS | `POST /api/v1/webhooks/payments/payos` | verified payOS signature | raw provider body → ack | 200; 400/401 | provider event ID |
 | API-TKT-001 | Customer | `GET /api/v1/bookings/{id}/ticket` | owner/Admin | none → `TicketResponse` | 200; 401/403/404/409 | safe |
 
 Security/failure specifics: auth response never returns password/hash; Catalog admin and public DTOs separated; booking conflicts do not expose other actor; webhook verifies raw body/timestamp/signature/reference/amount/currency before effect. Seat map (`API-BKG-004`) phục vụ từ Booking-owned snapshot/seat state, không phải Catalog; response chỉ expose seat identity/state/price, không expose actor khác. Release hold (`API-BKG-005`) trên hold đã terminal là no-op hoặc `409` theo reviewed design ticket.
+
+## CCR-005 inventory coverage
+
+Registry contract gồm: Public 8, Auth 4, Customer 10, Staff 3, Admin 17,
+Payment 2, Webhook 1 và AI 10 = **55 endpoint**. Trong đó Staff 3 là `POST_MVP`;
+AI 10 và preferences 1 là `STRETCH`; trailer management 3 và payment reconciliation
+1 là `CORE_OPTIONAL`; các row còn lại là `CORE_REQUIRED`.
+
+Payment initiation là provider-neutral tại `API-PAY-001`; implementation đi qua payment
+port. Adapter production được chọn là payOS và webhook canonical là `API-PAY-002`.
+Deterministic fake adapter là bắt buộc cho test/local verification nhưng không được báo
+cáo như bằng chứng gọi payOS thật.

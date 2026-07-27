@@ -26,6 +26,8 @@ con số.
 | DATA-CAT-001 | Catalog | `movies`, `movie_trailers`, `cinemas`, `screens`, `seats UNIQUE(screen_id,label)`, `showtimes(base_price INTEGER CHECK(base_price>0))`, `outbox_events` | showtime state+outbox same transaction; overlap protected by approved DB/application strategy |
 | DATA-BKG-001 | Booking | `showtime_snapshots`, `showtime_seats(price)`, `seat_holds`, `bookings`, `booking_seats(price snapshot tại booking time)`, `inbox_events`, `outbox_events`, `idempotency_records` | row lock/constraint gives exactly one winner; inbox+snapshot atomic; booking total derive từ `booking_seats`, không re-read live seat state |
 | DATA-PAY-001 | Booking | `payments(provider_reference UNIQUE)`, `payment_webhook_events(provider,event_id UNIQUE)`, `tickets(booking_id UNIQUE)`, job/DLQ records | verified webhook transition+outbox atomic; ticket issuance idempotent |
+| DATA-AUD-001 | Operational read model (owner fixed in design) | allowlisted audit/integration metadata, actor/action/outcome/correlation/time; no secret/raw sensitive payload | append-only ingestion or derived projection; bounded query; no cross-service SQL |
+| DATA-AI-001 | Future AI owner (stretch) | prompt/output metadata, usage and embedding version only after future design/retention review | no MVP table/migration; activation requires future ticket/CCR if ownership changes |
 
 ## State machines
 
@@ -35,3 +37,7 @@ con số.
 `DATA-SM-004`: Booking `PENDING_PAYMENT → CONFIRMED | CANCELLED | EXPIRED`; payment reconciliation controls confirm.  
 `DATA-SM-005`: Payment `PENDING → SUCCEEDED | FAILED | UNKNOWN`; unknown requires reconciliation.  
 `DATA-SM-006`: Ticket `ISSUED → CHECKED_IN | VOID`; one active issuance per booking. Transition sau `ISSUED` là post-MVP: MVP không có endpoint/actor nào exercise chúng; thêm check-in yêu cầu CCR tương lai định nghĩa acting role và authorization.
+
+`DATA-PAY-002`: Provider-neutral payment state is authoritative; payOS-specific IDs and
+verified webhook metadata remain adapter data. Raw webhook retention/redaction follows
+`DATA-008` and `SEC-007`; deterministic fake data must be visibly marked test-only.

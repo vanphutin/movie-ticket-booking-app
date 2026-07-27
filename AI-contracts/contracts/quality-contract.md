@@ -28,3 +28,10 @@ service ownership.
 `PERF-005`: Optimization BLOCKER/HIGH MUST block dependent module.  
 `PERF-006`: MEDIUM chỉ `DEFERRED_WITH_BUDGET` khi có owner, reason, budget,
 deadline/gate, risk acceptance và regression guard.
+`TRC-001`: Backlog API inventory phải map 1:1 tới đúng 55 row trong
+`traceability/backlog-contract-map.yml`; endpoint ID và method+canonical path phải unique.
+`TRC-002`: Mọi `CORE_REQUIRED` row phải map ít nhất một capability và delivery ticket;
+`STRETCH`/`POST_MVP` không được map active MVP ticket.
+`TRC-003`: Control-plane validation phải fail khi thiếu/thừa mapping, duplicate endpoint
+hoặc method+path, disposition không hợp lệ, core row thiếu ticket, hay operational log
+contract cho phép raw sensitive payload.

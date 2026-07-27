@@ -66,3 +66,13 @@ reconciliation có owner rõ; không dùng distributed transaction ngầm.
 `ARCH-026`: Topology logic dự kiến gồm Gateway, Identity, Catalog, Booking và Worker.
 Filesystem/module roots chưa được khóa cho tới ticket scaffold được review. Tài liệu
 không được giả định `apps/*`, package manager hoặc command runnable trước thời điểm đó.
+
+`ARCH-027`: Payment application boundary sở hữu provider-neutral port. payOS SDK/HTTP,
+signature mapping và provider error mapping chỉ nằm trong concrete adapter; deterministic
+fake implement cùng port cho local/test. Chọn fake không thay đổi production adapter đã
+duyệt và không tạo nhánh business rule riêng.
+`ARCH-028`: Audit/integration read model thuộc operational boundary có owner rõ trong
+design ticket; endpoint không được truy vấn chéo database hoặc biến Gateway/Worker thành
+domain owner.
+`ARCH-029`: Row `STRETCH`/`POST_MVP` trong endpoint registry chỉ khóa future contract;
+nó không chứng minh readiness, không cấp ticket và không cho phép scaffold/implementation.

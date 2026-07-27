@@ -18,3 +18,7 @@
 
 Worker không trở thành owner chỉ vì nó schedule/retry một command. Mọi event mang
 business fact phải được owner service xác nhận state transition trước khi phát.
+
+`EVT-COM-006`: Việc thêm endpoint vào registry không mặc nhiên tạo event mới. Event chỉ
+được thêm khi có propagated business fact/recovery need, owner, consumer, versioned
+schema, idempotency và failure evidence. AI/Staff deferred endpoints không mở event MVP.
