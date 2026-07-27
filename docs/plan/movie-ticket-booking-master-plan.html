@@ -34,7 +34,8 @@
       việc nào đã hoàn thành.</p>
       <div class="chips">
         <span class="chip">7 tuần</span><span class="chip">35 core tickets</span>
-        <span class="chip">8 phases</span><span class="chip">5 services</span>
+        <span class="chip">8 phases</span><span class="chip">55 contracted APIs</span>
+        <span class="chip">PC-2026.3</span><span class="chip">5 services</span>
         <span class="chip blocked">Hiện tại: BLOCKED · FG-001</span>
       </div>
     </header>
@@ -59,8 +60,9 @@
 
     <section>
       <div class="alert"><strong>Foundation Gate đang khóa implementation.</strong>
-      Repository chưa scaffold, branch main chưa có commit và control-plane state đang
-      lệch với CODEX-CONTEXT. Next best action là thu thập reviewer evidence tuần 1–3
+      Repository chưa scaffold. CCR-005 đã được áp dụng: 55/55 endpoint đã map,
+      Staff là POST_MVP, AI là STRETCH, payment dùng provider-neutral port với payOS
+      adapter và deterministic fake cho local/test. Next action là review evidence
       cho FG-001; chưa được tạo source để “đi trước” gate.</div>
     </section>
 
@@ -113,7 +115,7 @@
       </table>
     </section>
   </main>
-  <footer class="footer">Plan version 1.0 · 2026-07-23 · PLANNED ≠ VERIFIED · Chi tiết đầy đủ nằm trong file Markdown cùng thư mục.</footer>
+  <footer class="footer">Plan version 1.1 · 2026-07-28 · PC-2026.3 · PLANNED ≠ VERIFIED · Chi tiết đầy đủ nằm trong file Markdown cùng thư mục.</footer>
 
   <script>
     const weeks = [
@@ -138,7 +140,7 @@
       {n:8,title:"Payment, Ticket & Worker",goal:"Verified webhook, exactly-once ticket và bounded recovery.",tickets:[
         ["TKT-W08-D01","Payment states","Booking/payment/ticket transitions và reconciliation."],["TKT-W08-D02","Worker recovery","ACK/effect windows, retry/backoff/DLQ/runbook."],
         ["TKT-W08-D03","Webhook security","Signature/reference/amount/currency/redaction."],["TKT-W08-D04","Provider contract","Port/adapter, timeout và unknown outcome."],
-        ["TKT-W08-D05","Payment vertical slice","Mock payment→webhook→ticket + crash/DLQ drills."]]},
+        ["TKT-W08-D05","Payment vertical slice","Provider port + payOS adapter/fake→verified webhook→ticket + crash/DLQ drills."]]},
       {n:9,title:"Observability & Operations",goal:"Diagnose, degrade, drain và restore bằng evidence.",tickets:[
         ["TKT-W09-D01","Query optimization","Dataset, EXPLAIN before/after và index cost."],["TKT-W09-D02","Telemetry","Cross-service trace, bounded metrics và redaction."],
         ["TKT-W09-D03","Resilience","Timeout/retry budget, readiness và graceful drain."],["TKT-W09-D04","Recovery design","Backup/restore, deploy rollback, CI và runbook."],

@@ -1,10 +1,14 @@
 # Kế hoạch triển khai Movie Ticket Booking Backend
 
-> Phiên bản: 1.0  
-> Ngày lập: 2026-07-23  
+> Phiên bản: 1.1
+> Ngày cập nhật: 2026-07-28
 > Khung thời gian: 7 tuần, từ tuần 4 đến tuần 10  
 > Trạng thái tài liệu: `PLANNED` — không phải bằng chứng triển khai  
 > Nguồn: trạng thái repository, `CODEX-CONTEXT.md` và `AI-contracts/`
+
+> Baseline hiệu lực: `PC-2026.3` theo CCR-005. API inventory có 55 endpoint:
+> 37 `CORE_REQUIRED`, 4 `CORE_OPTIONAL`, 11 `STRETCH`, 3 `POST_MVP`.
+> Contract hóa endpoint không đồng nghĩa cấp quyền triển khai.
 
 ## 1. Mục tiêu
 
@@ -14,7 +18,8 @@ phải chứng minh được:
 
 - Guest tìm thấy movie và showtime đã publish.
 - Customer giữ và đặt ghế mà không oversell khi có cạnh tranh đồng thời.
-- Payment chỉ được ghi nhận sau khi webhook được xác minh.
+- Payment đi qua provider-neutral port; production adapter là payOS, deterministic fake
+  dùng cho local/test; thành công chỉ được ghi nhận sau khi webhook được xác minh.
 - Một booking đã thanh toán chỉ phát hành tối đa một ticket.
 - Operator truy vết, xử lý retry/DLQ và phục hồi hệ thống bằng evidence quan sát được.
 
@@ -34,7 +39,8 @@ Kế hoạch hoàn thành khi 35 ticket cốt lõi từ tuần 4–10 đã qua w
 ### Ngoài phạm vi
 
 - Loyalty, promotion và refund automation.
-- Recommendation hoặc semantic search.
+- Toàn bộ AI, recommendation, semantic search và preferences (`STRETCH`).
+- Staff ticket lookup/check-in (`POST_MVP`).
 - Multi-region và real payment settlement.
 - Domain mới trong tuần 10.
 - Scaffold toàn bộ topology trước khi ticket/gate tương ứng cho phép.
@@ -57,8 +63,9 @@ Kế hoạch hoàn thành khi 35 ticket cốt lõi từ tuần 4–10 đã qua w
 | Git | Branch `main` chưa có commit; toàn bộ file hiện là untracked | Cần baseline có chủ đích sau Foundation Gate |
 | Phase | `P0_PROJECT_CONTRACT_AND_FOUNDATION_GATE` | Chưa được mở implementation |
 | Gate | `FG-001` chưa có reviewer evidence | Đây là blocker ưu tiên cao nhất |
-| Operational context | `CODEX-CONTEXT.md` nêu ticket `TKT-W04-D01` | Ticket mục tiêu hiện tại là audit contract/gate |
-| Control-plane state | `state/current-ticket.yml` vẫn có `ticket_id: null` | Có drift cần reconcile, không tự đoán trạng thái đúng |
+| Contract baseline | `PC-2026.3`, CCR-005 đã áp dụng | 55/55 endpoint đã map; không phải runtime evidence |
+| Operational context | `TKT-W04-D01` là candidate, chưa authorized | Chờ reviewer verdict cho `FG-001` |
+| Control-plane state | `ticket_id: null`, stage `FOUNDATION_GATE` | Projection đã đồng bộ; không có application ticket |
 | Next action | `state/next-action.yml` yêu cầu lấy evidence cho `FG-001` | Phải xử lý gate trước mọi scaffold |
 | Test/evidence | Chưa có migration, test hoặc runtime evidence | Mọi trạng thái tiến độ mặc định là chưa thực hiện |
 
@@ -364,4 +371,3 @@ output hoặc kết quả do người dùng kể lại.
 **Thu thập reviewer evidence tuần 1–3 cho `FG-001`, lập inventory có nguồn tham chiếu,
 sau đó thực hiện Foundation Gate review.** Nếu evidence chưa tồn tại hoặc không quan sát
 được, giữ `TKT-W04-D01` ở trạng thái `BLOCKED`; không scaffold project.
-
