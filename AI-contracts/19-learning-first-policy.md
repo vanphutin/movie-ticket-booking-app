@@ -50,6 +50,18 @@ context. Explain an English technical term on first use. Use this order when rel
 6. Failure/security cases and common misconceptions.
 7. Application to the current ticket and referenced contracts.
 
+For a material decision, also teach:
+
+8. realistic options and their mechanisms;
+9. selected project direction and contract/design basis;
+10. rejected alternatives and concrete reasons;
+11. trade-off, limitation and conditions that require reconsideration;
+12. one counterexample.
+
+Use the gate's 1–3 reference documents as focused reading support. External docs never
+override the effective project contract and reading a link never counts as a learning
+pass.
+
 Do not turn the chat into a generic framework chapter. Only teach topics selected by the
 current ticket projection and observed gaps.
 
@@ -63,6 +75,7 @@ sample:
 - application to this project;
 - failure/security behavior;
 - trade-off, when the ticket requires one.
+- selected/rejected option and change condition when the gate targets `C4_DEFEND`.
 
 Do not use syntax memorization or trick questions as the gate. Do not answer the
 questions for the learner or infer answers from silence.
@@ -138,4 +151,3 @@ last_observation:
 
 Do not fabricate a transcript or backfill answers that were not observed. Sensitive
 content, credentials and tokens must never be copied into a checkpoint.
-
