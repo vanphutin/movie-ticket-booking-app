@@ -17,7 +17,7 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.4
+effective_baseline: PC-2026.5
 current_stage: ANALYSIS
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
@@ -46,9 +46,12 @@ last_application_test: NOT_RUN
 
 Observed notes:
 
-- `PC-2026.4` is the effective `APPROVED_FOR_TRAINING` baseline.
+- `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline.
 - CCR-006 authorizes autonomous local commits split by repository stream; it does not
-  authorize push, merge, tag, release, PR creation or history rewrite.
+  authorize unsafe history changes.
+- CCR-007 authorizes `codex/<work-unit>` branches, verified non-force push and Draft PR
+  creation/update; direct-main push, force-push, merge, tag/release and history rewrite
+  remain forbidden.
 - Foundation Gate `FG-001` is `VERIFIED` with final rubric score `12/12`.
 - Learning Gate `LG-TKT-W04-D01` is `PASSED` (`C4_DEFEND` level).
 - `TKT-W04-D01` Analysis Note artifact is created with 0 unanswered conflicts:

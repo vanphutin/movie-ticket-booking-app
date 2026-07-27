@@ -1,6 +1,6 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.4
+effective_baseline: PC-2026.5
 current_stage: ANALYSIS
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02

@@ -107,5 +107,8 @@ Follow `AI-contracts/15-git-and-pr-workflow.md` and approved `CCR-006`.
 - Review the staged diff and run the smallest relevant checks before every commit.
 - Keep canonical state and affected projections in the same control-plane commit.
 - Preserve ambiguous user changes unstaged and report them.
-- Local commits are autonomous when policy gates pass. Push, merge, tag, release, PR
-  creation, force operations and history rewriting still require separate authority.
+- Local commits are autonomous when policy gates pass.
+- Under approved CCR-007, create/switch `codex/<work-unit>` branches, non-force push
+  verified branches and create/update Draft PRs autonomously.
+- Never push directly to the default branch, force-push, merge/enable auto-merge, tag,
+  release, delete branches or rewrite published history without separate authority.

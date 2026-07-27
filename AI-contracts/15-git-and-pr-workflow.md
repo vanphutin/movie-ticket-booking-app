@@ -39,8 +39,21 @@ từng commit khi tất cả điều kiện sau đạt:
 - canonical state/projection đã đồng bộ khi bị ảnh hưởng;
 - checkpoint có thể hiểu và revert độc lập.
 
-Codex không được tự push, force-push, merge, tag, release, mở PR hoặc rewrite history chỉ
-từ quyền autonomous local commit.
+Theo CCR-007, Codex được tự tạo/switch branch `codex/<work-unit>`, non-force push branch
+đã verify và tạo/cập nhật Draft PR. Codex không được push trực tiếp `main`, force-push,
+auto-merge/merge, tag, release, xóa branch hoặc rewrite published history.
+
+## Autonomous branch and publish
+
+- Branch theo ticket, approved CCR hoặc coherent remediation; không tạo branch theo tên
+  thư mục.
+- Tạo branch trước khi có product/contract work mới khi đang ở default branch.
+- Chỉ push khi branch không phải default, remote đã verify, diff/commits rõ ownership,
+  secret review sạch và checks phù hợp pass hoặc limitation được ghi thật.
+- Push chỉ fast-forward/non-force và đặt upstream cho branch mới.
+- Tạo Draft PR với scope, non-scope, contracts, evidence, limitations và rollback.
+- Draft chỉ chuyển ready khi lifecycle gate cho phép; merge luôn cần reviewer quyết định.
+- Không dùng quyền publish để mở rộng ticket scope hay vượt learning/design/readiness gate.
 
 ## Split and checkpoint rules
 
