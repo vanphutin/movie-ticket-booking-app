@@ -22,8 +22,10 @@ nhật `state/contract-status.yml`; Foundation Gate là gate riêng và vẫn ph
 1. `00-operating-policy.md`
 2. `02-source-of-truth.md`
 3. `03-project-contract.md` và `changes/` đang mở
-4. `state/README.md`, `state/contract-status.yml`, `state/current-ticket.yml`
-5. `19-learning-first-policy.md`, `20-learning-gate-standard.md` và `learning/`
+4. `state/README.md`, `state/current-work.yml`, `state/contract-status.yml`
+5. `19-learning-first-policy.md`, `20-learning-gate-standard.md`,
+   `learning/decision-learning-standard.md`, capability lesson specs, retention map và
+   reference profiles
 6. các technical contract IDs trong `contract_ids` và `capability_ids`
 7. `21-post-mvp-optimization-policy.md`, `22-performance-baseline-standard.md` và
    `state/optimization-status.yml`
@@ -53,14 +55,21 @@ Không có `current-ticket`, AI chỉ được chọn ticket đầu tiên có pr
 
 ## Validation hiện có
 
-Repository hiện **chưa có validator executable** và chưa có project tooling. Vì vậy,
-không được mô tả các lệnh validator giả là runnable. Trước khi validator được triển khai,
-reviewer kiểm tra thủ công:
+Control-plane có validator Node.js không dùng dependency:
 
-- ID/reference và đường dẫn tồn tại.
-- Trạng thái chỉ dùng value trong `state/README.md`.
-- Ticket dependency không mở qua `BLOCKED`/`CONDITIONAL_PASS`.
-- Mọi claim `OBSERVED` có evidence reference.
+```text
+node tools/control-plane/validate-control-plane.mjs
+```
+
+Đây không phải command format/lint/test của application. Repository vẫn chưa có project
+tooling hoặc source module được scaffold. Validator kiểm tra:
+
+- canonical current-work và compatibility projection không drift;
+- effective baseline, current/candidate ticket và current stage;
+- chỉ có một next action;
+- implementation không được mở trước readiness;
+- Foundation Gate chưa verified thì không có authorized ticket;
+- handoff context trùng canonical state.
 
 Khi source/module root được scaffold bởi ticket đã đạt DoR, coding guideline và command
 format/lint/test mới được tạo tại module root bằng một CCR hoặc design decision được review.

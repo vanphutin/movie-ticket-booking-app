@@ -1,7 +1,7 @@
 schema_version: 1
-effective_baseline: PC-2026.2
+effective_baseline: PC-2026.4
 effective_status: APPROVED_FOR_TRAINING
-superseded_baseline: PC-2026.1
+superseded_baseline: PC-2026.3
 proposed_baseline: null
 proposed_status: null
 approved_change_requests:
@@ -17,6 +17,12 @@ approved_change_requests:
   - id: CCR-004
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-26"
+  - id: CCR-005
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-28"
+  - id: CCR-006
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-28"
 open_change_requests: []
 drift_findings:
   - id: DRIFT-001
@@ -43,5 +49,8 @@ drift_findings:
   - id: DRIFT-008
     description: "Referenced-but-undefined policies: ticket CHECKED_IN/VOID has no actor/endpoint, showtime cancellation impact on holds/bookings is unspecified, DATA-006 retention is documented nowhere."
     disposition: "Resolved by CCR-004 approved 2026-07-26: DATA-SM-006 annotated post-MVP, BUS-010 defines cancellation impact, DATA-008 requires retention strategy."
-updated_at: "2026-07-27"
-updated_by: "Claude Code"
+  - id: DRIFT-009
+    description: "The 55-row API backlog and 22-row API contract lacked complete mapping and conflicted on Staff, AI, payOS and canonical paths."
+    disposition: "Resolved in PC-2026.3 by CCR-005 approved 2026-07-28: 55-row registry, explicit dispositions, payOS adapter policy and enforcement."
+updated_at: "2026-07-28"
+updated_by: "Codex"

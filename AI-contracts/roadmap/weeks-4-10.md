@@ -1,5 +1,13 @@
 # Canonical daily tickets — weeks 4–10
 
+> CCR-005 route overlay: Week 5 covers `API-CAT-001..003`, `API-CAT-010..011`
+> and optional `API-CAT-016..018`; Week 6 covers `API-CAT-004..009`,
+> `API-CAT-012..015`, `API-CAT-019..021`; Week 7 covers `API-BKG-001..008`
+> and `API-TKT-002..003`; Week 8 covers `API-PAY-001..005` plus `API-TKT-001`
+> through the provider-neutral port and payOS adapter; Week 9 covers
+> `API-OPS-001..002`. This overlay supersedes narrower endpoint ranges in legacy rows.
+> Staff and AI routes are not authorized by this MVP roadmap.
+
 ## Ticket profile (áp dụng cho mọi row)
 
 Mỗi row là một daily contract ticket hoàn chỉnh khi kết hợp với profile này:

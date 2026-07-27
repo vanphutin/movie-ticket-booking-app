@@ -1,13 +1,16 @@
 schema_version: 1
-decision_status: BLOCKED
-next_ticket_id: null
-candidate_ticket_id: TKT-W04-D01
-action: "Obtain reviewer-observed evidence for Foundation Gate FG-001; if verified, authorize TKT-W04-D01 and start its learning gate (LG-TKT-W04-D01) theory-first."
-priority_reason: "All CCRs (001-004) are APPROVED and PC-2026.2 is effective, but the Foundation Gate has no observed evidence and no ticket may open before it is VERIFIED."
-blocking_ids:
-  - FG-001
+decision_status: READY
+next_ticket_id: TKT-W04-D01
+candidate_ticket_id: TKT-W04-D02
+action: REVIEW_ANALYSIS_ARTIFACT
+target: TKT-W04-D01
+priority_reason: "Analysis artifact for TKT-W04-D01 is created at AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md with 0 unanswered conflicts."
+completion_condition: "Reviewer confirms analysis artifact completeness and authorizes transition to DESIGN stage."
+on_success: ADVANCE_TO_DESIGN
+on_failure: REVISE_ANALYSIS_ARTIFACT
+blocking_ids: []
 source_evidence:
-  - "AI-contracts/state/contract-status.yml"
-  - "AI-contracts/changes/CCR-001-control-plane-and-architecture-rebaseline.md"
-decided_at: "2026-07-27"
-decided_by: "Claude Code (per reviewer approval by Van Phu Tin)"
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md"
+  - "AI-contracts/state/current-work.yml"
+decided_at: "2026-07-28"
+decided_by: "Codex (TKT-W04-D01 analysis note completed)"

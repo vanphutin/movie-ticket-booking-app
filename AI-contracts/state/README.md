@@ -3,6 +3,16 @@
 State files là machine-readable observation/control records, không phải kế hoạch hoặc
 template. Chỉ cập nhật từ evidence, review hoặc explicit decision có nguồn.
 
+## Canonical current work
+
+`current-work.yml` là nguồn điều phối duy nhất cho current stage, authorized/candidate
+ticket, blocker, required output và đúng một next action.
+
+- `current-ticket.yml` là projection tương thích cho tracker/tài liệu cũ.
+- `next-action.yml` là projection tương thích của `current-work.yml#next_action`.
+- Khi projection khác canonical state, delivery work phải dừng để reconcile.
+- Chạy `node tools/control-plane/validate-control-plane.mjs` sau khi cập nhật state.
+
 ## Independent dimensions
 
 - Definition of Ready: `NOT_EVALUATED | CHANGES_REQUIRED | READY | BLOCKED`
@@ -26,6 +36,17 @@ Optimization là dimension độc lập. Source module MVP chưa `VERIFIED` thì
 Valid main transitions:
 
 ```text
+FOUNDATION_GATE
+  → STARTUP
+  → LEARNING
+  → ANALYSIS
+  → DESIGN
+  → READINESS
+  → IMPLEMENTATION
+  → VERIFICATION
+  → REVIEW
+  → HANDOFF
+
 NOT_ELIGIBLE → NOT_EVALUATED
 NOT_EVALUATED → BASELINE_REQUIRED
 BASELINE_REQUIRED → BASELINE_OBSERVED
@@ -36,6 +57,21 @@ OPTIMIZATION_REQUIRED → IN_PROGRESS → SUBMITTED → OPTIMIZED_VERIFIED
 
 `BLOCKER/HIGH` không được `DEFERRED_WITH_BUDGET`. MEDIUM chỉ defer khi đủ controls
 trong `21-post-mvp-optimization-policy.md`.
+
+## Required artifact gates
+
+| Stage | Artifact/output bắt buộc | Điều kiện chuyển tiếp tối thiểu |
+|---|---|---|
+| `FOUNDATION_GATE` | Foundation Gate review | `FG-001` có verdict dựa trên evidence |
+| `STARTUP` | reconciliation report | state/repository drift đã xử lý hoặc ghi blocker |
+| `LEARNING` | learning checkpoint | câu trả lời được quan sát và status `PASSED` |
+| `ANALYSIS` | analysis note | không còn requirement conflict chưa xử lý |
+| `DESIGN` | design note + expected-files manifest | design được review |
+| `READINESS` | readiness verdict | verdict `READY` |
+| `IMPLEMENTATION` | scoped diff + self-review | chỉ đổi file được review |
+| `VERIFICATION` | evidence manifest | command/output/observation có nguồn |
+| `REVIEW` | acceptance review | mọi AC đạt hoặc trả remediation |
+| `HANDOFF` | state + context projection | validator pass và có một next action |
 
 ## Current versus candidate ticket
 

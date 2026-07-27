@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "current-work.schema.json",
+  "title": "Canonical current work",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "effective_baseline",
+    "current_stage",
+    "ticket_id",
+    "candidate_ticket_id",
+    "statuses",
+    "blockers",
+    "required_output",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "current_stage": {
+      "enum": [
+        "FOUNDATION_GATE",
+        "STARTUP",
+        "LEARNING",
+        "ANALYSIS",
+        "DESIGN",
+        "READINESS",
+        "IMPLEMENTATION",
+        "VERIFICATION",
+        "REVIEW",
+        "HANDOFF",
+        "BLOCKED"
+      ]
+    },
+    "ticket_id": { "type": ["string", "null"] },
+    "candidate_ticket_id": { "type": ["string", "null"] },
+    "active_artifact": { "type": ["string", "null"] },
+    "statuses": {
+      "type": "object",
+      "required": [
+        "learning",
+        "analysis",
+        "design",
+        "readiness",
+        "implementation",
+        "evidence",
+        "review",
+        "handoff"
+      ]
+    },
+    "blockers": { "type": "array" },
+    "required_output": {
+      "type": "object",
+      "required": ["type", "path"]
+    },
+    "next_action": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "target",
+        "reason",
+        "completion_condition",
+        "on_success",
+        "on_failure"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

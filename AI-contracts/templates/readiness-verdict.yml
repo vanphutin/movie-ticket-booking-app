@@ -1,0 +1,17 @@
+schema_version: 1
+ticket_id: ""
+verdict: BLOCKED
+checks:
+  ticket_authorized: false
+  prerequisites_verified: false
+  learning_passed: false
+  analysis_complete: false
+  requirements_clear: false
+  contracts_referenced: false
+  design_reviewed: false
+  expected_files_reviewed: false
+  test_plan_defined: false
+  migration_and_rollback_addressed: false
+blockers: []
+reviewer: ""
+reviewed_at: ""
