@@ -5,7 +5,7 @@ build/
 coverage/
 .turbo/
 .nx/
-
+note.txt
 # Runtime and local state
 *.log
 logs/
