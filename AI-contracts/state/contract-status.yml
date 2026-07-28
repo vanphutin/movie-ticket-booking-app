@@ -1,7 +1,7 @@
 schema_version: 1
-effective_baseline: PC-2026.6
+effective_baseline: PC-2026.7
 effective_status: APPROVED_FOR_TRAINING
-superseded_baseline: PC-2026.5
+superseded_baseline: PC-2026.6
 proposed_baseline: null
 proposed_status: null
 approved_change_requests:
@@ -27,6 +27,9 @@ approved_change_requests:
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-28"
   - id: CCR-008
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-28"
+  - id: CCR-009
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-28"
 open_change_requests: []

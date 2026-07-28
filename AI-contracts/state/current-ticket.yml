@@ -14,6 +14,7 @@ contract_ids:
   - CCR-006
   - CCR-007
   - CCR-008
+  - CCR-009
 definition_of_ready_status: NOT_EVALUATED
 execution_status: NOT_STARTED
 review_status: NOT_REVIEWED

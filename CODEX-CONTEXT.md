@@ -18,7 +18,7 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.6
+effective_baseline: PC-2026.7
 current_stage: DESIGN
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03

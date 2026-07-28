@@ -8,6 +8,9 @@ ESLint và Jest, trừ khi approved ADR/CCR chọn lựa khác.
 `QLT-004`: Mỗi module root MUST có nested `AGENTS.md` với command format/lint/test chạy
 được và `codex-guidelines` block; không tạo command placeholder trong module chưa tồn tại.  
 `QLT-005`: Error map deterministic theo `API-COM-003`; unknown/internal error không leak detail.  
+`QLT-006`: Khi NestJS implementation dùng relational persistence, TypeORM + `pg` là
+adapter mặc định. Thay default ORM hoặc relational engine cần reviewed architecture impact
+và approved CCR; lựa chọn TypeORM không biến ORM thành nguồn thiết kế schema.
 `OBS-001`: Structured log có timestamp, service, level, event/action, request/trace/correlation ID và redaction.  
 `OBS-002`: Request/trace context propagate qua HTTP/event; metric labels bounded, không PII/high-cardinality ID.  
 `TEST-001`: Testing pyramid/risk rules theo `AI-contracts/14-testing-rules.md`; boundary thật cho claim thật.  

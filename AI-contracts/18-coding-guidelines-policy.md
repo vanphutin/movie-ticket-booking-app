@@ -21,6 +21,13 @@ Khi module root đầu tiên được tạo bởi ticket đã đạt Definition 
 6. Command trong `codex-guidelines` phải chạy được từ module root.
 7. Formatter SHOULD hỗ trợ changed-files-first khi tool cho phép.
 8. Tooling/config change phải nằm trong ticket scaffold hoặc remediation riêng và có test.
+9. Relational analysis/design dùng PostgreSQL 16 vocabulary và không thiết kế từ TypeORM
+   decorator.
+10. Khi relational module được scaffold, TypeORM + `pg` là implementation adapter mặc
+    định; TypeORM chỉ nằm trong infrastructure/persistence, `synchronize` phải là `false`,
+    và migration phải hiện thực reviewed PostgreSQL design.
+11. Constraint/transaction/concurrency/migration claim phải có integration evidence trên
+    PostgreSQL 16 thật.
 
 ## Required module rules
 
@@ -33,6 +40,8 @@ Mỗi nested guideline sau này MUST kiểm soát tối thiểu:
 - service không import internal source/entity/repository của service khác.
 - migration/database/test command là service-local.
 - contract và generated artifact có owner, source và deterministic command.
+- TypeORM persistence entity/repository/DataSource/QueryRunner không được import vào
+  domain/application; database invariant không được chuyển thành ORM-only check.
 
 ## Planned commands, not executable
 

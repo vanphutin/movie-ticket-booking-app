@@ -17,6 +17,16 @@ trước MVP verification của module sở hữu: expired/revoked `refresh_sess
 DLQ entries. Webhook payload lưu trữ theo redaction `SEC-007`. Duration cụ thể chọn tại
 design ticket qua reviewed decision; contract này yêu cầu strategy tồn tại, không áp đặt
 con số.
+`DATA-009`: Relational learning, analysis và design MUST dùng PostgreSQL 16 làm target,
+độc lập ORM, và mô tả invariant qua table/type/constraint/index/transaction/concurrency/
+migration semantics; ORM metadata hoặc decorator không phải nguồn thiết kế schema.
+`DATA-010`: PostgreSQL schema và immutable migration là authority thực thi database
+invariant. TypeORM mapping/migration MUST conform với reviewed PostgreSQL design,
+`synchronize: true` bị cấm, và ORM metadata MUST NOT làm yếu hoặc tự định nghĩa lại
+invariant.
+`DATA-011`: Claim về relational constraint, transaction, concurrency hoặc migration MUST
+được verify trên PostgreSQL 16 thật; mock repository hoặc ORM-only unit test không chứng
+minh database behavior.
 
 ## Ownership and invariants
 

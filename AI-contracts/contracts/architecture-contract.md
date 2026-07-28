@@ -76,3 +76,10 @@ design ticket; endpoint không được truy vấn chéo database hoặc biến 
 domain owner.
 `ARCH-029`: Row `STRETCH`/`POST_MVP` trong endpoint registry chỉ khóa future contract;
 nó không chứng minh readiness, không cấp ticket và không cho phép scaffold/implementation.
+`ARCH-030`: TypeORM là concrete relational persistence adapter mặc định cho NestJS
+services và chỉ nằm trong infrastructure/adapters cùng persistence entity, repository,
+DataSource và migration; PostgreSQL 16 design vẫn là authority cho schema/invariant.
+`ARCH-031`: Domain và application MUST NOT import TypeORM API/decorator, persistence
+entity, `Repository`, `EntityManager` hoặc `QueryRunner`. Infrastructure adapter MAY dùng
+parameterized PostgreSQL SQL qua TypeORM khi behavior đã review không thể biểu diễn an toàn
+bằng ORM metadata.
