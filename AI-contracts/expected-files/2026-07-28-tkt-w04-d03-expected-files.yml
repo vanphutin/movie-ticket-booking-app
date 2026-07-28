@@ -164,6 +164,50 @@ files:
     verification:
       - "Browser rendering check"
 
+  - path: "docs-viewer/app.js"
+    action: MODIFY
+    responsibility: "Apply one Mermaid visual template and provide diagram zoom controls"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Central Mermaid theme configuration"
+      - "Diagram zoom modal and controls"
+      - "Actionable Mermaid render error"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Docs viewer Mermaid rendering check"
+
+  - path: "docs-viewer/styles.css"
+    action: MODIFY
+    responsibility: "Style the shared Mermaid template and zoom experience"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid card, toolbar, modal, zoom canvas, and responsive styles"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Docs viewer visual check"
+
+  - path: "docs-viewer/README.md"
+    action: MODIFY
+    responsibility: "Document the Mermaid normalization, validation, and AI repair loop"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Repository documentation commands and repair workflow"
+    forbidden_content:
+      - "Unverified application commands"
+    verification:
+      - "Repository consistency validation"
+
   - path: "AI-contracts/viewer/index.html"
     action: MODIFY
     responsibility: "Pin the legacy contract viewer to the repository-validated Mermaid version"
