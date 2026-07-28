@@ -1,3 +1,4 @@
+# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D02
@@ -9,8 +10,11 @@ completion_condition: "Design Note 2026-07-28-tkt-w04-d02-design.md and expected
 on_success: PROCEED_TO_READINESS
 on_failure: RECORD_DESIGN_BLOCKERS
 blocking_ids: []
+required_evidence:
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-expected-files.yml
+  - AI-contracts/state/current-work.yml
 source_evidence:
-  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md"
-  - "AI-contracts/state/current-work.yml"
+  - AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
 decided_at: "2026-07-28"
 decided_by: "Codex (TKT-W04-D02 analysis completed)"

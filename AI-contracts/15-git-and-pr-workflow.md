@@ -43,6 +43,19 @@ Theo CCR-007, Codex được tự tạo/switch branch `codex/<work-unit>`, non-f
 đã verify và tạo/cập nhật Draft PR. Codex không được push trực tiếp `main`, force-push,
 auto-merge/merge, tag, release, xóa branch hoặc rewrite published history.
 
+## Repository consistency enforcement
+
+Theo CCR-008:
+
+- cập nhật canonical state trước, sau đó chạy
+  `node tools/control-plane/sync-control-plane.mjs`;
+- generated full-file target và delimited generated region không được sửa tay;
+- pre-commit hook chỉ kiểm tra và chặn, không tự stage hay commit file;
+- kích hoạt hook cho mỗi clone bằng `node tools/repository/install-git-hooks.mjs`;
+- CI chạy `node tools/repository/validate-repository.mjs`, negative fixtures và clean
+  regeneration diff;
+- historical evidence không bị rewrite chỉ để giống current state.
+
 ## Autonomous branch and publish
 
 - Branch theo ticket, approved CCR hoặc coherent remediation; không tạo branch theo tên

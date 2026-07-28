@@ -1,3 +1,4 @@
+# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
@@ -12,6 +13,7 @@ contract_ids:
   - SEC-002
   - CCR-006
   - CCR-007
+  - CCR-008
 definition_of_ready_status: NOT_EVALUATED
 execution_status: NOT_STARTED
 review_status: NOT_REVIEWED

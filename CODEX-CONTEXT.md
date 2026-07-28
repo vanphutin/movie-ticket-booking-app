@@ -14,10 +14,11 @@
 
 ## Current handoff
 
+<!-- GENERATED:CURRENT-HANDOFF:START -->
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.5
+effective_baseline: PC-2026.6
 current_stage: DESIGN
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
@@ -29,6 +30,7 @@ review_status: NOT_REVIEWED
 next_action: PROCEED_TO_DESIGN
 completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
 ```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
 
 ## Repository snapshot
 
@@ -47,7 +49,7 @@ automation_validator: AVAILABLE (Observed: PASSED)
 
 Observed notes:
 
-- `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline (CCR-001 through CCR-007 approved).
+- Effective baseline and current ticket values are owned by the generated handoff block above.
 - Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED`.
 - Authorized current ticket is `TKT-W04-D02` (`CAP-IDN-01`: Identity & Session Data Design).
 - Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level).
@@ -78,7 +80,7 @@ Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created
 After material work:
 
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.
-2. Synchronize affected compatibility projections.
-3. Refresh this compact handoff.
-4. Run `node tools/control-plane/validate-control-plane.mjs` (Observed outcome: `PASSED`, exit code `0`).
+2. Run `node tools/control-plane/sync-control-plane.mjs`.
+3. Run `node tools/repository/validate-repository.mjs`.
+4. Review canonical/generated diffs together.
 5. Report one next action and its completion condition.

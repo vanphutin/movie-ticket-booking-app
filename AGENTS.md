@@ -87,10 +87,10 @@ Before ending material project work:
 
 1. Update `AI-contracts/state/current-work.yml` from observed evidence or explicit
    reviewer decisions.
-2. Synchronize compatibility projections when their fields are affected:
-   `state/current-ticket.yml` and `state/next-action.yml`.
-3. Update `CODEX-CONTEXT.md` as a compact projection.
-4. Run `node tools/control-plane/validate-control-plane.mjs`.
+2. Run `node tools/control-plane/sync-control-plane.mjs`; do not edit generated files or
+   delimited generated regions by hand.
+3. Run `node tools/repository/validate-repository.mjs`.
+4. Review the canonical and generated diff together.
 5. Report exactly one next action and its completion condition.
 
 Do not rewrite evidence, approval history or reviewer verdicts merely to make validation

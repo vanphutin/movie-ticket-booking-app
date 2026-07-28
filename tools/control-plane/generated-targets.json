@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "canonical_sources": [
+    "AI-contracts/state/current-work.yml",
+    "AI-contracts/state/contract-status.yml"
+  ],
+  "targets": [
+    {
+      "path": "AI-contracts/state/current-ticket.yml",
+      "ownership": "full-file"
+    },
+    {
+      "path": "AI-contracts/state/next-action.yml",
+      "ownership": "full-file"
+    },
+    {
+      "path": "CODEX-CONTEXT.md",
+      "ownership": "delimited-region",
+      "region": "CURRENT-HANDOFF"
+    },
+    {
+      "path": "AI-contracts/README.md",
+      "ownership": "delimited-region",
+      "region": "CURRENT-STATUS"
+    }
+  ]
+}

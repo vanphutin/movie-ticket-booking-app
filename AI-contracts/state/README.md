@@ -11,7 +11,9 @@ ticket, blocker, required output và đúng một next action.
 - `current-ticket.yml` là projection tương thích cho tracker/tài liệu cũ.
 - `next-action.yml` là projection tương thích của `current-work.yml#next_action`.
 - Khi projection khác canonical state, delivery work phải dừng để reconcile.
-- Chạy `node tools/control-plane/validate-control-plane.mjs` sau khi cập nhật state.
+- Chạy `node tools/control-plane/sync-control-plane.mjs` sau khi cập nhật canonical state.
+- Chạy `node tools/repository/validate-repository.mjs` sau khi đồng bộ; chế độ kiểm tra
+  `node tools/control-plane/sync-control-plane.mjs --check` không ghi file.
 
 ## Independent dimensions
 

@@ -1,10 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
 const errors = [];
 const warnings = [];
+
+const syncCheck = spawnSync(process.execPath, ["tools/control-plane/sync-control-plane.mjs", "--check"], {
+  cwd: root,
+  encoding: "utf8"
+});
+if (syncCheck.status !== 0) {
+  errors.push(`Generated projection drift: ${(syncCheck.stderr || syncCheck.stdout).trim()}`);
+}
 
 function read(relativePath) {
   const absolutePath = path.join(root, relativePath);

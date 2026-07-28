@@ -1,7 +1,7 @@
 schema_version: 1
-effective_baseline: PC-2026.5
+effective_baseline: PC-2026.6
 effective_status: APPROVED_FOR_TRAINING
-superseded_baseline: PC-2026.4
+superseded_baseline: PC-2026.5
 proposed_baseline: null
 proposed_status: null
 approved_change_requests:
@@ -24,6 +24,9 @@ approved_change_requests:
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-28"
   - id: CCR-007
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-28"
+  - id: CCR-008
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-28"
 open_change_requests: []
@@ -55,5 +58,8 @@ drift_findings:
   - id: DRIFT-009
     description: "The 55-row API backlog and 22-row API contract lacked complete mapping and conflicted on Staff, AI, payOS and canonical paths."
     disposition: "Resolved in PC-2026.3 by CCR-005 approved 2026-07-28: 55-row registry, explicit dispositions, payOS adapter policy and enforcement."
+  - id: DRIFT-010
+    description: "Current-status prose and generated projections could drift because repeated values did not all have declared ownership or clean-check enforcement."
+    disposition: "Resolved in PC-2026.6 by CCR-008 approved 2026-07-28: repository-wide generated-projection, hook and CI enforcement authorized."
 updated_at: "2026-07-28"
 updated_by: "Codex"
