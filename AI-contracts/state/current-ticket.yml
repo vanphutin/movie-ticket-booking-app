@@ -9,9 +9,11 @@ contract_ids:
   - BUS-001
   - ARCH-001
   - ARCH-009
-definition_of_ready_status: BLOCKED
+  - CCR-006
+  - CCR-007
+definition_of_ready_status: READY
 execution_status: NOT_STARTED
-review_status: NOT_REVIEWED
+review_status: APPROVED
 evidence_status: OBSERVED
 evidence_confidence: HIGH
 learning:
@@ -21,7 +23,7 @@ learning:
   topics_presented: []
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: false
+  design_unlocked: true
   skeleton_unlocked: false
   last_observation: null
 blockers: []

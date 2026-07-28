@@ -18,16 +18,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.5
-current_stage: ANALYSIS
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
 primary_blocker: NONE
-required_output: ANALYSIS_REVIEW
+required_output: SCOPED_DIFF_AND_SELF_REVIEW
 evidence_status: OBSERVED
-review_status: NOT_REVIEWED
-next_action: REVIEW_ANALYSIS_ARTIFACT
-completion_condition: Reviewer confirms analysis artifact completeness and authorizes transition to DESIGN stage.
+review_status: APPROVED
+next_action: EXECUTE_IMPLEMENTATION
+completion_condition: Scoped control-plane changes and expected files manifest are verified with validator passing.
 ```
 
 ## Repository snapshot
@@ -35,48 +35,45 @@ completion_condition: Reviewer confirms analysis artifact completeness and autho
 ```yaml
 captured_at: "2026-07-28"
 repository_root: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
-branch: main
-head_commit_before_control_plane_change: 099d664
+branch: codex/control-plane-governance
+head_commit_before_control_plane_change: 93a4f45
 working_tree: MODIFIED
 application_modules: NOT_SCAFFOLDED
 application_tooling: NOT_AVAILABLE
 services_running: POSTGRESQL_CONTAINER_ACTIVE
 last_application_test: NOT_RUN
+automation_validator: AVAILABLE (Observed: PASSED)
 ```
 
 Observed notes:
 
-- `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline.
-- CCR-006 authorizes autonomous local commits split by repository stream; it does not
-  authorize unsafe history changes.
-- CCR-007 authorizes `codex/<work-unit>` branches, verified non-force push and Draft PR
-  creation/update; direct-main push, force-push, merge, tag/release and history rewrite
-  remain forbidden.
+- `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline (CCR-001 through CCR-007 approved).
 - Foundation Gate `FG-001` is `VERIFIED` with final rubric score `12/12`.
 - Learning Gate `LG-TKT-W04-D01` is `PASSED` (`C4_DEFEND` level).
-- `TKT-W04-D01` Analysis Note artifact is created with 0 unanswered conflicts:
-  `AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md`.
-- Design and Implementation stages are NOT yet open.
+- Analysis Note artifact is `APPROVED` by reviewer with 0 unanswered conflicts.
+- Design Note and Expected-Files Manifest were approved after V4 remediation.
+- Readiness Verdict evaluated and `READY` (`2026-07-28-tkt-w04-d01-readiness.yml`); stage advanced to `IMPLEMENTATION`.
+- Application code is NOT scaffolded (`NOT_SCAFFOLDED`).
+- Automated validator script `tools/control-plane/validate-control-plane.mjs` is present in working tree and verified `PASSED` with exit code `0`.
 
 ## Active artifact and output
 
 The current required control-plane output is:
 
 ```text
-Review Analysis Artifact for TKT-W04-D01
-→ AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md
-→ verify actor, outcome, scope, out-of-scope, assumptions, invariants, owners, trust boundaries, failures, security risks, contract IDs, and 0 unanswered conflicts
-→ authorize transition to DESIGN stage
+Execute implementation for TKT-W04-D01
+→ perform scoped control-plane changes strictly within expected-files manifest
+→ maintain zero application code scaffolding for D01
 ```
 
 ## One next action
 
-Review `TKT-W04-D01` Analysis Note Artifact.
+Execute implementation for `TKT-W04-D01`.
 
 Completion condition:
 
 ```text
-Reviewer confirms analysis artifact completeness and authorizes transition to DESIGN stage.
+Scoped control-plane changes and expected files manifest are verified with validator passing.
 ```
 
 ## Shutdown
@@ -86,5 +83,5 @@ After material work:
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.
 2. Synchronize affected compatibility projections.
 3. Refresh this compact handoff.
-4. Run `node tools/control-plane/validate-control-plane.mjs`.
+4. Run `node tools/control-plane/validate-control-plane.mjs` (Observed outcome: `PASSED`, exit code `0`).
 5. Report one next action and its completion condition.

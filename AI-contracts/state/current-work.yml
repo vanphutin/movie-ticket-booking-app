@@ -1,31 +1,31 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.5
-current_stage: ANALYSIS
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
 statuses:
   learning: PASSED
-  analysis: COMPLETE
-  design: NOT_STARTED
-  readiness: BLOCKED
+  analysis: PASSED
+  design: PASSED
+  readiness: READY
   implementation: NOT_STARTED
   evidence: OBSERVED
-  review: NOT_REVIEWED
+  review: APPROVED
   handoff: CURRENT
 blockers: []
 required_output:
-  type: ANALYSIS_REVIEW
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md
+  type: SCOPED_DIFF_AND_SELF_REVIEW
+  path: AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml
 next_action:
-  id: ACTION-TKT-W04-D01-ANALYSIS-REVIEW
-  type: REVIEW_ANALYSIS_ARTIFACT
+  id: ACTION-TKT-W04-D01-IMPLEMENTATION
+  type: EXECUTE_IMPLEMENTATION
   target: TKT-W04-D01
-  reason: Analysis artifact for TKT-W04-D01 is created with 0 unanswered conflicts. Reviewer review required before advancing to DESIGN stage.
-  completion_condition: Reviewer confirms analysis artifact completeness and authorizes transition to DESIGN stage.
-  on_success: ADVANCE_TO_DESIGN
-  on_failure: REVISE_ANALYSIS_ARTIFACT
+  reason: Readiness verdict APPROVED with status READY. Scoped control-plane implementation under CCR-006 and CCR-007 is authorized.
+  completion_condition: Scoped control-plane changes and expected files manifest are verified with validator passing.
+  on_success: PROCEED_TO_VERIFICATION
+  on_failure: RECORD_IMPLEMENTATION_BLOCKERS
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "Analysis note artifact created for TKT-W04-D01; analysis status COMPLETE with 0 unanswered conflicts."
+update_source: "Readiness verdict evaluated and APPROVED with status READY; stage advanced to IMPLEMENTATION."
