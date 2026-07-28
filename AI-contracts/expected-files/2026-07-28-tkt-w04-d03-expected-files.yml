@@ -324,4 +324,23 @@ files:
     verification:
       - "Repository consistency workflow"
 
+  - path: "AGENTS.md"
+    action: MODIFY
+    responsibility: "Require every AI session to normalize and validate generated documentation and Mermaid diagrams"
+    contract_ids:
+      - CCR-006
+      - CCR-008
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mandatory documentation and Mermaid validation workflow"
+      - "Central Mermaid template and generated viewer data rules"
+      - "AI repair-and-rerun completion condition"
+    forbidden_content:
+      - "Application source code"
+      - "Duplicate canonical project state"
+    verification:
+      - "Documentation validation"
+      - "Repository consistency validation"
+
 unplanned_file_policy: RETURN_TO_DESIGN
