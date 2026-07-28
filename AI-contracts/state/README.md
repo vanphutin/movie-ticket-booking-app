@@ -10,6 +10,9 @@ ticket, blocker, required output và đúng một next action.
 
 - `current-ticket.yml` là projection tương thích cho tracker/tài liệu cũ.
 - `next-action.yml` là projection tương thích của `current-work.yml#next_action`.
+- `completed_ticket_ids` chỉ ghi ticket có review verdict `VERIFIED` và handoff đã hoàn
+  tất; generator dùng danh sách này để đánh dấu tiến độ trực quan, không suy diễn từ
+  checkbox hoặc artifact tồn tại.
 - Khi projection khác canonical state, delivery work phải dừng để reconcile.
 - Chạy `node tools/control-plane/sync-control-plane.mjs` sau khi cập nhật canonical state.
 - Chạy `node tools/repository/validate-repository.mjs` sau khi đồng bộ; chế độ kiểm tra
@@ -85,6 +88,8 @@ trong `21-post-mvp-optimization-policy.md`.
 ## Update rules
 
 - Không dùng `DONE`, checkbox hoặc artifact existence để suy ra `VERIFIED`.
+- Không thêm ticket vào `completed_ticket_ids` nếu thiếu review verdict `VERIFIED` và
+  handoff evidence tương ứng.
 - `updated_at/by` chỉ điền khi có update thật; không backfill giả.
 - Mỗi blocker/finding/decision có source evidence hoặc ghi rõ `MISSING`.
 - Contract draft không tự thay đổi runtime capability/ticket state.

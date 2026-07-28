@@ -22,6 +22,16 @@
       "path": "AI-contracts/README.md",
       "ownership": "delimited-region",
       "region": "CURRENT-STATUS"
+    },
+    {
+      "path": "docs/plan/movie-ticket-booking-master-plan.md",
+      "ownership": "delimited-region",
+      "region": "PLAN-PROGRESS"
+    },
+    {
+      "path": "docs/plan/movie-ticket-booking-master-plan.html",
+      "ownership": "delimited-region",
+      "region": "PLAN-PROGRESS"
     }
   ]
 }

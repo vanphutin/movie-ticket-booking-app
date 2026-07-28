@@ -4,6 +4,8 @@ effective_baseline: PC-2026.7
 current_stage: DESIGN
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
+completed_ticket_ids:
+  - TKT-W04-D01
 active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
 ticket_projection:
   phase_id: P0

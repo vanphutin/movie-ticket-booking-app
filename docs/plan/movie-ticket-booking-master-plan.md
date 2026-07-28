@@ -6,9 +6,58 @@
 > Trạng thái tài liệu: `PLANNED` — không phải bằng chứng triển khai  
 > Nguồn: trạng thái repository, `CODEX-CONTEXT.md` và `AI-contracts/`
 
-> Baseline hiệu lực: `PC-2026.3` theo CCR-005. API inventory có 55 endpoint:
-> 37 `CORE_REQUIRED`, 4 `CORE_OPTIONAL`, 11 `STRETCH`, 3 `POST_MVP`.
-> Contract hóa endpoint không đồng nghĩa cấp quyền triển khai.
+<!-- GENERATED:PLAN-PROGRESS:START -->
+## Tiến độ canonical tự động
+
+> Vùng này được sinh từ `AI-contracts/state/current-work.yml`. Dấu ☑ chỉ dành cho ticket có review
+> `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
+
+- Baseline: `PC-2026.7`
+- Ticket hiện tại: `TKT-W04-D02` — stage `DESIGN`
+- Hoàn thành có xác minh: **1/35**
+- Next action: `PROCEED_TO_DESIGN`
+
+| | Ticket | Trạng thái | Ý nghĩa |
+|---|---|---|---|
+| ☑ | `TKT-W04-D01` | `VERIFIED` | Canonical completed ticket |
+| ◉ | `TKT-W04-D02` | `DESIGN` | Current authorized ticket |
+| ☐ | `TKT-W04-D03` | `CANDIDATE` | Not authorized |
+| ☐ | `TKT-W04-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W04-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W05-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W05-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W05-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W05-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W05-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W06-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W06-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W06-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W06-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W06-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W07-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W07-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W07-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W07-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W07-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W08-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W08-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W08-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W08-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W08-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W09-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W09-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W09-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W09-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W09-D05` | `PLANNED` | Not started |
+| ☐ | `TKT-W10-D01` | `PLANNED` | Not started |
+| ☐ | `TKT-W10-D02` | `PLANNED` | Not started |
+| ☐ | `TKT-W10-D03` | `PLANNED` | Not started |
+| ☐ | `TKT-W10-D04` | `PLANNED` | Not started |
+| ☐ | `TKT-W10-D05` | `PLANNED` | Not started |
+<!-- GENERATED:PLAN-PROGRESS:END -->
+
+API inventory có 55 endpoint: 37 `CORE_REQUIRED`, 4 `CORE_OPTIONAL`, 11 `STRETCH`,
+3 `POST_MVP`. Contract hóa endpoint không đồng nghĩa cấp quyền triển khai.
 
 ## 1. Mục tiêu
 
@@ -55,7 +104,11 @@ Kế hoạch hoàn thành khi 35 ticket cốt lõi từ tuần 4–10 đã qua w
 - Command/event/webhook có thể lặp phải idempotent.
 - Không claim `VERIFIED` nếu thiếu command, exit code, artifact và observation thật.
 
-## 3. Hiện trạng đã quan sát
+## 3. Snapshot lịch sử khi plan 1.1 được tạo
+
+> Phần này giữ context ban đầu để giải thích quyết định của kế hoạch, không phải trạng
+> thái hiện tại. Xem vùng **Tiến độ canonical tự động** ở đầu tài liệu để biết trạng thái
+> đang có hiệu lực.
 
 | Hạng mục | Quan sát | Hệ quả |
 |---|---|---|

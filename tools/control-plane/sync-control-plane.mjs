@@ -100,6 +100,10 @@ const contractStatus = read(contractStatusPath);
 
 const ticket = topScalar(currentWork, "ticket_id");
 const candidate = topScalar(currentWork, "candidate_ticket_id");
+const completedTickets = block(currentWork, "completed_ticket_ids")
+  .split("\n")
+  .map((line) => line.match(/^\s*-\s+(TKT-W\d{2}-D\d{2})\s*$/)?.[1])
+  .filter(Boolean);
 const stage = topScalar(currentWork, "current_stage");
 const baseline = topScalar(currentWork, "effective_baseline");
 const activeArtifact = topScalar(currentWork, "active_artifact");
@@ -247,6 +251,65 @@ const readmeStatus = `- Baseline đang có hiệu lực: \`${baseline}\` — \`$
 - Approved change requests: \`${approvedIds[0]}\` đến \`${approvedIds.at(-1)}\`.`;
 const readme = replaceRegion(read("AI-contracts/README.md"), "CURRENT-STATUS", readmeStatus);
 writeIfChanged("AI-contracts/README.md", readme);
+
+const planTicketIds = [];
+for (let week = 4; week <= 10; week += 1) {
+  for (let day = 1; day <= 5; day += 1) {
+    planTicketIds.push(`TKT-W${String(week).padStart(2, "0")}-D${String(day).padStart(2, "0")}`);
+  }
+}
+const completedSet = new Set(completedTickets);
+const planRows = planTicketIds.map((id) => {
+  if (completedSet.has(id)) return `| ☑ | \`${id}\` | \`VERIFIED\` | Canonical completed ticket |`;
+  if (id === ticket) return `| ◉ | \`${id}\` | \`${stage}\` | Current authorized ticket |`;
+  if (id === candidate) return `| ☐ | \`${id}\` | \`CANDIDATE\` | Not authorized |`;
+  return `| ☐ | \`${id}\` | \`PLANNED\` | Not started |`;
+});
+const planProgress = `## Tiến độ canonical tự động
+
+> Vùng này được sinh từ \`${currentWorkPath}\`. Dấu ☑ chỉ dành cho ticket có review
+> \`VERIFIED\` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
+
+- Baseline: \`${baseline}\`
+- Ticket hiện tại: \`${ticket ?? "NONE"}\` — stage \`${stage}\`
+- Hoàn thành có xác minh: **${completedTickets.length}/${planTicketIds.length}**
+- Next action: \`${action}\`
+
+| | Ticket | Trạng thái | Ý nghĩa |
+|---|---|---|---|
+${planRows.join("\n")}`;
+const planMarkdown = replaceRegion(
+  read("docs/plan/movie-ticket-booking-master-plan.md"),
+  "PLAN-PROGRESS",
+  planProgress
+);
+writeIfChanged("docs/plan/movie-ticket-booking-master-plan.md", planMarkdown);
+
+const planCards = planTicketIds.map((id) => {
+  const status = completedSet.has(id)
+    ? "VERIFIED"
+    : id === ticket
+      ? stage
+      : id === candidate
+        ? "CANDIDATE"
+        : "PLANNED";
+  const symbol = status === "VERIFIED" ? "✓" : id === ticket ? "●" : "○";
+  const css = status === "VERIFIED" ? "verified" : id === ticket ? "current" : "planned";
+  return `<span class="canonical-ticket ${css}" title="${status}">${symbol} ${id}<small>${status}</small></span>`;
+}).join("\n        ");
+const planHtmlProgress = `<section class="canonical-progress" aria-label="Tiến độ canonical">
+      <div class="section-title"><div><div class="eyebrow">Canonical progress · generated</div><h2>${completedTickets.length}/${planTicketIds.length} ticket VERIFIED</h2></div><p>Baseline ${baseline} · Current ${ticket ?? "NONE"} · ${stage}</p></div>
+      <div class="canonical-summary"><strong>Next action</strong><code>${action}</code><span>✓ chỉ xuất hiện sau review VERIFIED và handoff.</span></div>
+      <div class="canonical-tickets">
+        ${planCards}
+      </div>
+    </section>`;
+const planHtml = replaceRegion(
+  read("docs/plan/movie-ticket-booking-master-plan.html"),
+  "PLAN-PROGRESS",
+  planHtmlProgress
+);
+writeIfChanged("docs/plan/movie-ticket-booking-master-plan.html", planHtml);
 
 if (changed.length > 0) {
   const prefix = checkOnly ? "Generated projection drift" : "Synchronized generated projections";

@@ -13,6 +13,8 @@ const files = [
   "AI-contracts/state/next-action.yml",
   "AI-contracts/README.md",
   "CODEX-CONTEXT.md",
+  "docs/plan/movie-ticket-booking-master-plan.md",
+  "docs/plan/movie-ticket-booking-master-plan.html",
   "tools/control-plane/sync-control-plane.mjs"
 ];
 
@@ -37,16 +39,38 @@ try {
   }
 
   const readmePath = path.join(temporaryRoot, "AI-contracts/README.md");
-  const drifted = fs.readFileSync(readmePath, "utf8").replace("PC-2026.6", "PC-STALE");
+  const baseline = fs
+    .readFileSync(path.join(temporaryRoot, "AI-contracts/state/current-work.yml"), "utf8")
+    .match(/^effective_baseline:\s*(\S+)/m)?.[1];
+  if (!baseline) throw new Error("Fixture canonical baseline is missing");
+  const drifted = fs.readFileSync(readmePath, "utf8").replace(baseline, "PC-STALE");
   fs.writeFileSync(readmePath, drifted, "utf8");
   const drift = runCheck();
   if (drift.status === 0 || !`${drift.stderr}${drift.stdout}`.includes("AI-contracts/README.md")) {
     throw new Error("README current-status drift was not rejected");
   }
 
+  fs.copyFileSync(path.join(root, "AI-contracts/README.md"), readmePath);
+  const planPath = path.join(temporaryRoot, "docs/plan/movie-ticket-booking-master-plan.md");
+  const stalePlan = fs.readFileSync(planPath, "utf8").replace(
+    "Hoàn thành có xác minh: **1/35**",
+    "Hoàn thành có xác minh: **35/35**"
+  );
+  fs.writeFileSync(planPath, stalePlan, "utf8");
+  const planDrift = runCheck();
+  if (
+    planDrift.status === 0 ||
+    !`${planDrift.stderr}${planDrift.stdout}`.includes(
+      "docs/plan/movie-ticket-booking-master-plan.md"
+    )
+  ) {
+    throw new Error("Plan progress drift was not rejected");
+  }
+
   console.log("Consistency negative fixtures: PASSED");
   console.log("- synchronized fixture accepted");
   console.log("- stale README generated region rejected");
+  console.log("- stale plan progress generated region rejected");
 } finally {
   fs.rmSync(temporaryRoot, { recursive: true, force: true });
 }

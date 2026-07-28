@@ -21,7 +21,8 @@
     table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--panel)}th,td{padding:13px;text-align:left;border-bottom:1px solid var(--line)}th{background:#10263e;color:#cfe6f8;font-size:12px;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border:0}.high{color:var(--red)}.medium{color:var(--amber)}
     .footer{padding:28px;border-top:1px solid var(--line);color:var(--muted);text-align:center}.empty{display:none;padding:30px;text-align:center;color:var(--muted)}
     @media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.tickets{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:repeat(4,1fr)}}@media(max-width:650px){.shell{padding:12px}.hero{padding:25px}.stats,.tickets,.d01-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.week-head{grid-template-columns:64px 1fr}.week-no{width:58px;height:58px}.gate{grid-column:1/-1;width:max-content}.toolbar .push{width:100%;margin:0}}
-    @media print{body{background:#fff;color:#111}.toolbar{display:none}.hero,.stat,.week,.ticket,.task,table{box-shadow:none;background:#fff;color:#111;border-color:#bbb}.week-head,th{background:#eee;color:#111}.hero p,.stat span,.week-head p,.ticket p,.task p,.section-title p{color:#444}.shell{max-width:none}.tickets{grid-template-columns:repeat(5,1fr)}}
+    .canonical-progress{margin:22px 0;padding:22px;border:1px solid #253857;border-radius:20px;background:linear-gradient(145deg,#101d31,#0b1526)}.canonical-summary{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;color:var(--muted)}.canonical-summary code{color:var(--cyan)}.canonical-tickets{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.canonical-ticket{display:flex;gap:7px;align-items:center;padding:9px 10px;border:1px solid #253857;border-radius:10px;font:700 12px/1.2 ui-monospace,monospace}.canonical-ticket small{margin-left:auto;font-size:9px;color:var(--muted)}.canonical-ticket.verified{color:#66e3a4;border-color:#23704e;background:#0c2a20}.canonical-ticket.current{color:var(--cyan);border-color:#247aa0;background:#0b2736}.canonical-ticket.planned{color:#8da0ba}@media(max-width:800px){.canonical-tickets{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media print{body{background:#fff;color:#111}.toolbar{display:none}.hero,.stat,.week,.ticket,.task,table,.canonical-progress{box-shadow:none;background:#fff;color:#111;border-color:#bbb}.week-head,th{background:#eee;color:#111}.hero p,.stat span,.week-head p,.ticket p,.task p,.section-title p{color:#444}.shell{max-width:none}.tickets{grid-template-columns:repeat(5,1fr)}}
   </style>
 </head>
 <body>
@@ -35,10 +36,54 @@
       <div class="chips">
         <span class="chip">7 tuần</span><span class="chip">35 core tickets</span>
         <span class="chip">8 phases</span><span class="chip">55 contracted APIs</span>
-        <span class="chip">PC-2026.3</span><span class="chip">5 services</span>
-        <span class="chip blocked">Hiện tại: BLOCKED · FG-001</span>
+        <span class="chip">Canonical baseline ở bảng dưới</span><span class="chip">5 services</span>
+        <span class="chip">Tiến độ lấy từ current-work.yml</span>
       </div>
     </header>
+
+    <!-- GENERATED:PLAN-PROGRESS:START -->
+<section class="canonical-progress" aria-label="Tiến độ canonical">
+      <div class="section-title"><div><div class="eyebrow">Canonical progress · generated</div><h2>1/35 ticket VERIFIED</h2></div><p>Baseline PC-2026.7 · Current TKT-W04-D02 · DESIGN</p></div>
+      <div class="canonical-summary"><strong>Next action</strong><code>PROCEED_TO_DESIGN</code><span>✓ chỉ xuất hiện sau review VERIFIED và handoff.</span></div>
+      <div class="canonical-tickets">
+        <span class="canonical-ticket verified" title="VERIFIED">✓ TKT-W04-D01<small>VERIFIED</small></span>
+        <span class="canonical-ticket current" title="DESIGN">● TKT-W04-D02<small>DESIGN</small></span>
+        <span class="canonical-ticket planned" title="CANDIDATE">○ TKT-W04-D03<small>CANDIDATE</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W04-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W04-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W05-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W05-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W05-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W05-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W05-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W06-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W06-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W06-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W06-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W06-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W07-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W07-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W07-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W07-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W07-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W08-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W08-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W08-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W08-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W08-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W09-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W09-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W09-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W09-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W09-D05<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W10-D01<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W10-D02<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W10-D03<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W10-D04<small>PLANNED</small></span>
+        <span class="canonical-ticket planned" title="PLANNED">○ TKT-W10-D05<small>PLANNED</small></span>
+      </div>
+    </section>
+<!-- GENERATED:PLAN-PROGRESS:END -->
 
     <nav class="toolbar" aria-label="Bộ lọc kế hoạch">
       <select id="weekFilter" aria-label="Lọc theo tuần"><option value="all">Tất cả tuần</option></select>
@@ -83,7 +128,7 @@
     </section>
 
     <section id="current-ticket">
-      <div class="section-title"><div><div class="eyebrow">Immediate execution</div><h2>TKT-W04-D01 · Foundation & Contract Audit</h2></div><p>Không scaffold cho đến khi D01-03 có verdict hợp lệ.</p></div>
+      <div class="section-title"><div><div class="eyebrow">Historical checklist</div><h2>TKT-W04-D01 · Foundation & Contract Audit</h2></div><p>Checklist nền đã hoàn thành; trạng thái hiện tại nằm trong canonical progress phía trên.</p></div>
       <div class="d01-grid" id="d01Tasks"></div>
     </section>
 
@@ -115,7 +160,7 @@
       </table>
     </section>
   </main>
-  <footer class="footer">Plan version 1.1 · 2026-07-28 · PC-2026.3 · PLANNED ≠ VERIFIED · Chi tiết đầy đủ nằm trong file Markdown cùng thư mục.</footer>
+  <footer class="footer">Plan version 1.1 · 2026-07-28 · Baseline và tiến độ được sinh từ canonical state · PLANNED ≠ VERIFIED.</footer>
 
   <script>
     const weeks = [
