@@ -1,84 +1,87 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
-current_stage: HANDOFF
-ticket_id: TKT-W04-D03
-candidate_ticket_id: TKT-W04-D04
+current_stage: STARTUP
+ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+  - TKT-W04-D03
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
   capability_ids:
-    - CAP-SEC-01
+    - CAP-IDN-01
   contract_ids:
-    - SEC-001
-    - SEC-002
-    - SEC-003
-    - SEC-004
-    - SEC-005
-    - SEC-006
-    - SEC-007
+    - API-AUTH-001
     - API-AUTH-002
     - API-AUTH-003
     - API-AUTH-004
+    - API-AUTH-005
+    - API-COM-001
+    - API-COM-002
+    - API-COM-003
+    - API-COM-004
+    - API-COM-005
+    - API-COM-006
+    - SEC-003
     - ARCH-008
     - CCR-006
     - CCR-007
     - CCR-008
     - CCR-009
     - CCR-010
-  execution_status: SUBMITTED
+  execution_status: NOT_STARTED
   evidence_confidence: HIGH
   learning:
-    gate_id: LG-TKT-W04-D03
+    gate_id: LG-TKT-W04-D04
     mode: REGULAR
     topics_presented:
-      - "AuthN vs AuthZ"
-      - "JWT signing, claims, expiry"
-      - "Access vs Refresh Token lifecycle"
-      - "Token rotation and reuse detection"
-      - "HTTP 401 vs 403 error matrix"
-      - "Gateway trusted propagation and log redaction"
+      - "OpenAPI 3.0/3.1 REST specification for auth APIs"
+      - "Request and Response DTO schemas and Mass Assignment prevention"
+      - "RBAC Deny Matrix and Enumeration attack mitigations"
+      - "Standard Error Response format (API-COM-001..006)"
+      - "OpenAPI Contract Testing design"
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: true
-    skeleton_unlocked: true
-    last_observation: PASSED
+    design_unlocked: false
+    skeleton_unlocked: false
+    last_observation: NOT_EVALUATED
 statuses:
-  learning: PASSED
-  analysis: PASSED
-  design: PASSED
-  readiness: READY
+  learning: NOT_STARTED
+  analysis: NOT_STARTED
+  design: NOT_STARTED
+  readiness: NOT_EVALUATED
   implementation: NOT_STARTED
-  evidence: OBSERVED
-  review: VERIFIED
-  handoff: IN_PROGRESS
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: PUBLISHED_WORK_UNIT_CHECKPOINT
-  path: AI-contracts/state/work-unit-checkpoint.yml
+  type: REPOSITORY_RECONCILIATION_REPORT
+  path: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
 next_action:
-  id: ACTION-TKT-W04-D03-PUBLISH
-  type: PUBLISH_WORK_UNIT_CHECKPOINT
-  target: TKT-W04-D03
-  reason: CCR-010 requires the outgoing D03 branch to be committed, pushed, remote-verified and represented by a Draft PR before D04 authorization.
-  completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
-  on_success: AUTHORIZE_TKT_W04_D04
-  on_failure: RECORD_GIT_PUBLICATION_BLOCKER
+  id: ACTION-TKT-W04-D04-STARTUP
+  type: RECONCILE_REPOSITORY
+  target: TKT-W04-D04
+  reason: TKT-W04-D03 publication checkpoint is VERIFIED under CCR-010; TKT-W04-D04 is now authorized on its own branch.
+  completion_condition: Repository reconciliation report AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md reflects the published D03 checkpoint and passes repository validation.
+  on_success: PROCEED_TO_LEARNING
+  on_failure: RECORD_STARTUP_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
+    - AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
     - AI-contracts/state/work-unit-checkpoint.yml
-    - https://github.com/vanphutin/movie-ticket-booking-app/pull/3
-  source_evidence:
-    - AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
     - AI-contracts/state/current-work.yml
+  source_evidence:
+    - AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
+    - AI-contracts/state/work-unit-checkpoint.yml
   decided_at: "2026-07-29"
-  decided_by: "Codex (CCR-010 approved; reconciling premature D04 transition)"
+  decided_by: "Codex (D03 checkpoint published and verified under CCR-010)"
 updated_at: "2026-07-29"
 updated_by: Codex
-update_source: "CCR-010 remediation: keep D03 current until its publication checkpoint is verified."
+update_source: "TKT-W04-D04 startup authorized after verified D03 publication checkpoint."

@@ -1,49 +1,50 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-ticket_id: TKT-W04-D03
-candidate_ticket_id: TKT-W04-D04
+ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
 phase_id: P0
 milestone_id: M0
 capability_ids:
-  - CAP-SEC-01
+  - CAP-IDN-01
 contract_ids:
-  - SEC-001
-  - SEC-002
-  - SEC-003
-  - SEC-004
-  - SEC-005
-  - SEC-006
-  - SEC-007
+  - API-AUTH-001
   - API-AUTH-002
   - API-AUTH-003
   - API-AUTH-004
+  - API-AUTH-005
+  - API-COM-001
+  - API-COM-002
+  - API-COM-003
+  - API-COM-004
+  - API-COM-005
+  - API-COM-006
+  - SEC-003
   - ARCH-008
   - CCR-006
   - CCR-007
   - CCR-008
   - CCR-009
   - CCR-010
-definition_of_ready_status: READY
-execution_status: SUBMITTED
-review_status: VERIFIED
-evidence_status: OBSERVED
+definition_of_ready_status: NOT_EVALUATED
+execution_status: NOT_STARTED
+review_status: NOT_REVIEWED
+evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
-  gate_id: LG-TKT-W04-D03
-  status: PASSED
+  gate_id: LG-TKT-W04-D04
+  status: NOT_STARTED
   mode: REGULAR
   topics_presented:
-    - "AuthN vs AuthZ"
-    - "JWT signing, claims, expiry"
-    - "Access vs Refresh Token lifecycle"
-    - "Token rotation and reuse detection"
-    - "HTTP 401 vs 403 error matrix"
-    - "Gateway trusted propagation and log redaction"
+    - "OpenAPI 3.0/3.1 REST specification for auth APIs"
+    - "Request and Response DTO schemas and Mass Assignment prevention"
+    - "RBAC Deny Matrix and Enumeration attack mitigations"
+    - "Standard Error Response format (API-COM-001..006)"
+    - "OpenAPI Contract Testing design"
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: true
-  skeleton_unlocked: true
-  last_observation: "PASSED"
+  design_unlocked: false
+  skeleton_unlocked: false
+  last_observation: "NOT_EVALUATED"
 blockers: []
 remediation_action: null
 updated_at: "2026-07-29"

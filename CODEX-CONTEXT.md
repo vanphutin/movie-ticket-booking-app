@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: HANDOFF
-ticket_id: TKT-W04-D03
-candidate_ticket_id: TKT-W04-D04
-active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+current_stage: STARTUP
+ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
 primary_blocker: NONE
-required_output: PUBLISHED_WORK_UNIT_CHECKPOINT
-evidence_status: OBSERVED
-review_status: VERIFIED
-next_action: PUBLISH_WORK_UNIT_CHECKPOINT
-completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
+required_output: REPOSITORY_RECONCILIATION_REPORT
+evidence_status: MISSING
+review_status: NOT_REVIEWED
+next_action: RECONCILE_REPOSITORY
+completion_condition: Repository reconciliation report AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md reflects the published D03 checkpoint and passes repository validation.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
