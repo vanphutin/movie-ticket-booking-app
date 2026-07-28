@@ -4,7 +4,10 @@ import process from "node:process";
 import { JSDOM } from "jsdom";
 
 const root = process.cwd();
-const requestedPaths = process.argv.slice(2).filter((argument) => argument !== "--self-test");
+const fixMode = process.argv.includes("--fix");
+const requestedPaths = process.argv
+  .slice(2)
+  .filter((argument) => !["--self-test", "--fix"].includes(argument));
 const ignoredDirectories = new Set([".git", ".agents", ".claude", "node_modules", "docs-viewer"]);
 
 const dom = new JSDOM("<!doctype html><html><body></body></html>");
@@ -48,10 +51,30 @@ const targets = requestedPaths.length > 0
   : [root];
 const files = [...new Set(targets.flatMap(walk))].sort();
 const failures = [];
+const normalizedFiles = [];
 let diagramCount = 0;
 
 for (const file of files) {
-  const content = fs.readFileSync(file, "utf8");
+  let content = fs.readFileSync(file, "utf8");
+  const mermaidBlock = /```mermaid[^\S\r\n]*\r?\n([\s\S]*?)```/gi;
+  const localThemeDirective = /%%\{\s*init\s*:[\s\S]*?\}%%[^\S\r\n]*(?:\r?\n)?/gi;
+  let hasLocalTheme = false;
+  content = content.replace(mermaidBlock, (block) => {
+    if (!localThemeDirective.test(block)) return block;
+    hasLocalTheme = true;
+    localThemeDirective.lastIndex = 0;
+    return fixMode ? block.replace(localThemeDirective, "") : block;
+  });
+  if (hasLocalTheme) {
+    if (!fixMode) {
+      failures.push(
+        `${path.relative(root, file)}: local Mermaid init/theme directive is forbidden; run npm run fix:mermaid`
+      );
+    } else {
+      fs.writeFileSync(file, content, "utf8");
+      normalizedFiles.push(path.relative(root, file));
+    }
+  }
   for (const match of content.matchAll(/```mermaid[^\S\r\n]*\r?\n([\s\S]*?)```/gi)) {
     diagramCount += 1;
     try {
@@ -70,4 +93,8 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
+if (normalizedFiles.length > 0) {
+  console.log(`Mermaid template normalization: updated ${normalizedFiles.length} file(s)`);
+  for (const file of normalizedFiles) console.log(`- ${file}`);
+}
 console.log(`Mermaid syntax (10.9.6): PASSED (${diagramCount} diagrams)`);

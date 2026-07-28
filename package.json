@@ -4,6 +4,8 @@
   "scripts": {
     "check:mermaid": "node tools/repository/validate-mermaid.mjs",
     "check:mermaid:self-test": "node tools/repository/validate-mermaid.mjs --self-test",
+    "fix:mermaid": "node tools/repository/validate-mermaid.mjs --fix",
+    "check:docs": "npm run fix:mermaid && node tools/control-plane/sync-control-plane.mjs && node tools/repository/validate-repository.mjs",
     "check:repository": "node tools/repository/validate-repository.mjs"
   },
   "devDependencies": {
