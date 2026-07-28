@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.7
-current_stage: DESIGN
-ticket_id: TKT-W04-D02
-candidate_ticket_id: TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+current_stage: STARTUP
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
+active_artifact: null
 primary_blocker: NONE
-required_output: DESIGN_NOTE
+required_output: REPOSITORY_RECONCILIATION_REPORT
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: PROCEED_TO_DESIGN
-completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
+next_action: RECONCILE_REPOSITORY
+completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

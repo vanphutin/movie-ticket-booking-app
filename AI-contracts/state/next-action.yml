@@ -1,20 +1,20 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D02
-candidate_ticket_id: TKT-W04-D03
-action: PROCEED_TO_DESIGN
-target: TKT-W04-D02
-priority_reason: "Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02."
-completion_condition: "Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed."
-on_success: PROCEED_TO_READINESS
-on_failure: RECORD_DESIGN_BLOCKERS
+next_ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
+action: RECONCILE_REPOSITORY
+target: TKT-W04-D03
+priority_reason: "TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied."
+completion_condition: "Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers."
+on_success: PROCEED_TO_LEARNING
+on_failure: RECORD_STARTUP_BLOCKERS
 blocking_ids: []
 required_evidence:
-  - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
-  - AI-contracts/designs/2026-07-28-tkt-w04-d02-expected-files.yml
+  - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+  - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
+  - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
 decided_at: "2026-07-28"
-decided_by: "Codex (TKT-W04-D02 analysis completed)"
+decided_by: "Codex (TKT-W04-D02 acceptance review approved)"

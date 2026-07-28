@@ -1,0 +1,27 @@
+schema_version: 1
+ticket_id: TKT-W04-D02
+review_state: APPROVED
+acceptance_criteria:
+  - id: AC-W04-D02-1
+    description: "Identity owner, trust boundaries, relational invariants, credential protection, refresh rotation, and family replay response are mapped."
+    status: VERIFIED
+    evidence: AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
+  - id: AC-W04-D02-2
+    description: "Clean and upgrade migration plans, idempotent role seed, retention, and rollback/forward-fix boundaries are documented."
+    status: VERIFIED
+    evidence: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  - id: AC-W04-D02-3
+    description: "Negative constraint, concurrency, replay, and credential/token exposure cases have explicit expected observations and future real-PostgreSQL verification boundaries."
+    status: VERIFIED
+    evidence: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+open_findings: []
+evidence_references:
+  - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  - AI-contracts/expected-files/2026-07-28-tkt-w04-d02-expected-files.yml
+  - AI-contracts/readiness/2026-07-28-tkt-w04-d02-readiness.yml
+next_action:
+  action: PROCEED_TO_HANDOFF
+  completion_condition: "Canonical state and generated projections record TKT-W04-D02 as VERIFIED and authorize TKT-W04-D03 at STARTUP."
+reviewer: Codex
+reviewed_at: "2026-07-28"
