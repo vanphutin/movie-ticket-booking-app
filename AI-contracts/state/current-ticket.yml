@@ -1,29 +1,30 @@
 schema_version: 1
-ticket_id: TKT-W04-D01
-candidate_ticket_id: TKT-W04-D02
+ticket_id: TKT-W04-D02
+candidate_ticket_id: TKT-W04-D03
 phase_id: P0
 milestone_id: M0
 capability_ids:
-  - CAP-CON-01
+  - CAP-IDN-01
 contract_ids:
-  - BUS-001
-  - ARCH-001
-  - ARCH-009
+  - DATA-IDN-001
+  - DATA-001
+  - SEC-001
+  - SEC-002
   - CCR-006
   - CCR-007
-definition_of_ready_status: READY
-execution_status: SUBMITTED
-review_status: APPROVED
-evidence_status: OBSERVED
+definition_of_ready_status: NOT_EVALUATED
+execution_status: NOT_STARTED
+review_status: NOT_REVIEWED
+evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
-  gate_id: LG-TKT-W04-D01
-  status: PASSED
+  gate_id: LG-TKT-W04-D02
+  status: NOT_EVALUATED
   mode: REGULAR
   topics_presented: []
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: true
+  design_unlocked: false
   skeleton_unlocked: false
   last_observation: null
 blockers: []

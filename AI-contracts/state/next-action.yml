@@ -1,20 +1,16 @@
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D01
-candidate_ticket_id: TKT-W04-D02
-action: AUTHORIZE_CANDIDATE_TICKET
-target: TKT-W04-D02
-priority_reason: "Ticket TKT-W04-D01 successfully reviewed and approved. Handing off to candidate ticket TKT-W04-D02 for startup authorization."
-completion_condition: "Candidate ticket TKT-W04-D02 DoR and startup prerequisites evaluated and authorized."
-on_success: PROCEED_TO_STARTUP
-on_failure: RECORD_AUTHORIZATION_BLOCKERS
+next_ticket_id: TKT-W04-D02
+candidate_ticket_id: TKT-W04-D03
+action: ADVANCE_TO_LEARNING
+target: LG-TKT-W04-D02
+priority_reason: "Startup repository reconciliation for TKT-W04-D02 completed. Advancing to Learning Gate stage."
+completion_condition: "Observed learning checkpoint LG-TKT-W04-D02 evaluated and PASSED."
+on_success: PROCEED_TO_ANALYSIS
+on_failure: RECORD_LEARNING_GAPS
 blocking_ids: []
 source_evidence:
-  - "AI-contracts/audits/2026-07-28-tkt-w04-d01-review.yml"
-  - "AI-contracts/audits/2026-07-28-tkt-w04-d01-verification.yml"
-  - "AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml"
-  - "AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md"
-  - "AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml"
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-startup.md"
   - "AI-contracts/state/current-work.yml"
 decided_at: "2026-07-28"
-decided_by: "Codex (Acceptance review APPROVED against all 3 acceptance criteria)"
+decided_by: "Codex (TKT-W04-D02 startup completed)"
