@@ -19,14 +19,18 @@ evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D02
-  status: NOT_EVALUATED
+  status: PASSED
   mode: REGULAR
-  topics_presented: []
+  topics_presented:
+    - identity versus credential versus session
+    - password hashing versus token hashing
+    - refresh session lifecycle and token rotation replay detection
+    - duplicate email handling and database unique constraints
   observed_gaps: []
   remediation_focus: []
   design_unlocked: false
   skeleton_unlocked: false
-  last_observation: null
+  last_observation: "2026-07-28-tkt-w04-d02-learning.md"
 blockers: []
 remediation_action: null
 updated_at: "2026-07-28"

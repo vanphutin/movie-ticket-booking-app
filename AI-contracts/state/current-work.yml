@@ -1,12 +1,12 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.5
-current_stage: STARTUP
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-startup.md
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md
 statuses:
-  learning: NOT_EVALUATED
+  learning: PASSED
   analysis: NOT_STARTED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
@@ -16,16 +16,16 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: OBSERVED_LEARNING_CHECKPOINT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md
+  type: ANALYSIS_ARTIFACT
+  path: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
 next_action:
-  id: ACTION-TKT-W04-D02-STARTUP
-  type: ADVANCE_TO_LEARNING
-  target: LG-TKT-W04-D02
-  reason: Startup repository reconciliation for TKT-W04-D02 completed. Advancing to Learning Gate stage.
-  completion_condition: Observed learning checkpoint LG-TKT-W04-D02 evaluated and PASSED.
-  on_success: PROCEED_TO_ANALYSIS
-  on_failure: RECORD_LEARNING_GAPS
+  id: ACTION-TKT-W04-D02-ANALYSIS
+  type: PROCEED_TO_ANALYSIS
+  target: TKT-W04-D02
+  reason: Learning Gate LG-TKT-W04-D02 evaluated and PASSED. Advancing to Analysis stage for TKT-W04-D02.
+  completion_condition: Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
+  on_success: PROCEED_TO_DESIGN
+  on_failure: RECORD_ANALYSIS_BLOCKERS
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "TKT-W04-D01 handoff verified; TKT-W04-D02 authorized and advanced to STARTUP stage."
+update_source: "Learning Gate LG-TKT-W04-D02 evaluated and PASSED against C3_INTEGRATE rubric."

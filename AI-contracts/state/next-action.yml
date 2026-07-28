@@ -2,15 +2,15 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-action: ADVANCE_TO_LEARNING
-target: LG-TKT-W04-D02
-priority_reason: "Startup repository reconciliation for TKT-W04-D02 completed. Advancing to Learning Gate stage."
-completion_condition: "Observed learning checkpoint LG-TKT-W04-D02 evaluated and PASSED."
-on_success: PROCEED_TO_ANALYSIS
-on_failure: RECORD_LEARNING_GAPS
+action: PROCEED_TO_ANALYSIS
+target: TKT-W04-D02
+priority_reason: "Learning Gate LG-TKT-W04-D02 evaluated and PASSED. Advancing to Analysis stage for TKT-W04-D02."
+completion_condition: "Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed."
+on_success: PROCEED_TO_DESIGN
+on_failure: RECORD_ANALYSIS_BLOCKERS
 blocking_ids: []
 source_evidence:
-  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-startup.md"
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md"
   - "AI-contracts/state/current-work.yml"
 decided_at: "2026-07-28"
-decided_by: "Codex (TKT-W04-D02 startup completed)"
+decided_by: "Codex (LG-TKT-W04-D02 evaluated and PASSED)"

@@ -18,16 +18,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.5
-current_stage: STARTUP
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-startup.md
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md
 primary_blocker: NONE
-required_output: OBSERVED_LEARNING_CHECKPOINT
+required_output: ANALYSIS_ARTIFACT
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: ADVANCE_TO_LEARNING
-completion_condition: Observed learning checkpoint LG-TKT-W04-D02 evaluated and PASSED.
+next_action: PROCEED_TO_ANALYSIS
+completion_condition: Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
 ```
 
 ## Repository snapshot
@@ -36,7 +36,7 @@ completion_condition: Observed learning checkpoint LG-TKT-W04-D02 evaluated and 
 captured_at: "2026-07-28"
 repository_root: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
 branch: codex/control-plane-governance
-head_commit_before_control_plane_change: 68cf586
+head_commit_before_control_plane_change: 8ea945a
 working_tree: MODIFIED
 application_modules: NOT_SCAFFOLDED
 application_tooling: NOT_AVAILABLE
@@ -48,10 +48,9 @@ automation_validator: AVAILABLE (Observed: PASSED)
 Observed notes:
 
 - `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline (CCR-001 through CCR-007 approved).
-- Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED` (commit `68cf586`).
+- Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED`.
 - Authorized current ticket is `TKT-W04-D02` (`CAP-IDN-01`: Identity & Session Data Design).
-- Candidate ticket is `TKT-W04-D03`.
-- Startup reconciliation report created (`2026-07-28-tkt-w04-d02-startup.md`).
+- Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level, `2026-07-28-tkt-w04-d02-learning.md`).
 - Automated validator script `tools/control-plane/validate-control-plane.mjs` verified `PASSED` with exit code `0`.
 
 ## Active artifact and output
@@ -59,18 +58,18 @@ Observed notes:
 The current required control-plane output is:
 
 ```text
-Advance to Learning Gate LG-TKT-W04-D02
-→ evaluate 5 core concepts: Identity vs Credential vs Session, Password Hash vs Token Hash, Refresh Session & Anti-replay, Email Unique Constraint, Domain Ownership & Invariants.
+Create Analysis Note 2026-07-28-tkt-w04-d02-analysis.md for TKT-W04-D02
+→ evaluate table boundaries, credential/session separation, password/token hashing strategies, and constraints.
 ```
 
 ## One next action
 
-Advance to Learning Gate `LG-TKT-W04-D02`.
+Proceed to Analysis stage for `TKT-W04-D02`.
 
 Completion condition:
 
 ```text
-Observed learning checkpoint LG-TKT-W04-D02 evaluated and PASSED.
+Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
 ```
 
 ## Shutdown
