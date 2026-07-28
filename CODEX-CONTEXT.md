@@ -18,16 +18,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.5
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
 primary_blocker: NONE
-required_output: ANALYSIS_ARTIFACT
+required_output: DESIGN_NOTE
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: PROCEED_TO_ANALYSIS
-completion_condition: Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
+next_action: PROCEED_TO_DESIGN
+completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
 ```
 
 ## Repository snapshot
@@ -36,7 +36,7 @@ completion_condition: Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md compl
 captured_at: "2026-07-28"
 repository_root: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
 branch: codex/control-plane-governance
-head_commit_before_control_plane_change: 8ea945a
+head_commit_before_control_plane_change: f35852b
 working_tree: MODIFIED
 application_modules: NOT_SCAFFOLDED
 application_tooling: NOT_AVAILABLE
@@ -50,7 +50,8 @@ Observed notes:
 - `PC-2026.5` is the effective `APPROVED_FOR_TRAINING` baseline (CCR-001 through CCR-007 approved).
 - Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED`.
 - Authorized current ticket is `TKT-W04-D02` (`CAP-IDN-01`: Identity & Session Data Design).
-- Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level, `2026-07-28-tkt-w04-d02-learning.md`).
+- Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level).
+- Analysis Note `2026-07-28-tkt-w04-d02-analysis.md` created with 0 unanswered conflicts.
 - Automated validator script `tools/control-plane/validate-control-plane.mjs` verified `PASSED` with exit code `0`.
 
 ## Active artifact and output
@@ -58,18 +59,18 @@ Observed notes:
 The current required control-plane output is:
 
 ```text
-Create Analysis Note 2026-07-28-tkt-w04-d02-analysis.md for TKT-W04-D02
-→ evaluate table boundaries, credential/session separation, password/token hashing strategies, and constraints.
+Create Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest for TKT-W04-D02
+→ define schema design, table definitions, indexing strategy, and expected-files manifest.
 ```
 
 ## One next action
 
-Proceed to Analysis stage for `TKT-W04-D02`.
+Proceed to Design stage for `TKT-W04-D02`.
 
 Completion condition:
 
 ```text
-Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
+Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
 ```
 
 ## Shutdown

@@ -2,15 +2,15 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-action: PROCEED_TO_ANALYSIS
+action: PROCEED_TO_DESIGN
 target: TKT-W04-D02
-priority_reason: "Learning Gate LG-TKT-W04-D02 evaluated and PASSED. Advancing to Analysis stage for TKT-W04-D02."
-completion_condition: "Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed."
-on_success: PROCEED_TO_DESIGN
-on_failure: RECORD_ANALYSIS_BLOCKERS
+priority_reason: "Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02."
+completion_condition: "Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed."
+on_success: PROCEED_TO_READINESS
+on_failure: RECORD_DESIGN_BLOCKERS
 blocking_ids: []
 source_evidence:
-  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md"
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md"
   - "AI-contracts/state/current-work.yml"
 decided_at: "2026-07-28"
-decided_by: "Codex (LG-TKT-W04-D02 evaluated and PASSED)"
+decided_by: "Codex (TKT-W04-D02 analysis completed)"

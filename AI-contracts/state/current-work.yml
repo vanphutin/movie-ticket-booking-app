@@ -1,13 +1,13 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.5
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D02
 candidate_ticket_id: TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-learning.md
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
 statuses:
   learning: PASSED
-  analysis: NOT_STARTED
+  analysis: PASSED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
@@ -16,16 +16,16 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: ANALYSIS_ARTIFACT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+  type: DESIGN_NOTE
+  path: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
 next_action:
-  id: ACTION-TKT-W04-D02-ANALYSIS
-  type: PROCEED_TO_ANALYSIS
+  id: ACTION-TKT-W04-D02-DESIGN
+  type: PROCEED_TO_DESIGN
   target: TKT-W04-D02
-  reason: Learning Gate LG-TKT-W04-D02 evaluated and PASSED. Advancing to Analysis stage for TKT-W04-D02.
-  completion_condition: Analysis artifact 2026-07-28-tkt-w04-d02-analysis.md completed and reviewed.
-  on_success: PROCEED_TO_DESIGN
-  on_failure: RECORD_ANALYSIS_BLOCKERS
+  reason: Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02.
+  completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
+  on_success: PROCEED_TO_READINESS
+  on_failure: RECORD_DESIGN_BLOCKERS
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "Learning Gate LG-TKT-W04-D02 evaluated and PASSED against C3_INTEGRATE rubric."
+update_source: "Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed with 0 unanswered conflicts."
