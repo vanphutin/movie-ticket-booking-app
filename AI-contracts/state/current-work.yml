@@ -1,13 +1,13 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.7
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+active_artifact: AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -48,35 +48,46 @@ ticket_projection:
     last_observation: PASSED
 statuses:
   learning: PASSED
-  analysis: IN_PROGRESS
-  design: NOT_STARTED
+  analysis: PASSED
+  design: CHANGES_REQUIRED
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
   evidence: MISSING
   review: NOT_REVIEWED
   handoff: NOT_STARTED
-blockers: []
+blockers:
+  - D03-DESIGN-F01
+  - D03-DESIGN-F02
+  - D03-DESIGN-F03
+  - D03-DESIGN-F04
+  - D03-DESIGN-F05
 required_output:
-  type: ANALYSIS_ARTIFACT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md
+  type: REVIEWED_DESIGN_NOTE_AND_EXPECTED_FILES
+  path: AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
 next_action:
-  id: ACTION-TKT-W04-D03-ANALYSIS
-  type: CREATE_ANALYSIS_ARTIFACT
+  id: ACTION-TKT-W04-D03-DESIGN
+  type: REMEDIATE_DESIGN
   target: TKT-W04-D03
-  reason: Learning gate LG-TKT-W04-D03 PASSED; prerequisite satisfied to prepare analysis artifact for TKT-W04-D03.
-  completion_condition: Analysis artifact AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md created and verified.
-  on_success: PROCEED_TO_DESIGN
-  on_failure: RECORD_ANALYSIS_REMEDIATION
+  reason: Reviewer found replay/binding, API error-envelope, logout status, correlation-format, and security-preserving rollback defects in the TKT-W04-D03 design.
+  completion_condition: D03-DESIGN-F01 through D03-DESIGN-F05 resolved in the design note and the design plus expected-files manifest re-reviewed with an APPROVED verdict.
+  on_success: PROCEED_TO_READINESS
+  on_failure: RECORD_DESIGN_REMEDIATION
 next_action_projection:
   decision_status: READY
-  blocking_ids: []
+  blocking_ids:
+    - D03-DESIGN-F01
+    - D03-DESIGN-F02
+    - D03-DESIGN-F03
+    - D03-DESIGN-F04
+    - D03-DESIGN-F05
   required_evidence:
-    - AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+    - AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
+    - AI-contracts/expected-files/2026-07-28-tkt-w04-d03-expected-files.yml
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+    - AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
   decided_at: "2026-07-29"
-  decided_by: "Codex (LG-TKT-W04-D03 learning gate evaluation completed)"
+  decided_by: "Codex (TKT-W04-D03 design review verdict CHANGES_REQUIRED)"
 updated_at: "2026-07-29"
 updated_by: Codex
-update_source: "LG-TKT-W04-D03 passed; learning checkpoint created; current stage advanced to ANALYSIS."
+update_source: "TKT-W04-D03 design review completed with CHANGES_REQUIRED; readiness remains locked."

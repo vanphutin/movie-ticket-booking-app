@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.7
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-active_artifact: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+active_artifact: AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
 primary_blocker: NONE
-required_output: ANALYSIS_ARTIFACT
+required_output: REVIEWED_DESIGN_NOTE_AND_EXPECTED_FILES
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: CREATE_ANALYSIS_ARTIFACT
-completion_condition: Analysis artifact AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md created and verified.
+next_action: REMEDIATE_DESIGN
+completion_condition: D03-DESIGN-F01 through D03-DESIGN-F05 resolved in the design note and the design plus expected-files manifest re-reviewed with an APPROVED verdict.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

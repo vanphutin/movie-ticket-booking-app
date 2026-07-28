@@ -1,0 +1,59 @@
+# Analysis — TKT-W04-D03
+
+- **Actor and business outcome:** Learner / Security Architect. Business outcome: Analyze token lifecycle, Gateway security pipeline, authentication vs authorization trust boundaries, JWT claims/expiration/signature verification, Refresh Token rotation and reuse detection, HTTP error status code matrix (401 vs 403), anti-header spoofing mechanisms, and log redaction policies under contracts `SEC-001` through `SEC-007`, `API-AUTH-002` through `API-AUTH-004`, `ARCH-008`, `CCR-006`, `CCR-007`, `CCR-008`, `CCR-009` for ticket `TKT-W04-D03` without scaffolding application code or modifying runtime service implementations.
+- **Scope:**
+  - Audit effective contracts `SEC-001`..`SEC-007`, `API-AUTH-002`..`API-AUTH-004`, `ARCH-008`, `CCR-006`..`CCR-009`.
+  - Analyze JWT Access Token structure (Header, Claims/Payload, Signature), expiration (`exp`), and non-exposure of sensitive credentials in payload.
+  - Analyze Refresh Token lifecycle: Rotation on token refresh, revocation state, and token family invalidation upon reuse detection.
+  - Analyze API Gateway security pipeline: JWT signature verification, expiration check, untrusted header stripping (`X-User-*`), trusted header injection (`X-User-Id`, `X-User-Roles`).
+  - Analyze HTTP status code policy: 401 Unauthorized (unauthenticated, missing/expired token) vs 403 Forbidden (authenticated actor lacking required role or resource ownership).
+  - Analyze log redaction rules for sensitive request/response headers, authorization tokens, cookies, and passwords (`SEC-007`).
+  - Verify Learning Gate `LG-TKT-W04-D03` status (`PASSED` at `C4_DEFEND` level, `AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml`).
+- **Out of scope:**
+  - Scaffolding NestJS gateway or microservice application modules (`apps/**`).
+  - Writing OpenAPI specifications or NestJS route controllers (belongs to `TKT-W04-D04` / `TKT-W04-D05`).
+  - Database migration scripts or entity definitions (completed in `TKT-W04-D02`).
+- **Repository facts:**
+  - Effective baseline: `PC-2026.7` (CCR-001 through CCR-009 APPROVED).
+  - Branch: `codex/tkt-w04-d03-token-gateway-design`
+  - Control-Plane Automated Validator: `AVAILABLE` (script `tools/repository/validate-repository.mjs` verified `PASSED`, exit code `0`).
+  - Learning Gate `LG-TKT-W04-D03`: `PASSED` (`C4_DEFEND` level, `AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml`).
+- **Assumptions:**
+  - API Gateway acts as the single edge entry point for external client traffic.
+  - API Gateway performs JWT signature and expiration verification but DOES NOT perform domain-level resource ownership checks.
+  - Microservices verify an internal HMAC signature token (`X-Internal-Gateway-Auth`) injected by API Gateway to authenticate header origin (`SEC-004`, `ARCH-008`).
+  - Refresh token rotation stores SHA-256 token hashes in the Identity Service database.
+- **Invariants:**
+  - `INV-SEC-01` (Edge Verification): All external protected routes must pass API Gateway JWT signature and expiration verification before reaching microservices.
+  - `INV-SEC-02` (Untrusted Client Headers): API Gateway strips all client-supplied `X-User-*` and `X-Actor-*` headers prior to injecting verified claims.
+  - `INV-SEC-03` (Resource Ownership Authorization): Domain microservices (e.g. Identity, Booking, Order) enforce resource ownership authorization at the service boundary.
+  - `INV-SEC-04` (Token Reuse Revocation): Detecting a previously used Refresh Token immediately revokes all tokens within that session family.
+  - `INV-SEC-05` (Strict Error Matrix): Unauthenticated requests return `401 Unauthorized`; authenticated requests attempting unauthorized actions return `403 Forbidden`.
+  - `INV-SEC-06` (Log Redaction): Authorization headers, refresh tokens, passwords, and secret keys must be redacted (`[REDACTED]`) from all system logs.
+- **Service/data owner:**
+  - **API Gateway:** Owner of edge JWT verification, routing, untrusted header stripping, trusted header injection, internal HMAC signing, and rate limiting.
+  - **Identity Service:** Owner of user credentials, session storage, refresh token issuance, rotation, and revocation.
+- **Dependencies and trust boundaries:**
+  - **Client ↔ API Gateway Boundary:** Untrusted public boundary. Gateway verifies JWT access token or routes login/refresh requests to Identity Service.
+  - **API Gateway ↔ Microservice Internal Boundary:** Private network + Authenticated internal identity. Gateway forwards requests with stripped client headers, injected `X-User-Id`, `X-User-Roles`, `X-Correlation-Id`, and `X-Internal-Gateway-Auth` HMAC signature to prove origin (`SEC-004`, `ARCH-008`).
+- **Failure cases:**
+  - Expired Access Token → API Gateway returns `401 Unauthorized` with `token_expired` error code.
+  - Invalid JWT Signature → API Gateway returns `401 Unauthorized`.
+  - Client attempts Header Spoofing (supplies `X-User-Id: 9999`) → Gateway strips header and overrides with verified JWT claim.
+  - Replayed Refresh Token → Identity Service revokes entire token family and returns `401 Unauthorized`.
+  - Customer attempts Admin API → Gateway/Microservice returns `403 Forbidden`.
+- **Security risks:**
+  - JWT claim tampering → Mitigated by cryptographic signature verification (RS256/HS256) at Gateway.
+  - Token theft & persistent session hijack → Mitigated by short-lived Access Tokens (15m) and Refresh Token Rotation with Reuse Revocation.
+  - Header spoofing → Mitigated by mandatory edge header stripping at Gateway.
+  - Credential leak in logs → Mitigated by automated log sanitizer middleware (`SEC-007`).
+- **Contract and capability IDs:**
+  - Capability: `CAP-SEC-01`
+  - Contracts: `SEC-001`, `SEC-002`, `SEC-003`, `SEC-004`, `SEC-005`, `SEC-006`, `SEC-007`, `API-AUTH-002`, `API-AUTH-003`, `API-AUTH-004`, `ARCH-008`, `CCR-006`, `CCR-007`, `CCR-008`, `CCR-009`.
+- **Unanswered questions:**
+  - None (`0` unanswered requirement conflicts). All contract requirements mapped and aligned.
+- **Status:** `COMPLETE`
+- **Completion evidence:**
+  - Learning Gate `LG-TKT-W04-D03` evaluated and `PASSED`.
+  - Analysis artifact created covering all security pipeline boundaries, invariants, status matrices, and threat mitigations.
+  - Repository consistency verified `PASSED` (`tools/repository/validate-repository.mjs`).

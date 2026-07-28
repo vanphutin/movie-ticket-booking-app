@@ -1,0 +1,153 @@
+schema_version: 1
+ticket_id: "TKT-W04-D03"
+design_artifact: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
+status: CHANGES_REQUIRED
+reviewed_by: "Codex"
+reviewed_at: "2026-07-29"
+files:
+  - path: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
+    action: CREATE
+    responsibility: "Design Note artifact for TKT-W04-D03 RS256 Token & Gateway Security Pipeline design"
+    contract_ids:
+      - SEC-001
+      - SEC-002
+      - SEC-003
+      - SEC-004
+      - SEC-005
+      - SEC-006
+      - SEC-007
+      - API-AUTH-002
+      - API-AUTH-003
+      - API-AUTH-004
+      - ARCH-008
+      - CCR-006
+      - CCR-007
+      - CCR-008
+      - CCR-009
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+      - AC-W04-D03-2
+      - AC-W04-D03-3
+    permitted_content:
+      - "Token architecture design sections"
+      - "RS256 key separation, claims, and 15m expiration"
+      - "Refresh token rotation and reuse detection"
+      - "API Gateway security pipeline and anti-header spoofing"
+      - "Authenticated Gateway-to-service internal HMAC header verification"
+      - "Correlation ID tracing and dependency timeout handling"
+      - "HTTP 401 vs 403 error status code matrix"
+      - "Log redaction policy rules and zero data leakage"
+      - "Classified test matrix"
+      - "Migration, expected files, and review status sections"
+    forbidden_content:
+      - "Application source code"
+      - "Unapproved contract modifications"
+    verification:
+      - "Reviewer review against design note requirements"
+
+  - path: "AI-contracts/expected-files/2026-07-28-tkt-w04-d03-expected-files.yml"
+    action: CREATE
+    responsibility: "Expected-files manifest for TKT-W04-D03"
+    contract_ids:
+      - DOR-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Expected files paths and rules"
+    forbidden_content:
+      - "Application source file permissions"
+    verification:
+      - "Control-plane schema validation"
+
+  - path: "AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md"
+    action: MODIFY
+    responsibility: "Analysis note artifact updated to baseline PC-2026.7 with corrected branch name and authenticated gateway boundary"
+    contract_ids:
+      - SEC-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Analysis note sections"
+      - "Observed validator status"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Reviewer review against analysis template"
+
+  - path: "AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml"
+    action: CREATE
+    responsibility: "Readiness verdict for TKT-W04-D03 after approved design review"
+    contract_ids:
+      - DOR-001
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+      - AC-W04-D03-2
+      - AC-W04-D03-3
+    permitted_content:
+      - "Readiness checks, verdict, blockers, reviewer, and review timestamp"
+    forbidden_content:
+      - "Application source code"
+      - "Implementation authorization without a READY verdict"
+    verification:
+      - "Reviewer review against readiness-verdict template"
+
+  - path: "AI-contracts/state/current-work.yml"
+    action: MODIFY
+    responsibility: "Canonical runtime state tracking TKT-W04-D03 DESIGN stage"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Canonical stage, ticket, blockers, required output, next action"
+    forbidden_content:
+      - "Duplicate technical contracts"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/current-ticket.yml"
+    action: MODIFY
+    responsibility: "Current ticket compatibility projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Ticket execution status and blockers"
+    forbidden_content:
+      - "Stale stage references"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/next-action.yml"
+    action: MODIFY
+    responsibility: "Next action compatibility projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Next action ID, target, and completion condition"
+    forbidden_content:
+      - "Unapproved next actions"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "CODEX-CONTEXT.md"
+    action: MODIFY
+    responsibility: "Compact session handoff projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Compact handoff, repository snapshot, next action"
+    forbidden_content:
+      - "Full contract text"
+    verification:
+      - "Handoff projection synchronization check"
+
+unplanned_file_policy: RETURN_TO_DESIGN
