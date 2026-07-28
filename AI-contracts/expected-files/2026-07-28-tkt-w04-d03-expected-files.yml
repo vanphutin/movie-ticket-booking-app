@@ -150,4 +150,134 @@ files:
     verification:
       - "Handoff projection synchronization check"
 
+  - path: "docs-viewer/index.html"
+    action: MODIFY
+    responsibility: "Pin the browser renderer to the repository-validated Mermaid version"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid runtime version pin"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Browser rendering check"
+
+  - path: "AI-contracts/viewer/index.html"
+    action: MODIFY
+    responsibility: "Pin the legacy contract viewer to the repository-validated Mermaid version"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid runtime version pin"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Browser rendering check"
+
+  - path: "tools/repository/validate-mermaid.mjs"
+    action: CREATE
+    responsibility: "Fail repository validation when a Markdown Mermaid block is invalid under Mermaid 10.9.6"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Markdown Mermaid extraction and syntax validation"
+      - "Actionable file and line diagnostics"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Positive repository validation"
+      - "Negative invalid-diagram fixture"
+
+  - path: "tools/repository/validate-repository.mjs"
+    action: MODIFY
+    responsibility: "Include Mermaid syntax in the repository consistency boundary"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid validator invocation and status output"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Repository consistency validation"
+
+  - path: "tools/control-plane/sync-control-plane.mjs"
+    action: MODIFY
+    responsibility: "Keep isolated control-plane fixtures independent from optional docs-viewer files"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Conditional docs-viewer projection synchronization"
+    forbidden_content:
+      - "Canonical state semantics changes"
+    verification:
+      - "Control-plane consistency negative fixtures"
+
+  - path: "tools/control-plane/test-consistency.mjs"
+    action: MODIFY
+    responsibility: "Keep the generated-plan drift fixture independent of the current verified count"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Robust generated projection negative fixture"
+    forbidden_content:
+      - "Canonical progress changes"
+    verification:
+      - "Control-plane consistency negative fixtures"
+
+  - path: "package.json"
+    action: CREATE
+    responsibility: "Pin repository-only Mermaid validation dependencies and commands"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Repository documentation validation tooling"
+    forbidden_content:
+      - "Application module scripts"
+    verification:
+      - "npm clean install"
+      - "Mermaid syntax validation"
+
+  - path: "package-lock.json"
+    action: CREATE
+    responsibility: "Lock repository-only Mermaid validation dependencies"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "npm dependency lock for repository validation"
+    forbidden_content:
+      - "Application module dependencies"
+    verification:
+      - "npm clean install"
+
+  - path: ".github/workflows/repository-consistency.yml"
+    action: MODIFY
+    responsibility: "Install locked validation dependencies before CI repository checks"
+    contract_ids:
+      - CCR-006
+      - CCR-007
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Dependency installation for repository validation"
+    forbidden_content:
+      - "Deployment or release automation"
+    verification:
+      - "Repository consistency workflow"
+
 unplanned_file_policy: RETURN_TO_DESIGN
