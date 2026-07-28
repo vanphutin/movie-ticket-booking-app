@@ -22,10 +22,11 @@ contract_ids:
   - CCR-007
   - CCR-008
   - CCR-009
-definition_of_ready_status: NOT_EVALUATED
-execution_status: NOT_STARTED
-review_status: NOT_REVIEWED
-evidence_status: MISSING
+  - CCR-010
+definition_of_ready_status: READY
+execution_status: SUBMITTED
+review_status: VERIFIED
+evidence_status: OBSERVED
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D03

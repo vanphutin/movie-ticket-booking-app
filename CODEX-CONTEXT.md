@@ -18,17 +18,17 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.7
-current_stage: DESIGN
+effective_baseline: PC-2026.8
+current_stage: HANDOFF
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-active_artifact: AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
 primary_blocker: NONE
-required_output: REVIEWED_DESIGN_NOTE_AND_EXPECTED_FILES
-evidence_status: MISSING
-review_status: NOT_REVIEWED
-next_action: REMEDIATE_DESIGN
-completion_condition: D03-DESIGN-F01 through D03-DESIGN-F05 resolved in the design note and the design plus expected-files manifest re-reviewed with an APPROVED verdict.
+required_output: PUBLISHED_WORK_UNIT_CHECKPOINT
+evidence_status: OBSERVED
+review_status: VERIFIED
+next_action: PUBLISH_WORK_UNIT_CHECKPOINT
+completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

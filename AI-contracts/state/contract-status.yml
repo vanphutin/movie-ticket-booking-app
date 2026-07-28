@@ -1,7 +1,7 @@
 schema_version: 1
-effective_baseline: PC-2026.7
+effective_baseline: PC-2026.8
 effective_status: APPROVED_FOR_TRAINING
-superseded_baseline: PC-2026.6
+superseded_baseline: PC-2026.7
 proposed_baseline: null
 proposed_status: null
 approved_change_requests:
@@ -32,6 +32,9 @@ approved_change_requests:
   - id: CCR-009
     approved_by: "Van Phu Tin"
     approved_at: "2026-07-28"
+  - id: CCR-010
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-07-29"
 open_change_requests: []
 drift_findings:
   - id: DRIFT-001
@@ -64,5 +67,8 @@ drift_findings:
   - id: DRIFT-010
     description: "Current-status prose and generated projections could drift because repeated values did not all have declared ownership or clean-check enforcement."
     disposition: "Resolved in PC-2026.6 by CCR-008 approved 2026-07-28: repository-wide generated-projection, hook and CI enforcement authorized."
-updated_at: "2026-07-28"
+  - id: DRIFT-011
+    description: "Canonical state advanced from TKT-W04-D03 while its branch remained ahead of upstream and transition changes were uncommitted."
+    disposition: "Resolved in PC-2026.8 by CCR-010 approved 2026-07-29: publication is a mandatory work-unit transition gate."
+updated_at: "2026-07-29"
 updated_by: "Codex"

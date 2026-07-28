@@ -128,5 +128,9 @@ Follow `AI-contracts/15-git-and-pr-workflow.md` and approved `CCR-006`.
 - Local commits are autonomous when policy gates pass.
 - Under approved CCR-007, create/switch `codex/<work-unit>` branches, non-force push
   verified branches and create/update Draft PRs autonomously.
+- Under approved CCR-010, do not change the canonical ticket/work unit until the outgoing
+  branch is coherently committed, non-force pushed, verified against its remote-tracking
+  ref, represented by a Draft PR and recorded in
+  `AI-contracts/state/work-unit-checkpoint.yml`.
 - Never push directly to the default branch, force-push, merge/enable auto-merge, tag,
   release, delete branches or rewrite published history without separate authority.
