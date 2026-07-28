@@ -19,61 +19,18 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.7
-current_stage: LEARNING
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
+active_artifact: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
 primary_blocker: NONE
-required_output: OBSERVED_LEARNING_CHECKPOINT
+required_output: ANALYSIS_ARTIFACT
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: PRESENT_LEARNING_GATE
-completion_condition: Learning gate LG-TKT-W04-D03 topics presented, learner response observed, and learning status evaluated.
+next_action: CREATE_ANALYSIS_ARTIFACT
+completion_condition: Analysis artifact AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md created and verified.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
-
-## Repository snapshot
-
-```yaml
-captured_at: "2026-07-28"
-repository_root: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
-branch: codex/control-plane-governance
-head_commit_before_control_plane_change: f35852b
-working_tree: MODIFIED
-application_modules: NOT_SCAFFOLDED
-application_tooling: NOT_AVAILABLE
-services_running: POSTGRESQL_CONTAINER_ACTIVE
-last_application_test: NOT_RUN
-automation_validator: AVAILABLE (Observed: PASSED)
-```
-
-Observed notes:
-
-- Effective baseline and current ticket values are owned by the generated handoff block above.
-- Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED`.
-- Authorized current ticket is `TKT-W04-D02` (`CAP-IDN-01`: Identity & Session Data Design).
-- Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level).
-- Analysis Note `2026-07-28-tkt-w04-d02-analysis.md` created with 0 unanswered conflicts.
-- Automated validator script `tools/control-plane/validate-control-plane.mjs` verified `PASSED` with exit code `0`.
-
-## Active artifact and output
-
-The current required control-plane output is:
-
-```text
-Create Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest for TKT-W04-D02
-→ define schema design, table definitions, indexing strategy, and expected-files manifest.
-```
-
-## One next action
-
-Proceed to Design stage for `TKT-W04-D02`.
-
-Completion condition:
-
-```text
-Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
-```
 
 ## Shutdown
 

@@ -1,13 +1,13 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.7
-current_stage: LEARNING
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
+active_artifact: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -34,15 +34,21 @@ ticket_projection:
   learning:
     gate_id: LG-TKT-W04-D03
     mode: REGULAR
-    topics_presented: []
+    topics_presented:
+      - "AuthN vs AuthZ"
+      - "JWT signing, claims, expiry"
+      - "Access vs Refresh Token lifecycle"
+      - "Token rotation and reuse detection"
+      - "HTTP 401 vs 403 error matrix"
+      - "Gateway trusted propagation and log redaction"
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: false
-    skeleton_unlocked: false
-    last_observation: null
+    design_unlocked: true
+    skeleton_unlocked: true
+    last_observation: PASSED
 statuses:
-  learning: IN_PROGRESS
-  analysis: NOT_STARTED
+  learning: PASSED
+  analysis: IN_PROGRESS
   design: NOT_STARTED
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
@@ -51,26 +57,26 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: OBSERVED_LEARNING_CHECKPOINT
-  path: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+  type: ANALYSIS_ARTIFACT
+  path: AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md
 next_action:
-  id: ACTION-TKT-W04-D03-LEARNING
-  type: PRESENT_LEARNING_GATE
-  target: LG-TKT-W04-D03
-  reason: Startup reconciliation for TKT-W04-D03 completed; prerequisite satisfied to present Learning Gate LG-TKT-W04-D03.
-  completion_condition: Learning gate LG-TKT-W04-D03 topics presented, learner response observed, and learning status evaluated.
-  on_success: PROCEED_TO_ANALYSIS
-  on_failure: RECORD_LEARNING_REMEDIATION
+  id: ACTION-TKT-W04-D03-ANALYSIS
+  type: CREATE_ANALYSIS_ARTIFACT
+  target: TKT-W04-D03
+  reason: Learning gate LG-TKT-W04-D03 PASSED; prerequisite satisfied to prepare analysis artifact for TKT-W04-D03.
+  completion_condition: Analysis artifact AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md created and verified.
+  on_success: PROCEED_TO_DESIGN
+  on_failure: RECORD_ANALYSIS_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
+    - AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
-  decided_at: "2026-07-28"
-  decided_by: "Codex (TKT-W04-D03 repository reconciliation completed)"
-updated_at: "2026-07-28"
+    - AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
+  decided_at: "2026-07-29"
+  decided_by: "Codex (LG-TKT-W04-D03 learning gate evaluation completed)"
+updated_at: "2026-07-29"
 updated_by: Codex
-update_source: "TKT-W04-D03 repository reconciliation report completed; current stage advanced to LEARNING for LG-TKT-W04-D03."
+update_source: "LG-TKT-W04-D03 passed; learning checkpoint created; current stage advanced to ANALYSIS."
