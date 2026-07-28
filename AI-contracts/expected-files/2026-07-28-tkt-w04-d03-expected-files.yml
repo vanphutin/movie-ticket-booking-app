@@ -1,9 +1,18 @@
 schema_version: 1
 ticket_id: "TKT-W04-D03"
 design_artifact: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
-status: CHANGES_REQUIRED
-reviewed_by: "Codex"
+status: APPROVED
+reviewed_by: "Reviewer"
 reviewed_at: "2026-07-29"
+remediation_status: READY_FOR_RE_REVIEW
+remediated_at: "2026-07-29"
+open_findings_pending_reviewer_verification:
+  - D03-DESIGN-F01
+  - D03-DESIGN-F02
+  - D03-DESIGN-F03
+  - D03-DESIGN-F04
+  - D03-DESIGN-F05
+reviewer_reapproval_condition: "Verify all five remediations against the effective contracts, then record APPROVED for both the design note and this manifest before READINESS evaluation."
 files:
   - path: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
     action: CREATE
@@ -44,6 +53,9 @@ files:
       - "Unapproved contract modifications"
     verification:
       - "Reviewer review against design note requirements"
+      - "Verify canonical internal signing binds method, path/query, audience, claims, request ID, body digest, timestamp, nonce, and key version"
+      - "Verify replay, substitution, stale/future timestamp, retired-key, concurrency, and fail-closed negative tests are planned"
+      - "Verify API-COM-003 envelope, API-AUTH-004 logout status, canonical UUID correlation, and security-preserving rollback"
 
   - path: "AI-contracts/expected-files/2026-07-28-tkt-w04-d03-expected-files.yml"
     action: CREATE
