@@ -1,0 +1,13 @@
+{
+  "name": "movie-ticket-booking-repository-tooling",
+  "private": true,
+  "scripts": {
+    "check:mermaid": "node tools/repository/validate-mermaid.mjs",
+    "check:mermaid:self-test": "node tools/repository/validate-mermaid.mjs --self-test",
+    "check:repository": "node tools/repository/validate-repository.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "24.1.3",
+    "mermaid": "10.9.6"
+  }
+}

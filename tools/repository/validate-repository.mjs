@@ -62,6 +62,7 @@ function checkReference(sourceFile, reference) {
 
 runNode("tools/control-plane/sync-control-plane.mjs", ["--check"]);
 runNode("tools/control-plane/validate-control-plane.mjs");
+runNode("tools/repository/validate-mermaid.mjs");
 
 const registryPath = path.join(root, "tools/control-plane/generated-targets.json");
 try {
@@ -125,5 +126,6 @@ if (errors.length > 0) {
 console.log("Repository consistency: PASSED");
 console.log("- generated projections: synchronized");
 console.log("- control plane: valid");
+console.log("- Mermaid 10.9.6 syntax: valid");
 console.log("- Markdown/HTML/CSS local references: valid");
 for (const warning of warnings) console.warn(`- warning: ${warning}`);
