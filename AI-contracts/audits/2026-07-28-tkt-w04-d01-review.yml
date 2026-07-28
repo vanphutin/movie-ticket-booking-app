@@ -1,0 +1,26 @@
+schema_version: 1
+ticket_id: TKT-W04-D01
+review_state: APPROVED
+acceptance_criteria:
+  - id: AC-W04-D01-1
+    description: Baseline PC-2026.5 contracts, CCR-006, and CCR-007 incorporated without conflicts.
+    status: VERIFIED
+    evidence: AI-contracts/audits/2026-07-28-tkt-w04-d01-verification.yml
+  - id: AC-W04-D01-2
+    description: 6 microservice boundaries and 55 REST API endpoints mapped cleanly.
+    status: VERIFIED
+    evidence: AI-contracts/traceability/backlog-contract-map.yml
+  - id: AC-W04-D01-3
+    description: Control-plane validator executes cleanly with exit code 0.
+    status: VERIFIED
+    evidence: AI-contracts/audits/2026-07-28-tkt-w04-d01-verification.yml
+open_findings: []
+evidence_references:
+  - AI-contracts/audits/2026-07-28-tkt-w04-d01-verification.yml
+  - AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md
+  - AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
+next_action:
+  action: PROCEED_TO_HANDOFF
+  completion_condition: Canonical state and compatibility projections updated; ticket TKT-W04-D01 completed; candidate TKT-W04-D02 ready for startup authorization.
+reviewer: Codex
+reviewed_at: "2026-07-28"

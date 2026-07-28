@@ -18,16 +18,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.5
-current_stage: IMPLEMENTATION
+current_stage: HANDOFF
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
-active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d01-review.yml
 primary_blocker: NONE
-required_output: SCOPED_DIFF_AND_SELF_REVIEW
+required_output: CANONICAL_STATE_UPDATE
 evidence_status: OBSERVED
 review_status: APPROVED
-next_action: EXECUTE_IMPLEMENTATION
-completion_condition: Scoped control-plane changes and expected files manifest are verified with validator passing.
+next_action: AUTHORIZE_CANDIDATE_TICKET
+completion_condition: Candidate ticket TKT-W04-D02 DoR and startup prerequisites evaluated and authorized.
 ```
 
 ## Repository snapshot
@@ -52,8 +52,10 @@ Observed notes:
 - Learning Gate `LG-TKT-W04-D01` is `PASSED` (`C4_DEFEND` level).
 - Analysis Note artifact is `APPROVED` by reviewer with 0 unanswered conflicts.
 - Design Note and Expected-Files Manifest were approved after V4 remediation.
-- Readiness Verdict evaluated and `READY` (`2026-07-28-tkt-w04-d01-readiness.yml`); stage advanced to `IMPLEMENTATION`.
-- Application code is NOT scaffolded (`NOT_SCAFFOLDED`).
+- Readiness Verdict evaluated and `READY` (`2026-07-28-tkt-w04-d01-readiness.yml`).
+- Implementation completed and committed in two stream-isolated commits (`b47822c`, `1588b87`). Zero application code scaffolded (`NOT_SCAFFOLDED`).
+- Verification evidence manifest created (`2026-07-28-tkt-w04-d01-verification.yml`).
+- Acceptance review verdict created and `APPROVED` (`2026-07-28-tkt-w04-d01-review.yml`).
 - Automated validator script `tools/control-plane/validate-control-plane.mjs` is present in working tree and verified `PASSED` with exit code `0`.
 
 ## Active artifact and output
@@ -61,19 +63,18 @@ Observed notes:
 The current required control-plane output is:
 
 ```text
-Execute implementation for TKT-W04-D01
-→ perform scoped control-plane changes strictly within expected-files manifest
-→ maintain zero application code scaffolding for D01
+Authorize candidate ticket TKT-W04-D02 for startup
+→ evaluate DoR and startup prerequisites for TKT-W04-D02
 ```
 
 ## One next action
 
-Execute implementation for `TKT-W04-D01`.
+Authorize candidate ticket `TKT-W04-D02`.
 
 Completion condition:
 
 ```text
-Scoped control-plane changes and expected files manifest are verified with validator passing.
+Candidate ticket TKT-W04-D02 DoR and startup prerequisites evaluated and authorized.
 ```
 
 ## Shutdown

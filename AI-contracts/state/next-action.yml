@@ -2,17 +2,19 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
-action: EXECUTE_IMPLEMENTATION
-target: TKT-W04-D01
-priority_reason: "Readiness verdict APPROVED with status READY; scoped control-plane implementation under CCR-006 and CCR-007 is authorized."
-completion_condition: "Scoped control-plane changes and expected files manifest are verified with validator passing."
-on_success: PROCEED_TO_VERIFICATION
-on_failure: RECORD_IMPLEMENTATION_BLOCKERS
+action: AUTHORIZE_CANDIDATE_TICKET
+target: TKT-W04-D02
+priority_reason: "Ticket TKT-W04-D01 successfully reviewed and approved. Handing off to candidate ticket TKT-W04-D02 for startup authorization."
+completion_condition: "Candidate ticket TKT-W04-D02 DoR and startup prerequisites evaluated and authorized."
+on_success: PROCEED_TO_STARTUP
+on_failure: RECORD_AUTHORIZATION_BLOCKERS
 blocking_ids: []
 source_evidence:
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d01-review.yml"
+  - "AI-contracts/audits/2026-07-28-tkt-w04-d01-verification.yml"
   - "AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml"
   - "AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md"
   - "AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml"
   - "AI-contracts/state/current-work.yml"
 decided_at: "2026-07-28"
-decided_by: "Codex (Readiness verdict evaluated and APPROVED with status READY)"
+decided_by: "Codex (Acceptance review APPROVED against all 3 acceptance criteria)"

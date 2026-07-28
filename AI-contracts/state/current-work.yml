@@ -1,31 +1,31 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.5
-current_stage: IMPLEMENTATION
+current_stage: HANDOFF
 ticket_id: TKT-W04-D01
 candidate_ticket_id: TKT-W04-D02
-active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d01-review.yml
 statuses:
   learning: PASSED
   analysis: PASSED
   design: PASSED
   readiness: READY
-  implementation: NOT_STARTED
+  implementation: PASSED
   evidence: OBSERVED
   review: APPROVED
-  handoff: CURRENT
+  handoff: COMPLETED
 blockers: []
 required_output:
-  type: SCOPED_DIFF_AND_SELF_REVIEW
-  path: AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml
+  type: CANONICAL_STATE_UPDATE
+  path: AI-contracts/state/current-work.yml
 next_action:
-  id: ACTION-TKT-W04-D01-IMPLEMENTATION
-  type: EXECUTE_IMPLEMENTATION
-  target: TKT-W04-D01
-  reason: Readiness verdict APPROVED with status READY. Scoped control-plane implementation under CCR-006 and CCR-007 is authorized.
-  completion_condition: Scoped control-plane changes and expected files manifest are verified with validator passing.
-  on_success: PROCEED_TO_VERIFICATION
-  on_failure: RECORD_IMPLEMENTATION_BLOCKERS
+  id: ACTION-TKT-W04-D01-HANDOFF
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: TKT-W04-D02
+  reason: Ticket TKT-W04-D01 successfully reviewed and approved. Handing off to candidate ticket TKT-W04-D02 for startup authorization.
+  completion_condition: Candidate ticket TKT-W04-D02 DoR and startup prerequisites evaluated and authorized.
+  on_success: PROCEED_TO_STARTUP
+  on_failure: RECORD_AUTHORIZATION_BLOCKERS
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "Readiness verdict evaluated and APPROVED with status READY; stage advanced to IMPLEMENTATION."
+update_source: "Acceptance review completed with APPROVED verdict against AC-W04-D01-1, AC-W04-D01-2, AC-W04-D01-3; control-plane state handed off."

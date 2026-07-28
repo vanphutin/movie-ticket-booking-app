@@ -12,7 +12,7 @@ contract_ids:
   - CCR-006
   - CCR-007
 definition_of_ready_status: READY
-execution_status: NOT_STARTED
+execution_status: SUBMITTED
 review_status: APPROVED
 evidence_status: OBSERVED
 evidence_confidence: HIGH
