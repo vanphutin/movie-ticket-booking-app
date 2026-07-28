@@ -157,8 +157,14 @@ function buildDocsDataPayload(targetRoot) {
     return a.path.localeCompare(b.path, undefined, { numeric: true });
   });
 
+  const latestSourceDate = entries.reduce(
+    (latest, entry) => (entry.mtime > latest ? entry.mtime : latest),
+    ''
+  );
   const payload = {
-    generatedAt: new Date().toISOString().substring(0, 16).replace('T', ' '),
+    // Derive metadata from the indexed sources so repeated control-plane checks
+    // produce byte-identical output when repository data has not changed.
+    generatedAt: latestSourceDate ? `${latestSourceDate} 00:00` : '',
     files: entries
   };
 
