@@ -6,9 +6,11 @@ file gốc) một cách trực quan. Không cần server, không cần cài depe
 ## Cách dùng
 
 1. Mở trực tiếp `docs-viewer/index.html` bằng trình duyệt (double-click).
-2. Khi tài liệu trong repo thay đổi, chạy lại lệnh sau để cập nhật dữ liệu:
+2. Khi tài liệu trong repo thay đổi, chạy lệnh sau để cập nhật dữ liệu (đã tích hợp tự động vào control plane sync):
 
 ```bash
+node tools/control-plane/sync-control-plane.mjs
+# Hoặc chạy trực tiếp script viewer:
 node docs-viewer/build-data.js
 ```
 
