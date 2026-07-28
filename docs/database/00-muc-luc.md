@@ -31,7 +31,7 @@
 
 ## Tổng quan nhanh
 
-> **Boundary update:** Các file entity/transaction bên dưới là logical-domain reference. Physical implementation phải chia theo `identity_db`, `catalog_db` và `booking_db` theo [kiến trúc microservice](../../chuong-trinh-dao-tao/thiet-ke/microservice-architecture.md). Không tạo một single/shared database, cross-service foreign key hoặc transaction xuyên service.
+> **Boundary update:** Các file entity/transaction bên dưới là logical-domain reference. Physical implementation phải chia theo `identity_db`, `catalog_db` và `booking_db` theo [architecture contract](../../AI-contracts/contracts/architecture-contract.md). Không tạo một single/shared database, cross-service foreign key hoặc transaction xuyên service.
 
 - **~25 logical entity** phân bổ theo service owner (Identity, Catalog, Booking; AI thuộc Catalog stretch)
 - **6 state machines** với valid/invalid transitions và test cases bắt buộc
