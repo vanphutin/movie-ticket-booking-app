@@ -1,13 +1,13 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.7
-current_stage: STARTUP
+current_stage: LEARNING
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: null
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -41,7 +41,7 @@ ticket_projection:
     skeleton_unlocked: false
     last_observation: null
 statuses:
-  learning: NOT_STARTED
+  learning: IN_PROGRESS
   analysis: NOT_STARTED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
@@ -51,16 +51,16 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: REPOSITORY_RECONCILIATION_REPORT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
+  type: OBSERVED_LEARNING_CHECKPOINT
+  path: AI-contracts/learning/checkpoints/2026-07-28-lg-tkt-w04-d03.yml
 next_action:
-  id: ACTION-TKT-W04-D03-STARTUP
-  type: RECONCILE_REPOSITORY
-  target: TKT-W04-D03
-  reason: TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied.
-  completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
-  on_success: PROCEED_TO_LEARNING
-  on_failure: RECORD_STARTUP_BLOCKERS
+  id: ACTION-TKT-W04-D03-LEARNING
+  type: PRESENT_LEARNING_GATE
+  target: LG-TKT-W04-D03
+  reason: Startup reconciliation for TKT-W04-D03 completed; prerequisite satisfied to present Learning Gate LG-TKT-W04-D03.
+  completion_condition: Learning gate LG-TKT-W04-D03 topics presented, learner response observed, and learning status evaluated.
+  on_success: PROCEED_TO_ANALYSIS
+  on_failure: RECORD_LEARNING_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
@@ -68,10 +68,9 @@ next_action_projection:
     - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
-    - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
+    - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
   decided_at: "2026-07-28"
-  decided_by: "Codex (TKT-W04-D02 acceptance review approved)"
+  decided_by: "Codex (TKT-W04-D03 repository reconciliation completed)"
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "TKT-W04-D02 design remediated to conform to DATA-IDN-001, readiness READY, all acceptance criteria VERIFIED, and handoff completed; TKT-W04-D03 authorized at STARTUP."
+update_source: "TKT-W04-D03 repository reconciliation report completed; current stage advanced to LEARNING for LG-TKT-W04-D03."

@@ -29,7 +29,7 @@ evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D03
-  status: NOT_STARTED
+  status: IN_PROGRESS
   mode: REGULAR
   topics_presented:
     []

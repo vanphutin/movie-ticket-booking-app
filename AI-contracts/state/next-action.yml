@@ -3,18 +3,17 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-action: RECONCILE_REPOSITORY
-target: TKT-W04-D03
-priority_reason: "TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied."
-completion_condition: "Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers."
-on_success: PROCEED_TO_LEARNING
-on_failure: RECORD_STARTUP_BLOCKERS
+action: PRESENT_LEARNING_GATE
+target: LG-TKT-W04-D03
+priority_reason: "Startup reconciliation for TKT-W04-D03 completed; prerequisite satisfied to present Learning Gate LG-TKT-W04-D03."
+completion_condition: "Learning gate LG-TKT-W04-D03 topics presented, learner response observed, and learning status evaluated."
+on_success: PROCEED_TO_ANALYSIS
+on_failure: RECORD_LEARNING_REMEDIATION
 blocking_ids: []
 required_evidence:
   - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
-  - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
+  - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
 decided_at: "2026-07-28"
-decided_by: "Codex (TKT-W04-D02 acceptance review approved)"
+decided_by: "Codex (TKT-W04-D03 repository reconciliation completed)"

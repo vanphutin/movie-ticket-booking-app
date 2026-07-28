@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.7
-current_stage: STARTUP
+current_stage: LEARNING
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-active_artifact: null
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
 primary_blocker: NONE
-required_output: REPOSITORY_RECONCILIATION_REPORT
+required_output: OBSERVED_LEARNING_CHECKPOINT
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: RECONCILE_REPOSITORY
-completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
+next_action: PRESENT_LEARNING_GATE
+completion_condition: Learning gate LG-TKT-W04-D03 topics presented, learner response observed, and learning status evaluated.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

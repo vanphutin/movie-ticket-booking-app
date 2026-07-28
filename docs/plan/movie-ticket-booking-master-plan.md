@@ -13,15 +13,15 @@
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
 - Baseline: `PC-2026.7`
-- Ticket hiện tại: `TKT-W04-D03` — stage `STARTUP`
+- Ticket hiện tại: `TKT-W04-D03` — stage `LEARNING`
 - Hoàn thành có xác minh: **2/35**
-- Next action: `RECONCILE_REPOSITORY`
+- Next action: `PRESENT_LEARNING_GATE`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
 | ☑ | `TKT-W04-D01` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D02` | `VERIFIED` | Canonical completed ticket |
-| ◉ | `TKT-W04-D03` | `STARTUP` | Current authorized ticket |
+| ◉ | `TKT-W04-D03` | `LEARNING` | Current authorized ticket |
 | ☐ | `TKT-W04-D04` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W04-D05` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D01` | `PLANNED` | Not started |
