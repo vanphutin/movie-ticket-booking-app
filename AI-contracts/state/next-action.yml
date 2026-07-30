@@ -3,17 +3,17 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: CREATE_ANALYSIS_ARTIFACT
+action: CREATE_DESIGN_NOTE_AND_EXPECTED_FILES
 target: TKT-W04-D05
-priority_reason: "LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps."
-completion_condition: "D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict."
-on_success: PROCEED_TO_DESIGN
-on_failure: RECORD_ANALYSIS_REMEDIATION
+priority_reason: "D05 analysis completed with zero requirement conflicts and identified the required scaffold, transaction, trust, migration and verification design decisions."
+completion_condition: "Reviewed D05 design note and expected-files manifest authorize exact application/tooling/migration/test paths and resolve every design input."
+on_success: PROCEED_TO_READINESS
+on_failure: RECORD_DESIGN_REMEDIATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
 decided_at: "2026-07-30"
 decided_by: "Codex"

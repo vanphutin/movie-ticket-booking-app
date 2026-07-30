@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
 primary_blocker: NONE
-required_output: ANALYSIS_ARTIFACT
+required_output: DESIGN_NOTE_AND_EXPECTED_FILES
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: CREATE_ANALYSIS_ARTIFACT
-completion_condition: D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict.
+next_action: CREATE_DESIGN_NOTE_AND_EXPECTED_FILES
+completion_condition: Reviewed D05 design note and expected-files manifest authorize exact application/tooling/migration/test paths and resolve every design input.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

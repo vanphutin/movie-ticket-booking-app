@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
-current_stage: ANALYSIS
+current_stage: DESIGN
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,7 +9,7 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -59,8 +59,8 @@ ticket_projection:
     last_observation: PASSED
 statuses:
   learning: PASSED
-  analysis: IN_PROGRESS
-  design: NOT_STARTED
+  analysis: COMPLETE
+  design: IN_PROGRESS
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
   evidence: MISSING
@@ -68,26 +68,28 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: ANALYSIS_ARTIFACT
-  path: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
+  type: DESIGN_NOTE_AND_EXPECTED_FILES
+  path:
+    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
 next_action:
-  id: ACTION-TKT-W04-D05-ANALYSIS
-  type: CREATE_ANALYSIS_ARTIFACT
+  id: ACTION-TKT-W04-D05-DESIGN
+  type: CREATE_DESIGN_NOTE_AND_EXPECTED_FILES
   target: TKT-W04-D05
-  reason: LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps.
-  completion_condition: D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict.
-  on_success: PROCEED_TO_DESIGN
-  on_failure: RECORD_ANALYSIS_REMEDIATION
+  reason: D05 analysis completed with zero requirement conflicts and identified the required scaffold, transaction, trust, migration and verification design decisions.
+  completion_condition: Reviewed D05 design note and expected-files manifest authorize exact application/tooling/migration/test paths and resolve every design input.
+  on_success: PROCEED_TO_READINESS
+  on_failure: RECORD_DESIGN_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+    - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+    - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
   decided_at: "2026-07-30"
   decided_by: Codex
 updated_at: "2026-07-30"
 updated_by: Codex
-update_source: "LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps; stage advanced to ANALYSIS."
+update_source: "D05 analysis completed with zero requirement conflicts; stage advanced to DESIGN."
