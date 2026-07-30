@@ -24,11 +24,11 @@ ticket_id: TKT-W04-D04
 candidate_ticket_id: TKT-W04-D05
 active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
 primary_blocker: NONE
-required_output: PUBLISHED_WORK_UNIT_HANDOFF
+required_output: NEXT_WORK_UNIT_AUTHORIZATION
 evidence_status: OBSERVED
 review_status: VERIFIED
-next_action: COMMIT_PUSH_AND_UPDATE_DRAFT_PR
-completion_condition: Authorized D04 changes are coherently committed and non-force pushed, remote reachability is verified, and the Draft PR is updated before recording the publication checkpoint.
+next_action: AUTHORIZE_NEXT_WORK_UNIT
+completion_condition: TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

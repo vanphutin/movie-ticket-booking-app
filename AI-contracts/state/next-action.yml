@@ -3,20 +3,17 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D04
 candidate_ticket_id: TKT-W04-D05
-action: COMMIT_PUSH_AND_UPDATE_DRAFT_PR
-target: TKT-W04-D04
-priority_reason: "Reviewer VERIFIED all acceptance criteria with no open findings; CCR-010 publication gate remains."
-completion_condition: "Authorized D04 changes are coherently committed and non-force pushed, remote reachability is verified, and the Draft PR is updated before recording the publication checkpoint."
-on_success: RECORD_PUBLICATION_CHECKPOINT
-on_failure: RECORD_PUBLICATION_REMEDIATION
+action: AUTHORIZE_NEXT_WORK_UNIT
+target: TKT-W04-D05
+priority_reason: "TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4."
+completion_condition: "TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report."
+on_success: PROCEED_TO_D05_STARTUP
+on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/openapi/auth-api.v1.yaml
-  - AI-contracts/tests/auth-api-contract-test-matrix.md
-  - AI-contracts/evidence/2026-07-30-tkt-w04-d04-evidence.md
-  - AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+  - AI-contracts/state/work-unit-checkpoint.yml
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+  - AI-contracts/state/work-unit-checkpoint.yml
 decided_at: "2026-07-30"
 decided_by: "Codex"
