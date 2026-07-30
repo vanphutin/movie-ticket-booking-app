@@ -32,7 +32,7 @@ contract_ids:
   - CCR-008
   - CCR-009
   - CCR-010
-definition_of_ready_status: NOT_EVALUATED
+definition_of_ready_status: READY
 execution_status: IN_PROGRESS
 review_status: NOT_REVIEWED
 evidence_status: MISSING
@@ -50,7 +50,7 @@ learning:
   observed_gaps: []
   remediation_focus: []
   design_unlocked: true
-  skeleton_unlocked: false
+  skeleton_unlocked: true
   last_observation: "PASSED"
 blockers: []
 remediation_action: null

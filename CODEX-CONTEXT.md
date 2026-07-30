@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: DESIGN
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
+active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
 primary_blocker: NONE
-required_output: DESIGN_NOTE_AND_EXPECTED_FILES
+required_output: SCOPED_DIFF_AND_SELF_REVIEW
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: CREATE_DESIGN_NOTE_AND_EXPECTED_FILES
-completion_condition: Reviewed D05 design note and expected-files manifest authorize exact application/tooling/migration/test paths and resolve every design input.
+next_action: IMPLEMENT_AUTH_VERTICAL_SLICE
+completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

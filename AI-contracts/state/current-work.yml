@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
-current_stage: DESIGN
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,7 +9,7 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
+active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -55,41 +55,47 @@ ticket_projection:
     observed_gaps: []
     remediation_focus: []
     design_unlocked: true
-    skeleton_unlocked: false
+    skeleton_unlocked: true
     last_observation: PASSED
 statuses:
   learning: PASSED
   analysis: COMPLETE
-  design: IN_PROGRESS
-  readiness: NOT_EVALUATED
-  implementation: NOT_STARTED
+  design: APPROVED
+  readiness: READY
+  implementation: IN_PROGRESS
   evidence: MISSING
   review: NOT_REVIEWED
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: DESIGN_NOTE_AND_EXPECTED_FILES
+  type: SCOPED_DIFF_AND_SELF_REVIEW
   path:
-    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
-    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - apps/package.json
+    - apps/api-gateway/src/main.ts
+    - apps/identity-service/src/main.ts
+    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W04-D05-DESIGN
-  type: CREATE_DESIGN_NOTE_AND_EXPECTED_FILES
+  id: ACTION-TKT-W04-D05-IMPLEMENT
+  type: IMPLEMENT_AUTH_VERTICAL_SLICE
   target: TKT-W04-D05
-  reason: D05 analysis completed with zero requirement conflicts and identified the required scaffold, transaction, trust, migration and verification design decisions.
-  completion_condition: Reviewed D05 design note and expected-files manifest authorize exact application/tooling/migration/test paths and resolve every design input.
-  on_success: PROCEED_TO_READINESS
-  on_failure: RECORD_DESIGN_REMEDIATION
+  reason: The corrected D05 design and 105-path expected-files manifest are approved, and the evidence-backed readiness verdict is READY with no blockers.
+  completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+  on_success: PROCEED_TO_VERIFICATION
+  on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
+    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
+    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
   decided_at: "2026-07-30"
   decided_by: Codex
 updated_at: "2026-07-30"
 updated_by: Codex
-update_source: "D05 analysis completed with zero requirement conflicts; stage advanced to DESIGN."
+update_source: "Reviewer approved the corrected D05 design and manifest; readiness evaluated READY with no blockers and implementation opened only for approved paths."
