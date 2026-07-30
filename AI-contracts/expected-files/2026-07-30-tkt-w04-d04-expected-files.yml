@@ -1,0 +1,274 @@
+schema_version: 1
+ticket_id: TKT-W04-D04
+design_artifact: AI-contracts/designs/2026-07-30-tkt-w04-d04-design.md
+status: APPROVED
+reviewed_by: User / Reviewer
+reviewed_at: "2026-07-30"
+files:
+  - path: AI-contracts/designs/2026-07-30-tkt-w04-d04-design.md
+    action: CREATE
+    responsibility: Reviewed OpenAPI, RBAC, error, idempotency and contract-test design
+    contract_ids:
+      - API-AUTH-001
+      - API-AUTH-002
+      - API-AUTH-003
+      - API-AUTH-004
+      - API-AUTH-005
+      - API-COM-001
+      - API-COM-002
+      - API-COM-003
+      - API-COM-004
+      - API-COM-005
+      - API-COM-006
+      - SEC-003
+      - ARCH-008
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+      - AC-W04-D04-2
+      - AC-W04-D04-3
+    permitted_content:
+      - Request, response, error and header component designs
+      - Operation status and security declarations
+      - RBAC and deny-by-default matrix
+      - Idempotency and refresh/logout behavior
+      - Contract-test matrix
+      - Compatibility, rollback, alternatives and trade-offs
+    forbidden_content:
+      - Application source code
+      - Runtime implementation claims
+      - Unapproved effective-contract changes
+    verification:
+      - Reviewer verifies the design checklist
+      - npm run check:docs
+      - node tools/repository/validate-repository.mjs
+
+  - path: AI-contracts/expected-files/2026-07-30-tkt-w04-d04-expected-files.yml
+    action: CREATE
+    responsibility: Expected-files boundary for TKT-W04-D04
+    contract_ids:
+      - CCR-006
+      - CCR-010
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Planned paths, responsibilities and verification boundaries
+    forbidden_content:
+      - Application implementation authorization
+    verification:
+      - Control-plane and repository validation
+
+  - path: AI-contracts/openapi/auth-api.v1.yaml
+    action: CREATE
+    responsibility: Reviewed OpenAPI 3.0/3.1 contract for API-AUTH-001 through API-AUTH-005
+    contract_ids:
+      - API-AUTH-001
+      - API-AUTH-002
+      - API-AUTH-003
+      - API-AUTH-004
+      - API-AUTH-005
+      - API-COM-001
+      - API-COM-002
+      - API-COM-003
+      - API-COM-004
+      - API-COM-006
+      - SEC-003
+      - ARCH-008
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+      - AC-W04-D04-2
+    permitted_content:
+      - OpenAPI document, schemas, parameters, security schemes and examples
+    forbidden_content:
+      - Runtime handlers or generated application code
+      - Detailed credential or account-existence failure disclosure
+    verification:
+      - OpenAPI parse and reference resolution
+      - Schema/status/security assertions from the reviewed design
+
+  - path: AI-contracts/tests/auth-api-contract-test-matrix.md
+    action: CREATE
+    responsibility: Planned positive, negative, idempotency and security contract cases
+    contract_ids:
+      - API-AUTH-001
+      - API-AUTH-002
+      - API-AUTH-003
+      - API-AUTH-004
+      - API-AUTH-005
+      - API-COM-003
+      - API-COM-004
+      - SEC-003
+      - ARCH-008
+    acceptance_criteria_ids:
+      - AC-W04-D04-2
+      - AC-W04-D04-3
+    permitted_content:
+      - Test IDs, predictions, fixtures, expected statuses and security assertions
+    forbidden_content:
+      - Fabricated runtime results
+      - Application test implementation
+    verification:
+      - Reviewer maps every operation, failure and deny case to at least one planned test
+
+  - path: AI-contracts/readiness/2026-07-30-tkt-w04-d04-readiness.yml
+    action: CREATE
+    responsibility: Readiness verdict after design and expected-files approval
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+      - AC-W04-D04-2
+      - AC-W04-D04-3
+    permitted_content:
+      - DoR checks, evidence references, blockers and verdict
+    forbidden_content:
+      - READY without reviewed design and expected-files approval
+    verification:
+      - Readiness template and repository validation
+
+  - path: AI-contracts/evidence/2026-07-30-tkt-w04-d04-evidence.md
+    action: CREATE
+    responsibility: Reproducible evidence manifest for contract artifacts and checks
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+      - AC-W04-D04-2
+      - AC-W04-D04-3
+    permitted_content:
+      - Predictions, exact commands, working directory, environment, exit codes, observations, artifact paths and limitations
+    forbidden_content:
+      - Invented or unobserved command results
+    verification:
+      - Evidence completeness review
+
+  - path: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+    action: CREATE
+    responsibility: Acceptance-criteria review verdict
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+      - AC-W04-D04-2
+      - AC-W04-D04-3
+    permitted_content:
+      - Findings, criterion verdicts, evidence links and final review status
+    forbidden_content:
+      - VERIFIED without observed evidence
+    verification:
+      - Reviewer acceptance review
+
+  - path: AI-contracts/state/current-work.yml
+    action: MODIFY
+    responsibility: Canonical lifecycle state, required output and next action
+    contract_ids:
+      - CCR-006
+      - CCR-010
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Stage, status, artifact, blocker and next-action observations
+    forbidden_content:
+      - Duplicate technical contract text
+      - Unobserved review or evidence verdicts
+    verification:
+      - Projection synchronization and repository validation
+
+  - path: AI-contracts/state/current-ticket.yml
+    action: MODIFY
+    responsibility: Generated current-ticket projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated projection only
+    forbidden_content:
+      - Manual edits
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: AI-contracts/state/next-action.yml
+    action: MODIFY
+    responsibility: Generated next-action projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated projection only
+    forbidden_content:
+      - Manual edits
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: CODEX-CONTEXT.md
+    action: MODIFY
+    responsibility: Generated compact handoff projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated handoff region only
+    forbidden_content:
+      - Manual edits to generated region
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: AI-contracts/README.md
+    action: MODIFY
+    responsibility: Generated current-state projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated current-state region only
+    forbidden_content:
+      - Manual edits to generated region
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: docs/plan/movie-ticket-booking-master-plan.md
+    action: MODIFY
+    responsibility: Generated progress projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated progress region only
+    forbidden_content:
+      - Manual edits to generated region
+    verification:
+      - npm run check:docs
+
+  - path: docs/plan/movie-ticket-booking-master-plan.html
+    action: MODIFY
+    responsibility: Generated HTML progress projection
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated progress region only
+    forbidden_content:
+      - Manual edits to generated region
+    verification:
+      - npm run check:docs
+
+  - path: docs-viewer/docs-data.js
+    action: MODIFY
+    responsibility: Generated docs-viewer data
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D04-1
+    permitted_content:
+      - Generated content only
+    forbidden_content:
+      - Manual edits
+    verification:
+      - npm run check:docs
+
+unplanned_file_policy: RETURN_TO_DESIGN

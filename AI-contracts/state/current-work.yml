@@ -1,14 +1,14 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
-current_stage: STARTUP
+current_stage: HANDOFF
 ticket_id: TKT-W04-D04
 candidate_ticket_id: TKT-W04-D05
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
   - TKT-W04-D03
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
+active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -33,7 +33,7 @@ ticket_projection:
     - CCR-008
     - CCR-009
     - CCR-010
-  execution_status: NOT_STARTED
+  execution_status: IN_PROGRESS
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D04
@@ -46,42 +46,43 @@ ticket_projection:
       - "OpenAPI Contract Testing design"
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: false
+    design_unlocked: true
     skeleton_unlocked: false
-    last_observation: NOT_EVALUATED
+    last_observation: PASSED
 statuses:
-  learning: NOT_STARTED
-  analysis: NOT_STARTED
-  design: NOT_STARTED
-  readiness: NOT_EVALUATED
-  implementation: NOT_STARTED
-  evidence: MISSING
-  review: NOT_REVIEWED
-  handoff: NOT_STARTED
+  learning: PASSED
+  analysis: COMPLETE
+  design: APPROVED
+  readiness: READY
+  implementation: COMPLETE
+  evidence: OBSERVED
+  review: VERIFIED
+  handoff: IN_PROGRESS
 blockers: []
 required_output:
-  type: REPOSITORY_RECONCILIATION_REPORT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
+  type: PUBLISHED_WORK_UNIT_HANDOFF
+  path: AI-contracts/state/work-unit-checkpoint.yml
 next_action:
-  id: ACTION-TKT-W04-D04-STARTUP
-  type: RECONCILE_REPOSITORY
+  id: ACTION-TKT-W04-D04-PUBLISH
+  type: COMMIT_PUSH_AND_UPDATE_DRAFT_PR
   target: TKT-W04-D04
-  reason: TKT-W04-D03 publication checkpoint is VERIFIED under CCR-010; TKT-W04-D04 is now authorized on its own branch.
-  completion_condition: Repository reconciliation report AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md reflects the published D03 checkpoint and passes repository validation.
-  on_success: PROCEED_TO_LEARNING
-  on_failure: RECORD_STARTUP_REMEDIATION
+  reason: Reviewer VERIFIED all acceptance criteria with no open findings; CCR-010 publication gate remains.
+  completion_condition: Authorized D04 changes are coherently committed and non-force pushed, remote reachability is verified, and the Draft PR is updated before recording the publication checkpoint.
+  on_success: RECORD_PUBLICATION_CHECKPOINT
+  on_failure: RECORD_PUBLICATION_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
-    - AI-contracts/state/work-unit-checkpoint.yml
+    - AI-contracts/openapi/auth-api.v1.yaml
+    - AI-contracts/tests/auth-api-contract-test-matrix.md
+    - AI-contracts/evidence/2026-07-30-tkt-w04-d04-evidence.md
+    - AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
-    - AI-contracts/state/work-unit-checkpoint.yml
-  decided_at: "2026-07-29"
-  decided_by: "Codex (D03 checkpoint published and verified under CCR-010)"
-updated_at: "2026-07-29"
+    - AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+  decided_at: "2026-07-30"
+  decided_by: Codex
+updated_at: "2026-07-30"
 updated_by: Codex
-update_source: "TKT-W04-D04 startup authorized after verified D03 publication checkpoint."
+update_source: "Reviewer VERIFIED all D04 acceptance criteria with no open findings; stage advanced to publication HANDOFF."

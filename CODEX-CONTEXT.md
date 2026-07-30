@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: STARTUP
+current_stage: HANDOFF
 ticket_id: TKT-W04-D04
 candidate_ticket_id: TKT-W04-D05
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md
+active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
 primary_blocker: NONE
-required_output: REPOSITORY_RECONCILIATION_REPORT
-evidence_status: MISSING
-review_status: NOT_REVIEWED
-next_action: RECONCILE_REPOSITORY
-completion_condition: Repository reconciliation report AI-contracts/audits/2026-07-28-tkt-w04-d04-startup.md reflects the published D03 checkpoint and passes repository validation.
+required_output: PUBLISHED_WORK_UNIT_HANDOFF
+evidence_status: OBSERVED
+review_status: VERIFIED
+next_action: COMMIT_PUSH_AND_UPDATE_DRAFT_PR
+completion_condition: Authorized D04 changes are coherently committed and non-force pushed, remote reachability is verified, and the Draft PR is updated before recording the publication checkpoint.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
