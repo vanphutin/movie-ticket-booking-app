@@ -52,7 +52,9 @@ Worker
 
 ## Thư mục & Cấu trúc dự án
 
-- `apps/client/` và `apps/server/`: Thư mục ứng dụng frontend và backend microservices (hiện là placeholder trống, scaffold theo ticket).
+- `client/`: Frontend workspace trong tương lai; chưa scaffold cho đến khi có ticket
+  frontend được phê duyệt.
+- `apps/`: Backend NestJS workspace, chứa các microservice và backend shared libraries;
+  được scaffold dần theo ticket đã qua readiness.
 - `docs/`: Tài liệu sản phẩm, database design, backlog và kế hoạch master plan (`docs/plan/`).
 - `AI-contracts/`: Quy ước AI, hợp đồng dự án, roadmap và công cụ xem contract tương tác (`AI-contracts/viewer/`).
-
