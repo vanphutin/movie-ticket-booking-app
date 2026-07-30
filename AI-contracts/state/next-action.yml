@@ -1,19 +1,19 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D04
-candidate_ticket_id: TKT-W04-D05
-action: AUTHORIZE_NEXT_WORK_UNIT
+next_ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
+action: CONDUCT_LEARNING_GATE
 target: TKT-W04-D05
-priority_reason: "TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4."
-completion_condition: "TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report."
-on_success: PROCEED_TO_D05_STARTUP
-on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
+priority_reason: "D05 repository reconciliation completed with a verified D04 publication checkpoint and no startup blockers."
+completion_condition: "Learning gate LG-TKT-W04-D05 records observed C4_DEFEND answers and a PASSED verdict."
+on_success: PROCEED_TO_ANALYSIS
+on_failure: RECORD_LEARNING_REMEDIATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/state/work-unit-checkpoint.yml
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/state/work-unit-checkpoint.yml
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
 decided_at: "2026-07-30"
 decided_by: "Codex"

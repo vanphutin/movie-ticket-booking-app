@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: HANDOFF
-ticket_id: TKT-W04-D04
-candidate_ticket_id: TKT-W04-D05
-active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+current_stage: LEARNING
+ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
+active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
 primary_blocker: NONE
-required_output: NEXT_WORK_UNIT_AUTHORIZATION
-evidence_status: OBSERVED
-review_status: VERIFIED
-next_action: AUTHORIZE_NEXT_WORK_UNIT
-completion_condition: TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report.
+required_output: LEARNING_CHECKPOINT
+evidence_status: MISSING
+review_status: NOT_REVIEWED
+next_action: CONDUCT_LEARNING_GATE
+completion_condition: Learning gate LG-TKT-W04-D05 records observed C4_DEFEND answers and a PASSED verdict.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
