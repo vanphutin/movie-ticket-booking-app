@@ -39,15 +39,19 @@ evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D05
-  status: IN_PROGRESS
+  status: PASSED
   mode: REGULAR
   topics_presented:
-    []
+    - "Clean Architecture vertical-slice responsibility and dependency direction"
+    - "Registration transaction, idempotency, unique-constraint and failure windows"
+    - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
+    - "Authenticated Gateway-to-Identity request context and correlation"
+    - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: false
+  design_unlocked: true
   skeleton_unlocked: false
-  last_observation: "NOT_EVALUATED"
+  last_observation: "PASSED"
 blockers: []
 remediation_action: null
 updated_at: "2026-07-30"

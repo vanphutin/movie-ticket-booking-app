@@ -3,17 +3,17 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: CONDUCT_LEARNING_GATE
+action: CREATE_ANALYSIS_ARTIFACT
 target: TKT-W04-D05
-priority_reason: "D05 repository reconciliation completed with a verified D04 publication checkpoint and no startup blockers."
-completion_condition: "Learning gate LG-TKT-W04-D05 records observed C4_DEFEND answers and a PASSED verdict."
-on_success: PROCEED_TO_ANALYSIS
-on_failure: RECORD_LEARNING_REMEDIATION
+priority_reason: "LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps."
+completion_condition: "D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict."
+on_success: PROCEED_TO_DESIGN
+on_failure: RECORD_ANALYSIS_REMEDIATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+  - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
 decided_at: "2026-07-30"
 decided_by: "Codex"

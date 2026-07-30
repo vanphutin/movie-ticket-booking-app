@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
-current_stage: LEARNING
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,7 +9,7 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -46,15 +46,20 @@ ticket_projection:
   learning:
     gate_id: LG-TKT-W04-D05
     mode: REGULAR
-    topics_presented: []
+    topics_presented:
+      - "Clean Architecture vertical-slice responsibility and dependency direction"
+      - "Registration transaction, idempotency, unique-constraint and failure windows"
+      - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
+      - "Authenticated Gateway-to-Identity request context and correlation"
+      - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: false
+    design_unlocked: true
     skeleton_unlocked: false
-    last_observation: NOT_EVALUATED
+    last_observation: PASSED
 statuses:
-  learning: IN_PROGRESS
-  analysis: NOT_STARTED
+  learning: PASSED
+  analysis: IN_PROGRESS
   design: NOT_STARTED
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
@@ -63,26 +68,26 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: LEARNING_CHECKPOINT
-  path: AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
+  type: ANALYSIS_ARTIFACT
+  path: AI-contracts/audits/2026-07-30-tkt-w04-d05-analysis.md
 next_action:
-  id: ACTION-TKT-W04-D05-LEARNING
-  type: CONDUCT_LEARNING_GATE
+  id: ACTION-TKT-W04-D05-ANALYSIS
+  type: CREATE_ANALYSIS_ARTIFACT
   target: TKT-W04-D05
-  reason: D05 repository reconciliation completed with a verified D04 publication checkpoint and no startup blockers.
-  completion_condition: Learning gate LG-TKT-W04-D05 records observed C4_DEFEND answers and a PASSED verdict.
-  on_success: PROCEED_TO_ANALYSIS
-  on_failure: RECORD_LEARNING_REMEDIATION
+  reason: LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps.
+  completion_condition: D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict.
+  on_success: PROCEED_TO_DESIGN
+  on_failure: RECORD_ANALYSIS_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+    - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+    - AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
   decided_at: "2026-07-30"
   decided_by: Codex
 updated_at: "2026-07-30"
 updated_by: Codex
-update_source: "TKT-W04-D05 authorized on its matching branch after completed repository reconciliation; stage advanced to LEARNING."
+update_source: "LG-TKT-W04-D05 PASSED at C4_DEFEND with no observed gaps; stage advanced to ANALYSIS."

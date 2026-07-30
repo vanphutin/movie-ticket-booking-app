@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
-current_stage: LEARNING
+current_stage: ANALYSIS
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-startup.md
+active_artifact: AI-contracts/audits/2026-07-30-tkt-w04-d05-learning.md
 primary_blocker: NONE
-required_output: LEARNING_CHECKPOINT
+required_output: ANALYSIS_ARTIFACT
 evidence_status: MISSING
 review_status: NOT_REVIEWED
-next_action: CONDUCT_LEARNING_GATE
-completion_condition: Learning gate LG-TKT-W04-D05 records observed C4_DEFEND answers and a PASSED verdict.
+next_action: CREATE_ANALYSIS_ARTIFACT
+completion_condition: D05 analysis artifact maps the vertical slice, owners, transaction/trust boundaries, failure cases and verification boundaries with no unresolved requirement conflict.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
