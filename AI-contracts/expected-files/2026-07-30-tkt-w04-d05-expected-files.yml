@@ -3,7 +3,12 @@ ticket_id: TKT-W04-D05
 design_artifact: AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
 status: APPROVED
 reviewed_by: User / Reviewer
-reviewed_at: "2026-07-30"
+reviewed_at: "2026-07-31"
+previous_approval:
+  reviewed_by: User / Reviewer
+  reviewed_at: "2026-07-30"
+amendment_finding: EF-D05-001
+amendment_resolution: APPROVED_SINGLE_PACKAGE_NEST_MONOREPO
 
 defaults:
   contract_ids:
@@ -82,7 +87,7 @@ files:
 
   - path: apps/package.json
     action: CREATE
-    responsibility: Backend npm workspace scripts and dependencies
+    responsibility: Single-package backend scripts and dependency authority
     permitted_content:
       - Reproducible build, lint, migration and test commands
     verification:

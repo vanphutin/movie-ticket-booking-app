@@ -1,6 +1,14 @@
 schema_version: 1
 ticket_id: TKT-W04-D05
 verdict: READY
+previous_verdict:
+  verdict: READY
+  reviewed_at: "2026-07-30"
+  superseded_by: EF-D05-001
+finding_resolution:
+  id: EF-D05-001
+  resolution: APPROVED_SINGLE_PACKAGE_NEST_MONOREPO
+  reviewed_at: "2026-07-31"
 checks:
   ticket_authorized: true
   prerequisites_verified: true
@@ -37,5 +45,5 @@ implementation_boundary:
   unplanned_file_policy: RETURN_TO_DESIGN
 blockers: []
 reviewer: User / Reviewer
-reviewed_at: "2026-07-30"
-decision_source: Explicit APPROVED verdict for the corrected assembled D05 design note and expected-files manifest in the working session.
+reviewed_at: "2026-07-31"
+decision_source: Explicit approval of the single-package NestJS monorepo resolution after reviewing EF-D05-001.

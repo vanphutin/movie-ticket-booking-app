@@ -78,7 +78,7 @@ next_action:
   id: ACTION-TKT-W04-D05-IMPLEMENT
   type: IMPLEMENT_AUTH_VERTICAL_SLICE
   target: TKT-W04-D05
-  reason: The corrected D05 design and 105-path expected-files manifest are approved, and the evidence-backed readiness verdict is READY with no blockers.
+  reason: Reviewer resolved EF-D05-001 by approving apps as one NestJS package/lockfile authority; design and readiness are approved with no blocker.
   completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
   on_success: PROCEED_TO_VERIFICATION
   on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
@@ -94,8 +94,8 @@ next_action_projection:
     - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
     - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
     - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
-  decided_at: "2026-07-30"
+  decided_at: "2026-07-31"
   decided_by: Codex
-updated_at: "2026-07-30"
+updated_at: "2026-07-31"
 updated_by: Codex
-update_source: "Reviewer approved the corrected D05 design and manifest; readiness evaluated READY with no blockers and implementation opened only for approved paths."
+update_source: "Reviewer approved the single-package NestJS monorepo resolution for EF-D05-001; readiness restored to READY and implementation resumed."
