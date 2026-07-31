@@ -53,6 +53,10 @@ comment policy; do not narrate obvious control flow.
       {
         "pattern": "synchronize\\s*:\\s*true",
         "message": "Identity schema changes require reviewed migrations."
+      },
+      {
+        "pattern": "\\b(?:T[O]DO|F[I]XME|H[A]CK|T[E]MP)\\b(?!(?=[^\\r\\n]*(?:TKT|EF|CCR|ADR)-[A-Z0-9-]+)(?=[^\\r\\n]*(?:remove|removal|until|when)))",
+        "message": "Temporary annotations require a traceable identifier and an explicit removal condition."
       }
     ]
   }

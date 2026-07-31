@@ -52,6 +52,10 @@ workspace `CCR-011` comment policy; do not narrate obvious request flow.
       {
         "pattern": "identity-service[/]src|from\\s+['\\\"](?:@nestjs[/]typeorm|typeorm)['\\\"]",
         "message": "Gateway must call Identity through the authenticated client port."
+      },
+      {
+        "pattern": "\\b(?:T[O]DO|F[I]XME|H[A]CK|T[E]MP)\\b(?!(?=[^\\r\\n]*(?:TKT|EF|CCR|ADR)-[A-Z0-9-]+)(?=[^\\r\\n]*(?:remove|removal|until|when)))",
+        "message": "Temporary annotations require a traceable identifier and an explicit removal condition."
       }
     ]
   }
