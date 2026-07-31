@@ -15,6 +15,16 @@
 - `bootstrap` is the composition root.
 - A service must not import another service's private source, entity or repository.
 
+## Code comments
+
+- Review comments after every authored or materially modified application-code unit.
+- Add comments only for non-obvious design intent, invariants, security/trust boundaries,
+  concurrency or failure semantics, compatibility constraints and necessary workarounds.
+- Prefer clear names, types, structure, validation and tests over comments that narrate code.
+- Update or remove stale comments. A committed `TODO`, `FIXME`, `HACK` or temporary
+  workaround must reference a ticket/finding/decision and state its removal condition.
+- Record the applicable `CCR-011` comment-review disposition in self-review.
+
 ## Commands
 
 - Format: `npm run format`

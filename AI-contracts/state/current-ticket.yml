@@ -32,6 +32,7 @@ contract_ids:
   - CCR-008
   - CCR-009
   - CCR-010
+  - CCR-011
 definition_of_ready_status: READY
 execution_status: IN_PROGRESS
 review_status: NOT_REVIEWED

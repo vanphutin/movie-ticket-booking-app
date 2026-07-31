@@ -1,6 +1,6 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.8
+effective_baseline: PC-2026.9
 current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
@@ -41,6 +41,7 @@ ticket_projection:
     - CCR-008
     - CCR-009
     - CCR-010
+    - CCR-011
   execution_status: IN_PROGRESS
   evidence_confidence: HIGH
   learning:
@@ -98,4 +99,4 @@ next_action_projection:
   decided_by: Codex
 updated_at: "2026-07-31"
 updated_by: Codex
-update_source: "Reviewer approved the single-package NestJS monorepo resolution for EF-D05-001; readiness restored to READY and implementation resumed."
+update_source: "Reviewer approved CCR-011; PC-2026.9 adds the code-comment review policy without changing the D05 ticket, readiness or implementation scope."

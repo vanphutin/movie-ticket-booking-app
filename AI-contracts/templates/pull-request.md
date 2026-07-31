@@ -10,4 +10,5 @@
 - Negative/failure cases:
 - Known limitation/risk:
 - Self-review:
+- Code-comment review disposition(s) and reason:
 - Reviewer decision:

@@ -12,6 +12,11 @@
 - Untrusted actor/internal headers are stripped before trusted context is created.
 - Application code depends on behavioral ports; infrastructure implements them.
 
+For non-obvious token verification, trusted-context construction, correlation propagation
+or upstream failure mapping, preserve the security/compatibility reason in an
+intent-bearing comment when naming, types and tests are insufficient. Follow the
+workspace `CCR-011` comment policy; do not narrate obvious request flow.
+
 ## Commands
 
 - Format: `npm --prefix .. run format`

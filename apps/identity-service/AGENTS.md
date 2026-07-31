@@ -13,6 +13,11 @@
 - Transactions are short, contain no network call and lock user/session rows consistently.
 - Passwords and refresh tokens are never persisted or logged in plaintext.
 
+For non-obvious transaction ordering, row locks, idempotency, refresh-token rotation/reuse
+or unknown commit outcomes, preserve the invariant or failure reason in an intent-bearing
+comment when naming, types and tests are insufficient. Follow the workspace `CCR-011`
+comment policy; do not narrate obvious control flow.
+
 ## Commands
 
 - Format: `npm --prefix .. run format`
