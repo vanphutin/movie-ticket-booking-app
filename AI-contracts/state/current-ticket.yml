@@ -33,6 +33,7 @@ contract_ids:
   - CCR-009
   - CCR-010
   - CCR-011
+  - CCR-012
 definition_of_ready_status: READY
 execution_status: IN_PROGRESS
 review_status: NOT_REVIEWED
@@ -55,5 +56,5 @@ learning:
   last_observation: "PASSED"
 blockers: []
 remediation_action: null
-updated_at: "2026-07-31"
+updated_at: "2026-08-01"
 updated_by: Codex
