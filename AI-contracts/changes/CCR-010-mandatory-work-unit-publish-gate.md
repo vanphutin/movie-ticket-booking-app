@@ -25,6 +25,10 @@ and allows a new ticket to start before the previous checkpoint is recoverable.
 
 ## Decision
 
+CCR-012 supersedes the `codex/<work-unit>` naming requirement for new branches. The
+publication gate below is unchanged and accepts the typed branch convention defined by
+CCR-012. Existing `codex/*` checkpoints remain valid historical evidence.
+
 Before canonical state changes from one ticket or coherent work unit to another, Codex
 MUST complete the outgoing work-unit publication gate:
 
@@ -37,8 +41,8 @@ MUST complete the outgoing work-unit publication gate:
    remote-tracking branch;
 7. create or update a Draft PR with scope, evidence, limitations and rollback;
 8. record a machine-readable publication checkpoint; and
-9. only then authorize the next work unit and create or switch to its
-   `codex/<work-unit>` branch.
+9. only then authorize the next work unit and create or switch to its typed branch under
+   CCR-012.
 
 `HANDOFF` is not complete while the publication gate is incomplete. A failed check,
 ambiguous ownership, failed push, missing remote, missing Draft PR or unverified remote

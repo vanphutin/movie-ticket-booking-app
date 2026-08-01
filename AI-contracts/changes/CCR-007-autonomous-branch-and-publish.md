@@ -34,8 +34,13 @@ Codex is not authorized to:
 
 ## Branch policy
 
+> Naming amendment: CCR-012 supersedes the `codex/<work-unit>` default for work-unit
+> branches created on or after 2026-08-01. New branches use the typed convention in
+> CCR-012. Historical and already-published `codex/*` branches remain valid.
+
 - Branch unit is a ticket, approved CCR or coherent remediation—not a folder.
-- Default name: `codex/<ticket-or-ccr>-<short-outcome>`.
+- Original default name: `codex/<ticket-or-ccr>-<short-outcome>` (historical only after
+  CCR-012).
 - A branch may contain multiple commit streams when they serve the same reviewed work
   unit; commits remain independently reviewable.
 - Before switching/creating a branch, preserve a mixed worktree and classify it under
