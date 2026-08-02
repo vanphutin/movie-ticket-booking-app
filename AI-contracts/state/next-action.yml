@@ -3,12 +3,12 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: VERIFY_AUTH_VERTICAL_SLICE
-target: TKT-W04-D05
-priority_reason: "Registration idempotency, password redaction and PostgreSQL transaction rollback evidence have been captured in evidence manifest."
-completion_condition: "All acceptance criteria for registration persistence and idempotency are verified against canonical state."
-on_success: PROCEED_TO_REVIEW
-on_failure: RETURN_TO_IMPLEMENTATION
+action: START_TICKET
+target: TKT-W05-D01
+priority_reason: "TKT-W04-D05 registration persistence and idempotency vertical slice verified, approved, and handed off."
+completion_condition: "Authorize candidate ticket TKT-W05-D01 and begin its learning gate."
+on_success: PROCEED_TO_LEARNING
+on_failure: RETURN_TO_VERIFICATION
 blocking_ids: []
 required_evidence:
   - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml

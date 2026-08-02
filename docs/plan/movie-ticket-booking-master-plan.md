@@ -13,9 +13,9 @@
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
 - Baseline: `PC-2026.9`
-- Ticket hiện tại: `TKT-W04-D05` — stage `VERIFICATION`
-- Hoàn thành có xác minh: **4/35**
-- Next action: `VERIFY_AUTH_VERTICAL_SLICE`
+- Ticket hiện tại: `TKT-W04-D05` — stage `HANDOFF`
+- Hoàn thành có xác minh: **5/35**
+- Next action: `START_TICKET`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
@@ -23,7 +23,7 @@
 | ☑ | `TKT-W04-D02` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D03` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D04` | `VERIFIED` | Canonical completed ticket |
-| ◉ | `TKT-W04-D05` | `VERIFICATION` | Current authorized ticket |
+| ☑ | `TKT-W04-D05` | `VERIFIED` | Canonical completed ticket |
 | ☐ | `TKT-W05-D01` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W05-D02` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D03` | `PLANNED` | Not started |

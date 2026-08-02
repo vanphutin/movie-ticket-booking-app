@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.9
-current_stage: VERIFICATION
+current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,6 +9,7 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
+  - TKT-W04-D05
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 ticket_projection:
   phase_id: P0
@@ -42,7 +43,7 @@ ticket_projection:
     - CCR-009
     - CCR-010
     - CCR-011
-  execution_status: IN_PROGRESS
+  execution_status: COMPLETED
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D05
@@ -65,21 +66,22 @@ statuses:
   readiness: READY
   implementation: COMPLETE
   evidence: VERIFIED
-  review: IN_PROGRESS
-  handoff: NOT_STARTED
+  review: APPROVED
+  handoff: COMPLETE
 blockers: []
 required_output:
-  type: REPRODUCIBLE_EVIDENCE_MANIFEST
+  type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
   path:
-    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    - AI-contracts/state/current-work.yml
+    - CODEX-CONTEXT.md
 next_action:
-  id: ACTION-TKT-W04-D05-VERIFY
-  type: VERIFY_AUTH_VERTICAL_SLICE
-  target: TKT-W04-D05
-  reason: Registration idempotency, password redaction and PostgreSQL transaction rollback evidence have been captured in evidence manifest.
-  completion_condition: All acceptance criteria for registration persistence and idempotency are verified against canonical state.
-  on_success: PROCEED_TO_REVIEW
-  on_failure: RETURN_TO_IMPLEMENTATION
+  id: ACTION-TKT-W05-D01-START
+  type: START_TICKET
+  target: TKT-W05-D01
+  reason: TKT-W04-D05 registration persistence and idempotency vertical slice verified, approved, and handed off.
+  completion_condition: Authorize candidate ticket TKT-W05-D01 and begin its learning gate.
+  on_success: PROCEED_TO_LEARNING
+  on_failure: RETURN_TO_VERIFICATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
@@ -91,4 +93,4 @@ next_action_projection:
   decided_by: Codex
 updated_at: "2026-08-02"
 updated_by: Codex
-update_source: "Evidence manifest created for TKT-W04-D05 persistence and idempotency checkpoint."
+update_source: "Ticket TKT-W04-D05 reviewed, approved, and handed off."

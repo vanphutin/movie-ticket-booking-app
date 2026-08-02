@@ -34,8 +34,8 @@ contract_ids:
   - CCR-010
   - CCR-011
 definition_of_ready_status: READY
-execution_status: IN_PROGRESS
-review_status: IN_PROGRESS
+execution_status: COMPLETED
+review_status: APPROVED
 evidence_status: VERIFIED
 evidence_confidence: HIGH
 learning:

@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.9
-current_stage: VERIFICATION
+current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 primary_blocker: NONE
-required_output: REPRODUCIBLE_EVIDENCE_MANIFEST
+required_output: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
 evidence_status: VERIFIED
-review_status: IN_PROGRESS
-next_action: VERIFY_AUTH_VERTICAL_SLICE
-completion_condition: All acceptance criteria for registration persistence and idempotency are verified against canonical state.
+review_status: APPROVED
+next_action: START_TICKET
+completion_condition: Authorize candidate ticket TKT-W05-D01 and begin its learning gate.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
