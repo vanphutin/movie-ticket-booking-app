@@ -646,6 +646,14 @@ files:
     verification:
       - Clean and upgrade migration tests
 
+  - path: apps/identity-service/migrations/202607300002-create-refresh-sessions.ts
+    action: CREATE
+    responsibility: Forward-only refresh-session schema migration
+    permitted_content:
+      - Refresh token hashes, family linkage, revocation metadata and lookup indexes
+    verification:
+      - PostgreSQL login-session integration tests
+
   - path: apps/identity-service/seeds/seed-identity.ts
     action: CREATE
     responsibility: Minimal idempotent Customer-role seed
