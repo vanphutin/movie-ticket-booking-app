@@ -13,3 +13,11 @@ export class IdempotencyKeyConflictError extends Error {
     this.name = 'IdempotencyKeyConflictError';
   }
 }
+
+export class InvalidCredentialsError extends Error {
+  readonly code = 'INVALID_CREDENTIALS' as const;
+  constructor(message = 'Invalid email or password') {
+    super(message);
+    this.name = 'InvalidCredentialsError';
+  }
+}

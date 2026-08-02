@@ -1,8 +1,9 @@
-import type { RegisterResult } from '../auth.models';
+import type { LoginResult, RegisterResult } from '../auth.models';
 import type { CompletedRegistrationRecord } from './registration-persistence.port';
 
 export interface PasswordHasher {
   readonly hash: (plaintext: string) => Promise<string>;
+  readonly verify: (plaintext: string, hash: string) => Promise<boolean>;
 }
 
 export interface IdGenerator {
@@ -34,4 +35,8 @@ export interface IdempotencyCryptoPort {
   ) => Promise<FingerprintOutcome>;
   readonly encryptResult: (result: RegisterResult) => Promise<EncryptedIdempotencyOutcome>;
   readonly decryptResult: (record: CompletedRegistrationRecord) => Promise<RegisterResult>;
+}
+
+export interface AuthTokenPort {
+  readonly signAccessToken: (user: LoginResult['user']) => Promise<string>;
 }

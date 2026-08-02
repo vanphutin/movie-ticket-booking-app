@@ -1,176 +1,281 @@
 /**
- * Integration tests for RegistrationPersistencePort adapter with PostgreSQL verifying
- * atomic registration, concurrent idempotency-key race conditions, transaction rollbacks,
- * garbage data absence, and winner completed record retrieval.
+ * Integration tests verifying AuthPersistenceAdapter against real PostgreSQL
+ * database transactions, idempotency atomicity, and login session persistence boundaries.
  */
-import type {
-  RegisterAtomicallyInput,
-  RegistrationPersistencePort,
-} from '../../src/application/ports/registration-persistence.port';
+import type { DataSource } from 'typeorm';
 import type { CustomerUser } from '../../src/domain/user';
+import type { RegisterAtomicallyInput } from '../../src/application/ports/registration-persistence.port';
 import { seedIdentity } from '../../seeds/seed-identity';
 import { AuthPersistenceAdapter } from '../../src/infrastructure/database/auth-persistence.adapter';
 import { createIdentityDataSource } from '../../src/infrastructure/database/typeorm.config';
-import type { DataSource } from 'typeorm';
 
-describe('RegistrationPersistencePort (PostgreSQL Integration)', () => {
-  let adapter!: RegistrationPersistencePort;
-  let dataSource!: DataSource;
+const TEST_DATABASE_URL =
+  process.env.IDENTITY_TEST_DATABASE_URL ||
+  'postgresql://movie_ticket_test:movie_ticket_test@127.0.0.1:55432/movie_ticket_test';
+
+describe('AuthPersistenceAdapter (Integration)', () => {
+  let testDataSource: DataSource;
+  let adapter: AuthPersistenceAdapter;
 
   beforeAll(async () => {
-    dataSource = createIdentityDataSource(
-      process.env.IDENTITY_TEST_DATABASE_URL ??
-        'postgres://movie_ticket_test:movie_ticket_test@127.0.0.1:55432/movie_ticket_test',
-    );
-    await dataSource.initialize();
-    await dataSource.runMigrations();
-    await seedIdentity(dataSource);
-    adapter = new AuthPersistenceAdapter(dataSource);
-  });
-
-  beforeEach(async () => {
-    await dataSource.query('TRUNCATE registration_idempotency_records, user_roles, users CASCADE');
+    testDataSource = createIdentityDataSource(TEST_DATABASE_URL);
+    if (!testDataSource.isInitialized) {
+      await testDataSource.initialize();
+    }
+    await testDataSource.runMigrations();
+    adapter = new AuthPersistenceAdapter(testDataSource);
   });
 
   afterAll(async () => {
-    if (dataSource.isInitialized) {
-      await dataSource.destroy();
+    if (testDataSource?.isInitialized) {
+      await testDataSource.destroy();
     }
   });
 
-  describe('Concurrent idempotency-key registration race', () => {
-    it('ensures exactly one winner creates user/idempotency record, loser receives idempotency_key_exists, leaves no garbage data, and replays winner record', async () => {
-      const keyHash = 'hash_concurrent_race_key_999';
+  beforeEach(async () => {
+    await testDataSource.query(
+      'TRUNCATE TABLE refresh_sessions, registration_idempotency_records, user_roles, users, roles RESTART IDENTITY CASCADE;',
+    );
+    await seedIdentity(testDataSource);
+  });
 
-      const winnerUser: CustomerUser = {
-        id: 'f1111111-1111-4111-8111-111111111111',
+  it('handles concurrent registration with the same Idempotency-Key: exactly one winner succeeds and loser leaves no orphan records', async () => {
+    const sharedKeyHash = 'hash_idem_concurrent_001';
+
+    const winnerInput: RegisterAtomicallyInput = {
+      user: {
+        id: '11111111-1111-4111-a111-111111111111',
         email: 'winner@example.com',
         displayName: 'Winner User',
         roles: ['CUSTOMER'],
-      };
+      },
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$winnerhash',
+      idempotencyRecord: {
+        keyHash: sharedKeyHash,
+        fingerprintHash: 'fp_winner_hash',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_winner_result',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_winner',
+      },
+    };
 
-      const loserUser: CustomerUser = {
-        id: 'f2222222-2222-4222-8222-222222222222',
+    const loserInput: RegisterAtomicallyInput = {
+      user: {
+        id: '22222222-2222-4222-a222-222222222222',
         email: 'loser@example.com',
         displayName: 'Loser User',
         roles: ['CUSTOMER'],
-      };
+      },
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$loserhash',
+      idempotencyRecord: {
+        keyHash: sharedKeyHash,
+        fingerprintHash: 'fp_loser_hash',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_loser_result',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_loser',
+      },
+    };
 
-      const inputWinner: RegisterAtomicallyInput = {
-        user: winnerUser,
-        passwordHash: '$argon2id$winner',
-        idempotencyRecord: {
-          keyHash,
-          fingerprintHash: 'fp_winner_hash',
-          fingerprintKeyId: 'v1',
-          encryptedResponse: 'enc_winner_response',
-          responseKeyId: 'key_v1',
-          responseNonce: 'nonce_v1',
-        },
-      };
+    const [result1, result2] = await Promise.all([
+      adapter.registerAtomically(winnerInput),
+      adapter.registerAtomically(loserInput),
+    ]);
 
-      const inputLoser: RegisterAtomicallyInput = {
-        user: loserUser,
-        passwordHash: '$argon2id$loser',
-        idempotencyRecord: {
-          keyHash, // SAME keyHash causes PostgreSQL UNIQUE constraint race condition
-          fingerprintHash: 'fp_loser_hash',
-          fingerprintKeyId: 'v1',
-          encryptedResponse: 'enc_loser_response',
-          responseKeyId: 'key_v1',
-          responseNonce: 'nonce_v1',
-        },
-      };
+    const createdResults = [result1, result2].filter((r) => r.kind === 'created');
+    expect(createdResults).toHaveLength(1);
 
-      // Concurrent execution of registerAtomically with identical Idempotency-Key
-      const [resultA, resultB] = await Promise.all([
-        adapter.registerAtomically(inputWinner),
-        adapter.registerAtomically(inputLoser),
-      ]);
+    const usersResult = await testDataSource.query<Array<{ id: string; email: string }>>(
+      'SELECT id, email_normalized AS email FROM users;',
+    );
+    expect(usersResult).toHaveLength(1);
+    expect(usersResult[0]?.email).toBe('winner@example.com');
 
-      const results = [resultA, resultB];
-      const createdResults = results.filter((r) => r.kind === 'created');
-      const raceConflictResults = results.filter((r) => r.kind === 'idempotency_key_exists');
+    const userRolesResult = await testDataSource.query<Array<{ user_id: string }>>(
+      'SELECT user_id FROM user_roles;',
+    );
+    expect(userRolesResult).toHaveLength(1);
+    expect(userRolesResult[0]?.user_id).toBe('11111111-1111-4111-a111-111111111111');
 
-      // 1. Race condition boundary: Exactly ONE winner succeeds, ONE loser receives idempotency_key_exists
-      expect(createdResults).toHaveLength(1);
-      expect(raceConflictResults).toHaveLength(1);
+    const idempotencyResult = await testDataSource.query<
+      Array<{ key_hash: string; encrypted_response: string }>
+    >('SELECT key_hash, encrypted_response FROM registration_idempotency_records;');
+    expect(idempotencyResult).toHaveLength(1);
+    expect(idempotencyResult[0]?.key_hash).toBe(sharedKeyHash);
+    expect(idempotencyResult[0]?.encrypted_response).toBe('enc_winner_result');
 
-      // 2. Winner created user successfully
-      const winnerResult = createdResults[0];
-      expect(winnerResult?.kind).toBe('created');
-
-      // 3. Replay winner record boundary: Loser queries findCompletedByKey and reads winner's completed record
-      const winnerRecord = await adapter.findCompletedByKey('REGISTER', keyHash);
-
-      expect(winnerRecord).not.toBeNull();
-      expect(winnerRecord?.fingerprintHash).toBe('fp_winner_hash');
-      expect(winnerRecord?.encryptedResponse).toBe('enc_winner_response');
-      expect(winnerRecord?.responseKeyId).toBe('key_v1');
-      expect(winnerRecord?.responseNonce).toBe('nonce_v1');
-
-      const loserUsers = await dataSource.query<{ count: string }[]>(
-        'SELECT COUNT(*)::text AS count FROM users WHERE id = $1',
-        [loserUser.id],
-      );
-      const loserRoleAssignments = await dataSource.query<{ count: string }[]>(
-        'SELECT COUNT(*)::text AS count FROM user_roles WHERE user_id = $1',
-        [loserUser.id],
-      );
-      expect(loserUsers[0]?.count).toBe('0');
-      expect(loserRoleAssignments[0]?.count).toBe('0');
-    });
+    const completedRecord = await adapter.findCompletedByKey('REGISTER', sharedKeyHash);
+    expect(completedRecord).not.toBeNull();
+    expect(completedRecord?.encryptedResponse).toBe('enc_winner_result');
   });
 
-  describe('Duplicate email rollback', () => {
-    it('does not create a role assignment or idempotency record for the rejected registration', async () => {
-      const firstUser: CustomerUser = {
-        id: 'f3333333-3333-4333-8333-333333333333',
+  it('rejects registration with duplicate email in atomic transaction and leaves no orphan idempotency record or role data', async () => {
+    const userAInput: RegisterAtomicallyInput = {
+      user: {
+        id: '11111111-1111-4111-a111-111111111111',
         email: 'duplicate@example.com',
-        displayName: 'First User',
+        displayName: 'User A',
         roles: ['CUSTOMER'],
-      };
-      const rejectedUser: CustomerUser = {
-        id: 'f4444444-4444-4444-8444-444444444444',
+      },
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$userAhash',
+      idempotencyRecord: {
+        keyHash: 'hash_idem_user_a',
+        fingerprintHash: 'fp_user_a',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_user_a',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_a',
+      },
+    };
+
+    const resultA = await adapter.registerAtomically(userAInput);
+    expect(resultA.kind).toBe('created');
+
+    const userBInput: RegisterAtomicallyInput = {
+      user: {
+        id: '22222222-2222-4222-a222-222222222222',
         email: 'duplicate@example.com',
-        displayName: 'Rejected User',
+        displayName: 'User B',
         roles: ['CUSTOMER'],
-      };
-      const createInput = (user: CustomerUser, keyHash: string): RegisterAtomicallyInput => ({
-        user,
-        passwordHash: '$argon2id$test',
-        idempotencyRecord: {
-          keyHash,
-          fingerprintHash: `fp_${keyHash}`,
-          fingerprintKeyId: 'v1',
-          encryptedResponse: `enc_${keyHash}`,
-          responseKeyId: 'k1',
-          responseNonce: `nonce_${keyHash}`,
-        },
-      });
+      },
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$userBhash',
+      idempotencyRecord: {
+        keyHash: 'hash_idem_user_b',
+        fingerprintHash: 'fp_user_b',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_user_b',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_b',
+      },
+    };
 
-      await expect(
-        adapter.registerAtomically(createInput(firstUser, 'hash_duplicate_first')),
-      ).resolves.toMatchObject({ kind: 'created' });
-      await expect(
-        adapter.registerAtomically(createInput(rejectedUser, 'hash_duplicate_rejected')),
-      ).resolves.toEqual({ kind: 'email_already_exists' });
+    const resultB = await adapter.registerAtomically(userBInput);
+    expect(resultB.kind).toBe('email_already_exists');
 
-      const rejectedUsers = await dataSource.query<{ count: string }[]>(
-        'SELECT COUNT(*)::text AS count FROM users WHERE id = $1',
-        [rejectedUser.id],
-      );
-      const rejectedRoles = await dataSource.query<{ count: string }[]>(
-        'SELECT COUNT(*)::text AS count FROM user_roles WHERE user_id = $1',
-        [rejectedUser.id],
-      );
-      const rejectedRecords = await dataSource.query<{ count: string }[]>(
-        'SELECT COUNT(*)::text AS count FROM registration_idempotency_records WHERE key_hash = $1',
-        ['hash_duplicate_rejected'],
-      );
-      expect(rejectedUsers[0]?.count).toBe('0');
-      expect(rejectedRoles[0]?.count).toBe('0');
-      expect(rejectedRecords[0]?.count).toBe('0');
+    const usersResult = await testDataSource.query<Array<{ id: string; email: string }>>(
+      'SELECT id, email_normalized AS email FROM users;',
+    );
+    expect(usersResult).toHaveLength(1);
+    expect(usersResult[0]?.id).toBe('11111111-1111-4111-a111-111111111111');
+
+    const userRolesResult = await testDataSource.query<Array<{ user_id: string }>>(
+      'SELECT user_id FROM user_roles;',
+    );
+    expect(userRolesResult).toHaveLength(1);
+    expect(userRolesResult[0]?.user_id).toBe('11111111-1111-4111-a111-111111111111');
+
+    const idempotencyResult = await testDataSource.query<Array<{ key_hash: string }>>(
+      'SELECT key_hash FROM registration_idempotency_records;',
+    );
+    expect(idempotencyResult).toHaveLength(1);
+    expect(idempotencyResult[0]?.key_hash).toBe('hash_idem_user_a');
+  });
+
+  it('findCredentialByEmail retrieves minimal credential record for active user', async () => {
+    await adapter.registerAtomically({
+      user: {
+        id: '11111111-1111-4111-a111-111111111111',
+        email: 'active@example.com',
+        displayName: 'Active User',
+        roles: ['CUSTOMER'],
+      },
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$validhash',
+      idempotencyRecord: {
+        keyHash: 'hash_login_active_001',
+        fingerprintHash: 'fp_active',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_active',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_active',
+      },
     });
+
+    const credential = await adapter.findCredentialByEmail('active@example.com');
+
+    expect(credential).not.toBeNull();
+    expect(credential?.user.id).toBe('11111111-1111-4111-a111-111111111111');
+    expect(credential?.user.email).toBe('active@example.com');
+    expect(credential?.passwordHash).toBe('$argon2id$v=19$m=65536,t=3,p=4$validhash');
+    expect(credential?.status).toBe('ACTIVE');
+    expect(credential).not.toHaveProperty('displayName');
+    expect(credential).not.toHaveProperty('roles');
+  });
+
+  it('issueForActiveUserAtomically issues session for active user and rolls back for non-existent user', async () => {
+    const activeUser: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'active_session@example.com',
+      displayName: 'Active User Session',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: activeUser,
+      passwordHash: '$argon2id$hash',
+      idempotencyRecord: {
+        keyHash: 'hash_login_session_001',
+        fingerprintHash: 'fp_session',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_session',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_session',
+      },
+    });
+
+    const activeSession = await adapter.issueForActiveUserAtomically(activeUser);
+    expect(activeSession).not.toBeNull();
+    expect(activeSession?.refreshToken).toBeDefined();
+
+    const nonExistentUser: CustomerUser = {
+      id: '99999999-9999-4999-a999-999999999999',
+      email: 'nonexistent@example.com',
+      displayName: 'Non Existent',
+      roles: ['CUSTOMER'],
+    };
+
+    const invalidSession = await adapter.issueForActiveUserAtomically(nonExistentUser);
+    expect(invalidSession).toBeNull();
+
+    const invalidDbRows = await testDataSource.query<Array<{ id: string }>>(
+      'SELECT id FROM refresh_sessions WHERE user_id = $1;',
+      [nonExistentUser.id],
+    );
+    expect(invalidDbRows).toHaveLength(0);
+  });
+
+  it('issueForActiveUserAtomically rejects session issuance and rolls back when user is disabled', async () => {
+    const disabledUser: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'disabled@example.com',
+      displayName: 'Disabled User',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: disabledUser,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$disabledhash',
+      idempotencyRecord: {
+        keyHash: 'hash_login_disabled_001',
+        fingerprintHash: 'fp_disabled',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_disabled',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_disabled',
+      },
+    });
+
+    await testDataSource.query("UPDATE users SET status = 'DISABLED' WHERE id = $1;", [
+      disabledUser.id,
+    ]);
+
+    const disabledSession = await adapter.issueForActiveUserAtomically(disabledUser);
+    expect(disabledSession).toBeNull();
+
+    const dbRows = await testDataSource.query<Array<{ id: string }>>(
+      'SELECT id FROM refresh_sessions WHERE user_id = $1;',
+      [disabledUser.id],
+    );
+    expect(dbRows).toHaveLength(0);
   });
 });

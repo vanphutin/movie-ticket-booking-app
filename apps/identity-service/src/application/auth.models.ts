@@ -10,3 +10,14 @@ export interface RegisterCommand {
 export interface RegisterResult {
   readonly user: CustomerUser;
 }
+
+export interface LoginCommand {
+  readonly email: string;
+  readonly password: string;
+}
+
+export interface LoginResult {
+  readonly accessToken: string;
+  readonly refreshToken: string;
+  readonly user: CustomerUser;
+}

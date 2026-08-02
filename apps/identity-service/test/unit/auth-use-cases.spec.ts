@@ -1,22 +1,29 @@
 /**
- * Unit tests for RegisterUseCase verifying domain policy, password redaction,
- * completed idempotency replay, and payload conflict rejection boundaries.
+ * Unit tests for RegisterUseCase and LoginUseCase verifying domain policy, password redaction,
+ * completed idempotency replay, payload conflict rejection, and valid login boundaries.
  */
 import {
   IdempotencyKeyConflictError,
+  InvalidCredentialsError,
   RegistrationConflictError,
 } from '../../src/application/auth.errors';
-import type { RegisterCommand } from '../../src/application/auth.models';
+import type { LoginCommand, RegisterCommand } from '../../src/application/auth.models';
 import type {
+  AuthTokenPort,
   IdGenerator,
   IdempotencyCryptoPort,
   PasswordHasher,
 } from '../../src/application/ports/auth-crypto.ports';
 import type {
+  CredentialReaderPort,
+  LoginSessionPort,
+} from '../../src/application/ports/login-session.port';
+import type {
   CompletedRegistrationRecord,
   RegistrationPersistencePort,
 } from '../../src/application/ports/registration-persistence.port';
 import { RegisterUseCase } from '../../src/application/register.use-case';
+import { LoginUseCase } from '../../src/application/login.use-case';
 
 describe('RegisterUseCase', () => {
   let persistence: jest.Mocked<RegistrationPersistencePort>;
@@ -28,6 +35,7 @@ describe('RegisterUseCase', () => {
   beforeEach(() => {
     passwordHasher = {
       hash: jest.fn().mockResolvedValue('hashed_password_123'),
+      verify: jest.fn().mockResolvedValue(true),
     };
 
     idGenerator = {
@@ -371,5 +379,178 @@ describe('RegisterUseCase', () => {
       code: 'IDEMPOTENCY_KEY_CONFLICT',
     });
     expect(idempotencyCrypto.decryptResult).not.toHaveBeenCalled();
+  });
+});
+
+describe('LoginUseCase', () => {
+  const mockUser = {
+    id: 'f2ad40a8-7d46-4a45-b4ec-fda33d17da8b',
+    email: 'user@example.com',
+    displayName: 'John Doe',
+    roles: ['CUSTOMER'] as const,
+  };
+
+  it('authenticates valid credentials and issues access token and refresh token session', async () => {
+    const credentialReader: jest.Mocked<CredentialReaderPort> = {
+      findCredentialByEmail: jest.fn().mockResolvedValue({
+        user: mockUser,
+        passwordHash: 'hashed_password_123',
+        status: 'ACTIVE',
+      }),
+    };
+
+    const passwordHasher: jest.Mocked<PasswordHasher> = {
+      hash: jest.fn(),
+      verify: jest.fn().mockResolvedValue(true),
+    };
+
+    const loginSessionPort: jest.Mocked<LoginSessionPort> = {
+      issueForActiveUserAtomically: jest.fn().mockResolvedValue({
+        refreshToken: 'opaque_refresh_token_xyz',
+      }),
+    };
+
+    const authTokenPort: jest.Mocked<AuthTokenPort> = {
+      signAccessToken: jest.fn().mockResolvedValue('jwt_access_token_abc'),
+    };
+
+    const command: LoginCommand = {
+      email: '  User@Example.COM ',
+      password: 'Password123!',
+    };
+
+    const loginUseCase = new LoginUseCase(
+      credentialReader,
+      passwordHasher,
+      loginSessionPort,
+      authTokenPort,
+    );
+
+    const result = await loginUseCase.execute(command);
+
+    expect(credentialReader.findCredentialByEmail).toHaveBeenCalledWith('user@example.com');
+    expect(passwordHasher.verify).toHaveBeenCalledWith('Password123!', 'hashed_password_123');
+    expect(loginSessionPort.issueForActiveUserAtomically).toHaveBeenCalledWith(mockUser);
+    expect(authTokenPort.signAccessToken).toHaveBeenCalledWith(mockUser);
+    expect(result).toMatchObject({
+      accessToken: 'jwt_access_token_abc',
+      refreshToken: 'opaque_refresh_token_xyz',
+      user: mockUser,
+    });
+    expect(result).not.toHaveProperty('password');
+    expect(result).not.toHaveProperty('passwordHash');
+  });
+
+  it('rejects login with InvalidCredentialsError when user status is DISABLED', async () => {
+    const credentialReader: jest.Mocked<CredentialReaderPort> = {
+      findCredentialByEmail: jest.fn().mockResolvedValue({
+        user: mockUser,
+        passwordHash: 'hashed_password_123',
+        status: 'DISABLED',
+      }),
+    };
+
+    const passwordHasher: jest.Mocked<PasswordHasher> = {
+      hash: jest.fn(),
+      verify: jest.fn(),
+    };
+
+    const loginSessionPort: jest.Mocked<LoginSessionPort> = {
+      issueForActiveUserAtomically: jest.fn(),
+    };
+
+    const authTokenPort: jest.Mocked<AuthTokenPort> = {
+      signAccessToken: jest.fn(),
+    };
+
+    const command: LoginCommand = {
+      email: 'user@example.com',
+      password: 'Password123!',
+    };
+
+    const loginUseCase = new LoginUseCase(
+      credentialReader,
+      passwordHasher,
+      loginSessionPort,
+      authTokenPort,
+    );
+
+    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    expect(passwordHasher.verify).not.toHaveBeenCalled();
+    expect(loginSessionPort.issueForActiveUserAtomically).not.toHaveBeenCalled();
+    expect(authTokenPort.signAccessToken).not.toHaveBeenCalled();
+  });
+
+  it('rejects login with InvalidCredentialsError when credential is not found', async () => {
+    const credentialReader: jest.Mocked<CredentialReaderPort> = {
+      findCredentialByEmail: jest.fn().mockResolvedValue(null),
+    };
+
+    const passwordHasher: jest.Mocked<PasswordHasher> = {
+      hash: jest.fn(),
+      verify: jest.fn(),
+    };
+
+    const loginSessionPort: jest.Mocked<LoginSessionPort> = {
+      issueForActiveUserAtomically: jest.fn(),
+    };
+
+    const authTokenPort: jest.Mocked<AuthTokenPort> = {
+      signAccessToken: jest.fn(),
+    };
+
+    const command: LoginCommand = {
+      email: 'nonexistent@example.com',
+      password: 'Password123!',
+    };
+
+    const loginUseCase = new LoginUseCase(
+      credentialReader,
+      passwordHasher,
+      loginSessionPort,
+      authTokenPort,
+    );
+
+    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    expect(passwordHasher.verify).not.toHaveBeenCalled();
+  });
+
+  it('rejects login with InvalidCredentialsError when password verification fails', async () => {
+    const credentialReader: jest.Mocked<CredentialReaderPort> = {
+      findCredentialByEmail: jest.fn().mockResolvedValue({
+        user: mockUser,
+        passwordHash: 'hashed_password_123',
+        status: 'ACTIVE',
+      }),
+    };
+
+    const passwordHasher: jest.Mocked<PasswordHasher> = {
+      hash: jest.fn(),
+      verify: jest.fn().mockResolvedValue(false),
+    };
+
+    const loginSessionPort: jest.Mocked<LoginSessionPort> = {
+      issueForActiveUserAtomically: jest.fn(),
+    };
+
+    const authTokenPort: jest.Mocked<AuthTokenPort> = {
+      signAccessToken: jest.fn(),
+    };
+
+    const command: LoginCommand = {
+      email: 'user@example.com',
+      password: 'WrongPassword123!',
+    };
+
+    const loginUseCase = new LoginUseCase(
+      credentialReader,
+      passwordHasher,
+      loginSessionPort,
+      authTokenPort,
+    );
+
+    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    expect(loginSessionPort.issueForActiveUserAtomically).not.toHaveBeenCalled();
+    expect(authTokenPort.signAccessToken).not.toHaveBeenCalled();
   });
 });
