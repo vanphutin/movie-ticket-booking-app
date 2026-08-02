@@ -1,29 +1,40 @@
 /**
- * Unit tests for RegisterUseCase and LoginUseCase verifying domain policy, password redaction,
- * completed idempotency replay, payload conflict rejection, and valid login boundaries.
+ * Unit tests for RegisterUseCase, LoginUseCase, and RefreshUseCase verifying domain policy,
+ * password redaction, idempotency replay, payload conflict rejection, and valid token rotation.
  */
 import {
   IdempotencyKeyConflictError,
   InvalidCredentialsError,
+  InvalidRefreshTokenError,
   RegistrationConflictError,
 } from '../../src/application/auth.errors';
-import type { LoginCommand, RegisterCommand } from '../../src/application/auth.models';
+import type {
+  LoginCommand,
+  RefreshCommand,
+  RegisterCommand,
+} from '../../src/application/auth.models';
 import type {
   AuthTokenPort,
   IdGenerator,
   IdempotencyCryptoPort,
   PasswordHasher,
+  RefreshTokenCryptoPort,
 } from '../../src/application/ports/auth-crypto.ports';
 import type {
   CredentialReaderPort,
   LoginSessionPort,
 } from '../../src/application/ports/login-session.port';
 import type {
+  RefreshRotationResult,
+  RefreshSessionRotationPort,
+} from '../../src/application/ports/refresh-session-rotation.port';
+import type {
   CompletedRegistrationRecord,
   RegistrationPersistencePort,
 } from '../../src/application/ports/registration-persistence.port';
 import { RegisterUseCase } from '../../src/application/register.use-case';
 import { LoginUseCase } from '../../src/application/login.use-case';
+import { RefreshUseCase } from '../../src/application/refresh.use-case';
 
 describe('RegisterUseCase', () => {
   let persistence: jest.Mocked<RegistrationPersistencePort>;
@@ -553,4 +564,124 @@ describe('LoginUseCase', () => {
     expect(loginSessionPort.issueForActiveUserAtomically).not.toHaveBeenCalled();
     expect(authTokenPort.signAccessToken).not.toHaveBeenCalled();
   });
+});
+
+describe('RefreshUseCase', () => {
+  it('rotates valid refresh token and issues new access token and refresh token', async () => {
+    const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
+      hashRefreshToken: jest.fn().mockReturnValue('hashed_old_refresh_token'),
+      prepareRefreshToken: jest.fn().mockReturnValue({
+        rawToken: 'new_opaque_refresh_token_002',
+        tokenHash: 'hashed_new_refresh_token_002',
+      }),
+    };
+
+    const fakeRotationPort: jest.Mocked<RefreshSessionRotationPort> = {
+      rotateSessionAtomically: jest.fn().mockResolvedValue({
+        kind: 'success',
+        user: {
+          id: '11111111-1111-4111-a111-111111111111',
+          email: 'user@example.com',
+          displayName: 'Customer User',
+          roles: ['CUSTOMER'],
+        },
+      }),
+    };
+
+    const fakeTokenPort: jest.Mocked<AuthTokenPort> = {
+      signAccessToken: jest.fn().mockResolvedValue('signed_new_access_token'),
+    };
+
+    const fakeIdGenerator: jest.Mocked<IdGenerator> = {
+      generate: jest.fn().mockReturnValue('new_session_uuid_002'),
+    };
+
+    const useCase = new RefreshUseCase(
+      fakeCryptoPort,
+      fakeRotationPort,
+      fakeTokenPort,
+      fakeIdGenerator,
+    );
+
+    const command: RefreshCommand = {
+      refreshToken: 'opaque_old_refresh_token_001',
+    };
+
+    const result = await useCase.execute(command);
+
+    expect(fakeCryptoPort.hashRefreshToken).toHaveBeenCalledWith('opaque_old_refresh_token_001');
+    expect(fakeCryptoPort.prepareRefreshToken).toHaveBeenCalled();
+    expect(fakeRotationPort.rotateSessionAtomically).toHaveBeenCalledWith({
+      oldTokenHash: 'hashed_old_refresh_token',
+      nextSessionId: 'new_session_uuid_002',
+      nextTokenHash: 'hashed_new_refresh_token_002',
+    });
+    expect(fakeTokenPort.signAccessToken).toHaveBeenCalledWith({
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'user@example.com',
+      displayName: 'Customer User',
+      roles: ['CUSTOMER'],
+    });
+
+    expect(result).toEqual({
+      accessToken: 'signed_new_access_token',
+      refreshToken: 'new_opaque_refresh_token_002',
+      user: {
+        id: '11111111-1111-4111-a111-111111111111',
+        email: 'user@example.com',
+        displayName: 'Customer User',
+        roles: ['CUSTOMER'],
+      },
+    });
+
+    expect(result).not.toHaveProperty('tokenHash');
+    expect(result).not.toHaveProperty('familyId');
+    expect(result).not.toHaveProperty('password');
+  });
+
+  it.each<[RefreshRotationResult]>([
+    [{ kind: 'session_not_found' }],
+    [{ kind: 'session_revoked' }],
+    [{ kind: 'replay_detected', familyId: 'fam_stolen_123' }],
+  ])(
+    'throws InvalidRefreshTokenError when session rotation fails with outcome %p without leaking internal details',
+    async (failureOutcome) => {
+      const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
+        hashRefreshToken: jest.fn().mockReturnValue('hashed_token_xyz'),
+        prepareRefreshToken: jest.fn().mockReturnValue({
+          rawToken: 'new_opaque_refresh_token_002',
+          tokenHash: 'hashed_new_refresh_token_002',
+        }),
+      };
+      const fakeRotationPort: jest.Mocked<RefreshSessionRotationPort> = {
+        rotateSessionAtomically: jest.fn().mockResolvedValue(failureOutcome),
+      };
+      const fakeTokenPort: jest.Mocked<AuthTokenPort> = {
+        signAccessToken: jest.fn(),
+      };
+      const fakeIdGenerator: jest.Mocked<IdGenerator> = {
+        generate: jest.fn().mockReturnValue('new_session_uuid_002'),
+      };
+
+      const useCase = new RefreshUseCase(
+        fakeCryptoPort,
+        fakeRotationPort,
+        fakeTokenPort,
+        fakeIdGenerator,
+      );
+
+      const action = useCase.execute({ refreshToken: 'invalid_opaque_token' });
+
+      await expect(action).rejects.toThrow(InvalidRefreshTokenError);
+      expect(fakeTokenPort.signAccessToken).not.toHaveBeenCalled();
+
+      await action.catch((err: unknown) => {
+        expect(err).toBeInstanceOf(InvalidRefreshTokenError);
+        expect(err).not.toHaveProperty('tokenHash');
+        expect(err).not.toHaveProperty('familyId');
+        expect((err as Error).message).not.toContain('hashed_token_xyz');
+        expect((err as Error).message).not.toContain('fam_stolen_123');
+      });
+    },
+  );
 });

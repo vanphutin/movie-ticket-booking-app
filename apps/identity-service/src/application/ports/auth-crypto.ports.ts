@@ -40,3 +40,12 @@ export interface IdempotencyCryptoPort {
 export interface AuthTokenPort {
   readonly signAccessToken: (user: LoginResult['user']) => Promise<string>;
 }
+export interface PreparedRefreshToken {
+  readonly rawToken: string;
+  readonly tokenHash: string;
+}
+
+export interface RefreshTokenCryptoPort {
+  readonly hashRefreshToken: (token: string) => string;
+  readonly prepareRefreshToken: () => PreparedRefreshToken;
+}

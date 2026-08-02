@@ -21,3 +21,13 @@ export interface LoginResult {
   readonly refreshToken: string;
   readonly user: CustomerUser;
 }
+
+export interface RefreshCommand {
+  readonly refreshToken: string;
+}
+
+export interface RefreshResult {
+  readonly accessToken: string;
+  readonly refreshToken: string;
+  readonly user: CustomerUser;
+}

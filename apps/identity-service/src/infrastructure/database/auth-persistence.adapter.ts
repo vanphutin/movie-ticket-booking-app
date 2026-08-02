@@ -15,9 +15,18 @@ import type {
   LoginSessionResult,
 } from '../../application/ports/login-session.port';
 import type { CustomerUser } from '../../domain/user';
+import type {
+  RefreshRotationResult,
+  RefreshSessionRotationPort,
+  RotateSessionInput,
+} from '../../application/ports/refresh-session-rotation.port';
 
 export class AuthPersistenceAdapter
-  implements RegistrationPersistencePort, CredentialReaderPort, LoginSessionPort
+  implements
+    RegistrationPersistencePort,
+    CredentialReaderPort,
+    LoginSessionPort,
+    RefreshSessionRotationPort
 {
   constructor(private readonly dataSource: DataSource) {}
 
@@ -137,6 +146,106 @@ export class AuthPersistenceAdapter
 
       return {
         refreshToken: rawRefreshToken,
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async rotateSessionAtomically(input: RotateSessionInput): Promise<RefreshRotationResult> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const rows = (await queryRunner.query(
+        `SELECT s.id AS session_id, s.user_id, s.family_id, s.revoked_at, s.revocation_reason,
+              s.expires_at <= NOW() AS is_expired,
+              u.email_normalized AS email, u.status AS user_status
+       FROM refresh_sessions s
+       JOIN users u ON u.id = s.user_id
+       WHERE s.token_hash = $1
+        FOR UPDATE OF s, u;`,
+        [input.oldTokenHash],
+      )) as Array<{
+        session_id: string;
+        user_id: string;
+        family_id: string;
+        revoked_at: Date | null;
+        revocation_reason: string | null;
+        is_expired: boolean;
+        email: string;
+        user_status: string;
+      }>;
+
+      const currentSession = rows[0];
+      if (!currentSession) {
+        await queryRunner.commitTransaction();
+        return { kind: 'session_not_found' };
+      }
+
+      if (currentSession.revoked_at !== null && currentSession.revocation_reason === 'ROTATED') {
+        await queryRunner.query(
+          `SELECT id
+           FROM refresh_sessions
+           WHERE family_id = $1
+           ORDER BY id
+           FOR UPDATE`,
+          [currentSession.family_id],
+        );
+        await queryRunner.query(
+          `UPDATE refresh_sessions
+           SET revoked_at = NOW(), revocation_reason = 'REUSE_DETECTED'
+           WHERE family_id = $1 AND revoked_at IS NULL`,
+          [currentSession.family_id],
+        );
+        await queryRunner.commitTransaction();
+        return {
+          kind: 'replay_detected',
+          familyId: currentSession.family_id,
+        };
+      }
+
+      if (
+        currentSession.revoked_at !== null ||
+        currentSession.is_expired ||
+        currentSession.user_status !== 'ACTIVE'
+      ) {
+        await queryRunner.commitTransaction();
+        return { kind: 'session_revoked' };
+      }
+
+      await queryRunner.query(
+        `UPDATE refresh_sessions
+         SET revoked_at = NOW(), revocation_reason = 'ROTATED'
+         WHERE id = $1`,
+        [currentSession.session_id],
+      );
+
+      await queryRunner.query(
+        `INSERT INTO refresh_sessions
+           (id, user_id, token_hash, family_id, created_at, expires_at)
+         VALUES ($1, $2, $3, $4, NOW(), NOW() + INTERVAL '30 days')`,
+        [
+          input.nextSessionId,
+          currentSession.user_id,
+          input.nextTokenHash,
+          currentSession.family_id,
+        ],
+      );
+
+      await queryRunner.commitTransaction();
+      return {
+        kind: 'success',
+        user: {
+          id: currentSession.user_id,
+          email: currentSession.email,
+          displayName: currentSession.email,
+          roles: ['CUSTOMER'],
+        },
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();

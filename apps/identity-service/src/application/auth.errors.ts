@@ -21,3 +21,11 @@ export class InvalidCredentialsError extends Error {
     this.name = 'InvalidCredentialsError';
   }
 }
+
+export class InvalidRefreshTokenError extends Error {
+  readonly code = 'INVALID_REFRESH_TOKEN' as const;
+  constructor(message = 'Invalid or expired refresh token') {
+    super(message);
+    this.name = 'InvalidRefreshTokenError';
+  }
+}
