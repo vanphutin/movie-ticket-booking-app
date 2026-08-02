@@ -1,3 +1,5 @@
+/** Public registration creates a Customer only; callers cannot choose the initial role. */
+
 export interface CustomerUser {
   readonly id: string;
   readonly email: string;
