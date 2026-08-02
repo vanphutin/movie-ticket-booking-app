@@ -1,0 +1,77 @@
+schema_version: 1
+evidence_id: EVD-CCR-012-ROLLOUT-2026-08-02
+change_request_id: CCR-012
+ticket_id: TKT-W04-D05
+baseline_under_test: PC-2026.9
+proposed_baseline: PC-2026.10
+scope: CONTROL_PLANE_ONLY
+prediction: >-
+  The approved rollout accepts one valid LOGOUT-RED-01 checkpoint, rejects ticket, stage,
+  required-field, path and sensitive-field violations, detects a stale cross-session
+  handoff, synchronizes projections and changes no application source/test/migration.
+working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+environment:
+  os: Windows
+  shell: PowerShell
+  observed_at: "2026-08-02"
+verification_runs:
+  - command: npm run check:docs
+    exit_code: 0
+    observation: Mermaid 10.9.6 passed for 11 diagrams; projections synchronized and repository consistency passed.
+  - command: node tools/control-plane/validate-control-plane.mjs
+    exit_code: 0
+    observation: >-
+      Control-plane validation passed, including the active checkpoint and positive/negative
+      coding-checkpoint fixtures.
+  - command: node tools/control-plane/test-consistency.mjs
+    exit_code: 0
+    observation: >-
+      Synchronized fixture was accepted; stale README, plan and active coding-checkpoint
+      handoff projections were rejected.
+  - command: node tools/control-plane/sync-control-plane.mjs --check
+    exit_code: 0
+    observation: Generated projections were synchronized.
+  - command: node tools/repository/validate-repository.mjs
+    exit_code: 0
+    observation: Repository consistency passed all configured boundaries.
+  - command: git diff --check
+    exit_code: 0
+    observation: No whitespace-error finding was emitted.
+observed_checkpoint:
+  step_id: LOGOUT-RED-01
+  phase: RED
+  status: READY_TO_START
+  evidence: NOT_RUN
+  interpretation: >-
+    CCR rollout is verified, but the application coding step itself has not run and no
+    Logout test or implementation result is claimed.
+scope_review:
+  application_source_modified: false
+  application_test_modified: false
+  application_migration_modified: false
+  package_dependency_modified: false
+artifact_paths:
+  - AI-contracts/changes/CCR-012-cross-session-coding-action-and-checkpoint-policy.md
+  - AI-contracts/expected-files/2026-08-02-ccr-012-rollout-expected-files.yml
+  - AI-contracts/schemas/current-work.schema.json
+  - AI-contracts/state/current-work.yml
+  - AI-contracts/templates/coding-action-card.md
+  - tools/control-plane/fixtures/coding-checkpoint-cases.json
+  - CODEX-CONTEXT.md
+limitation: >-
+  This evidence verifies control-plane continuity and deterministic validation only. It
+  does not verify LogoutUseCase behavior, application tests, a commit, remote publication
+  or a new ticket lifecycle state.
+observation_source: OBSERVED
+redaction_applied: true
+reviewer: Van Phu Tin
+review_status: VERIFIED
+review_evidence: Explicit `APPROVE CCR-012 ROLLOUT` response on 2026-08-02
+post_review_finding: >-
+  EF-CCR012-001: effective-baseline synchronization changes current-ticket.yml and two
+  plan projections omitted from the approved expected-files manifest. Baseline activation
+  was rolled back pending review of the additive manifest amendment.
+post_review_finding_resolution: >-
+  EF-CCR012-001 approved by Van Phu Tin on 2026-08-02; the three deterministic generated
+  projections are now within reviewed scope and PC-2026.10 may become effective.
+confidence: HIGH

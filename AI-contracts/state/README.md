@@ -110,3 +110,25 @@ VERIFY_OPTIMIZATION
 
 Canonical next action hiện tại không đổi nếu prerequisite cao hơn như contract/Foundation
 Gate vẫn đang block.
+
+## Coding checkpoint under CCR-012
+
+`current-work.yml#coding_checkpoint` là con trỏ triển khai tùy chọn và phụ thuộc vào
+`next_action` cấp ticket. Nó không phải một next action thứ hai và không cấp quyền cho
+ticket, file hay hành vi mới.
+
+- Chỉ được có checkpoint khi stage là `IMPLEMENTATION` và `ticket_id` khớp current ticket.
+- `allowed_paths` phải là tập con của expected-files manifest đã review của ticket.
+- Session làm việc với `apps/**` phải reconcile checkpoint với branch, diff và evidence
+  trước khi chọn hoặc thực hiện bước code.
+- `done`, `fixed`, checkbox, file tồn tại hoặc chat summary chỉ kích hoạt verification;
+  chúng không tự chuyển checkpoint.
+- Checkpoint chỉ chuyển từ evidence đã quan sát hoặc explicit reviewer decision.
+- Khi checkpoint hợp lệ, session tiếp tục đúng `step_id`; khi drift, dừng code và sửa từ
+  authority cao hơn.
+- Khi ticket rời implementation, checkpoint phải được xóa. Chỉ một checkpoint được phép
+  tồn tại, phù hợp single-active-work rule.
+
+Coding Action Card đầy đủ được dùng khi giao hoặc thay đổi bước; các cập nhật trong cùng
+một `step_id` có thể rút gọn. Template chuẩn nằm tại
+`AI-contracts/templates/coding-action-card.md`.

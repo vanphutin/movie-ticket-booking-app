@@ -74,6 +74,13 @@ Before modifying application files, confirm:
 - `expected-files.yml` permits the target;
 - the acceptance criterion and verification boundary are known.
 
+For work under `apps/**`, also read and reconcile
+`AI-contracts/state/current-work.yml#coding_checkpoint` before selecting or performing a
+coding step. Follow approved `CCR-012`: a newly assigned or materially changed coding
+step requires the eight-section Coding Action Card; an unchanged step may use a compact
+progress update. A learner report such as `done` or `fixed` triggers verification and
+does not advance the checkpoint without observed evidence.
+
 If implementation needs an unplanned file, return to `DESIGN` and update/review the
 expected-files manifest first.
 
