@@ -11,6 +11,8 @@
 - No Identity domain rule in Gateway.
 - Untrusted actor/internal headers are stripped before trusted context is created.
 - Application code depends on behavioral ports; infrastructure implements them.
+- Gateway coding steps inherit the repository CCR-012 checkpoint; local guidance cannot
+  replace its ticket, expected-files or evidence authority.
 
 For non-obvious token verification, trusted-context construction, correlation propagation
 or upstream failure mapping, preserve the security/compatibility reason in an

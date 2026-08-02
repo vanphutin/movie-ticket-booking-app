@@ -15,6 +15,13 @@
 - `bootstrap` is the composition root.
 - A service must not import another service's private source, entity or repository.
 
+## Coding checkpoint
+
+- Before application work, reconcile the canonical `coding_checkpoint` under CCR-012.
+- Only use paths authorized by the current ticket's reviewed expected-files manifest.
+- New or materially changed steps use the shared eight-section Coding Action Card.
+- `done` or `fixed` triggers verification; only observed evidence advances the step.
+
 ## Code comments
 
 - Review comments after every authored or materially modified application-code unit.

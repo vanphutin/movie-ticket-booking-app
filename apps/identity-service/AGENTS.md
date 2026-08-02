@@ -12,6 +12,8 @@
 - TypeORM exists only under `infrastructure/database`.
 - Transactions are short, contain no network call and lock user/session rows consistently.
 - Passwords and refresh tokens are never persisted or logged in plaintext.
+- Identity coding steps inherit the repository CCR-012 checkpoint; local guidance cannot
+  replace its ticket, expected-files or evidence authority.
 
 For non-obvious transaction ordering, row locks, idempotency, refresh-token rotation/reuse
 or unknown commit outcomes, preserve the invariant or failure reason in an intent-bearing
