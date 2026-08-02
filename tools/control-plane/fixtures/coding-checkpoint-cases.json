@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "base_checkpoint": {
+    "step_id": "LOGOUT-RED-01",
+    "ticket_id": "TKT-W04-D05",
+    "scope": "APPLICATION",
+    "feature": "LOGOUT",
+    "layer": "APPLICATION",
+    "phase": "RED",
+    "status": "READY_TO_START",
+    "problem": "Fixture problem",
+    "reason": "Fixture reason",
+    "previous_observed_step": "REFRESH-GREEN-AND-INTEGRATION",
+    "allowed_paths": ["apps/identity-service/src/application/logout.use-case.ts"],
+    "required_behaviors": ["ACTIVE_FAMILY_REVOKED_ATOMICALLY"],
+    "exclusions": ["GREEN_IMPLEMENTATION"],
+    "verification": {
+      "working_directory": "apps",
+      "command": "npm run test:unit",
+      "expected_result": "CLEAN_RED"
+    },
+    "completion_condition": "Fixture completes only on intended RED",
+    "evidence": "NOT_RUN",
+    "updated_at": "2026-08-02",
+    "updated_by": "Codex"
+  },
+  "cases": [
+    {
+      "id": "VALID_ACTIVE_CHECKPOINT",
+      "expected_valid": true,
+      "stage": "IMPLEMENTATION",
+      "ticket_id": "TKT-W04-D05"
+    },
+    {
+      "id": "REJECT_TICKET_MISMATCH",
+      "expected_valid": false,
+      "stage": "IMPLEMENTATION",
+      "ticket_id": "TKT-W04-D05",
+      "overrides": { "ticket_id": "TKT-W05-D01" }
+    },
+    {
+      "id": "REJECT_WRONG_STAGE",
+      "expected_valid": false,
+      "stage": "VERIFICATION",
+      "ticket_id": "TKT-W04-D05"
+    },
+    {
+      "id": "REJECT_MISSING_REQUIRED_FIELD",
+      "expected_valid": false,
+      "stage": "IMPLEMENTATION",
+      "ticket_id": "TKT-W04-D05",
+      "delete": ["completion_condition"]
+    },
+    {
+      "id": "REJECT_UNAUTHORIZED_PATH",
+      "expected_valid": false,
+      "stage": "IMPLEMENTATION",
+      "ticket_id": "TKT-W04-D05",
+      "overrides": {
+        "allowed_paths": ["apps/payment-service/src/application/pay.use-case.ts"]
+      }
+    },
+    {
+      "id": "REJECT_SECRET_FIELD",
+      "expected_valid": false,
+      "stage": "IMPLEMENTATION",
+      "ticket_id": "TKT-W04-D05",
+      "overrides": { "raw_refresh_token": "fixture-only-forbidden-value" }
+    }
+  ]
+}
