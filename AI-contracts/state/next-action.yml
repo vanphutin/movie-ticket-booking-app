@@ -1,15 +1,16 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-decision_status: READY
+decision_status: BLOCKED
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: START_TICKET
-target: TKT-W05-D01
-priority_reason: "TKT-W04-D05 registration persistence and idempotency vertical slice verified, approved, and handed off."
-completion_condition: "Authorize candidate ticket TKT-W05-D01 and begin its learning gate."
-on_success: PROCEED_TO_LEARNING
-on_failure: RETURN_TO_VERIFICATION
-blocking_ids: []
+action: IMPLEMENT_AUTH_VERTICAL_SLICE
+target: TKT-W04-D05
+priority_reason: "Registration persistence/idempotency evidence is observed, but the reviewed D05 scope still lacks login, refresh, logout, /me and Gateway-to-Identity verification."
+completion_condition: "The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review."
+on_success: PROCEED_TO_VERIFICATION
+on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
+blocking_ids:
+  - REM-D05-001
 required_evidence:
   - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 source_evidence:

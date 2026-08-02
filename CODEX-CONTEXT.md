@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.9
-current_stage: HANDOFF
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 primary_blocker: NONE
-required_output: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
-evidence_status: VERIFIED
-review_status: APPROVED
-next_action: START_TICKET
-completion_condition: Authorize candidate ticket TKT-W05-D01 and begin its learning gate.
+required_output: SCOPED_DIFF_AND_SELF_REVIEW
+evidence_status: PARTIAL
+review_status: NOT_REVIEWED
+next_action: IMPLEMENT_AUTH_VERTICAL_SLICE
+completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

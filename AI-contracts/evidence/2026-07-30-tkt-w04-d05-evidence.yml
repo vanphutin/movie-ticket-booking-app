@@ -1,9 +1,9 @@
 schema_version: 1
 ticket_id: TKT-W04-D05
-checkpoint: PERSISTENCE_AND_IDEMPOTENCY_VERIFICATION
+checkpoint: REGISTRATION_PERSISTENCE_AND_IDEMPOTENCY
 verified_by: Codex
 verified_at: "2026-08-02"
-status: VERIFIED
+status: PARTIAL
 
 environment:
   os: Windows
@@ -19,7 +19,7 @@ evidence_items:
     working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
     environment: Node.js v20 / Jest 29
     exit_code: 0
-    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (5 tests passed, 0 failed)"
+    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (8 tests passed, 0 failed)"
     artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
     limitation: Unit tests use in-memory mocks for ports and do not verify real PostgreSQL transaction boundaries.
 

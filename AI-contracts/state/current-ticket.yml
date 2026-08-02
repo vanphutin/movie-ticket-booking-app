@@ -34,9 +34,9 @@ contract_ids:
   - CCR-010
   - CCR-011
 definition_of_ready_status: READY
-execution_status: COMPLETED
-review_status: APPROVED
-evidence_status: VERIFIED
+execution_status: IN_PROGRESS
+review_status: NOT_REVIEWED
+evidence_status: PARTIAL
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D05

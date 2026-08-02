@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.9
-current_stage: HANDOFF
+current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,7 +9,6 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-  - TKT-W04-D05
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 ticket_projection:
   phase_id: P0
@@ -43,7 +42,7 @@ ticket_projection:
     - CCR-009
     - CCR-010
     - CCR-011
-  execution_status: COMPLETED
+  execution_status: IN_PROGRESS
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D05
@@ -64,27 +63,30 @@ statuses:
   analysis: COMPLETE
   design: APPROVED
   readiness: READY
-  implementation: COMPLETE
-  evidence: VERIFIED
-  review: APPROVED
-  handoff: COMPLETE
+  implementation: IN_PROGRESS
+  evidence: PARTIAL
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
+  type: SCOPED_DIFF_AND_SELF_REVIEW
   path:
-    - AI-contracts/state/current-work.yml
-    - CODEX-CONTEXT.md
+    - apps/package.json
+    - apps/api-gateway/src/main.ts
+    - apps/identity-service/src/main.ts
+    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W05-D01-START
-  type: START_TICKET
-  target: TKT-W05-D01
-  reason: TKT-W04-D05 registration persistence and idempotency vertical slice verified, approved, and handed off.
-  completion_condition: Authorize candidate ticket TKT-W05-D01 and begin its learning gate.
-  on_success: PROCEED_TO_LEARNING
-  on_failure: RETURN_TO_VERIFICATION
+  id: ACTION-TKT-W04-D05-IMPLEMENT
+  type: IMPLEMENT_AUTH_VERTICAL_SLICE
+  target: TKT-W04-D05
+  reason: Registration persistence/idempotency evidence is observed, but the reviewed D05 scope still lacks login, refresh, logout, /me and Gateway-to-Identity verification.
+  completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+  on_success: PROCEED_TO_VERIFICATION
+  on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
 next_action_projection:
-  decision_status: READY
-  blocking_ids: []
+  decision_status: BLOCKED
+  blocking_ids:
+    - REM-D05-001
   required_evidence:
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
   source_evidence:
@@ -93,4 +95,4 @@ next_action_projection:
   decided_by: Codex
 updated_at: "2026-08-02"
 updated_by: Codex
-update_source: "Ticket TKT-W04-D05 reviewed, approved, and handed off."
+update_source: "Forward-only remediation of premature D05 completion; registration persistence/idempotency evidence is partial and remaining auth-slice scope is unverified."
