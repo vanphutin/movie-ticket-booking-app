@@ -1,0 +1,35 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+checkpoint: PERSISTENCE_AND_IDEMPOTENCY_VERIFICATION
+verified_by: Codex
+verified_at: "2026-08-02"
+status: VERIFIED
+
+environment:
+  os: Windows
+  runtime: Node.js v20
+  database: PostgreSQL 16 (via Docker Compose apps/docker-compose.test.yml)
+  working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+
+evidence_items:
+  - id: EVI-D05-UNIT-TESTS
+    description: Unit test coverage for RegisterUseCase, Domain Invariants, Idempotency Replay, Payload Conflict, and Password Redaction
+    prediction: All unit tests in auth-use-cases.spec.ts pass cleanly without plaintext password leakage.
+    command: npm --prefix apps run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+    environment: Node.js v20 / Jest 29
+    exit_code: 0
+    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (5 tests passed, 0 failed)"
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Unit tests use in-memory mocks for ports and do not verify real PostgreSQL transaction boundaries.
+
+  - id: EVI-D05-INTEGRATION-TESTS
+    description: PostgreSQL 16 integration evidence for race conditions, single winner atomicity, and duplicate email transaction rollback
+    prediction: Concurrent registration requests with identical Idempotency-Key yield exactly 1 winner, zero orphan records, and clean replay.
+    command: npm --prefix apps run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+    environment: PostgreSQL 16 Docker / TypeORM QueryRunner
+    exit_code: 0
+    observation: "PASS identity-service/test/integration/auth-persistence.spec.ts (2 tests passed: 1 race winner, 1 duplicate email rollback with 0 orphan records)"
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Scope is strictly limited to Registration Persistence & Idempotency. Login, Refresh Token rotation, Logout, and API Gateway HTTP proxy flows are not yet verified in this checkpoint."

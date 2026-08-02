@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.9
-current_stage: IMPLEMENTATION
+current_stage: VERIFICATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 primary_blocker: NONE
-required_output: SCOPED_DIFF_AND_SELF_REVIEW
-evidence_status: MISSING
-review_status: NOT_REVIEWED
-next_action: IMPLEMENT_AUTH_VERTICAL_SLICE
-completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+required_output: REPRODUCIBLE_EVIDENCE_MANIFEST
+evidence_status: VERIFIED
+review_status: IN_PROGRESS
+next_action: VERIFY_AUTH_VERTICAL_SLICE
+completion_condition: All acceptance criteria for registration persistence and idempotency are verified against canonical state.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

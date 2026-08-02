@@ -3,21 +3,16 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: IMPLEMENT_AUTH_VERTICAL_SLICE
+action: VERIFY_AUTH_VERTICAL_SLICE
 target: TKT-W04-D05
-priority_reason: "Reviewer resolved EF-D05-001 by approving apps as one NestJS package/lockfile authority; design and readiness are approved with no blocker."
-completion_condition: "The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review."
-on_success: PROCEED_TO_VERIFICATION
-on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
+priority_reason: "Registration idempotency, password redaction and PostgreSQL transaction rollback evidence have been captured in evidence manifest."
+completion_condition: "All acceptance criteria for registration persistence and idempotency are verified against canonical state."
+on_success: PROCEED_TO_REVIEW
+on_failure: RETURN_TO_IMPLEMENTATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
-  - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
-  - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
-  - AI-contracts/state/current-work.yml
+  - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 source_evidence:
-  - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
-  - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
-  - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
-decided_at: "2026-07-31"
+  - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+decided_at: "2026-08-02"
 decided_by: "Codex"

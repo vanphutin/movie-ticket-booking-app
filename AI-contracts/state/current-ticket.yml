@@ -35,8 +35,8 @@ contract_ids:
   - CCR-011
 definition_of_ready_status: READY
 execution_status: IN_PROGRESS
-review_status: NOT_REVIEWED
-evidence_status: MISSING
+review_status: IN_PROGRESS
+evidence_status: VERIFIED
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D05
@@ -55,5 +55,5 @@ learning:
   last_observation: "PASSED"
 blockers: []
 remediation_action: null
-updated_at: "2026-07-31"
+updated_at: "2026-08-02"
 updated_by: Codex
