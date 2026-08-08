@@ -1,0 +1,54 @@
+# Analysis — TKT-W04-D02
+
+- **Actor and business outcome:** Learner / System Architect. Business outcome: Analyze identity data domain, entity boundaries, credential isolation, password versus token hashing strategies, refresh session rotation and replay detection lifecycle, and PostgreSQL unique constraints under contracts `DATA-IDN-001`, `DATA-001`, `SEC-001`, `SEC-002`, `CCR-006`, `CCR-007` for ticket `TKT-W04-D02` without scaffolding application code or creating DB migrations.
+- **Scope:**
+  - Audit contracts `DATA-IDN-001` (Identity Data & Session Storage), `DATA-001` (Database Standards), `SEC-001` (Credential Protection), `SEC-002` (Session Lifecycle).
+  - Define logical entity boundaries for Identity domain: `users`, `user_credentials`, and `refresh_sessions`.
+  - Analyze password storage mechanism (slow/adaptive hash: bcrypt / Argon2id) versus refresh token storage (fast cryptographic hash: SHA-256).
+  - Analyze refresh session lifecycle: Token rotation on refresh, revocation state, and token family invalidation upon replay detection.
+  - Analyze concurrent registration race condition and database-level enforcement via PostgreSQL `UNIQUE(email)` constraint (`SQLSTATE 23505`).
+  - Verify Learning Gate `LG-TKT-W04-D02` status (`PASSED` at `C3_INTEGRATE` level, `2026-07-28-tkt-w04-d02-learning.md`).
+- **Out of scope:**
+  - Scaffolding NestJS application modules, controllers, or services (`apps/**`).
+  - Writing SQL migration files or TypeORM/Prisma entities (belongs to `DESIGN` & `IMPLEMENTATION` after readiness gate).
+  - Edge JWT authentication verification at Gateway (belongs to `TKT-W04-D03`).
+- **Repository facts:**
+  - Effective baseline: `PC-2026.5` (CCR-001 through CCR-007 APPROVED).
+  - Branch: `codex/control-plane-governance`
+  - HEAD Commit: `f35852b` (*docs(learning): record PASSED verdict for LG-TKT-W04-D02*)
+  - Control-Plane Automated Validator: `AVAILABLE` (script `tools/control-plane/validate-control-plane.mjs` verified `PASSED`, exit code `0`).
+  - Learning Gate `LG-TKT-W04-D02`: `PASSED` (`C3_INTEGRATE` level, `2026-07-28-tkt-w04-d02-learning.md`).
+- **Assumptions:**
+  - Identity Service is the single owner of `users`, `user_credentials`, and `refresh_sessions` data structures.
+  - Primary database engine is PostgreSQL 16.
+  - Refresh tokens are 256-bit cryptographically secure random values; DB stores only SHA-256 hex digests.
+  - Passwords use adaptive slow hashing (bcrypt cost factor >= 10 or Argon2id).
+- **Invariants:**
+  - `INV-IDN-01` (Credential Isolation): Credentials (password hashes) are isolated from sessions and public profiles, and must never be exposed via API payloads or JWT claims.
+  - `INV-IDN-02` (Unique Email): User email uniqueness is strictly enforced at the database level via PostgreSQL `UNIQUE(email)` constraint.
+  - `INV-IDN-03` (Token Rotation & Family Revocation): Token refresh rotates the refresh token; replay of any revoked/previous refresh token immediately revokes all sessions in that user's token family.
+  - `INV-IDN-04` (Fast Token Hashing): Refresh tokens stored in DB are stored exclusively as SHA-256 cryptographic hashes, never as plaintext.
+- **Service/data owner:**
+  - **Identity Service:** Sole owner of `users`, `user_credentials`, and `refresh_sessions` database tables and domain models.
+- **Dependencies and trust boundaries:**
+  - **Client ↔ Identity Service Boundary:** Authenticates username/password credentials; issues signed JWT Access Tokens and HTTP-only Refresh Tokens.
+  - **Identity Service ↔ Database Boundary:** Executes transactional identity creation, credential verification, and refresh session rotation.
+- **Failure cases:**
+  - Duplicate email registration attempt → Handled via PostgreSQL `UNIQUE(email)` constraint violation (`SQLSTATE 23505`) and returned as `409 Conflict`.
+  - Invalid credentials on login → `401 Unauthorized` with generic message (prevents account enumeration).
+  - Replay of revoked refresh token → Triggers session family revocation (all user sessions invalidated) and returns `401 Unauthorized`.
+- **Security risks:**
+  - Credential leak via DB dump → Mitigated by slow salted password hashes (bcrypt/Argon2id).
+  - Token leak via DB dump → Mitigated by fast SHA-256 token hashing.
+  - Account enumeration → Mitigated by uniform generic authentication error responses.
+  - Race condition on simultaneous registrations → Mitigated by DB-level `UNIQUE` index.
+- **Contract and capability IDs:**
+  - Capability: `CAP-IDN-01`
+  - Contracts: `DATA-IDN-001`, `DATA-001`, `SEC-001`, `SEC-002`, `CCR-006`, `CCR-007`.
+- **Unanswered questions:**
+  - None (`0` unanswered requirement conflicts).
+- **Status:** `COMPLETE`
+- **Completion evidence:**
+  - Learning Gate `LG-TKT-W04-D02` evaluated and `PASSED`.
+  - Data domain boundaries and security invariants defined.
+  - Automated validator status verified as `AVAILABLE` (`PASSED`, exit code `0`).

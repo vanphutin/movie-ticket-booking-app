@@ -7,7 +7,7 @@
         <mxCell id="a-title" value="Movie Ticket Booking — Microservices Backend (thiết kế theo contract, tuần 4–10)" style="text;html=1;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="40" y="20" width="1460" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="a-status" value="Trạng thái 26/07/2026: repository chỉ có tài liệu — chưa scaffold source code (apps/client và apps/server trống); Foundation Gate FG-001 chưa VERIFIED; ADR-001 đang PROPOSED. Toàn bộ diagram là THIẾT KẾ DỰ KIẾN tổng hợp từ AI-contracts/ và docs/, không phải hệ thống đã chạy." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+        <mxCell id="a-status" value="Trạng thái 28/07/2026: PC-2026.3 hiệu lực; CCR-005 đã map 55/55 endpoint; repository chưa scaffold source code; Foundation Gate FG-001 chưa VERIFIED. Staff là POST_MVP, AI là STRETCH. Toàn bộ diagram là THIẾT KẾ DỰ KIẾN, không phải hệ thống đã chạy." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
           <mxGeometry x="40" y="70" width="1460" height="50" as="geometry" />
         </mxCell>
         <mxCell id="a-h-actors" value="Actors" style="text;html=1;align=left;fontSize=15;fontStyle=1;" vertex="1" parent="1">
@@ -19,7 +19,7 @@
         <mxCell id="a-act2" value="&lt;b&gt;Customer&lt;/b&gt;&lt;hr&gt;Quản lý profile/session; giữ ghế, booking, thanh toán; xem vé của mình" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="285" y="175" width="225" height="95" as="geometry" />
         </mxCell>
-        <mxCell id="a-act3" value="&lt;b&gt;Staff&lt;/b&gt;&lt;hr&gt;Tra cứu vé bằng ticket code; check-in vé (theo MVP scope)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="a-act3" value="&lt;b&gt;Staff — POST_MVP&lt;/b&gt;&lt;hr&gt;Tra cứu vé bằng ticket code; check-in vé; chưa được authorize trong MVP" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="530" y="175" width="225" height="95" as="geometry" />
         </mxCell>
         <mxCell id="a-act4" value="&lt;b&gt;Admin&lt;/b&gt;&lt;hr&gt;Quản lý movie, cinema, screen, seat, showtime; không đọc credential/payment secret" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
@@ -46,7 +46,7 @@
         <mxCell id="a-mvp4" value="&lt;b&gt;Payment (payOS)&lt;/b&gt;&lt;hr&gt;Tạo payment link; webhook verify chữ ký; idempotent; đối soát amount/orderCode/paymentLinkId; PAID → booking CONFIRMED + ghế SOLD + tạo ticket" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="928" y="325" width="278" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="a-mvp5" value="&lt;b&gt;Ticket và Check-in&lt;/b&gt;&lt;hr&gt;Ticket tự động khi CONFIRMED (1 ghế = 1 vé); customer xem vé; staff tra cứu theo code và check-in" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="a-mvp5" value="&lt;b&gt;Ticket issuance (MVP)&lt;/b&gt;&lt;hr&gt;Ticket tự động khi CONFIRMED; customer xem vé. Staff lookup/check-in là POST_MVP, không chặn MVP release." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="1224" y="325" width="276" height="115" as="geometry" />
         </mxCell>
         <mxCell id="a-mvp6" value="&lt;b&gt;Admin Management&lt;/b&gt;&lt;hr&gt;CRUD phim/trailer/rạp/phòng/ghế; tạo suất chiếu (snapshot seat map); publish/hủy suất chiếu; xem bookings/payments; sync payment thủ công" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
@@ -277,7 +277,7 @@
         <mxCell id="c-audit" value="&lt;b&gt;audit_logs&lt;/b&gt; (chỉ INSERT — fail không block main op)&lt;hr&gt;id : UUID «PK»&lt;br&gt;actor_id (opaque, null = system job)&lt;br&gt;actor_role (role tại thời điểm thực hiện)&lt;br&gt;action (CREATE_MOVIE, HOLD_SEAT, CONFIRM_PAYMENT…)&lt;br&gt;resource_type / resource_id&lt;br&gt;details : JSONB (không password/token/card)&lt;br&gt;ip_address, request_id (correlation)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="c-logsdb">
           <mxGeometry x="20" y="40" width="360" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="c-intlogs" value="&lt;b&gt;integration_logs&lt;/b&gt; (append-only)&lt;hr&gt;id : UUID «PK»&lt;br&gt;provider (PAYOS | OPENAI | MOCK_AI)&lt;br&gt;method / url&lt;br&gt;request_body / response_body (truncated ≤ 10KB, mask secrets)&lt;br&gt;response_status, latency_ms, error_message&lt;br&gt;request_id (correlation)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="c-logsdb">
+        <mxCell id="c-intlogs" value="&lt;b&gt;integration_logs&lt;/b&gt; (append-only operational metadata)&lt;hr&gt;id : UUID «PK»&lt;br&gt;provider / operation / outcome&lt;br&gt;response_status, latency_ms, error_code&lt;br&gt;request_id (correlation)&lt;br&gt;Allowlist + bounded retention; cấm raw body, token, signature, secret, PII và internal URL." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="c-logsdb">
           <mxGeometry x="20" y="240" width="360" height="160" as="geometry" />
         </mxCell>
         <mxCell id="c-note" value="&lt;b&gt;Quy tắc cross-service (ARCH-009/012):&lt;/b&gt; đường nét đứt xám = opaque UUID + snapshot, KHÔNG có FK vật lý, KHÔNG JOIN xuyên database. Gồm: booking_db → catalog_db (showtime_id, seat_id), booking_db → identity_db (user_id, held_by_user_id, checked_in_by), catalog_db → identity_db (applied_by, user_id…). Lưu ý: docs/database 02–07 vẽ như một logical model duy nhất — khi tách DB các FK xuyên boundary phải chuyển thành opaque ID (ghi chú P1 trong tài liệu)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
@@ -351,7 +351,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="d-title" value="Luồng end-to-end: publish suất chiếu → giữ ghế → booking → thanh toán payOS → phát hành vé → check-in" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="d-title" value="Luồng MVP: publish suất chiếu → giữ ghế → booking → payment port/payOS → phát hành vé (Staff check-in là POST_MVP)" style="text;html=1;align=left;fontSize=18;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="40" y="10" width="1300" height="30" as="geometry" />
         </mxCell>
         <mxCell id="d-legend" value="Màu theo service sở hữu bước: &lt;font color=&quot;#d79b00&quot;&gt;■ Catalog&lt;/font&gt;   &lt;font color=&quot;#6c8ebf&quot;&gt;■ Customer qua Gateway&lt;/font&gt;   &lt;font color=&quot;#b85450&quot;&gt;■ Booking&lt;/font&gt;   &lt;font color=&quot;#666666&quot;&gt;■ payOS&lt;/font&gt;   &lt;font color=&quot;#9673a6&quot;&gt;■ Worker&lt;/font&gt;" style="text;html=1;align=left;fontSize=11;" vertex="1" parent="1">
@@ -363,7 +363,7 @@
         <mxCell id="d-s1" value="&lt;b&gt;1. Phát event catalog.showtime.published.v1&lt;/b&gt; (EVT-CAT-001, key showtimeId) → Booking consume (inbox dedup theo eventId) → tạo snapshot showtime_seats trạng thái AVAILABLE. Duplicate ignored; version mới thắng." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="380" y="195" width="820" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="d-s2" value="&lt;b&gt;2. Customer giữ ghế&lt;/b&gt; — POST /api/v1/holds (API-BKG-001, Idempotency-Key bắt buộc). Booking: SELECT … FOR UPDATE (ORDER BY id chống deadlock) → tất cả ghế phải AVAILABLE → ghế HELD, seat_holds ACTIVE, hết hạn +5 phút. Ghế đã bị giữ → 409 (không lộ thông tin actor khác)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="d-s2" value="&lt;b&gt;2. Customer giữ ghế&lt;/b&gt; — POST /api/v1/showtimes/{id}/holds (API-BKG-001, Idempotency-Key bắt buộc). Booking: SELECT … FOR UPDATE (ORDER BY id chống deadlock) → tất cả ghế phải AVAILABLE → ghế HELD, seat_holds ACTIVE, hết hạn +5 phút. Ghế đã bị giữ → 409 (không lộ thông tin actor khác)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="380" y="315" width="820" height="90" as="geometry" />
         </mxCell>
         <mxCell id="d-s3" value="&lt;b&gt;3. Tạo booking từ hold&lt;/b&gt; — POST /api/v1/bookings (API-BKG-002, chỉ hold owner, idempotent). Validate hold ACTIVE + chưa hết hạn (FOR UPDATE); total_amount do server tính; booking PENDING_PAYMENT hết hạn +15 phút; hold → CONVERTED_TO_BOOKING." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
@@ -384,7 +384,7 @@
         <mxCell id="d-s8" value="&lt;b&gt;8. Worker consume&lt;/b&gt; (at-least-once, inbox dedup) → relay/side effect. Duplicate command/event không lặp business effect (BUS-007); một paid booking phát hành tối đa một ticket (BUS-008)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="380" y="1065" width="820" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="d-s9" value="&lt;b&gt;9. Nhận vé và soát vé&lt;/b&gt; — Customer: GET /api/v1/bookings/{id}/ticket (API-TKT-001). Staff: GET /staff/tickets/{code} tra cứu, POST /staff/tickets/{id}/check-in → ticket ACTIVE → CHECKED_IN (validate đúng suất chiếu ±2 giờ, idempotent)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="d-s9" value="&lt;b&gt;9. Nhận vé (MVP)&lt;/b&gt; — Customer đọc ticket qua API-TKT-001/API-TKT-002..003. Staff lookup/check-in API-TKT-004..006 là POST_MVP; không được thực thi trong MVP." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacing=10;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="380" y="1185" width="820" height="80" as="geometry" />
         </mxCell>
         <mxCell id="d-br1" value="&lt;b&gt;Nhánh hết hạn hold (5 phút):&lt;/b&gt; Worker/BullMQ delayed job → Booking verify state/version (FOR UPDATE) → seat_holds EXPIRED, ghế HELD → AVAILABLE → emit booking.hold.expired.v1 (EVT-BKG-002). Worker không tự sửa DB." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;dashed=1;" vertex="1" parent="1">

@@ -1,6 +1,6 @@
 # Kế hoạch delivery tăng trưởng tuần 4–10
 
-> Canonical phase, milestone, dependency và daily contract ticket hiện nằm trong [`AI/roadmap/`](../AI/roadmap/). Tài liệu này giữ progression kỹ thuật và database gates hiện có; khi mâu thuẫn về scope/status/review, áp dụng [`AI/02-source-of-truth.md`](../AI/02-source-of-truth.md).
+> Canonical phase, milestone, dependency và daily contract ticket hiện nằm trong [`AI-contracts/roadmap/`](../AI-contracts/roadmap/). Tài liệu này giữ progression kỹ thuật và database gates hiện có; khi mâu thuẫn về scope/status/review, áp dụng [`AI-contracts/02-source-of-truth.md`](../AI-contracts/02-source-of-truth.md).
 
 Tài liệu này là nguồn chuẩn để sắp thứ tự implementation, backlog và database cho project **Movie Ticket Booking Microservices**. Mỗi tuần chỉ mở rộng 1–2 module nghiệp vụ, phải chạy được từ Gateway và phải sử dụng đầu ra của tuần trước.
 

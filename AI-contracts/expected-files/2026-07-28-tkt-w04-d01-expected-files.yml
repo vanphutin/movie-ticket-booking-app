@@ -1,0 +1,203 @@
+schema_version: 1
+ticket_id: "TKT-W04-D01"
+design_artifact: "AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md"
+status: APPROVED
+reviewed_by: "Codex"
+reviewed_at: "2026-07-28"
+files:
+  - path: "AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md"
+    action: CREATE
+    responsibility: "Design Note artifact for TKT-W04-D01 control-plane baseline under PC-2026.5"
+    contract_ids:
+      - PRD-001
+      - SCOPE-001
+      - BUS-001
+      - ARCH-001
+      - ARCH-009
+      - CCR-006
+      - CCR-007
+    acceptance_criteria_ids:
+      - AC-W04-D01-1
+      - AC-W04-D01-2
+      - AC-W04-D01-3
+    permitted_content:
+      - "Architecture design note sections"
+      - "Repository facts and invariants"
+      - "Microservice ownership and boundary rules"
+    forbidden_content:
+      - "Application source code"
+      - "Unapproved contract modifications"
+    verification:
+      - "Reviewer review against design-note.md template"
+
+  - path: "AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml"
+    action: CREATE
+    responsibility: "Expected-files manifest for TKT-W04-D01"
+    contract_ids:
+      - DOR-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D01-1
+    permitted_content:
+      - "Expected files paths and rules"
+    forbidden_content:
+      - "Application source file permissions"
+    verification:
+      - "Control-plane schema validation"
+
+  - path: "AI-contracts/audits/2026-07-28-tkt-w04-d01-analysis.md"
+    action: MODIFY
+    responsibility: "Analysis note artifact updated to baseline PC-2026.5 with observed validator status and 0 unanswered conflicts"
+    contract_ids:
+      - PRD-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D01-1
+      - AC-W04-D01-2
+      - AC-W04-D01-3
+    permitted_content:
+      - "Analysis note sections"
+      - "Observed validator status"
+      - "PC-2026.5 baseline updates"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Reviewer review against analysis-note.md template"
+
+  - path: "AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml"
+    action: CREATE
+    responsibility: "Readiness verdict for TKT-W04-D01 after approved design review"
+    contract_ids:
+      - DOR-001
+      - PRD-001
+    acceptance_criteria_ids:
+      - AC-W04-D01-1
+      - AC-W04-D01-2
+      - AC-W04-D01-3
+    permitted_content:
+      - "Readiness checks, verdict, blockers, reviewer, and review timestamp"
+    forbidden_content:
+      - "Application source code"
+      - "Implementation authorization without a READY verdict"
+    verification:
+      - "Reviewer review against readiness-verdict.yml template"
+
+  - path: "tools/control-plane/validate-control-plane.mjs"
+    action: CREATE
+    responsibility: "Control-plane automated validator script"
+    contract_ids:
+      - PRD-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "Control-plane validation script logic"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "node tools/control-plane/validate-control-plane.mjs execution"
+
+  - path: "tools/control-plane/fixtures/backlog-contract-negative-cases.json"
+    action: CREATE
+    responsibility: "Control-plane validator negative test fixtures for backlog-contract registry enforcement"
+    contract_ids:
+      - PRD-001
+      - CCR-005
+    acceptance_criteria_ids:
+      - AC-W04-D01-1
+    permitted_content:
+      - "JSON negative fixture records for 55-endpoint registry"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Control-plane validator test suite execution"
+
+  - path: "tools/labs/run_lab.mjs"
+    action: CREATE
+    responsibility: "PostgreSQL lab verification test harness for FG-001 real engine evidence"
+    contract_ids:
+      - ARCH-001
+      - DATA-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "PostgreSQL dual-client test harness logic and assertions"
+    forbidden_content:
+      - "Plaintext credentials"
+      - "Hardcoded secret fallbacks"
+    verification:
+      - "PG_URI=<postgresql-connection-uri> node tools/labs/run_lab.mjs execution"
+
+  - path: "tools/labs/verify_lab.sql"
+    action: CREATE
+    responsibility: "PostgreSQL DDL schema artifact containing hold_status_enum and idx_uniq_active_seat_hold partial unique index"
+    contract_ids:
+      - DATA-BKG-001
+      - ARCH-009
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "PostgreSQL DDL DML statements, types, tables, and partial unique index"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "PostgreSQL DDL execution on real PostgreSQL 16 engine"
+
+  - path: "AI-contracts/state/current-work.yml"
+    action: MODIFY
+    responsibility: "Canonical runtime state tracking TKT-W04-D01 DESIGN stage"
+    contract_ids:
+      - PRD-001
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "Canonical stage, ticket, blockers, required output, next action"
+    forbidden_content:
+      - "Duplicate technical contracts"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/current-ticket.yml"
+    action: MODIFY
+    responsibility: "Current ticket compatibility projection"
+    contract_ids:
+      - PRD-001
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "Ticket execution status and blockers"
+    forbidden_content:
+      - "Stale stage references"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/next-action.yml"
+    action: MODIFY
+    responsibility: "Next action compatibility projection"
+    contract_ids:
+      - PRD-001
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "Next action ID, target, and completion condition"
+    forbidden_content:
+      - "Unapproved next actions"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "CODEX-CONTEXT.md"
+    action: MODIFY
+    responsibility: "Compact session handoff projection"
+    contract_ids:
+      - PRD-001
+    acceptance_criteria_ids:
+      - AC-W04-D01-2
+    permitted_content:
+      - "Compact handoff, repository snapshot, next action"
+    forbidden_content:
+      - "Full contract text"
+    verification:
+      - "Handoff projection synchronization check"
+
+unplanned_file_policy: RETURN_TO_DESIGN

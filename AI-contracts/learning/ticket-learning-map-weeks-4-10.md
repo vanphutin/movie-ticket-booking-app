@@ -4,6 +4,11 @@ Each canonical daily ticket has exactly one gate. `Topics` reference the reusabl
 capability map and specialize it for the day's outcome. `Gate focus` supplies question
 dimensions, not a static answer key.
 
+Lesson depth follows `capability-lesson-specs.md`; decision teaching follows
+`decision-learning-standard.md`; recall follows `knowledge-retention.yml`. The matrix
+below assigns one target level and one reference profile to every gate. A profile resolves
+to 1–3 documentation links in `reference-profiles.yml`.
+
 ## Week 4 — Contract, Identity and Security
 
 | Gate | Ticket / capabilities | Topics | Gate focus and unlock evidence |
@@ -84,3 +89,42 @@ For every row:
 - A learning pass never bypasses prerequisite, contract approval, Foundation Gate, test
   or evidence requirements.
 
+## Gate depth and reference matrix
+
+| Gate | Target level | Reference profile | Required comparison/defense |
+|---|---|---|---|
+| LG-TKT-W04-D01 | C4_DEFEND | REF-CONTRACT | canonical state vs duplicated context; classify evidence |
+| LG-TKT-W04-D02 | C3_INTEGRATE | REF-IDENTITY | plaintext vs adaptive/hash storage; fixed vs rotated session |
+| LG-TKT-W04-D03 | C4_DEFEND | REF-SECURITY | Gateway verification vs owner authorization |
+| LG-TKT-W04-D04 | C4_DEFEND | REF-SECURITY | deny-by-default vs allow-by-default; 401/403/404 |
+| LG-TKT-W04-D05 | C4_DEFEND | REF-SECURITY | framework coupling vs clean boundary |
+| LG-TKT-W05-D01 | C3_INTEGRATE | REF-DATA-API | public vs admin DTO; lifecycle vs arbitrary mutation |
+| LG-TKT-W05-D02 | C4_DEFEND | REF-POSTGRES-DATA | application validation vs database constraint |
+| LG-TKT-W05-D03 | C4_DEFEND | REF-DATA-API | bounded query/index alternatives and workload trade-off |
+| LG-TKT-W05-D04 | C3_INTEGRATE | REF-DATA-API | additive vs breaking API change |
+| LG-TKT-W05-D05 | C4_DEFEND | REF-DATA-API | mock vs real-boundary evidence |
+| LG-TKT-W06-D01 | C4_DEFEND | REF-POSTGRES-DATA | transition policy and temporal-overlap strategies |
+| LG-TKT-W06-D02 | C4_DEFEND | REF-POSTGRES-DATA | constraint type and migration alternatives |
+| LG-TKT-W06-D03 | C4_DEFEND | REF-EVENTS | publish timing/2PC/outbox alternatives |
+| LG-TKT-W06-D04 | C4_DEFEND | REF-EVENTS | atomic state+outbox vs unsafe crash windows |
+| LG-TKT-W06-D05 | C4_DEFEND | REF-EVENTS | at-least-once replay and evidence boundary |
+| LG-TKT-W07-D01 | C3_INTEGRATE | REF-BOOKING | live lookup vs owned snapshot; client vs server time |
+| LG-TKT-W07-D02 | C4_DEFEND | REF-CONCURRENCY | mutex/distributed lock/row lock/serializable |
+| LG-TKT-W07-D03 | C4_DEFEND | REF-BOOKING | durable idempotency vs in-memory dedup |
+| LG-TKT-W07-D04 | C4_DEFEND | REF-CONCURRENCY | owner/expiry/race test alternatives |
+| LG-TKT-W07-D05 | C4_DEFEND | REF-CONCURRENCY | sequential test vs simultaneous real-DB evidence |
+| LG-TKT-W08-D01 | C4_DEFEND | REF-PAYMENT | redirect authority vs verified provider outcome |
+| LG-TKT-W08-D02 | C4_DEFEND | REF-WORKER | retry forever vs bounded retry/DLQ |
+| LG-TKT-W08-D03 | C4_DEFEND | REF-PAYMENT | raw signature/durable dedup vs trusted payload |
+| LG-TKT-W08-D04 | C4_DEFEND | REF-PAYMENT | provider port vs SDK/domain coupling |
+| LG-TKT-W08-D05 | C4_DEFEND | REF-PAYMENT | happy-only E2E vs duplicate/crash recovery evidence |
+| LG-TKT-W09-D01 | C4_DEFEND | REF-DATA-API | measured index vs speculative index |
+| LG-TKT-W09-D02 | C3_INTEGRATE | REF-OBSERVABILITY | metric label vs trace/log field; redaction |
+| LG-TKT-W09-D03 | C4_DEFEND | REF-OPERATIONS | liveness/readiness and retry-budget alternatives |
+| LG-TKT-W09-D04 | C4_DEFEND | REF-OPERATIONS | rollback vs forward-fix; backup vs restore evidence |
+| LG-TKT-W09-D05 | C4_DEFEND | REF-OPERATIONS | plan vs measured operational evidence |
+| LG-TKT-W10-D01 | C4_DEFEND | REF-RELEASE | contract drift severity and remediation scope |
+| LG-TKT-W10-D02 | C4_DEFEND | REF-RELEASE | reproducible workload vs misleading benchmark |
+| LG-TKT-W10-D03 | C4_DEFEND | REF-RELEASE | automated scan vs manual threat/recovery evidence |
+| LG-TKT-W10-D04 | C4_DEFEND | REF-RELEASE | hidden local knowledge vs reproducible handoff |
+| LG-TKT-W10-D05 | C4_DEFEND | REF-RELEASE | aggregate score vs hard-gate release verdict |

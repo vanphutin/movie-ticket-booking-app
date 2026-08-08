@@ -4,15 +4,17 @@ Thư mục này là nguồn sự thật chuẩn cho cách AI và học viên đi
 
 ## Trạng thái baseline
 
-- Baseline đang có hiệu lực: `PC-2026.2` — `APPROVED_FOR_TRAINING` (từ 2026-07-27; thay thế `PC-2026.1`).
-- Open change requests: không còn.
-- Approved change requests:
-  - `changes/CCR-001-control-plane-and-architecture-rebaseline.md` — approved 2026-07-27; `PC-2026.2` có hiệu lực, `ADR-001` chuyển `ACCEPTED`.
-  - `changes/CCR-002-learning-first-control-plane.md` — approved 2026-07-27; learning-first layer có hiệu lực.
-  - `changes/CCR-003-post-mvp-optimization-gate.md` — approved 2026-07-27; optimization gate có hiệu lực, mọi module vẫn `NOT_ELIGIBLE`.
-  - `changes/CCR-004-pricing-and-endpoint-completeness.md` — approved 2026-07-26; amendments đã apply vào `contracts/`.
-- Foundation Gate `FG-001`: chưa có evidence được reviewer quan sát — tuần 4 vẫn bị chặn.
-- Chưa có source/module root; mọi topology và tooling command vẫn là quyết định dự kiến.
+<!-- GENERATED:CURRENT-STATUS:START -->
+- Baseline đang có hiệu lực: `PC-2026.7` — `APPROVED_FOR_TRAINING`.
+- Ticket hiện tại: `TKT-W04-D02`; candidate: `TKT-W04-D03`.
+- Stage hiện tại: `DESIGN`; next action: `PROCEED_TO_DESIGN`.
+- Open change requests: không có.
+- Approved change requests: `CCR-001` đến `CCR-009`.
+<!-- GENERATED:CURRENT-STATUS:END -->
+
+Foundation Gate `FG-001` đã được reviewer xác minh trước khi `TKT-W04-D01` được hoàn
+thành và `TKT-W04-D02` được authorize. Repository chưa có source/module root; mọi topology
+filesystem và application tooling command vẫn là quyết định dự kiến.
 
 Draft policy không có hiệu lực chỉ vì file đã tồn tại. Reviewer phải duyệt CCR liên quan và cập
 nhật `state/contract-status.yml`; Foundation Gate là gate riêng và vẫn phải được xác minh.
@@ -22,8 +24,10 @@ nhật `state/contract-status.yml`; Foundation Gate là gate riêng và vẫn ph
 1. `00-operating-policy.md`
 2. `02-source-of-truth.md`
 3. `03-project-contract.md` và `changes/` đang mở
-4. `state/README.md`, `state/contract-status.yml`, `state/current-ticket.yml`
-5. `19-learning-first-policy.md`, `20-learning-gate-standard.md` và `learning/`
+4. `state/README.md`, `state/current-work.yml`, `state/contract-status.yml`
+5. `19-learning-first-policy.md`, `20-learning-gate-standard.md`,
+   `learning/decision-learning-standard.md`, capability lesson specs, retention map và
+   reference profiles
 6. các technical contract IDs trong `contract_ids` và `capability_ids`
 7. `21-post-mvp-optimization-policy.md`, `22-performance-baseline-standard.md` và
    `state/optimization-status.yml`
@@ -53,14 +57,29 @@ Không có `current-ticket`, AI chỉ được chọn ticket đầu tiên có pr
 
 ## Validation hiện có
 
-Repository hiện **chưa có validator executable** và chưa có project tooling. Vì vậy,
-không được mô tả các lệnh validator giả là runnable. Trước khi validator được triển khai,
-reviewer kiểm tra thủ công:
+Control-plane có validator Node.js không dùng dependency:
 
-- ID/reference và đường dẫn tồn tại.
-- Trạng thái chỉ dùng value trong `state/README.md`.
-- Ticket dependency không mở qua `BLOCKED`/`CONDITIONAL_PASS`.
-- Mọi claim `OBSERVED` có evidence reference.
+```text
+node tools/control-plane/sync-control-plane.mjs
+node tools/control-plane/sync-control-plane.mjs --check
+node tools/control-plane/validate-control-plane.mjs
+node tools/repository/validate-repository.mjs
+node tools/control-plane/test-consistency.mjs
+node tools/repository/install-git-hooks.mjs
+```
+
+Đây không phải command format/lint/test của application. Repository vẫn chưa có project
+tooling hoặc source module được scaffold. Validator kiểm tra:
+
+- canonical current-work và compatibility projection không drift;
+- effective baseline, current/candidate ticket và current stage;
+- chỉ có một next action;
+- implementation không được mở trước readiness;
+- Foundation Gate chưa verified thì không có authorized ticket;
+- handoff context trùng canonical state.
+- generated projections và vùng Markdown hiện hành trùng canonical state;
+- local Markdown/HTML/CSS reference không trỏ tới target hiện hành bị thiếu;
+- Git hook và CI chạy lại cùng consistency boundary mà không tự commit thay đổi.
 
 Khi source/module root được scaffold bởi ticket đã đạt DoR, coding guideline và command
 format/lint/test mới được tạo tại module root bằng một CCR hoặc design decision được review.

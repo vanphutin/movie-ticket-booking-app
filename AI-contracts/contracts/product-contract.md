@@ -15,11 +15,12 @@
 | ACT-003 | Admin | quản lý movie/cinema/screen/seat/showtime; không đọc credential/payment secret |
 | ACT-004 | Service identity | gọi boundary nội bộ tối thiểu, authenticated và auditable |
 | ACT-005 | Operator | health/metrics/DLQ/reconciliation theo least privilege; không đổi business state trực tiếp |
+| ACT-006 | Staff (post-MVP) | tra cứu/check-in ticket theo least privilege; không được authorize trong MVP |
 
 ## MVP
 
-`SCOPE-001`: Identity/Gateway, Catalog, Showtime publication, Booking/seat hold, payment mock/webhook, ticket/worker, observability/recovery và E2E release.  
-`SCOPE-002`: Core luôn ưu tiên stretch; semantic/recommendation, real payment settlement, multi-region, loyalty, promotion, refund automation và mobile UI là out of scope.  
+`SCOPE-001`: Identity/Gateway, Catalog, Showtime publication, Booking/seat hold, payment qua provider port với payOS adapter, ticket issuance/worker, observability/recovery và E2E release. Deterministic fake payment adapter là test/local boundary bắt buộc.
+`SCOPE-002`: Core luôn ưu tiên stretch; toàn bộ AI/semantic/recommendation, Staff check-in, multi-region, loyalty, promotion, refund automation và mobile UI không thuộc MVP delivery gate. Các endpoint này vẫn được contract hóa bằng disposition `STRETCH` hoặc `POST_MVP`.
 `SCOPE-003`: Tuần 10 feature freeze; không domain mới.
 
 ## Business rules
@@ -34,6 +35,11 @@
 `BUS-008`: Admin không được bypass invariant bằng endpoint đặc quyền.  
 `BUS-009`: Giá xuất phát từ Catalog: mỗi showtime có `base_price` integer minor unit (VND đồng, > 0); per-seat override chỉ được thêm qua reviewed design decision. Booking snapshot giá khi tiêu thụ published snapshot và snapshot lại per seat tại thời điểm booking; payment amount phải bằng tổng price snapshot của các ghế đã book. MVP dùng một currency (VND). Monetary value dùng integer minor unit; cấm floating point.  
 `BUS-010`: Khi nhận verified `catalog.showtime.cancelled.v1`: active hold → `RELEASED`; booking `PENDING_PAYMENT` → `CANCELLED`; booking `CONFIRMED` giữ nguyên nhưng được flag cho operator reconciliation vì refund automation out of scope theo `SCOPE-002`. Mọi transition idempotent dưới duplicate delivery và audit được.
+`BUS-011`: Audit/integration log endpoint chỉ trả metadata allowlisted, bounded và
+redacted; không phải quyền đọc raw payload, secret, token, signature hoặc PII.
+`BUS-012`: payOS không được gọi trực tiếp từ domain/application rule. Provider result
+chỉ làm thay đổi booking/payment sau verification theo `BUS-005`; timeout/unknown phải
+đi vào reconciliation, không được suy đoán thành công.
 
 ## Assumptions, constraints and NFR
 

@@ -1,0 +1,73 @@
+schema_version: 1
+project: Movie Ticket Booking Microservices
+effective_baseline: PC-2026.7
+current_stage: DESIGN
+ticket_id: TKT-W04-D02
+candidate_ticket_id: TKT-W04-D03
+completed_ticket_ids:
+  - TKT-W04-D01
+active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+ticket_projection:
+  phase_id: P0
+  milestone_id: M0
+  capability_ids:
+    - CAP-IDN-01
+  contract_ids:
+    - DATA-IDN-001
+    - DATA-001
+    - SEC-001
+    - SEC-002
+    - CCR-006
+    - CCR-007
+    - CCR-008
+    - CCR-009
+  execution_status: NOT_STARTED
+  evidence_confidence: HIGH
+  learning:
+    gate_id: LG-TKT-W04-D02
+    mode: REGULAR
+    topics_presented:
+      - identity versus credential versus session
+      - password hashing versus token hashing
+      - refresh session lifecycle and token rotation replay detection
+      - duplicate email handling and database unique constraints
+    observed_gaps: []
+    remediation_focus: []
+    design_unlocked: false
+    skeleton_unlocked: false
+    last_observation: 2026-07-28-tkt-w04-d02-learning.md
+statuses:
+  learning: PASSED
+  analysis: PASSED
+  design: NOT_STARTED
+  readiness: NOT_EVALUATED
+  implementation: NOT_STARTED
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
+blockers: []
+required_output:
+  type: DESIGN_NOTE
+  path: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+next_action:
+  id: ACTION-TKT-W04-D02-DESIGN
+  type: PROCEED_TO_DESIGN
+  target: TKT-W04-D02
+  reason: Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02.
+  completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
+  on_success: PROCEED_TO_READINESS
+  on_failure: RECORD_DESIGN_BLOCKERS
+next_action_projection:
+  decision_status: READY
+  blocking_ids: []
+  required_evidence:
+    - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+    - AI-contracts/designs/2026-07-28-tkt-w04-d02-expected-files.yml
+    - AI-contracts/state/current-work.yml
+  source_evidence:
+    - AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+  decided_at: "2026-07-28"
+  decided_by: "Codex (TKT-W04-D02 analysis completed)"
+updated_at: "2026-07-28"
+updated_by: Codex
+update_source: "CCR-009 approved PostgreSQL-first design and TypeORM implementation baseline; ticket stage and next action unchanged."

@@ -1,0 +1,140 @@
+schema_version: 1
+policy:
+  minimum_links_per_gate: 1
+  maximum_links_per_gate: 3
+  authority_order:
+    - specification
+    - official_security_guidance
+    - official_product_documentation
+    - recognized_pattern_reference
+  contract_boundary: External references cannot override effective project contracts.
+profiles:
+  REF-CONTRACT:
+    - title: RFC 2119 — Requirement Levels
+      url: https://www.rfc-editor.org/rfc/rfc2119.html
+      authority: IETF_RFC_EDITOR
+      purpose: Distinguish mandatory, recommended and optional normative language.
+  REF-IDENTITY:
+    - title: OWASP Authentication Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Password, authentication response and account protection guidance.
+    - title: OWASP Session Management Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Session lifecycle, token handling and invalidation risks.
+  REF-SECURITY:
+    - title: RFC 7519 — JSON Web Token
+      url: https://www.rfc-editor.org/rfc/rfc7519.html
+      authority: IETF_RFC_EDITOR
+      purpose: JWT structure, claims and validation vocabulary.
+    - title: OWASP Authorization Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Deny-by-default, least privilege and authorization checks.
+    - title: OWASP Authentication Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Authentication failure and safe response guidance.
+  REF-DATA-API:
+    - title: OpenAPI Specification
+      url: https://spec.openapis.org/oas/latest.html
+      authority: OPENAPI_INITIATIVE
+      purpose: Language-neutral HTTP API contract structure.
+    - title: PostgreSQL — Using EXPLAIN
+      url: https://www.postgresql.org/docs/current/using-explain.html
+      authority: POSTGRESQL
+      purpose: Evidence-based query plan and index reasoning.
+  REF-POSTGRES-DATA:
+    - title: PostgreSQL — Constraints
+      url: https://www.postgresql.org/docs/current/ddl-constraints.html
+      authority: POSTGRESQL
+      purpose: Unique, check, foreign-key and exclusion constraint semantics.
+    - title: PostgreSQL — Transaction Isolation
+      url: https://www.postgresql.org/docs/current/transaction-iso.html
+      authority: POSTGRESQL
+      purpose: Visibility and anomaly behavior under isolation levels.
+  REF-EVENTS:
+    - title: Transactional Outbox Pattern
+      url: https://microservices.io/patterns/data/transactional-outbox.html
+      authority: RECOGNIZED_PATTERN_REFERENCE
+      purpose: Atomic state/event publication problem, solution and duplicate relay consequence.
+    - title: RabbitMQ Reliability Guide
+      url: https://www.rabbitmq.com/docs/reliability
+      authority: RABBITMQ
+      purpose: Delivery acknowledgement, connection failure and recovery semantics.
+    - title: AsyncAPI Document Structure
+      url: https://www.asyncapi.com/docs/concepts/asyncapi-document/structure
+      authority: ASYNCAPI_INITIATIVE
+      purpose: Event-driven API contract structure and message schemas.
+  REF-BOOKING:
+    - title: RFC 9110 — HTTP Semantics
+      url: https://www.rfc-editor.org/rfc/rfc9110.html
+      authority: IETF_RFC_EDITOR
+      purpose: Method semantics, safety and idempotency terminology.
+    - title: PostgreSQL — Transaction Isolation
+      url: https://www.postgresql.org/docs/current/transaction-iso.html
+      authority: POSTGRESQL
+      purpose: Transaction visibility for hold, expiry and confirmation reasoning.
+  REF-CONCURRENCY:
+    - title: PostgreSQL — Transaction Isolation
+      url: https://www.postgresql.org/docs/current/transaction-iso.html
+      authority: POSTGRESQL
+      purpose: Isolation anomalies and serialization behavior.
+    - title: PostgreSQL — Explicit Locking
+      url: https://www.postgresql.org/docs/current/explicit-locking.html
+      authority: POSTGRESQL
+      purpose: Row/table/advisory locking and deadlock behavior.
+    - title: PostgreSQL — Constraints
+      url: https://www.postgresql.org/docs/current/ddl-constraints.html
+      authority: POSTGRESQL
+      purpose: Durable uniqueness and exclusion invariant guards.
+  REF-PAYMENT:
+    - title: Stripe Webhooks
+      url: https://docs.stripe.com/webhooks
+      authority: STRIPE
+      purpose: Signature verification, duplicate events and asynchronous webhook handling.
+    - title: OWASP Third Party Payment Gateway Integration Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Payment_Gateway_Integration_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Server-side verification and payment integration threats.
+  REF-WORKER:
+    - title: RabbitMQ Reliability Guide
+      url: https://www.rabbitmq.com/docs/reliability
+      authority: RABBITMQ
+      purpose: Acknowledgement, redelivery and connection-recovery behavior.
+    - title: Transactional Outbox Pattern
+      url: https://microservices.io/patterns/data/transactional-outbox.html
+      authority: RECOGNIZED_PATTERN_REFERENCE
+      purpose: Relay crash window and idempotent consumer requirement.
+  REF-OBSERVABILITY:
+    - title: OpenTelemetry Signals
+      url: https://opentelemetry.io/docs/concepts/signals/
+      authority: OPENTELEMETRY
+      purpose: Distinguish traces, metrics, logs and baggage.
+    - title: OpenTelemetry Context Propagation
+      url: https://opentelemetry.io/docs/concepts/context-propagation/
+      authority: OPENTELEMETRY
+      purpose: Correlate causal work across service boundaries.
+  REF-OPERATIONS:
+    - title: Kubernetes Probes
+      url: https://kubernetes.io/docs/concepts/workloads/pods/probes/
+      authority: KUBERNETES
+      purpose: Liveness, readiness and startup probe semantics.
+    - title: Google SRE — Handling Overload
+      url: https://sre.google/sre-book/handling-overload/
+      authority: GOOGLE_SRE
+      purpose: Bounded load, throttling and overload behavior.
+  REF-RELEASE:
+    - title: GitHub Actions Documentation
+      url: https://docs.github.com/en/actions
+      authority: GITHUB
+      purpose: Reproducible CI workflow concepts.
+    - title: Docker Compose File Reference
+      url: https://docs.docker.com/reference/compose-file/
+      authority: DOCKER
+      purpose: Reproducible multi-container setup and lifecycle guidance.
+    - title: OWASP Secure Code Review Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html
+      authority: OWASP
+      purpose: Manual review boundaries beyond automated scan results.

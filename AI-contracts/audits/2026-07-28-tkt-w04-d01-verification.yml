@@ -1,0 +1,39 @@
+schema_version: 1
+evidence_id: EV-TKT-W04-D01-01
+ticket_id: TKT-W04-D01
+capability_ids:
+  - CAP-CON-01
+contract_ids:
+  - PRD-001
+  - SCOPE-001
+  - BUS-001
+  - ARCH-001
+  - ARCH-009
+  - CCR-006
+  - CCR-007
+acceptance_criteria_ids:
+  - AC-W04-D01-1
+  - AC-W04-D01-2
+  - AC-W04-D01-3
+test_ids:
+  - TEST-CP-VAL-01
+prediction: Control-plane validation script executes cleanly with exit code 0 under PC-2026.5 baseline.
+command: node tools/control-plane/validate-control-plane.mjs
+working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+environment: Windows Node.js v20+
+started_at: "2026-07-28T08:06:27Z"
+finished_at: "2026-07-28T08:06:27Z"
+exit_code: 0
+artifact_paths:
+  - AI-contracts/designs/2026-07-28-tkt-w04-d01-design.md
+  - AI-contracts/expected-files/2026-07-28-tkt-w04-d01-expected-files.yml
+  - AI-contracts/readiness/2026-07-28-tkt-w04-d01-readiness.yml
+  - tools/control-plane/validate-control-plane.mjs
+observation: "Control-plane validation: PASSED; effective baseline: PC-2026.5; authorized ticket: TKT-W04-D01; 55/55 endpoints verified; zero requirement conflicts remain."
+observation_source: OBSERVED
+redaction_applied: true
+commit_sha: 1588b87
+pull_request: null
+reviewer: Codex
+review_status: SUBMITTED
+confidence: HIGH

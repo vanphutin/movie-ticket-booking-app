@@ -1,13 +1,20 @@
+# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-decision_status: BLOCKED
-next_ticket_id: null
-candidate_ticket_id: TKT-W04-D01
-action: "Obtain reviewer-observed evidence for Foundation Gate FG-001; if verified, authorize TKT-W04-D01 and start its learning gate (LG-TKT-W04-D01) theory-first."
-priority_reason: "All CCRs (001-004) are APPROVED and PC-2026.2 is effective, but the Foundation Gate has no observed evidence and no ticket may open before it is VERIFIED."
-blocking_ids:
-  - FG-001
+decision_status: READY
+next_ticket_id: TKT-W04-D02
+candidate_ticket_id: TKT-W04-D03
+action: PROCEED_TO_DESIGN
+target: TKT-W04-D02
+priority_reason: "Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02."
+completion_condition: "Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed."
+on_success: PROCEED_TO_READINESS
+on_failure: RECORD_DESIGN_BLOCKERS
+blocking_ids: []
+required_evidence:
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-expected-files.yml
+  - AI-contracts/state/current-work.yml
 source_evidence:
-  - "AI-contracts/state/contract-status.yml"
-  - "AI-contracts/changes/CCR-001-control-plane-and-architecture-rebaseline.md"
-decided_at: "2026-07-27"
-decided_by: "Claude Code (per reviewer approval by Van Phu Tin)"
+  - AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+decided_at: "2026-07-28"
+decided_by: "Codex (TKT-W04-D02 analysis completed)"

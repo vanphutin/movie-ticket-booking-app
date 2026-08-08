@@ -12,3 +12,10 @@
 `SEC-010`: TLS outside local-only boundary; CORS explicit allowlist; secure cookie flags khi cookie dùng.  
 `SEC-011`: Dependency/secret scan là release evidence nhưng không thay threat model/manual review.  
 `SEC-012`: Security finding BLOCKER/HIGH phải resolved trước dependent ticket/release.
+`SEC-013`: Staff role và check-in routes là `POST_MVP`; MVP token/RBAC không được cấp
+Staff permission ngầm. Activation cần deny matrix, least-privilege scope và audit review.
+`SEC-014`: Audit/integration/AI log endpoints chỉ expose allowlisted metadata với bounded
+filter/pagination; raw body, prompt chứa PII, signature, token, secret và internal URL bị cấm.
+`SEC-015`: payOS webhook dùng provider-specific verification adapter nhưng application
+chỉ nhận verified normalized result. AI endpoints khi được mở phải có separate abuse,
+cost, prompt-injection, data-egress và retention review.

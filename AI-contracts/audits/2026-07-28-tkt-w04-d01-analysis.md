@@ -1,0 +1,72 @@
+# Analysis — TKT-W04-D01
+
+- **Actor and business outcome:** Learner / System Architect. Business outcome: Audit project contracts under effective baseline `PC-2026.5`, map microservice system boundaries and service/data ownership, incorporate governance impact of approved `CCR-006` and `CCR-007`, freeze MVP scope vs post-MVP/stretch scope, verify zero unanswered requirement conflicts, and establish foundation for kickoff without scaffolding application code.
+- **Scope:**
+  - Audit baseline `PC-2026.5` contracts (`PRD-001`, `SCOPE-001`, `BUS-001`, `ARCH-001` through `ARCH-016`, `SEC-001` through `SEC-012`, `DATA-001` through `DATA-008`, `DOR-001`).
+  - Incorporate governance contract rules from `CCR-006` (Autonomous Commit Policy: strict stream classification, explicit path staging, pre-commit checks) and `CCR-007` (Autonomous Branch & Draft PR Policy: `codex/<work-unit>` branch isolation, non-force push, draft PR creation).
+  - Review 55-row backlog-to-contract traceability matrix.
+  - Verify Foundation Gate `FG-001` status (`VERIFIED` at `12/12` backed by real PostgreSQL 16 dual-session lock contention evidence).
+  - Verify Learning Gate `LG-TKT-W04-D01` status (`PASSED` at `C4_DEFEND` level).
+  - Map logical service boundaries, data ownership, and trust boundaries (Gateway, Identity, Catalog, Booking, Payment, Worker).
+  - Freeze Core MVP scope (46 Must, 6 Should, 3 Could) and separate Staff Post-MVP and AI Stretch routes.
+- **Out of scope:**
+  - Scaffolding application source code (`apps/client`, `apps/server`, NestJS modules).
+  - Designing DB migrations, ERDs, or API DTOs for `TKT-W04-D02` or later tickets.
+  - Creating mock or placeholder application source files.
+- **Repository facts:**
+  - Effective contract baseline is `PC-2026.5` (CCR-001 through CCR-007 APPROVED).
+  - Branch: `codex/control-plane-governance`
+  - HEAD Commit: `93a4f45` (*chore(tooling): add autonomous Git workflow skill*)
+  - Working Tree State: `MODIFIED` (contains 5 uncommitted control-plane and analysis files: `current-work.yml`, `current-ticket.yml`, `next-action.yml`, `CODEX-CONTEXT.md`, `2026-07-28-tkt-w04-d01-analysis.md`).
+  - Control-Plane Automated Validator: `AVAILABLE` (script `tools/control-plane/validate-control-plane.mjs` present in working tree; execution observed with status `PASSED`, exit code `0`).
+  - Foundation Gate `FG-001` is `VERIFIED` (`12/12` rubric score) with observed PostgreSQL 16 dual-session lock contention evidence (PIDs 83 & 84), `SQLSTATE 23505`, equality expiry (`now >= expires_at`), redacted credentials, and non-zero exit on missing config.
+  - Learning Gate `LG-TKT-W04-D01` is `PASSED` (`C4_DEFEND` level).
+  - 55-row endpoint traceability matrix is registered and locked.
+  - Application source modules are not yet scaffolded (`modules: []`).
+- **Assumptions:**
+  - Logical microservice architecture: Gateway (Edge), Identity, Catalog, Booking, Payment, Worker.
+  - Service-local data ownership: Each microservice owns its database schema; direct cross-service DB access is forbidden (`ARCH-013`).
+  - Edge untrusted input: All external client inputs (including HTTP headers like `X-User-Id`) are untrusted at the Gateway edge.
+  - Git stream separation: Product code, contract files, control-plane state, and tooling must remain in separate commit streams (`CCR-006`).
+- **Invariants:**
+  - `INV-01` (Authority Order): `Approved CCR → Effective contracts → Authorized current ticket → Code → Observed tests/evidence`.
+  - `INV-02` (Exactly-One-Winner Concurrency): Simultaneous seat hold requests for the same `(showtime_id, seat_id)` must result in exactly one successful hold; competitors must be blocked and rejected (`SQLSTATE 23505`).
+  - `INV-03` (Lifecycle Reuse): Seats in `EXPIRED` or `CANCELLED` status can be safely re-held; seats in `CONFIRMED` status remain locked.
+  - `INV-04` (Zero Unverified Claims & Zero Secrets): No gate or feature may be marked `VERIFIED` without observed execution evidence; no plaintext credentials permitted in repo/logs.
+  - `INV-05` (Autonomous Workflow Boundaries): Local commits follow explicit stream classification (`CCR-006`); remote pushes follow non-force branch publishing and Draft PR creation (`CCR-007`).
+- **Service/data owner:**
+  - **API Gateway:** Owns Edge routing, JWT validation, rate limiting, and internal verified auth-context propagation.
+  - **Identity Service:** Owns user credentials, password hashing, roles, refresh session lifecycle, and token signing.
+  - **Catalog Service:** Owns movies, trailers, screens, seats, showtimes, pricing, and showtime snapshots.
+  - **Booking Service:** Owns seat holds, booking transactions, hold expiry state machine, and seat ownership authorization.
+  - **Payment Service:** Owns payment transaction reconciliation, webhook verification, and provider port integration.
+  - **Worker Service:** Owns outbox event relay, background expiry sweeps, and asynchronous retry/DLQ handlers.
+- **Dependencies and trust boundaries:**
+  - **Edge Trust Boundary (Client ↔ Gateway):** Client requests are untrusted. Gateway verifies JWT signature/expiry, strips client-supplied identity headers, and injects verified internal context.
+  - **Service-to-Service Boundary (Gateway ↔ Microservices):** Microservices receive verified context from Gateway but enforce domain-level resource ownership (e.g. Booking verifies customer ownership before hold cancellation).
+  - **Database Boundary (Microservice ↔ Local DB):** Microservices access only their dedicated schema. Inter-service data sharing occurs strictly via REST APIs or Async Outbox Events.
+  - **Git Branch Boundary:** Autonomous work unit changes are isolated on `codex/<work-unit>` branches (`CCR-007`).
+- **Failure cases:**
+  - Unauthenticated request or expired token → `401 Unauthorized`.
+  - Cross-user resource access attempt → `403 Forbidden`.
+  - Concurrent seat hold conflict → `409 Conflict` (PostgreSQL `SQLSTATE 23505`).
+  - Missing connection environment variables (`PG_URI` / `DATABASE_URL`) → Exit `1` before DB access (`[FATAL CONFIG ERROR]`).
+  - Implicit or mixed commit staging → Rejected by `CCR-006` policy.
+- **Security risks:**
+  - Token/credential disclosure in logs → Mitigated by mandatory log redaction (`redactUri()`).
+  - Untrusted actor header spoofing → Mitigated by Gateway stripping untrusted client headers.
+  - Mass assignment / Broken Object Level Authorization → Mitigated by explicit DTO mapping and domain ownership verification in Booking service.
+  - Direct push to default branch or force-push → Strictly prohibited by `CCR-007`.
+- **Contract and capability IDs:**
+  - Capability: `CAP-CON-01`
+  - Contracts: `PRD-001`, `SCOPE-001`, `BUS-001`, `ARCH-001` through `ARCH-016`, `SEC-001` through `SEC-012`, `DATA-001` through `DATA-008`, `DOR-001`, `CCR-006`, `CCR-007`.
+- **Unanswered questions:**
+  - None (`0` unanswered requirement conflicts).
+- **Status:** `COMPLETE`
+- **Completion evidence:**
+  - Effective baseline `PC-2026.5` verified.
+  - Governance contracts `CCR-006` and `CCR-007` incorporated.
+  - Foundation Gate `FG-001` `VERIFIED` (`12/12`).
+  - Learning Gate `LG-TKT-W04-D01` `PASSED` (`C4_DEFEND`).
+  - Repository branch `codex/control-plane-governance` working tree `MODIFIED` (5 uncommitted control-plane/analysis files).
+  - Validator status verified as `AVAILABLE` (Observed outcome: `PASSED`, exit code `0`).
