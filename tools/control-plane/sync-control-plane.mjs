@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
 
 const root = process.cwd();
 const checkOnly = process.argv.includes("--check");
@@ -310,6 +313,13 @@ const planHtml = replaceRegion(
   planHtmlProgress
 );
 writeIfChanged("docs/plan/movie-ticket-booking-master-plan.html", planHtml);
+
+const docsViewerBuilder = path.join(root, "docs-viewer/build-data.js");
+if (fs.existsSync(docsViewerBuilder)) {
+  const { buildDocsDataPayload } = require(docsViewerBuilder);
+  const docsDataContent = buildDocsDataPayload(root);
+  writeIfChanged("docs-viewer/docs-data.js", docsDataContent);
+}
 
 if (changed.length > 0) {
   const prefix = checkOnly ? "Generated projection drift" : "Synchronized generated projections";

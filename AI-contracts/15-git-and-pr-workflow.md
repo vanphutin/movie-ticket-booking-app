@@ -80,6 +80,21 @@ Theo CCR-008:
 - Commit tại approved contract rollout, completed stage artifact, verified vertical
   slice/fix hoặc handoff boundary; không commit chỉ vì session kết thúc hoặc file nhiều.
 
+## Mandatory work-unit publication gate
+
+Theo CCR-010, trước khi thay đổi canonical ticket/work unit, Codex MUST:
+
+1. phân loại, kiểm tra và commit toàn bộ thay đổi authorized của work unit đang rời;
+2. giữ thay đổi mơ hồ/ngoài scope unstaged và ghi blocker;
+3. non-force push branch không phải default branch;
+4. xác minh checkpoint commit reachable từ remote-tracking ref;
+5. tạo/cập nhật Draft PR;
+6. ghi `AI-contracts/state/work-unit-checkpoint.yml`; và
+7. chỉ sau đó mới authorize ticket mới và create/switch branch `codex/<work-unit>`.
+
+`HANDOFF` chưa hoàn tất nếu publication gate chưa hoàn tất. Push/check/ownership/PR thất
+bại thì ticket cũ vẫn là current ticket và next action duy nhất là remediation tương ứng.
+
 ## Stop conditions
 
 Không commit khi contract chưa có approved CCR, path ngoài scope/manifest, verification

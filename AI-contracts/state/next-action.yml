@@ -3,18 +3,18 @@ schema_version: 1
 decision_status: READY
 next_ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
-action: RECONCILE_REPOSITORY
+action: PUBLISH_WORK_UNIT_CHECKPOINT
 target: TKT-W04-D03
-priority_reason: "TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied."
-completion_condition: "Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers."
-on_success: PROCEED_TO_LEARNING
-on_failure: RECORD_STARTUP_BLOCKERS
+priority_reason: "CCR-010 requires the outgoing D03 branch to be committed, pushed, remote-verified and represented by a Draft PR before D04 authorization."
+completion_condition: "D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded."
+on_success: AUTHORIZE_TKT_W04_D04
+on_failure: RECORD_GIT_PUBLICATION_BLOCKER
 blocking_ids: []
 required_evidence:
-  - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
-  - AI-contracts/state/current-work.yml
+  - AI-contracts/state/work-unit-checkpoint.yml
+  - https://github.com/vanphutin/movie-ticket-booking-app/pull/3
 source_evidence:
-  - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
-  - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
-decided_at: "2026-07-28"
-decided_by: "Codex (TKT-W04-D02 acceptance review approved)"
+  - AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+  - AI-contracts/state/current-work.yml
+decided_at: "2026-07-29"
+decided_by: "Codex (CCR-010 approved; reconciling premature D04 transition)"

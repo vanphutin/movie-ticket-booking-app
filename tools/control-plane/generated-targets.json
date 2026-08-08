@@ -32,6 +32,10 @@
       "path": "docs/plan/movie-ticket-booking-master-plan.html",
       "ownership": "delimited-region",
       "region": "PLAN-PROGRESS"
+    },
+    {
+      "path": "docs-viewer/docs-data.js",
+      "ownership": "full-file"
     }
   ]
 }

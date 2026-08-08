@@ -81,6 +81,24 @@ Evidence must record prediction, exact command, working directory, environment, 
 code, observation, artifact path and limitation. Report `NOT_RUN`, `INTERRUPTED` or
 `MISSING` rather than filling gaps.
 
+## Documentation and Mermaid validation
+
+After creating or modifying Markdown documentation:
+
+1. Run `npm run check:docs`.
+2. If validation reports a Mermaid file and line, repair that source diagram.
+3. Re-run `npm run check:docs` until the command exits successfully.
+4. Do not declare documentation work complete while this validation is failing.
+
+All Mermaid diagrams use the centralized template configured in `docs-viewer/app.js`.
+Do not add per-diagram `%%{init: ...}%%`, `theme` or renderer configuration directives.
+Do not edit `docs-viewer/docs-data.js` manually; regenerate it through
+`npm run check:docs`.
+
+Automated normalization may only perform syntax-preserving changes. If an automatic
+rewrite could alter the meaning, participants, messages, states, edges or security
+boundary of a diagram, repair the Markdown source explicitly and validate it again.
+
 ## Handoff
 
 Before ending material project work:
@@ -110,5 +128,9 @@ Follow `AI-contracts/15-git-and-pr-workflow.md` and approved `CCR-006`.
 - Local commits are autonomous when policy gates pass.
 - Under approved CCR-007, create/switch `codex/<work-unit>` branches, non-force push
   verified branches and create/update Draft PRs autonomously.
+- Under approved CCR-010, do not change the canonical ticket/work unit until the outgoing
+  branch is coherently committed, non-force pushed, verified against its remote-tracking
+  ref, represented by a Draft PR and recorded in
+  `AI-contracts/state/work-unit-checkpoint.yml`.
 - Never push directly to the default branch, force-push, merge/enable auto-merge, tag,
   release, delete branches or rewrite published history without separate authority.

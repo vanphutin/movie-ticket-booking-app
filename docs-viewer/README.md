@@ -6,9 +6,11 @@ file gốc) một cách trực quan. Không cần server, không cần cài depe
 ## Cách dùng
 
 1. Mở trực tiếp `docs-viewer/index.html` bằng trình duyệt (double-click).
-2. Khi tài liệu trong repo thay đổi, chạy lại lệnh sau để cập nhật dữ liệu:
+2. Khi tài liệu trong repo thay đổi, chạy lệnh sau để cập nhật dữ liệu (đã tích hợp tự động vào control plane sync):
 
 ```bash
+node tools/control-plane/sync-control-plane.mjs
+# Hoặc chạy trực tiếp script viewer:
 node docs-viewer/build-data.js
 ```
 
@@ -33,3 +35,30 @@ node docs-viewer/build-data.js
 - Viewer cũ `AI-contracts/viewer/` vẫn giữ nguyên vai trò workbench riêng cho
   AI-contracts; viewer này bao trùm toàn bộ tài liệu ở mức đọc/tra cứu.
 - Debug parser trên console trình duyệt: `window.__dv.parseMarkdown('# test')`.
+
+## Mermaid: một template, tự sửa an toàn và chặn lỗi
+
+Mọi diagram dùng cùng template tối do `docs-viewer/app.js` quản lý. Không đặt
+`%%{init: ...}%%`, `theme` hoặc cấu hình renderer riêng trong từng block Mermaid.
+Các vùng `rect rgb(...)` vẫn được phép để diễn tả nhóm logic, nhưng viewer sẽ chuẩn hóa
+màu nền và độ tương phản theo template chung.
+
+Sau khi AI tạo hoặc sửa tài liệu, chạy một lệnh:
+
+```bash
+npm run check:docs
+```
+
+Lệnh này:
+
+1. loại bỏ directive theme cục bộ bằng `npm run fix:mermaid`;
+2. parse mọi block bằng Mermaid `10.9.6`;
+3. đồng bộ `docs-viewer/docs-data.js`;
+4. chạy toàn bộ repository validator.
+
+Nếu cú pháp Mermaid sai, command dừng với exit code khác `0` và báo `file:dòng`.
+AI phải sửa đúng block được báo rồi chạy lại `npm run check:docs` cho đến khi pass.
+Không tự sửa ngữ pháp tùy ý bằng regex vì có thể làm thay đổi ý nghĩa kiến trúc.
+
+Trong viewer, mỗi diagram có nút **Phóng to**. Modal hỗ trợ `+`, `-`, **Đặt lại**
+và phím `Esc` để đóng.

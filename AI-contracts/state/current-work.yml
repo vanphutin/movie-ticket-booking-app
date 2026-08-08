@@ -1,13 +1,13 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.7
-current_stage: STARTUP
+effective_baseline: PC-2026.8
+current_stage: HANDOFF
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: null
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -29,49 +29,56 @@ ticket_projection:
     - CCR-007
     - CCR-008
     - CCR-009
-  execution_status: NOT_STARTED
+    - CCR-010
+  execution_status: SUBMITTED
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D03
     mode: REGULAR
-    topics_presented: []
+    topics_presented:
+      - "AuthN vs AuthZ"
+      - "JWT signing, claims, expiry"
+      - "Access vs Refresh Token lifecycle"
+      - "Token rotation and reuse detection"
+      - "HTTP 401 vs 403 error matrix"
+      - "Gateway trusted propagation and log redaction"
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: false
-    skeleton_unlocked: false
-    last_observation: null
+    design_unlocked: true
+    skeleton_unlocked: true
+    last_observation: PASSED
 statuses:
-  learning: NOT_STARTED
-  analysis: NOT_STARTED
-  design: NOT_STARTED
-  readiness: NOT_EVALUATED
+  learning: PASSED
+  analysis: PASSED
+  design: PASSED
+  readiness: READY
   implementation: NOT_STARTED
-  evidence: MISSING
-  review: NOT_REVIEWED
-  handoff: NOT_STARTED
+  evidence: OBSERVED
+  review: VERIFIED
+  handoff: IN_PROGRESS
 blockers: []
 required_output:
-  type: REPOSITORY_RECONCILIATION_REPORT
-  path: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
+  type: PUBLISHED_WORK_UNIT_CHECKPOINT
+  path: AI-contracts/state/work-unit-checkpoint.yml
 next_action:
-  id: ACTION-TKT-W04-D03-STARTUP
-  type: RECONCILE_REPOSITORY
+  id: ACTION-TKT-W04-D03-PUBLISH
+  type: PUBLISH_WORK_UNIT_CHECKPOINT
   target: TKT-W04-D03
-  reason: TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied.
-  completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
-  on_success: PROCEED_TO_LEARNING
-  on_failure: RECORD_STARTUP_BLOCKERS
+  reason: CCR-010 requires the outgoing D03 branch to be committed, pushed, remote-verified and represented by a Draft PR before D04 authorization.
+  completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
+  on_success: AUTHORIZE_TKT_W04_D04
+  on_failure: RECORD_GIT_PUBLICATION_BLOCKER
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
-    - AI-contracts/state/current-work.yml
+    - AI-contracts/state/work-unit-checkpoint.yml
+    - https://github.com/vanphutin/movie-ticket-booking-app/pull/3
   source_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
-    - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
-  decided_at: "2026-07-28"
-  decided_by: "Codex (TKT-W04-D02 acceptance review approved)"
-updated_at: "2026-07-28"
+    - AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+    - AI-contracts/state/current-work.yml
+  decided_at: "2026-07-29"
+  decided_by: "Codex (CCR-010 approved; reconciling premature D04 transition)"
+updated_at: "2026-07-29"
 updated_by: Codex
-update_source: "TKT-W04-D02 design remediated to conform to DATA-IDN-001, readiness READY, all acceptance criteria VERIFIED, and handoff completed; TKT-W04-D03 authorized at STARTUP."
+update_source: "CCR-010 remediation: keep D03 current until its publication checkpoint is verified."

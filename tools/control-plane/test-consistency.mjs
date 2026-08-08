@@ -53,7 +53,7 @@ try {
   fs.copyFileSync(path.join(root, "AI-contracts/README.md"), readmePath);
   const planPath = path.join(temporaryRoot, "docs/plan/movie-ticket-booking-master-plan.md");
   const stalePlan = fs.readFileSync(planPath, "utf8").replace(
-    "Hoàn thành có xác minh: **1/35**",
+    /Hoàn thành có xác minh: \*\*\d+\/35\*\*/,
     "Hoàn thành có xác minh: **35/35**"
   );
   fs.writeFileSync(planPath, stalePlan, "utf8");

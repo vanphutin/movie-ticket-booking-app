@@ -30,10 +30,15 @@ const AI_SUB_MAP = {
   contracts: 'Contracts',
   changes: 'Change Requests (CCR)',
   decisions: 'Decisions (ADR)',
-  roadmap: 'Roadmap',
+  designs: 'Designs (Thiết kế)',
+  'expected-files': 'Expected Files (Manifest)',
   learning: 'Learning',
+  readiness: 'Readiness Checklists',
+  roadmap: 'Roadmap',
+  schemas: 'Schemas (JSON/YAML)',
   state: 'State (YAML)',
   templates: 'Templates',
+  traceability: 'Traceability Matrix',
   audits: 'Audits',
   viewer: 'Viewer'
 };
@@ -42,8 +47,16 @@ const DOCS_SUB_MAP = {
   plan: 'Kế hoạch tổng thể',
   'product-backlog': 'Product Backlog',
   database: 'Database Design',
-  'curriculum-upgrade': 'Curriculum Upgrade'
+  'curriculum-upgrade': 'Curriculum Upgrade',
+  diagrams: 'Diagrams'
 };
+
+function formatSubName(key) {
+  if (!key) return '';
+  return key
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 function classify(relPath) {
   const parts = relPath.split('/');
@@ -51,11 +64,13 @@ function classify(relPath) {
     if (parts.length === 2) {
       return { group: 'AI Contracts', sub: /^\d{2}-/.test(parts[1]) ? 'Policies (00–22)' : 'Tổng quan' };
     }
-    return { group: 'AI Contracts', sub: AI_SUB_MAP[parts[1]] || parts[1] };
+    const subName = AI_SUB_MAP[parts[1]] || formatSubName(parts[1]);
+    return { group: 'AI Contracts', sub: subName };
   }
   if (parts[0] === 'docs') {
     if (parts.length === 2) return { group: 'Docs', sub: 'Chung' };
-    return { group: 'Docs', sub: DOCS_SUB_MAP[parts[1]] || parts[1] };
+    const subName = DOCS_SUB_MAP[parts[1]] || formatSubName(parts[1]);
+    return { group: 'Docs', sub: subName };
   }
   return { group: 'Gốc dự án', sub: 'Root' };
 }
@@ -75,55 +90,106 @@ const GROUP_ORDER = ['Gốc dự án', 'AI Contracts', 'Docs'];
 const SUB_ORDER = {
   'Gốc dự án': ['Root'],
   'AI Contracts': [
-    'Tổng quan', 'Policies (00–22)', 'Contracts', 'Change Requests (CCR)', 'Decisions (ADR)',
-    'Roadmap', 'Learning', 'State (YAML)', 'Templates', 'Audits', 'Viewer'
+    'Tổng quan',
+    'Policies (00–22)',
+    'Contracts',
+    'Change Requests (CCR)',
+    'Decisions (ADR)',
+    'Designs (Thiết kế)',
+    'Expected Files (Manifest)',
+    'Readiness Checklists',
+    'Roadmap',
+    'Learning',
+    'Schemas (JSON/YAML)',
+    'State (YAML)',
+    'Templates',
+    'Traceability Matrix',
+    'Audits',
+    'Viewer'
   ],
-  Docs: ['Kế hoạch tổng thể', 'Chung', 'Product Backlog', 'Database Design', 'Curriculum Upgrade']
+  Docs: [
+    'Kế hoạch tổng thể',
+    'Chung',
+    'Product Backlog',
+    'Database Design',
+    'Curriculum Upgrade',
+    'Diagrams'
+  ]
 };
 
-const allFilePaths = getAllFiles(repoRoot);
-const entries = [];
+function buildDocsDataPayload(targetRoot) {
+  const root = targetRoot || repoRoot;
+  const allFilePaths = getAllFiles(root);
+  const entries = [];
 
-allFilePaths.forEach((filePath) => {
-  const relPath = path.relative(repoRoot, filePath).replace(/\\/g, '/');
-  const ext = path.extname(filePath).toLowerCase();
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const stat = fs.statSync(filePath);
-  const filename = path.basename(filePath);
-  const { group, sub } = classify(relPath);
+  allFilePaths.forEach((filePath) => {
+    const relPath = path.relative(root, filePath).replace(/\\/g, '/');
+    const ext = path.extname(filePath).toLowerCase();
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const stat = fs.statSync(filePath);
+    const filename = path.basename(filePath);
+    const { group, sub } = classify(relPath);
 
-  entries.push({
-    path: relPath,
-    filename,
-    ext,
-    group,
-    sub,
-    title: extractTitle(content, filename, ext),
-    mtime: stat.mtime.toISOString().substring(0, 10),
-    words: content.split(/\s+/).filter(Boolean).length,
-    content
+    entries.push({
+      path: relPath,
+      filename,
+      ext,
+      group,
+      sub,
+      title: extractTitle(content, filename, ext),
+      mtime: stat.mtime.toISOString().substring(0, 10),
+      words: content.split(/\s+/).filter(Boolean).length,
+      content
+    });
   });
-});
 
-entries.sort((a, b) => {
-  const g = GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group);
-  if (g !== 0) return g;
-  const subOrder = SUB_ORDER[a.group] || [];
-  const s = subOrder.indexOf(a.sub) - subOrder.indexOf(b.sub);
-  if (s !== 0) return s;
-  return a.path.localeCompare(b.path, undefined, { numeric: true });
-});
+  entries.sort((a, b) => {
+    const g = GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group);
+    if (g !== 0) return g;
+    const subOrder = SUB_ORDER[a.group] || [];
+    const idxA = subOrder.indexOf(a.sub);
+    const idxB = subOrder.indexOf(b.sub);
+    const posA = idxA >= 0 ? idxA : 999;
+    const posB = idxB >= 0 ? idxB : 999;
+    if (posA !== posB) return posA - posB;
+    const s = a.sub.localeCompare(b.sub, undefined, { numeric: true });
+    if (s !== 0) return s;
+    return a.path.localeCompare(b.path, undefined, { numeric: true });
+  });
 
-const payload = {
-  generatedAt: new Date().toISOString().substring(0, 16).replace('T', ' '),
-  files: entries
+  const latestSourceDate = entries.reduce(
+    (latest, entry) => (entry.mtime > latest ? entry.mtime : latest),
+    ''
+  );
+  const payload = {
+    // Derive metadata from the indexed sources so repeated control-plane checks
+    // produce byte-identical output when repository data has not changed.
+    generatedAt: latestSourceDate ? `${latestSourceDate} 00:00` : '',
+    files: entries
+  };
+
+  return (
+    '// File này được generate bởi docs-viewer/build-data.js — không sửa tay.\n' +
+    'window.DOCS_DATA = ' +
+    JSON.stringify(payload, null, 0).replace(/<\/script/gi, '<\\/script') +
+    ';\n'
+  );
+}
+
+function compileToFile(targetRoot, outPath) {
+  const root = targetRoot || repoRoot;
+  const targetOutput = outPath || outputFile;
+  const js = buildDocsDataPayload(root);
+  fs.writeFileSync(targetOutput, js, 'utf-8');
+  return js;
+}
+
+if (require.main === module) {
+  compileToFile();
+  console.log(`Compiled documents into ${outputFile}`);
+}
+
+module.exports = {
+  buildDocsDataPayload,
+  compileToFile
 };
-
-const js =
-  '// File này được generate bởi docs-viewer/build-data.js — không sửa tay.\n' +
-  'window.DOCS_DATA = ' +
-  JSON.stringify(payload, null, 0).replace(/<\/script/gi, '<\\/script') +
-  ';\n';
-
-fs.writeFileSync(outputFile, js, 'utf-8');
-console.log(`Compiled ${entries.length} documents into ${outputFile}`);

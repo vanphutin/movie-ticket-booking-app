@@ -22,23 +22,29 @@ contract_ids:
   - CCR-007
   - CCR-008
   - CCR-009
-definition_of_ready_status: NOT_EVALUATED
-execution_status: NOT_STARTED
-review_status: NOT_REVIEWED
-evidence_status: MISSING
+  - CCR-010
+definition_of_ready_status: READY
+execution_status: SUBMITTED
+review_status: VERIFIED
+evidence_status: OBSERVED
 evidence_confidence: HIGH
 learning:
   gate_id: LG-TKT-W04-D03
-  status: NOT_STARTED
+  status: PASSED
   mode: REGULAR
   topics_presented:
-    []
+    - "AuthN vs AuthZ"
+    - "JWT signing, claims, expiry"
+    - "Access vs Refresh Token lifecycle"
+    - "Token rotation and reuse detection"
+    - "HTTP 401 vs 403 error matrix"
+    - "Gateway trusted propagation and log redaction"
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: false
-  skeleton_unlocked: false
-  last_observation: ""
+  design_unlocked: true
+  skeleton_unlocked: true
+  last_observation: "PASSED"
 blockers: []
 remediation_action: null
-updated_at: "2026-07-28"
+updated_at: "2026-07-29"
 updated_by: Codex

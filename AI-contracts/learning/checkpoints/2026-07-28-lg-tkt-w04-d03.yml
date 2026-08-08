@@ -1,0 +1,54 @@
+schema_version: 1
+learning_gate_id: LG-TKT-W04-D03
+ticket_id: TKT-W04-D03
+capability_ids:
+  - CAP-SEC-01
+target_level: C4_DEFEND
+status: PASSED
+observed_at: "2026-07-29T00:56:00+07:00"
+observed_by: Codex
+business_context: "Customer token lifecycle and Gateway security pipeline"
+learning_outcomes:
+  - "Understood AuthN vs AuthZ separation between API Gateway and Domain Owner Microservices."
+  - "Understood Access Token (JWT) vs Refresh Token (long-lived) mechanics and security characteristics."
+  - "Understood Refresh Token Rotation and Token Family Revocation upon reuse detection."
+  - "Correctly differentiated HTTP 401 Unauthorized vs HTTP 403 Forbidden error responses."
+  - "Understood anti-header spoofing via Gateway header stripping/injection and log redaction of sensitive credentials."
+topics_covered:
+  - "AuthN vs AuthZ"
+  - "JWT signing, claims, expiry"
+  - "Access vs Refresh Token lifecycle"
+  - "Token rotation and reuse detection"
+  - "HTTP 401 vs 403 error matrix"
+  - "Gateway trusted propagation and log redaction"
+decision_record:
+  project_constraints:
+    - "Only verified actor may exercise allowed action on owned resource."
+    - "Gateway does not own domain state/DB."
+  options:
+    - name: "Gateway-only Authorization"
+      mechanism: "Gateway verifies JWT and queries DB to authorize ownership."
+      advantages: ["Centralized checks"]
+      disadvantages: ["Coupling, DB bottleneck, violates bounded context"]
+      status: "REJECTED"
+    - name: "Edge Verification + Owner-Service Authorization"
+      mechanism: "Gateway verifies JWT signature/expiry, strips untrusted headers, injects X-User-Id; Microservice evaluates domain ownership."
+      advantages: ["Clean architecture, lightweight gateway, domain autonomy"]
+      disadvantages: ["Requires trusted network boundary & header stripping"]
+      status: "SELECTED"
+evaluations:
+  q1_architecture_boundary:
+    status: PASSED
+    learner_response: "Gateway handles AuthN (who), Microservice handles AuthZ (do/ownership)."
+  q2_reuse_detection:
+    status: PASSED
+    learner_response: "Revoke family upon reuse attempt to prevent hacker from exploiting stolen token."
+  q3_error_matrix:
+    status: PASSED
+    learner_response: "Scenario A: 401 Unauthorized, Scenario B: 403 Forbidden."
+  q4_header_spoofing_redaction:
+    status: PASSED
+    learner_response: "Understood header stripping at Gateway and credential redaction in system logs."
+remediation_applied: false
+design_unlocked: true
+skeleton_unlocked: true

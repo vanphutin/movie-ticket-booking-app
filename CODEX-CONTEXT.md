@@ -18,6 +18,25 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
+effective_baseline: PC-2026.8
+current_stage: HANDOFF
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+primary_blocker: NONE
+required_output: PUBLISHED_WORK_UNIT_CHECKPOINT
+evidence_status: OBSERVED
+review_status: VERIFIED
+next_action: PUBLISH_WORK_UNIT_CHECKPOINT
+completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
+```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
+
+## Shutdown
+
+After material work:
+
+=======
 effective_baseline: PC-2026.7
 current_stage: STARTUP
 ticket_id: TKT-W04-D03
@@ -79,6 +98,7 @@ Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created
 
 After material work:
 
+>>>>>>> origin/main
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.
 2. Run `node tools/control-plane/sync-control-plane.mjs`.
 3. Run `node tools/repository/validate-repository.mjs`.

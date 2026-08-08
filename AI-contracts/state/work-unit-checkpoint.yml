@@ -1,0 +1,16 @@
+schema_version: 1
+status: VERIFIED
+outgoing_work_unit: TKT-W04-D03
+incoming_work_unit: TKT-W04-D04
+outgoing_branch: codex/tkt-w04-d03-token-gateway-design
+published_checkpoint_commit: acedce2fa342356ebfc72e63351fa2aaa0adbd13
+remote_tracking_ref: origin/codex/tkt-w04-d03-token-gateway-design
+draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/3
+verification:
+  command: git merge-base --is-ancestor acedce2fa342356ebfc72e63351fa2aaa0adbd13 origin/codex/tkt-w04-d03-token-gateway-design
+  working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+  exit_code: 0
+  observation: Local and remote branch heads both resolved to acedce2fa342356ebfc72e63351fa2aaa0adbd13 after a non-force push; Draft PR 3 remained open and draft.
+  limitation: Remote reachability is verified against the fetched origin remote-tracking ref and the successful push response; merge and CI completion are outside this checkpoint.
+verified_at: "2026-07-29"
+verified_by: Codex
