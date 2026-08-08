@@ -1,19 +1,19 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-decision_status: BLOCKED
+decision_status: READY
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: REMEDIATE_PUBLICATION_CHECKPOINT
-target: TKT-W04-D05
-priority_reason: "TKT-W04-D05 is VERIFIED, but CCR-010 requires coherent commits, non-force push, Draft PR update and a recorded publication checkpoint before handoff completes."
-completion_condition: "Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml."
-on_success: COMPLETE_HANDOFF
-on_failure: KEEP_D05_CURRENT_AND_REPORT_PUBLICATION_BLOCKER
-blocking_ids:
-  - PUB-D05-001
+action: AUTHORIZE_CANDIDATE_TICKET
+target: TKT-W05-D01
+priority_reason: "TKT-W04-D05 publication checkpoint is VERIFIED and recorded in work-unit-checkpoint.yml; handoff is COMPLETE."
+completion_condition: "Reviewer authorizes TKT-W05-D01 as the new current ticket."
+on_success: BEGIN_LEARNING_GATE
+on_failure: RETAIN_CANDIDATE_STATUS
+blocking_ids: []
 required_evidence:
   - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+  - AI-contracts/state/work-unit-checkpoint.yml
 source_evidence:
-  - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+  - AI-contracts/state/work-unit-checkpoint.yml
 decided_at: "2026-08-08"
 decided_by: "User / Reviewer and Codex"

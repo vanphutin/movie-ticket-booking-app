@@ -9,6 +9,7 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
+  - TKT-W04-D05
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 ticket_projection:
   phase_id: P0
@@ -68,11 +69,8 @@ statuses:
   implementation: COMPLETE
   evidence: COMPLETE
   review: APPROVED
-  handoff: IN_PROGRESS
-blockers:
-  - id: PUB-D05-001
-    severity: BLOCKER
-    description: D05 publication is not coherent on the remote branch; shared-worktree CCR-013 rollout changes must remain outside D05 commits.
+  handoff: COMPLETE
+blockers: []
 required_output:
   type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
   path:
@@ -81,23 +79,23 @@ required_output:
     - apps/identity-service/src/main.ts
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W04-D05-PUBLICATION-REMEDIATION
-  type: REMEDIATE_PUBLICATION_CHECKPOINT
-  target: TKT-W04-D05
-  reason: TKT-W04-D05 is VERIFIED, but CCR-010 requires coherent commits, non-force push, Draft PR update and a recorded publication checkpoint before handoff completes.
-  completion_condition: Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml.
-  on_success: COMPLETE_HANDOFF
-  on_failure: KEEP_D05_CURRENT_AND_REPORT_PUBLICATION_BLOCKER
+  id: ACTION-AUTHORIZE-TKT-W05-D01
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: TKT-W05-D01
+  reason: TKT-W04-D05 publication checkpoint is VERIFIED and recorded in work-unit-checkpoint.yml; handoff is COMPLETE.
+  completion_condition: Reviewer authorizes TKT-W05-D01 as the new current ticket.
+  on_success: BEGIN_LEARNING_GATE
+  on_failure: RETAIN_CANDIDATE_STATUS
 next_action_projection:
-  decision_status: BLOCKED
-  blocking_ids:
-    - PUB-D05-001
+  decision_status: READY
+  blocking_ids: []
   required_evidence:
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    - AI-contracts/state/work-unit-checkpoint.yml
   source_evidence:
-    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    - AI-contracts/state/work-unit-checkpoint.yml
   decided_at: "2026-08-08"
   decided_by: User / Reviewer and Codex
 updated_at: "2026-08-08"
 updated_by: Codex
-update_source: "User/reviewer approved TKT-W04-D05 as VERIFIED. Handoff remains in progress pending CCR-010 publication remediation without mixing shared-worktree CCR-013 rollout changes."
+update_source: "Publication checkpoint for TKT-W04-D05 verified in work-unit-checkpoint.yml; handoff completed successfully."

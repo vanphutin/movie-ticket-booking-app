@@ -14,8 +14,8 @@
 
 - Baseline: `PC-2026.11`
 - Ticket hiện tại: `TKT-W04-D05` — stage `HANDOFF`
-- Hoàn thành có xác minh: **4/35**
-- Next action: `REMEDIATE_PUBLICATION_CHECKPOINT`
+- Hoàn thành có xác minh: **5/35**
+- Next action: `AUTHORIZE_CANDIDATE_TICKET`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
@@ -23,7 +23,7 @@
 | ☑ | `TKT-W04-D02` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D03` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D04` | `VERIFIED` | Canonical completed ticket |
-| ◉ | `TKT-W04-D05` | `HANDOFF` | Current authorized ticket |
+| ☑ | `TKT-W04-D05` | `VERIFIED` | Canonical completed ticket |
 | ☐ | `TKT-W05-D01` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W05-D02` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D03` | `PLANNED` | Not started |

@@ -27,8 +27,8 @@ primary_blocker: NONE
 required_output: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
 evidence_status: COMPLETE
 review_status: APPROVED
-next_action: REMEDIATE_PUBLICATION_CHECKPOINT
-completion_condition: Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml.
+next_action: AUTHORIZE_CANDIDATE_TICKET
+completion_condition: Reviewer authorizes TKT-W05-D01 as the new current ticket.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 
