@@ -3,17 +3,17 @@ schema_version: 1
 decision_status: BLOCKED
 next_ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
-action: IMPLEMENT_AUTH_VERTICAL_SLICE
+action: REMEDIATE_PUBLICATION_CHECKPOINT
 target: TKT-W04-D05
-priority_reason: "Registration persistence/idempotency evidence is observed, but the reviewed D05 scope still lacks login, refresh, logout, /me and Gateway-to-Identity verification."
-completion_condition: "The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review."
-on_success: PROCEED_TO_VERIFICATION
-on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
+priority_reason: "TKT-W04-D05 is VERIFIED, but CCR-010 requires coherent commits, non-force push, Draft PR update and a recorded publication checkpoint before handoff completes."
+completion_condition: "Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml."
+on_success: COMPLETE_HANDOFF
+on_failure: KEEP_D05_CURRENT_AND_REPORT_PUBLICATION_BLOCKER
 blocking_ids:
-  - REM-D05-001
+  - PUB-D05-001
 required_evidence:
   - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 source_evidence:
   - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
-decided_at: "2026-08-02"
-decided_by: "Codex"
+decided_at: "2026-08-08"
+decided_by: "User / Reviewer and Codex"

@@ -9,6 +9,11 @@ previous_approval:
   reviewed_at: "2026-07-30"
 amendment_finding: EF-D05-001
 amendment_resolution: APPROVED_SINGLE_PACKAGE_NEST_MONOREPO
+design_amendment_id: DA-D05-002
+design_amendment_reviewed_by: User / Reviewer
+design_amendment_reviewed_at: "2026-08-08"
+design_amendment_approval_evidence: Explicit `duyệt` response to requested `duyệt DA-D05-002`
+design_amendment_resolution: APPROVED_SESSION_CREDENTIALS_AND_EXPIRES_IN_AUTHORITY
 
 defaults:
   contract_ids:
@@ -163,6 +168,7 @@ files:
     responsibility: Non-secret backend configuration variable documentation
     permitted_content:
       - Placeholder variable names and safe local examples
+      - Non-secret access-token TTL example (JWT_ACCESS_TOKEN_TTL_SECONDS)
     verification:
       - Secret scan
 
@@ -210,7 +216,7 @@ files:
     action: CREATE
     responsibility: Behavioral Identity client boundary
     permitted_content:
-      - Public auth operation inputs and typed results
+      - Public auth operation inputs and typed results with mandatory non-optional accessToken, refreshToken and expiresIn
     verification:
       - Architecture test
 
@@ -242,7 +248,7 @@ files:
     action: CREATE
     responsibility: Authenticated internal HTTP adapter for Identity
     permitted_content:
-      - Exact-byte forwarding, timeout and typed failure mapping
+      - Exact-byte forwarding, timeout, typed failure mapping and non-optional session credential/expiresIn parsing without fallbacks
     verification:
       - Gateway-to-Identity integration tests
 
@@ -266,7 +272,7 @@ files:
     action: CREATE
     responsibility: D04 register, login, refresh and logout public routes
     permitted_content:
-      - Strict DTO binding and response mapping
+      - Strict DTO binding and response mapping to D04 AuthSessionResponse using configuration-derived expiresIn
     verification:
       - Auth contract tests
 
@@ -355,6 +361,7 @@ files:
     responsibility: Identity composition root
     permitted_content:
       - Concrete adapter and use-case provider wiring
+      - Configured token lifetime (expiresInSeconds) provider wiring to AuthTokenAdapter
     verification:
       - Identity integration test
 
@@ -363,6 +370,7 @@ files:
     responsibility: Validated Identity runtime configuration
     permitted_content:
       - Database, crypto, retention and freshness configuration
+      - Positive-integer access-token TTL (expiresInSeconds) parsing with strict fail-closed rejection of missing, zero, negative or non-numeric values
     verification:
       - Configuration unit test
 
@@ -395,6 +403,8 @@ files:
     responsibility: Application command, result and trusted-context models
     permitted_content:
       - Framework-free typed models
+      - Framework-free trusted invocation context passed separately from registration command data
+      - Mandatory session result models with accessToken, refreshToken and expiresIn
     verification:
       - Typecheck and architecture test
 
@@ -411,6 +421,7 @@ files:
     responsibility: Password, token, encryption, clock, UUID and randomness ports
     permitted_content:
       - Framework-free behavioral interfaces
+      - Access-token signing port contract returning access token and configured expiresIn (refresh tokens created by session ports)
     verification:
       - Architecture test
 
@@ -419,6 +430,7 @@ files:
     responsibility: Atomic registration and completed-replay behavior
     permitted_content:
       - findCompletedByKey and registerAtomically operations
+      - Atomic user creation, refresh session persistence and idempotency outcome storage
     verification:
       - Register application and PostgreSQL tests
 
@@ -459,6 +471,7 @@ files:
     responsibility: Registration, idempotency and credential orchestration
     permitted_content:
       - Crypto preparation and atomic persistence invocation
+      - Required trusted invocation context as a separate application-boundary parameter
     verification:
       - Register unit and integration tests
 
@@ -467,6 +480,7 @@ files:
     responsibility: Neutral credential verification and session issuance
     permitted_content:
       - Credential reader, password verifier and session-port orchestration
+      - Required trusted invocation context as a separate application-boundary parameter
     verification:
       - Login unit and integration tests
 
@@ -475,6 +489,7 @@ files:
     responsibility: Opaque-token rotation/reuse orchestration
     permitted_content:
       - Token hashing, successor preparation and rotation-port invocation
+      - Required trusted invocation context as a separate application-boundary parameter
     verification:
       - Refresh unit and concurrency tests
 
@@ -483,6 +498,7 @@ files:
     responsibility: Replay-safe logout orchestration
     permitted_content:
       - Token hashing and logout-port invocation
+      - Required trusted invocation context as a separate application-boundary parameter
     verification:
       - Logout unit and integration tests
 
@@ -555,6 +571,7 @@ files:
     responsibility: TypeORM implementation of registration, login, refresh, logout and profile ports
     permitted_content:
       - Short transactions, named-constraint mapping and stable row-lock order
+      - Atomic registration persistence with user creation, refresh session insertion and idempotency outcome saving
     verification:
       - PostgreSQL integration and concurrency tests
 
@@ -579,6 +596,7 @@ files:
     responsibility: Opaque refresh generation/hash and asymmetric access-token signing
     permitted_content:
       - Secure randomness, token hashing and versioned JWT signing
+      - Configurable access-token TTL (expiresInSeconds) and explicit token issuance result
     verification:
       - Token adapter tests
 
@@ -610,7 +628,7 @@ files:
     action: CREATE
     responsibility: Internal register, login, refresh and logout transport
     permitted_content:
-      - Strict DTO binding and use-case invocation
+      - Strict DTO binding and use-case invocation returning mandatory user, tokens and expiresIn
     verification:
       - Identity transport integration tests
 
@@ -626,7 +644,7 @@ files:
     action: CREATE
     responsibility: Strict internal auth DTO allowlists
     permitted_content:
-      - Fields derived from D04 transport contract
+      - Fields derived from D04 transport contract including mandatory session credentials and expiresIn
     verification:
       - DTO negative tests
 
@@ -675,6 +693,7 @@ files:
     responsibility: Register, login, refresh, logout and profile application tests
     permitted_content:
       - Controlled ports and typed outcomes
+      - Registration session credentials, token lifetime and exact replay unit tests
     verification:
       - npm run test:unit
 
@@ -683,6 +702,8 @@ files:
     responsibility: Crypto, JWT, idempotency and internal-signature adapter tests
     permitted_content:
       - Positive, tamper and key-version cases
+      - Positive-integer access-token TTL config parsing and fail-closed invalid value rejection tests
+      - AuthTokenAdapter access token signing and { accessToken, expiresIn } result shape tests
     verification:
       - npm run test:unit
 
@@ -699,6 +720,7 @@ files:
     responsibility: Registration/login/logout transaction and constraint evidence
     permitted_content:
       - Rollback, uniqueness, disable race and replay-safe cases
+      - Atomic registration persistence transaction, refresh session saving and idempotency outcome integration evidence
     verification:
       - npm run test:integration
 

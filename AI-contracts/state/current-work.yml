@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.9
-current_stage: IMPLEMENTATION
+effective_baseline: PC-2026.11
+current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -42,7 +42,9 @@ ticket_projection:
     - CCR-009
     - CCR-010
     - CCR-011
-  execution_status: IN_PROGRESS
+    - CCR-012
+    - CCR-013
+  execution_status: COMPLETE
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D05
@@ -63,36 +65,39 @@ statuses:
   analysis: COMPLETE
   design: APPROVED
   readiness: READY
-  implementation: IN_PROGRESS
-  evidence: PARTIAL
-  review: NOT_REVIEWED
-  handoff: NOT_STARTED
-blockers: []
+  implementation: COMPLETE
+  evidence: COMPLETE
+  review: APPROVED
+  handoff: IN_PROGRESS
+blockers:
+  - id: PUB-D05-001
+    severity: BLOCKER
+    description: D05 publication is not coherent on the remote branch; shared-worktree CCR-013 rollout changes must remain outside D05 commits.
 required_output:
-  type: SCOPED_DIFF_AND_SELF_REVIEW
+  type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
   path:
     - apps/package.json
     - apps/api-gateway/src/main.ts
     - apps/identity-service/src/main.ts
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W04-D05-IMPLEMENT
-  type: IMPLEMENT_AUTH_VERTICAL_SLICE
+  id: ACTION-TKT-W04-D05-PUBLICATION-REMEDIATION
+  type: REMEDIATE_PUBLICATION_CHECKPOINT
   target: TKT-W04-D05
-  reason: Registration persistence/idempotency evidence is observed, but the reviewed D05 scope still lacks login, refresh, logout, /me and Gateway-to-Identity verification.
-  completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
-  on_success: PROCEED_TO_VERIFICATION
-  on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
+  reason: TKT-W04-D05 is VERIFIED, but CCR-010 requires coherent commits, non-force push, Draft PR update and a recorded publication checkpoint before handoff completes.
+  completion_condition: Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml.
+  on_success: COMPLETE_HANDOFF
+  on_failure: KEEP_D05_CURRENT_AND_REPORT_PUBLICATION_BLOCKER
 next_action_projection:
   decision_status: BLOCKED
   blocking_ids:
-    - REM-D05-001
+    - PUB-D05-001
   required_evidence:
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
   source_evidence:
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
-  decided_at: "2026-08-02"
-  decided_by: Codex
-updated_at: "2026-08-02"
+  decided_at: "2026-08-08"
+  decided_by: User / Reviewer and Codex
+updated_at: "2026-08-08"
 updated_by: Codex
-update_source: "Forward-only remediation of premature D05 completion; registration persistence/idempotency evidence is partial and remaining auth-slice scope is unverified."
+update_source: "User/reviewer approved TKT-W04-D05 as VERIFIED. Handoff remains in progress pending CCR-010 publication remediation without mixing shared-worktree CCR-013 rollout changes."

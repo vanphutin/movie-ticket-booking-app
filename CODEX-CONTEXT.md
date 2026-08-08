@@ -18,17 +18,17 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.9
-current_stage: IMPLEMENTATION
+effective_baseline: PC-2026.11
+current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 primary_blocker: NONE
-required_output: SCOPED_DIFF_AND_SELF_REVIEW
-evidence_status: PARTIAL
-review_status: NOT_REVIEWED
-next_action: IMPLEMENT_AUTH_VERTICAL_SLICE
-completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+required_output: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
+evidence_status: COMPLETE
+review_status: APPROVED
+next_action: REMEDIATE_PUBLICATION_CHECKPOINT
+completion_condition: Authorized D05 streams are committed without CCR-013 contamination, pushed non-force to the existing branch, represented by the Draft PR and recorded in work-unit-checkpoint.yml.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

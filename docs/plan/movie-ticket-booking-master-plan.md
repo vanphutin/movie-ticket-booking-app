@@ -12,10 +12,10 @@
 > Vùng này được sinh từ `AI-contracts/state/current-work.yml`. Dấu ☑ chỉ dành cho ticket có review
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
-- Baseline: `PC-2026.10`
-- Ticket hiện tại: `TKT-W04-D05` — stage `IMPLEMENTATION`
+- Baseline: `PC-2026.11`
+- Ticket hiện tại: `TKT-W04-D05` — stage `HANDOFF`
 - Hoàn thành có xác minh: **4/35**
-- Next action: `IMPLEMENT_AUTH_VERTICAL_SLICE`
+- Next action: `REMEDIATE_PUBLICATION_CHECKPOINT`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
@@ -23,7 +23,7 @@
 | ☑ | `TKT-W04-D02` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D03` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D04` | `VERIFIED` | Canonical completed ticket |
-| ◉ | `TKT-W04-D05` | `IMPLEMENTATION` | Current authorized ticket |
+| ◉ | `TKT-W04-D05` | `HANDOFF` | Current authorized ticket |
 | ☐ | `TKT-W05-D01` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W05-D02` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D03` | `PLANNED` | Not started |
