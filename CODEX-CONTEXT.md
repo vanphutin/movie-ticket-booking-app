@@ -20,6 +20,23 @@ schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.8
 current_stage: HANDOFF
+ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
+active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+primary_blocker: NONE
+required_output: NEXT_WORK_UNIT_AUTHORIZATION
+evidence_status: OBSERVED
+review_status: VERIFIED
+next_action: AUTHORIZE_NEXT_WORK_UNIT
+completion_condition: TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report.
+```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
+
+## Shutdown
+
+After material work:
+
+=======
 ticket_id: TKT-W04-D03
 candidate_ticket_id: TKT-W04-D04
 active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
@@ -98,6 +115,7 @@ Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created
 
 After material work:
 
+>>>>>>> origin/main
 >>>>>>> origin/main
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.
 2. Run `node tools/control-plane/sync-control-plane.mjs`.

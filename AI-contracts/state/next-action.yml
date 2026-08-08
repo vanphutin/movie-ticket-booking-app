@@ -1,20 +1,19 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D03
-candidate_ticket_id: TKT-W04-D04
-action: PUBLISH_WORK_UNIT_CHECKPOINT
-target: TKT-W04-D03
-priority_reason: "CCR-010 requires the outgoing D03 branch to be committed, pushed, remote-verified and represented by a Draft PR before D04 authorization."
-completion_condition: "D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded."
-on_success: AUTHORIZE_TKT_W04_D04
-on_failure: RECORD_GIT_PUBLICATION_BLOCKER
+next_ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
+action: AUTHORIZE_NEXT_WORK_UNIT
+target: TKT-W04-D05
+priority_reason: "TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4."
+completion_condition: "TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report."
+on_success: PROCEED_TO_D05_STARTUP
+on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
 blocking_ids: []
 required_evidence:
   - AI-contracts/state/work-unit-checkpoint.yml
-  - https://github.com/vanphutin/movie-ticket-booking-app/pull/3
-source_evidence:
-  - AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
   - AI-contracts/state/current-work.yml
-decided_at: "2026-07-29"
-decided_by: "Codex (CCR-010 approved; reconciling premature D04 transition)"
+source_evidence:
+  - AI-contracts/state/work-unit-checkpoint.yml
+decided_at: "2026-07-30"
+decided_by: "Codex"

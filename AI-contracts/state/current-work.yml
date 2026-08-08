@@ -2,28 +2,32 @@ schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.8
 current_stage: HANDOFF
-ticket_id: TKT-W04-D03
-candidate_ticket_id: TKT-W04-D04
+ticket_id: TKT-W04-D04
+candidate_ticket_id: TKT-W04-D05
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
-active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+  - TKT-W04-D03
+  - TKT-W04-D04
+active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
 ticket_projection:
   phase_id: P0
   milestone_id: M0
   capability_ids:
-    - CAP-SEC-01
+    - CAP-IDN-01
   contract_ids:
-    - SEC-001
-    - SEC-002
-    - SEC-003
-    - SEC-004
-    - SEC-005
-    - SEC-006
-    - SEC-007
+    - API-AUTH-001
     - API-AUTH-002
     - API-AUTH-003
     - API-AUTH-004
+    - API-AUTH-005
+    - API-COM-001
+    - API-COM-002
+    - API-COM-003
+    - API-COM-004
+    - API-COM-005
+    - API-COM-006
+    - SEC-003
     - ARCH-008
     - CCR-006
     - CCR-007
@@ -33,52 +37,50 @@ ticket_projection:
   execution_status: SUBMITTED
   evidence_confidence: HIGH
   learning:
-    gate_id: LG-TKT-W04-D03
+    gate_id: LG-TKT-W04-D04
     mode: REGULAR
     topics_presented:
-      - "AuthN vs AuthZ"
-      - "JWT signing, claims, expiry"
-      - "Access vs Refresh Token lifecycle"
-      - "Token rotation and reuse detection"
-      - "HTTP 401 vs 403 error matrix"
-      - "Gateway trusted propagation and log redaction"
+      - "OpenAPI 3.0/3.1 REST specification for auth APIs"
+      - "Request and Response DTO schemas and Mass Assignment prevention"
+      - "RBAC Deny Matrix and Enumeration attack mitigations"
+      - "Standard Error Response format (API-COM-001..006)"
+      - "OpenAPI Contract Testing design"
     observed_gaps: []
     remediation_focus: []
     design_unlocked: true
-    skeleton_unlocked: true
+    skeleton_unlocked: false
     last_observation: PASSED
 statuses:
   learning: PASSED
-  analysis: PASSED
-  design: PASSED
+  analysis: COMPLETE
+  design: APPROVED
   readiness: READY
-  implementation: NOT_STARTED
+  implementation: COMPLETE
   evidence: OBSERVED
   review: VERIFIED
-  handoff: IN_PROGRESS
+  handoff: COMPLETE
 blockers: []
 required_output:
-  type: PUBLISHED_WORK_UNIT_CHECKPOINT
+  type: NEXT_WORK_UNIT_AUTHORIZATION
   path: AI-contracts/state/work-unit-checkpoint.yml
 next_action:
-  id: ACTION-TKT-W04-D03-PUBLISH
-  type: PUBLISH_WORK_UNIT_CHECKPOINT
-  target: TKT-W04-D03
-  reason: CCR-010 requires the outgoing D03 branch to be committed, pushed, remote-verified and represented by a Draft PR before D04 authorization.
-  completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
-  on_success: AUTHORIZE_TKT_W04_D04
-  on_failure: RECORD_GIT_PUBLICATION_BLOCKER
+  id: ACTION-TKT-W04-D05-AUTHORIZE
+  type: AUTHORIZE_NEXT_WORK_UNIT
+  target: TKT-W04-D05
+  reason: TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4.
+  completion_condition: TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report.
+  on_success: PROCEED_TO_D05_STARTUP
+  on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
     - AI-contracts/state/work-unit-checkpoint.yml
-    - https://github.com/vanphutin/movie-ticket-booking-app/pull/3
-  source_evidence:
-    - AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
     - AI-contracts/state/current-work.yml
-  decided_at: "2026-07-29"
-  decided_by: "Codex (CCR-010 approved; reconciling premature D04 transition)"
-updated_at: "2026-07-29"
+  source_evidence:
+    - AI-contracts/state/work-unit-checkpoint.yml
+  decided_at: "2026-07-30"
+  decided_by: Codex
+updated_at: "2026-07-30"
 updated_by: Codex
-update_source: "CCR-010 remediation: keep D03 current until its publication checkpoint is verified."
+update_source: "D04 publication checkpoint verified against origin and Draft PR 4; HANDOFF completed and D05 authorization is next."
