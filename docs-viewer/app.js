@@ -683,10 +683,77 @@
         const id = 'mm-' + Math.random().toString(36).substring(2, 9);
         const { svg } = await window.mermaid.render(id, raw);
         node.innerHTML = svg;
+        attachMermaidToolbar(node);
       } catch (err) {
-        node.innerHTML = `<pre><code>${escapeHtml(raw)}</code></pre>`;
+        node.innerHTML = `<div class="mermaid-error"><strong>Mermaid 10.9.6 render failed</strong><br>${escapeHtml(err?.message || String(err))}</div><pre><code>${escapeHtml(raw)}</code></pre>`;
       }
     }
+  }
+
+  function attachMermaidToolbar(node) {
+    if (node.parentElement?.classList.contains('mermaid-card')) return;
+    const card = document.createElement('div');
+    card.className = 'mermaid-card';
+    const toolbar = document.createElement('div');
+    toolbar.className = 'mermaid-toolbar';
+    toolbar.innerHTML = '<span>Mermaid 10.9.6</span><button type="button" class="mermaid-expand" title="Phóng to sơ đồ">⛶ Phóng to</button>';
+    node.parentNode.insertBefore(card, node);
+    card.appendChild(toolbar);
+    card.appendChild(node);
+    toolbar.querySelector('.mermaid-expand').addEventListener('click', () => openMermaidZoom(node));
+  }
+
+  function openMermaidZoom(node) {
+    const sourceSvg = node.querySelector('svg');
+    if (!sourceSvg) return;
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-zoom-modal';
+    modal.innerHTML = `
+      <div class="mermaid-zoom-header">
+        <strong>Sơ đồ Mermaid</strong>
+        <div class="mermaid-zoom-actions">
+          <button type="button" data-zoom="out" title="Thu nhỏ">−</button>
+          <span class="mermaid-zoom-value">100%</span>
+          <button type="button" data-zoom="in" title="Phóng to">+</button>
+          <button type="button" data-zoom="reset" title="Kích thước ban đầu">Đặt lại</button>
+          <button type="button" data-zoom="close" title="Đóng">✕</button>
+        </div>
+      </div>
+      <div class="mermaid-zoom-viewport"><div class="mermaid-zoom-canvas"></div></div>`;
+    const canvas = modal.querySelector('.mermaid-zoom-canvas');
+    const zoomSvg = sourceSvg.cloneNode(true);
+    canvas.appendChild(zoomSvg);
+    const viewBox = (zoomSvg.getAttribute('viewBox') || '').split(/\s+/).map(Number);
+    const baseWidth = Number.isFinite(viewBox[2]) && viewBox[2] > 0 ? viewBox[2] : 1000;
+    let scale = 1;
+    const updateScale = () => {
+      const scaledWidth = Math.max(320, Math.round(baseWidth * scale));
+      zoomSvg.style.width = `${scaledWidth}px`;
+      zoomSvg.style.maxWidth = 'none';
+      zoomSvg.style.height = 'auto';
+      canvas.style.width = `${scaledWidth}px`;
+      modal.querySelector('.mermaid-zoom-value').textContent = `${Math.round(scale * 100)}%`;
+    };
+    const close = () => {
+      document.removeEventListener('keydown', onKeydown);
+      modal.remove();
+    };
+    const onKeydown = (event) => {
+      if (event.key === 'Escape') close();
+      if (event.key === '+' || event.key === '=') { scale = Math.min(3, scale + 0.2); updateScale(); }
+      if (event.key === '-') { scale = Math.max(0.4, scale - 0.2); updateScale(); }
+    };
+    modal.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-zoom]')?.getAttribute('data-zoom');
+      if (action === 'in') scale = Math.min(3, scale + 0.2);
+      if (action === 'out') scale = Math.max(0.4, scale - 0.2);
+      if (action === 'reset') scale = 1;
+      if (action === 'close' || event.target === modal) return close();
+      if (action) updateScale();
+    });
+    document.addEventListener('keydown', onKeydown);
+    document.body.appendChild(modal);
+    updateScale();
   }
 
   /* ================= Navigation / routing ================= */
@@ -802,7 +869,35 @@
     localStorage.setItem('dv_theme', theme);
     DOM.btnTheme.textContent = theme === 'dark' ? '🌙' : '☀️';
     if (window.mermaid) {
-      window.mermaid.initialize({ startOnLoad: false, theme: theme === 'dark' ? 'dark' : 'default' });
+      window.mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        securityLevel: 'strict',
+        themeVariables: {
+          background: '#0b1020',
+          primaryColor: '#161d3a',
+          primaryTextColor: '#e6eaf6',
+          primaryBorderColor: '#64748b',
+          lineColor: '#94a3b8',
+          secondaryColor: '#111731',
+          tertiaryColor: '#1d2547',
+          actorBkg: '#161d3a',
+          actorBorder: '#64748b',
+          actorTextColor: '#e6eaf6',
+          actorLineColor: '#64748b',
+          signalColor: '#e6eaf6',
+          signalTextColor: '#e6eaf6',
+          labelBoxBkgColor: '#111731',
+          labelBoxBorderColor: '#64748b',
+          labelTextColor: '#e6eaf6',
+          noteBkgColor: '#1d2547',
+          noteBorderColor: '#64748b',
+          noteTextColor: '#e6eaf6',
+          activationBkgColor: '#1d2547',
+          activationBorderColor: '#64748b'
+        },
+        themeCSS: '.rect { fill: #111731 !important; stroke: #64748b !important; opacity: 1 !important; }'
+      });
     }
   }
 

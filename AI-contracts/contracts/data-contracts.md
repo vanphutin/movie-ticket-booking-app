@@ -17,6 +17,16 @@ trước MVP verification của module sở hữu: expired/revoked `refresh_sess
 DLQ entries. Webhook payload lưu trữ theo redaction `SEC-007`. Duration cụ thể chọn tại
 design ticket qua reviewed decision; contract này yêu cầu strategy tồn tại, không áp đặt
 con số.
+`DATA-009`: Relational learning, analysis và design MUST dùng PostgreSQL 16 làm target,
+độc lập ORM, và mô tả invariant qua table/type/constraint/index/transaction/concurrency/
+migration semantics; ORM metadata hoặc decorator không phải nguồn thiết kế schema.
+`DATA-010`: PostgreSQL schema và immutable migration là authority thực thi database
+invariant. TypeORM mapping/migration MUST conform với reviewed PostgreSQL design,
+`synchronize: true` bị cấm, và ORM metadata MUST NOT làm yếu hoặc tự định nghĩa lại
+invariant.
+`DATA-011`: Claim về relational constraint, transaction, concurrency hoặc migration MUST
+được verify trên PostgreSQL 16 thật; mock repository hoặc ORM-only unit test không chứng
+minh database behavior.
 
 ## Ownership and invariants
 
@@ -26,6 +36,8 @@ con số.
 | DATA-CAT-001 | Catalog | `movies`, `movie_trailers`, `cinemas`, `screens`, `seats UNIQUE(screen_id,label)`, `showtimes(base_price INTEGER CHECK(base_price>0))`, `outbox_events` | showtime state+outbox same transaction; overlap protected by approved DB/application strategy |
 | DATA-BKG-001 | Booking | `showtime_snapshots`, `showtime_seats(price)`, `seat_holds`, `bookings`, `booking_seats(price snapshot tại booking time)`, `inbox_events`, `outbox_events`, `idempotency_records` | row lock/constraint gives exactly one winner; inbox+snapshot atomic; booking total derive từ `booking_seats`, không re-read live seat state |
 | DATA-PAY-001 | Booking | `payments(provider_reference UNIQUE)`, `payment_webhook_events(provider,event_id UNIQUE)`, `tickets(booking_id UNIQUE)`, job/DLQ records | verified webhook transition+outbox atomic; ticket issuance idempotent |
+| DATA-AUD-001 | Operational read model (owner fixed in design) | allowlisted audit/integration metadata, actor/action/outcome/correlation/time; no secret/raw sensitive payload | append-only ingestion or derived projection; bounded query; no cross-service SQL |
+| DATA-AI-001 | Future AI owner (stretch) | prompt/output metadata, usage and embedding version only after future design/retention review | no MVP table/migration; activation requires future ticket/CCR if ownership changes |
 
 ## State machines
 
@@ -35,3 +47,7 @@ con số.
 `DATA-SM-004`: Booking `PENDING_PAYMENT → CONFIRMED | CANCELLED | EXPIRED`; payment reconciliation controls confirm.  
 `DATA-SM-005`: Payment `PENDING → SUCCEEDED | FAILED | UNKNOWN`; unknown requires reconciliation.  
 `DATA-SM-006`: Ticket `ISSUED → CHECKED_IN | VOID`; one active issuance per booking. Transition sau `ISSUED` là post-MVP: MVP không có endpoint/actor nào exercise chúng; thêm check-in yêu cầu CCR tương lai định nghĩa acting role và authorization.
+
+`DATA-PAY-002`: Provider-neutral payment state is authoritative; payOS-specific IDs and
+verified webhook metadata remain adapter data. Raw webhook retention/redaction follows
+`DATA-008` and `SEC-007`; deterministic fake data must be visibly marked test-only.

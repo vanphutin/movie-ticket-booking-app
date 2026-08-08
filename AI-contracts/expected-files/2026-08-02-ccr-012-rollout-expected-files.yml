@@ -1,0 +1,313 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+change_request_id: CCR-012
+design_artifact: AI-contracts/changes/CCR-012-cross-session-coding-action-and-checkpoint-policy.md
+status: APPROVED
+reviewed_by: Van Phu Tin
+reviewed_at: "2026-08-02"
+approval_evidence: Explicit `APPROVE CCR-012 ROLLOUT MANIFEST` response
+amendment_finding: EF-CCR012-001
+amendment_reason: >-
+  The approved manifest omitted three deterministic projections changed by the effective
+  baseline transition. The original approval remains recorded; the additive amendment
+  requires review before PC-2026.10 becomes effective.
+amendment_reviewed_by: Van Phu Tin
+amendment_reviewed_at: "2026-08-02"
+amendment_approval_evidence: Explicit `APPROVE EF-CCR012-001` response
+amendment_resolution: APPROVED_ADDITIVE_GENERATED_PROJECTIONS
+
+scope_statement: >-
+  Control-plane-only rollout of the repository-wide Coding Action Card and cross-session
+  Coding Checkpoint policy. This manifest does not authorize product behavior changes or
+  expand the application-code scope of TKT-W04-D05.
+
+defaults:
+  contract_ids:
+    - CCR-012
+    - CCR-008
+    - CCR-010
+  acceptance_criteria_ids:
+    - CCR-012-ROLLOUT-01
+    - CCR-012-ROLLOUT-02
+    - CCR-012-ROLLOUT-03
+    - CCR-012-ROLLOUT-04
+  forbidden_content:
+    - Product runtime behavior changes
+    - New application feature scope
+    - Secrets, credentials, passwords or raw access/refresh tokens
+    - Automatic checkpoint advancement from chat-only done/fixed claims
+    - A coding checkpoint that overrides ticket, contract, design or expected-files authority
+    - Fabricated command output, evidence or reviewer decisions
+
+files:
+  - path: AI-contracts/changes/CCR-012-cross-session-coding-action-and-checkpoint-policy.md
+    action: CREATE
+    responsibility: Approved repository-wide Coding Action Card and cross-session checkpoint decision
+    permitted_content:
+      - Problem, decision, authority, compatibility, rollout and approval evidence
+      - Explicit all-weeks and all-applications scope
+    verification:
+      - Reviewer confirms CCR-012 approval text and scope
+      - npm run check:docs
+
+  - path: AI-contracts/expected-files/2026-08-02-ccr-012-rollout-expected-files.yml
+    action: CREATE
+    responsibility: Exact control-plane rollout boundary for CCR-012
+    permitted_content:
+      - Planned paths, responsibilities, exclusions and verification boundaries
+    verification:
+      - Reviewer manifest approval
+      - node tools/repository/validate-repository.mjs
+
+  - path: AI-contracts/state/contract-status.yml
+    action: MODIFY
+    responsibility: CCR-012 approval and PC-2026.10 rollout/effective-baseline state
+    permitted_content:
+      - Observed approval record
+      - Proposed status before rollout verification
+      - Effective baseline transition only after rollout review passes
+    verification:
+      - node tools/control-plane/validate-control-plane.mjs
+      - Reviewer confirms PC-2026.10 is not effective prematurely
+
+  - path: AI-contracts/schemas/current-work.schema.json
+    action: MODIFY
+    responsibility: Optional canonical coding_checkpoint structure and mechanical invariants
+    permitted_content:
+      - Zero-or-one optional checkpoint schema
+      - Required checkpoint identity, scope, behavior, verification and evidence fields
+      - Bounded phase, status and evidence enums
+    verification:
+      - Valid checkpoint fixture accepted
+      - Missing required checkpoint field rejected
+      - node tools/control-plane/validate-control-plane.mjs
+
+  - path: AI-contracts/state/current-work.yml
+    action: MODIFY
+    responsibility: Canonical subordinate coding checkpoint for the current implementation step
+    permitted_content:
+      - One checkpoint consistent with TKT-W04-D05 and its approved application expected-files
+      - LOGOUT-RED-01 problem, reason, allowed paths, exclusions and clean-RED verification
+      - Observed checkpoint status and evidence reference
+      - Effective baseline update only after rollout verification
+    verification:
+      - Checkpoint ticket equals current ticket
+      - Allowed paths are a subset of the approved D05 expected-files manifest
+      - node tools/control-plane/validate-control-plane.mjs
+
+  - path: AI-contracts/state/README.md
+    action: MODIFY
+    responsibility: Normative state-model rules for the subordinate coding checkpoint
+    permitted_content:
+      - Authority, lifecycle, resume, drift and evidence rules
+      - Distinction between ticket next_action and coding checkpoint
+    verification:
+      - Policy consistency review
+      - npm run check:docs
+
+  - path: AI-contracts/05-software-engineering-workflow.md
+    action: MODIFY
+    responsibility: Coding Action Card and checkpoint duties during implementation/self-review
+    permitted_content:
+      - Eight required Coding Action Card sections
+      - Full-card versus compact-update rule
+      - Evidence-based checkpoint transitions
+    verification:
+      - Workflow consistency review against CCR-012
+      - npm run check:docs
+
+  - path: AI-contracts/09-next-task-decision-policy.md
+    action: MODIFY
+    responsibility: Selection and resumption rules for a subordinate coding step
+    permitted_content:
+      - Resume current valid checkpoint before selecting a different coding step
+      - Drift handling and authority order
+      - Prohibition on treating a checkpoint as a new ticket authorization
+    verification:
+      - Next-action consistency review against CCR-012
+      - npm run check:docs
+
+  - path: AI-contracts/templates/coding-action-card.md
+    action: CREATE
+    responsibility: Shared human-readable template for assigning application coding work
+    permitted_content:
+      - Eight mandatory sections
+      - Compact same-step update form
+      - Clean RED and ordinary implementation examples without secrets
+    verification:
+      - Template review against CCR-012
+      - npm run check:docs
+
+  - path: AI-contracts/templates/evidence-manifest.yml
+    action: MODIFY
+    responsibility: Optional linkage from implementation evidence to a coding step identifier
+    permitted_content:
+      - Optional coding_step_id and checkpoint expectation/observation fields
+    verification:
+      - Evidence-template compatibility review
+
+  - path: AI-contracts/evidence/2026-08-02-ccr-012-rollout-evidence.yml
+    action: CREATE
+    responsibility: Reproducible rollout and negative-fixture evidence
+    permitted_content:
+      - Predictions, commands, working directories, exits, observations and limitations
+      - Schema, resume, drift, projection and repository-validation results
+    verification:
+      - Evidence completeness review
+
+  - path: AI-contracts/reviews/2026-08-02-ccr-012-rollout-review.md
+    action: CREATE
+    responsibility: Acceptance review for making PC-2026.10 effective
+    permitted_content:
+      - Criterion verdicts, findings, limitations and reviewer decision
+    verification:
+      - Explicit reviewer verdict
+      - No inference from command pass alone
+
+  - path: AGENTS.md
+    action: MODIFY
+    responsibility: Repository startup and handoff enforcement for CCR-012
+    permitted_content:
+      - Read/reconcile coding checkpoint before apps work
+      - Coding Action Card response requirements
+      - Evidence-based checkpoint update rule
+    verification:
+      - Root instruction consistency review
+
+  - path: apps/AGENTS.md
+    action: MODIFY
+    responsibility: Inherited application-wide coding-step guidance for current and future services
+    permitted_content:
+      - CCR-012 scope under apps
+      - Reference to canonical checkpoint and action-card template
+    verification:
+      - Scoped instruction consistency review
+
+  - path: apps/api-gateway/AGENTS.md
+    action: MODIFY
+    responsibility: Gateway-local compatibility with the repository-wide coding checkpoint policy
+    permitted_content:
+      - Non-conflicting local reminder of CCR-012 authority and evidence rules
+    verification:
+      - Scoped instruction consistency review
+
+  - path: apps/identity-service/AGENTS.md
+    action: MODIFY
+    responsibility: Identity-local compatibility with the repository-wide coding checkpoint policy
+    permitted_content:
+      - Non-conflicting local reminder of CCR-012 authority and evidence rules
+    verification:
+      - Scoped instruction consistency review
+
+  - path: tools/control-plane/sync-control-plane.mjs
+    action: MODIFY
+    responsibility: Deterministic projection of approved/open CCR status and coding checkpoint handoff
+    permitted_content:
+      - Approved/open CCR block isolation fix
+      - Coding checkpoint projection into the generated handoff region
+      - Stable serialization without invented defaults
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+      - node tools/control-plane/test-consistency.mjs
+
+  - path: tools/control-plane/validate-control-plane.mjs
+    action: MODIFY
+    responsibility: Mechanical coding-checkpoint authority and consistency validation
+    permitted_content:
+      - Optional checkpoint validation
+      - Ticket/stage equality and required-field validation
+      - Approved expected-files path subset validation
+      - Sensitive-field and contradictory-state rejection where mechanically provable
+    verification:
+      - Valid checkpoint fixture accepted
+      - Every planned negative checkpoint case rejected
+
+  - path: tools/control-plane/test-consistency.mjs
+    action: MODIFY
+    responsibility: Cross-session resume and generated-projection regression tests
+    permitted_content:
+      - Same-step resume fixture
+      - Stale handoff projection fixture
+      - Approved/open CCR projection regression
+    verification:
+      - node tools/control-plane/test-consistency.mjs
+
+  - path: tools/control-plane/fixtures/coding-checkpoint-cases.json
+    action: CREATE
+    responsibility: Deterministic positive and negative checkpoint validation fixtures
+    permitted_content:
+      - Valid optional/active checkpoint cases
+      - Ticket mismatch, wrong stage, missing field and unauthorized-path cases
+      - Secret-like forbidden field case without real secrets
+    verification:
+      - node tools/control-plane/validate-control-plane.mjs
+      - node tools/control-plane/test-consistency.mjs
+
+  - path: tools/repository/validate-repository.mjs
+    action: MODIFY
+    responsibility: Repository gate invokes the complete CCR-012 consistency boundary
+    permitted_content:
+      - Wiring to control-plane checkpoint validation without application execution
+    verification:
+      - node tools/repository/validate-repository.mjs
+
+  - path: CODEX-CONTEXT.md
+    action: MODIFY
+    responsibility: Generated compact handoff projection including the active coding step
+    permitted_content:
+      - Generated CURRENT-HANDOFF region only
+      - Canonical checkpoint projection without duplicated authority
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: AI-contracts/state/current-ticket.yml
+    action: MODIFY
+    responsibility: Generated current-ticket projection of the effective baseline and CCR list
+    permitted_content:
+      - Generated full-file content only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: docs/plan/movie-ticket-booking-master-plan.md
+    action: MODIFY
+    responsibility: Generated Markdown plan projection of the effective baseline
+    permitted_content:
+      - Generated PLAN-PROGRESS region only
+    verification:
+      - npm run check:docs
+
+  - path: docs/plan/movie-ticket-booking-master-plan.html
+    action: MODIFY
+    responsibility: Generated HTML plan projection of the effective baseline
+    permitted_content:
+      - Generated PLAN-PROGRESS region only
+    verification:
+      - npm run check:docs
+
+  - path: AI-contracts/README.md
+    action: MODIFY
+    responsibility: Generated approved-CCR and effective-baseline status projection
+    permitted_content:
+      - Generated CURRENT-STATUS region only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: docs-viewer/docs-data.js
+    action: MODIFY
+    responsibility: Generated documentation viewer projection
+    permitted_content:
+      - Generated content only
+    verification:
+      - npm run check:docs
+
+explicitly_excluded_paths:
+  - apps/**/src/**
+  - apps/**/test/**
+  - apps/**/migrations/**
+  - apps/package.json
+  - apps/package-lock.json
+  - AI-contracts/contracts/**
+  - AI-contracts/openapi/**
+  - AI-contracts/roadmap/**
+
+unplanned_file_policy: RETURN_TO_DESIGN

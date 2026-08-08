@@ -1,11 +1,13 @@
 schema_version: 1
 evidence_id: ""
 ticket_id: ""
+coding_step_id: ""
 capability_ids: []
 contract_ids: []
 acceptance_criteria_ids: []
 test_ids: []
 prediction: ""
+checkpoint_expected_result: ""
 command: ""
 working_directory: ""
 environment: ""
@@ -14,6 +16,7 @@ finished_at: ""
 exit_code: null
 artifact_paths: []
 observation: ""
+checkpoint_observed_result: ""
 observation_source: MISSING
 redaction_applied: false
 commit_sha: ""

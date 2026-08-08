@@ -1,0 +1,49 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+verdict: READY
+previous_verdict:
+  verdict: READY
+  reviewed_at: "2026-07-30"
+  superseded_by: EF-D05-001
+finding_resolution:
+  id: EF-D05-001
+  resolution: APPROVED_SINGLE_PACKAGE_NEST_MONOREPO
+  reviewed_at: "2026-07-31"
+checks:
+  ticket_authorized: true
+  prerequisites_verified: true
+  learning_passed: true
+  analysis_complete: true
+  requirements_clear: true
+  contracts_referenced: true
+  design_reviewed: true
+  expected_files_reviewed: true
+  test_plan_defined: true
+  migration_and_rollback_addressed: true
+observations:
+  DOR-001: Customer auth outcome, Gateway/Identity actors and the runnable vertical-slice problem are explicit.
+  DOR-002: Scope, non-scope, assumptions, rejected alternatives and zero requirement conflicts are recorded.
+  DOR-003: TKT-W04-D01 through TKT-W04-D04 and Foundation Gate FG-001 are VERIFIED.
+  DOR-004: CAP-IDN-01, CAP-SEC-01 and every referenced effective contract identifier exist.
+  DOR-005: Ownership, dependency, transaction, trust, replay, disclosure and failure invariants are explicit.
+  DOR-006: Register, login, refresh, logout, me, migration, concurrency and redaction outcomes have testable boundaries.
+  DOR-007: The approved design covers application structure, test strategy, migration, compatibility, rollback and limitations.
+  DOR-008: The approved manifest names 105 exact paths and requires a return to DESIGN for any unplanned path.
+  DOR-009: LG-TKT-W04-D05 is PASSED at C4_DEFEND and unlocks design/implementation after independent DoR checks.
+implementation_boundary:
+  permitted:
+    - Only paths listed in AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - Backend workspace under apps/; root client/ remains untouched
+    - D04-compatible Gateway and Identity auth vertical slice
+    - Identity-owned PostgreSQL 16 migrations, seed and boundary-specific tests
+  forbidden:
+    - Any unlisted application or tooling path
+    - Frontend implementation under client/
+    - Public API or effective-contract changes
+    - Cross-service database access, shared ORM entities or synchronize true
+    - Plaintext credentials, private keys or fabricated evidence
+  unplanned_file_policy: RETURN_TO_DESIGN
+blockers: []
+reviewer: User / Reviewer
+reviewed_at: "2026-07-31"
+decision_source: Explicit approval of the single-package NestJS monorepo resolution after reviewing EF-D05-001.

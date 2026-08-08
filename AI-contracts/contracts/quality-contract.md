@@ -8,6 +8,14 @@ ESLint và Jest, trừ khi approved ADR/CCR chọn lựa khác.
 `QLT-004`: Mỗi module root MUST có nested `AGENTS.md` với command format/lint/test chạy
 được và `codex-guidelines` block; không tạo command placeholder trong module chưa tồn tại.  
 `QLT-005`: Error map deterministic theo `API-COM-003`; unknown/internal error không leak detail.  
+`QLT-006`: Khi NestJS implementation dùng relational persistence, TypeORM + `pg` là
+adapter mặc định. Thay default ORM hoặc relational engine cần reviewed architecture impact
+và approved CCR; lựa chọn TypeORM không biến ORM thành nguồn thiết kế schema.
+`QLT-007`: Mọi application code được tạo hoặc sửa đáng kể MUST qua code-comment review
+theo `CCR-011`. Comment chỉ giữ non-obvious intent, invariant, security/trust boundary,
+concurrency/failure/compatibility constraint hoặc traceable workaround; comment lặp code,
+sai/lỗi thời hay TODO/FIXME không có identifier và removal condition bị cấm. Comment count
+hoặc density không phải quality gate.
 `OBS-001`: Structured log có timestamp, service, level, event/action, request/trace/correlation ID và redaction.  
 `OBS-002`: Request/trace context propagate qua HTTP/event; metric labels bounded, không PII/high-cardinality ID.  
 `TEST-001`: Testing pyramid/risk rules theo `AI-contracts/14-testing-rules.md`; boundary thật cho claim thật.  
@@ -28,3 +36,10 @@ service ownership.
 `PERF-005`: Optimization BLOCKER/HIGH MUST block dependent module.  
 `PERF-006`: MEDIUM chỉ `DEFERRED_WITH_BUDGET` khi có owner, reason, budget,
 deadline/gate, risk acceptance và regression guard.
+`TRC-001`: Backlog API inventory phải map 1:1 tới đúng 55 row trong
+`traceability/backlog-contract-map.yml`; endpoint ID và method+canonical path phải unique.
+`TRC-002`: Mọi `CORE_REQUIRED` row phải map ít nhất một capability và delivery ticket;
+`STRETCH`/`POST_MVP` không được map active MVP ticket.
+`TRC-003`: Control-plane validation phải fail khi thiếu/thừa mapping, duplicate endpoint
+hoặc method+path, disposition không hợp lệ, core row thiếu ticket, hay operational log
+contract cho phép raw sensitive payload.

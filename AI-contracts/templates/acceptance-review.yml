@@ -1,0 +1,11 @@
+schema_version: 1
+ticket_id: ""
+review_state: BLOCKED
+acceptance_criteria: []
+open_findings: []
+evidence_references: []
+next_action:
+  action: ""
+  completion_condition: ""
+reviewer: ""
+reviewed_at: ""

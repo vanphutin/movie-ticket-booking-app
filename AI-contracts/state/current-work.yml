@@ -1,0 +1,68 @@
+schema_version: 1
+project: Movie Ticket Booking Microservices
+effective_baseline: PC-2026.11
+current_stage: STARTUP
+ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+completed_ticket_ids:
+  - TKT-W04-D01
+  - TKT-W04-D02
+  - TKT-W04-D03
+  - TKT-W04-D04
+  - TKT-W04-D05
+active_artifact: null
+ticket_projection:
+  phase_id: P2
+  milestone_id: M2
+  capability_ids:
+    - CAP-CAT-01
+  contract_ids:
+    - BUS-001
+    - DATA-SM-001
+    - ARCH-003
+    - CCR-013
+  execution_status: NOT_STARTED
+  evidence_confidence: NOT_EVALUATED
+  learning:
+    gate_id: LG-TKT-W05-D01
+    mode: REGULAR
+    topics_presented: []
+    observed_gaps: []
+    remediation_focus: []
+    design_unlocked: false
+    skeleton_unlocked: false
+    last_observation: NOT_EVALUATED
+statuses:
+  learning: NOT_EVALUATED
+  analysis: NOT_STARTED
+  design: NOT_STARTED
+  readiness: NOT_EVALUATED
+  implementation: NOT_STARTED
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
+blockers: []
+required_output:
+  type: REPOSITORY_RECONCILIATION_REPORT
+  path:
+    - AI-contracts/audits/2026-08-08-tkt-w05-d01-startup.md
+next_action:
+  id: ACTION-TKT-W05-D01-STARTUP-RECONCILIATION
+  type: RECONCILE_REPOSITORY_AND_CONTRACT_STATE
+  target: TKT-W05-D01
+  reason: Reviewer authorized TKT-W05-D01 as the new current ticket. Reconcile repository state, active branch, dependencies, and contract baseline before proceeding to learning.
+  completion_condition: Repository reconciliation report is produced with zero unresolved drift or blockers.
+  on_success: BEGIN_LEARNING_GATE
+  on_failure: REPORT_DRIFT_OR_BLOCKER
+next_action_projection:
+  decision_status: READY
+  blocking_ids: []
+  required_evidence:
+    - AI-contracts/state/work-unit-checkpoint.yml
+  source_evidence:
+    - AI-contracts/state/work-unit-checkpoint.yml
+  decided_at: "2026-08-08"
+  decided_by: User / Reviewer and Codex
+updated_at: "2026-08-08"
+updated_by: Codex
+update_source: "Reviewer authorized TKT-W05-D01 as current ticket; stage advanced to STARTUP."

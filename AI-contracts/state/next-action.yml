@@ -1,13 +1,18 @@
+# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-decision_status: BLOCKED
-next_ticket_id: null
-candidate_ticket_id: TKT-W04-D01
-action: "Obtain reviewer-observed evidence for Foundation Gate FG-001; if verified, authorize TKT-W04-D01 and start its learning gate (LG-TKT-W04-D01) theory-first."
-priority_reason: "All CCRs (001-004) are APPROVED and PC-2026.2 is effective, but the Foundation Gate has no observed evidence and no ticket may open before it is VERIFIED."
-blocking_ids:
-  - FG-001
+decision_status: READY
+next_ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+action: RECONCILE_REPOSITORY_AND_CONTRACT_STATE
+target: TKT-W05-D01
+priority_reason: "Reviewer authorized TKT-W05-D01 as the new current ticket. Reconcile repository state, active branch, dependencies, and contract baseline before proceeding to learning."
+completion_condition: "Repository reconciliation report is produced with zero unresolved drift or blockers."
+on_success: BEGIN_LEARNING_GATE
+on_failure: REPORT_DRIFT_OR_BLOCKER
+blocking_ids: []
+required_evidence:
+  - AI-contracts/state/work-unit-checkpoint.yml
 source_evidence:
-  - "AI-contracts/state/contract-status.yml"
-  - "AI-contracts/changes/CCR-001-control-plane-and-architecture-rebaseline.md"
-decided_at: "2026-07-27"
-decided_by: "Claude Code (per reviewer approval by Van Phu Tin)"
+  - AI-contracts/state/work-unit-checkpoint.yml
+decided_at: "2026-08-08"
+decided_by: "User / Reviewer and Codex"

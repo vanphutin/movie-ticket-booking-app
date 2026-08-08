@@ -27,6 +27,10 @@ learning_gate:
   misconceptions: []
   security_or_failure_focus: []
   check_question_dimensions: []
+  target_level:
+  reference_profile:
+  decision_points: []
+  counterexamples: []
   pass_conditions: []
   design_unlock_condition:
   skeleton_unlock_condition:
@@ -47,6 +51,13 @@ failure_cases: []
 security_cases: []
 design_requirements: []
 implementation_constraints: []
+code_comment_review:
+  required: true
+  dispositions:
+    - COMMENTS_ADDED
+    - COMMENTS_NOT_REQUIRED
+    - COMMENTS_UPDATED
+    - STALE_COMMENTS_REMOVED
 expected_files: []
 tooling_commands:
   availability: NOT_AVAILABLE
@@ -55,7 +66,16 @@ tooling_commands:
   test: null
 verification_plan: []
 evidence_required: []
+required_artifacts:
+  - analysis
+  - design
+  - expected-files
+  - readiness-verdict
+  - self-review
+  - evidence
+  - acceptance-review
 definition_of_done: []
+completion_condition:
 reviewer_focus: []
 next_ticket_dependencies: []
 core_or_stretch: CORE

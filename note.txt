@@ -1,2 +1,0 @@
-## AI bỏ qua file này / KHÔNG ĐỌC FILE NÀY 
-sau khi học xong thì triển khai quyền giám sát hệt thống với devops, quan sát grafana

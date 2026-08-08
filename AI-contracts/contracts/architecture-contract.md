@@ -66,3 +66,20 @@ reconciliation có owner rõ; không dùng distributed transaction ngầm.
 `ARCH-026`: Topology logic dự kiến gồm Gateway, Identity, Catalog, Booking và Worker.
 Filesystem/module roots chưa được khóa cho tới ticket scaffold được review. Tài liệu
 không được giả định `apps/*`, package manager hoặc command runnable trước thời điểm đó.
+
+`ARCH-027`: Payment application boundary sở hữu provider-neutral port. payOS SDK/HTTP,
+signature mapping và provider error mapping chỉ nằm trong concrete adapter; deterministic
+fake implement cùng port cho local/test. Chọn fake không thay đổi production adapter đã
+duyệt và không tạo nhánh business rule riêng.
+`ARCH-028`: Audit/integration read model thuộc operational boundary có owner rõ trong
+design ticket; endpoint không được truy vấn chéo database hoặc biến Gateway/Worker thành
+domain owner.
+`ARCH-029`: Row `STRETCH`/`POST_MVP` trong endpoint registry chỉ khóa future contract;
+nó không chứng minh readiness, không cấp ticket và không cho phép scaffold/implementation.
+`ARCH-030`: TypeORM là concrete relational persistence adapter mặc định cho NestJS
+services và chỉ nằm trong infrastructure/adapters cùng persistence entity, repository,
+DataSource và migration; PostgreSQL 16 design vẫn là authority cho schema/invariant.
+`ARCH-031`: Domain và application MUST NOT import TypeORM API/decorator, persistence
+entity, `Repository`, `EntityManager` hoặc `QueryRunner`. Infrastructure adapter MAY dùng
+parameterized PostgreSQL SQL qua TypeORM khi behavior đã review không thể biểu diễn an toàn
+bằng ORM metadata.

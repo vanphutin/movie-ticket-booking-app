@@ -1,0 +1,358 @@
+schema_version: 1
+ticket_id: "TKT-W04-D03"
+design_artifact: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
+status: APPROVED
+reviewed_by: "Reviewer"
+reviewed_at: "2026-07-29"
+remediation_status: READY_FOR_RE_REVIEW
+remediated_at: "2026-07-29"
+open_findings_pending_reviewer_verification:
+  - D03-DESIGN-F01
+  - D03-DESIGN-F02
+  - D03-DESIGN-F03
+  - D03-DESIGN-F04
+  - D03-DESIGN-F05
+reviewer_reapproval_condition: "Verify all five remediations against the effective contracts, then record APPROVED for both the design note and this manifest before READINESS evaluation."
+files:
+  - path: "AI-contracts/designs/2026-07-28-tkt-w04-d03-design.md"
+    action: CREATE
+    responsibility: "Design Note artifact for TKT-W04-D03 RS256 Token & Gateway Security Pipeline design"
+    contract_ids:
+      - SEC-001
+      - SEC-002
+      - SEC-003
+      - SEC-004
+      - SEC-005
+      - SEC-006
+      - SEC-007
+      - API-AUTH-002
+      - API-AUTH-003
+      - API-AUTH-004
+      - ARCH-008
+      - CCR-006
+      - CCR-007
+      - CCR-008
+      - CCR-009
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+      - AC-W04-D03-2
+      - AC-W04-D03-3
+    permitted_content:
+      - "Token architecture design sections"
+      - "RS256 key separation, claims, and 15m expiration"
+      - "Refresh token rotation and reuse detection"
+      - "API Gateway security pipeline and anti-header spoofing"
+      - "Authenticated Gateway-to-service internal HMAC header verification"
+      - "Correlation ID tracing and dependency timeout handling"
+      - "HTTP 401 vs 403 error status code matrix"
+      - "Log redaction policy rules and zero data leakage"
+      - "Classified test matrix"
+      - "Migration, expected files, and review status sections"
+    forbidden_content:
+      - "Application source code"
+      - "Unapproved contract modifications"
+    verification:
+      - "Reviewer review against design note requirements"
+      - "Verify canonical internal signing binds method, path/query, audience, claims, request ID, body digest, timestamp, nonce, and key version"
+      - "Verify replay, substitution, stale/future timestamp, retired-key, concurrency, and fail-closed negative tests are planned"
+      - "Verify API-COM-003 envelope, API-AUTH-004 logout status, canonical UUID correlation, and security-preserving rollback"
+
+  - path: "AI-contracts/expected-files/2026-07-28-tkt-w04-d03-expected-files.yml"
+    action: CREATE
+    responsibility: "Expected-files manifest for TKT-W04-D03"
+    contract_ids:
+      - DOR-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Expected files paths and rules"
+    forbidden_content:
+      - "Application source file permissions"
+    verification:
+      - "Control-plane schema validation"
+
+  - path: "AI-contracts/audits/2026-07-28-tkt-w04-d03-analysis.md"
+    action: MODIFY
+    responsibility: "Analysis note artifact updated to baseline PC-2026.7 with corrected branch name and authenticated gateway boundary"
+    contract_ids:
+      - SEC-001
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Analysis note sections"
+      - "Observed validator status"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Reviewer review against analysis template"
+
+  - path: "AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml"
+    action: CREATE
+    responsibility: "Readiness verdict for TKT-W04-D03 after approved design review"
+    contract_ids:
+      - DOR-001
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+      - AC-W04-D03-2
+      - AC-W04-D03-3
+    permitted_content:
+      - "Readiness checks, verdict, blockers, reviewer, and review timestamp"
+    forbidden_content:
+      - "Application source code"
+      - "Implementation authorization without a READY verdict"
+    verification:
+      - "Reviewer review against readiness-verdict template"
+
+  - path: "AI-contracts/state/current-work.yml"
+    action: MODIFY
+    responsibility: "Canonical runtime state tracking TKT-W04-D03 DESIGN stage"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Canonical stage, ticket, blockers, required output, next action"
+    forbidden_content:
+      - "Duplicate technical contracts"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/current-ticket.yml"
+    action: MODIFY
+    responsibility: "Current ticket compatibility projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Ticket execution status and blockers"
+    forbidden_content:
+      - "Stale stage references"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "AI-contracts/state/next-action.yml"
+    action: MODIFY
+    responsibility: "Next action compatibility projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Next action ID, target, and completion condition"
+    forbidden_content:
+      - "Unapproved next actions"
+    verification:
+      - "State projection synchronization check"
+
+  - path: "CODEX-CONTEXT.md"
+    action: MODIFY
+    responsibility: "Compact session handoff projection"
+    contract_ids:
+      - SEC-001
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Compact handoff, repository snapshot, next action"
+    forbidden_content:
+      - "Full contract text"
+    verification:
+      - "Handoff projection synchronization check"
+
+  - path: "docs-viewer/index.html"
+    action: MODIFY
+    responsibility: "Pin the browser renderer to the repository-validated Mermaid version"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid runtime version pin"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Browser rendering check"
+
+  - path: "docs-viewer/app.js"
+    action: MODIFY
+    responsibility: "Apply one Mermaid visual template and provide diagram zoom controls"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Central Mermaid theme configuration"
+      - "Diagram zoom modal and controls"
+      - "Actionable Mermaid render error"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Docs viewer Mermaid rendering check"
+
+  - path: "docs-viewer/styles.css"
+    action: MODIFY
+    responsibility: "Style the shared Mermaid template and zoom experience"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid card, toolbar, modal, zoom canvas, and responsive styles"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Docs viewer visual check"
+
+  - path: "docs-viewer/README.md"
+    action: MODIFY
+    responsibility: "Document the Mermaid normalization, validation, and AI repair loop"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Repository documentation commands and repair workflow"
+    forbidden_content:
+      - "Unverified application commands"
+    verification:
+      - "Repository consistency validation"
+
+  - path: "AI-contracts/viewer/index.html"
+    action: MODIFY
+    responsibility: "Pin the legacy contract viewer to the repository-validated Mermaid version"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid runtime version pin"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Browser rendering check"
+
+  - path: "tools/repository/validate-mermaid.mjs"
+    action: CREATE
+    responsibility: "Fail repository validation when a Markdown Mermaid block is invalid under Mermaid 10.9.6"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Markdown Mermaid extraction and syntax validation"
+      - "Actionable file and line diagnostics"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Positive repository validation"
+      - "Negative invalid-diagram fixture"
+
+  - path: "tools/repository/validate-repository.mjs"
+    action: MODIFY
+    responsibility: "Include Mermaid syntax in the repository consistency boundary"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mermaid validator invocation and status output"
+    forbidden_content:
+      - "Application source code"
+    verification:
+      - "Repository consistency validation"
+
+  - path: "tools/control-plane/sync-control-plane.mjs"
+    action: MODIFY
+    responsibility: "Keep isolated control-plane fixtures independent from optional docs-viewer files"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Conditional docs-viewer projection synchronization"
+    forbidden_content:
+      - "Canonical state semantics changes"
+    verification:
+      - "Control-plane consistency negative fixtures"
+
+  - path: "tools/control-plane/test-consistency.mjs"
+    action: MODIFY
+    responsibility: "Keep the generated-plan drift fixture independent of the current verified count"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Robust generated projection negative fixture"
+    forbidden_content:
+      - "Canonical progress changes"
+    verification:
+      - "Control-plane consistency negative fixtures"
+
+  - path: "package.json"
+    action: CREATE
+    responsibility: "Pin repository-only Mermaid validation dependencies and commands"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Repository documentation validation tooling"
+    forbidden_content:
+      - "Application module scripts"
+    verification:
+      - "npm clean install"
+      - "Mermaid syntax validation"
+
+  - path: "package-lock.json"
+    action: CREATE
+    responsibility: "Lock repository-only Mermaid validation dependencies"
+    contract_ids:
+      - CCR-006
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "npm dependency lock for repository validation"
+    forbidden_content:
+      - "Application module dependencies"
+    verification:
+      - "npm clean install"
+
+  - path: ".github/workflows/repository-consistency.yml"
+    action: MODIFY
+    responsibility: "Install locked validation dependencies before CI repository checks"
+    contract_ids:
+      - CCR-006
+      - CCR-007
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Dependency installation for repository validation"
+    forbidden_content:
+      - "Deployment or release automation"
+    verification:
+      - "Repository consistency workflow"
+
+  - path: "AGENTS.md"
+    action: MODIFY
+    responsibility: "Require every AI session to normalize and validate generated documentation and Mermaid diagrams"
+    contract_ids:
+      - CCR-006
+      - CCR-008
+    acceptance_criteria_ids:
+      - AC-W04-D03-1
+    permitted_content:
+      - "Mandatory documentation and Mermaid validation workflow"
+      - "Central Mermaid template and generated viewer data rules"
+      - "AI repair-and-rerun completion condition"
+    forbidden_content:
+      - "Application source code"
+      - "Duplicate canonical project state"
+    verification:
+      - "Documentation validation"
+      - "Repository consistency validation"
+
+unplanned_file_policy: RETURN_TO_DESIGN

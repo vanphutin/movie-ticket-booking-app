@@ -7,7 +7,8 @@
 | Architecture decisions | `AI-contracts/decisions/*` | sơ đồ hoặc note trong ticket |
 | Contract changes | `AI-contracts/changes/*` | thảo luận/review bên ngoài |
 | Phase/milestone/capability/tickets | `AI-contracts/roadmap/*` | roadmap tuần, study tickets, tracker curriculum |
-| Runtime state | `AI-contracts/state/*` | tracker legacy statuses |
+| Current stage/ticket/blocker/next action | `AI-contracts/state/current-work.yml` | `current-ticket.yml`, `next-action.yml`, `CODEX-CONTEXT.md` |
+| Other runtime dimensions | remaining `AI-contracts/state/*` | tracker legacy statuses |
 | Learner notes/progress history | SQLite/`tien-do-hoc-tap/progress.json` hiện hữu | tracker UI |
 | Evidence rules/manifest | `AI-contracts/08-*`, `AI-contracts/templates/evidence-manifest.yml` | curriculum evidence standard |
 | Traceability | `AI-contracts/16-*` + ticket/evidence IDs | traceability projection nếu có |
@@ -20,6 +21,6 @@ effective contract, code là chưa đạt. `DONE`/checkbox/link không thắng e
 
 ## Ownership of synchronization
 
-Hiện chưa có synchronization/validation script trong repository. Nếu bổ sung sau này,
-script chỉ được đọc canonical control plane và sinh projection; không được tự sửa evidence,
-review verdict, capability state hoặc progress history.
+`tools/control-plane/validate-control-plane.mjs` kiểm tra canonical state và các projection
+tương thích. Script chỉ đọc control plane; không tự sửa evidence, review verdict,
+capability state hoặc progress history.

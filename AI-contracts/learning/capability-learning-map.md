@@ -3,6 +3,10 @@
 This is the reusable concept source for learning gates. Ticket projections select only
 the concepts needed for the current outcome.
 
+Detailed mental models, option comparisons, counterexamples, target levels and reference
+profiles are canonical in `capability-lesson-specs.md`. This table remains the compact
+capability index.
+
 | Capability | Business problem and mental model | Core theory | Failure/security and project application |
 |---|---|---|---|
 | CAP-CON-01 | Deliver from explicit authority and evidence | contract vs plan vs observation; source of truth; invariant; gate; traceability | contract drift, fake evidence; map Movie Ticket Booking owners and trust boundaries |
@@ -28,3 +32,5 @@ For a selected capability, teach only the ticket-relevant subset in this order:
 Framework syntax follows the concept and approved design. It never replaces the mental
 model or becomes a source of technical authority.
 
+Each full gate must resolve the target level and reference profile in
+`ticket-learning-map-weeks-4-10.md`.

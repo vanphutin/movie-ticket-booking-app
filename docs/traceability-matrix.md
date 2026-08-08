@@ -1,6 +1,6 @@
 # Traceability Matrix
 
-> Đây là projection legacy từ dữ liệu progress. Traceability normative tuần 4–10 nằm ở [`AI/16-traceability-policy.md`](../AI/16-traceability-policy.md), ticket catalog và evidence manifest; trạng thái `DONE` ở đây không đồng nghĩa `VERIFIED`.
+> Đây là projection legacy từ dữ liệu progress. Traceability normative tuần 4–10 nằm ở [`AI-contracts/16-traceability-policy.md`](../AI-contracts/16-traceability-policy.md), ticket catalog và evidence manifest; trạng thái `DONE` ở đây không đồng nghĩa `VERIFIED`. Các liên kết `study/` bên dưới là tham chiếu lịch sử tới workspace đào tạo cũ và không phải current repository targets.
 
 Ma trận được sinh từ `tien-do-hoc-tap/progress.json`. Tuần 4–10 phải tuân theo [kế hoạch delivery tăng trưởng](progressive-delivery-plan-weeks-4-10.md).
 

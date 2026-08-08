@@ -1,0 +1,674 @@
+openapi: 3.1.0
+info:
+  title: Movie Ticket Booking Auth API
+  version: 1.0.0
+  description: >
+    Reviewed contract for customer registration, login, refresh, logout and self-profile.
+    Credential values are opaque to clients and must never be logged.
+servers:
+  - url: /api/v1
+tags:
+  - name: Auth
+    description: Customer authentication and session lifecycle
+  - name: Profile
+    description: Authenticated self-profile
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      operationId: registerCustomer
+      summary: Register a Customer and create an auth session
+      description: >
+        Public, rate-limited registration. Public callers cannot assign roles, status,
+        verification state or actor identity. Reusing the same Idempotency-Key with the
+        same canonical request returns the same logical outcome.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              customer:
+                value:
+                  email: customer@example.com
+                  password: correct horse battery staple
+                  displayName: Nguyen Van A
+      responses:
+        '201':
+          description: Customer registered and session created
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/RegistrationConflict'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: loginCustomer
+      summary: Authenticate a Customer and create an auth session
+      description: >
+        Unknown email, wrong password and other public credential failures return the
+        same neutral response shape.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              customer:
+                value:
+                  email: customer@example.com
+                  password: correct horse battery staple
+      responses:
+        '200':
+          description: Authentication succeeded
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/InvalidCredentials'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      operationId: refreshSession
+      summary: Rotate a refresh credential and return a new auth session
+      description: >
+        The refresh credential is opaque. Invalid, expired, revoked and replayed
+        credentials share the same neutral public failure. Replay handling may revoke
+        the token family internally without disclosing that event.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Refresh credential rotated and new session credentials returned
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/InvalidRefreshToken'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      operationId: logoutSession
+      summary: Revoke the session identified by a refresh credential
+      description: >
+        Logout does not require a valid access token. A recognized already-revoked
+        credential returns the same replay-safe 204 outcome.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '204':
+          description: Session revoked or recognized as already revoked
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/InvalidRefreshToken'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /me:
+    get:
+      tags: [Profile]
+      operationId: getMyProfile
+      summary: Get the authenticated Customer's profile
+      description: >
+        The actor is resolved only from trusted authentication context. Client-supplied
+        actor headers, query fields or request bodies never select the profile.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Authenticated self-profile
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '401':
+          $ref: '#/components/responses/AccessTokenFailure'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: >
+        Opaque, case-sensitive client-generated key. It must not contain email,
+        user identifiers or other personal data.
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 128
+        pattern: '^[A-Za-z0-9._:-]+$'
+      example: reg_01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+  headers:
+    XRequestId:
+      description: Correlation identifier for this request
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 128
+      example: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+    RetryAfter:
+      description: Whole seconds before the client should retry
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 60
+
+  schemas:
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - email
+        - password
+        - displayName
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: customer@example.com
+        password:
+          type: string
+          format: password
+          minLength: 12
+          maxLength: 128
+          writeOnly: true
+          example: correct horse battery staple
+        displayName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Nguyen Van A
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: customer@example.com
+        password:
+          type: string
+          format: password
+          minLength: 1
+          maxLength: 128
+          writeOnly: true
+          example: correct horse battery staple
+
+    RefreshRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          writeOnly: true
+          example: opaque-refresh-token
+
+    LogoutRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          writeOnly: true
+          example: opaque-refresh-token
+
+    AuthSessionResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - accessToken
+        - refreshToken
+        - tokenType
+        - expiresIn
+        - user
+      properties:
+        accessToken:
+          type: string
+          minLength: 1
+          readOnly: true
+          example: opaque-access-token
+        refreshToken:
+          type: string
+          minLength: 1
+          readOnly: true
+          example: opaque-refresh-token
+        tokenType:
+          type: string
+          enum: [Bearer]
+          readOnly: true
+        expiresIn:
+          type: integer
+          minimum: 1
+          description: Remaining access-token lifetime in seconds
+          readOnly: true
+          example: 900
+        user:
+          $ref: '#/components/schemas/SessionUserResponse'
+
+    SessionUserResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - email
+        - displayName
+        - roles
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: f2ad40a8-7d46-4a45-b4ec-fda33d17da8b
+        email:
+          type: string
+          format: email
+          readOnly: true
+          example: customer@example.com
+        displayName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          readOnly: true
+          example: Nguyen Van A
+        roles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserRole'
+
+    ProfileResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - email
+        - displayName
+        - roles
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: f2ad40a8-7d46-4a45-b4ec-fda33d17da8b
+        email:
+          type: string
+          format: email
+          readOnly: true
+          example: customer@example.com
+        displayName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          readOnly: true
+          example: Nguyen Van A
+        roles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserRole'
+
+    UserRole:
+      type: string
+      enum:
+        - CUSTOMER
+        - ADMIN
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorObject'
+
+    ErrorObject:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+        - requestId
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '^[A-Z][A-Z0-9_]*$'
+          example: VALIDATION_FAILED
+        message:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: The request is invalid.
+        requestId:
+          type: string
+          minLength: 1
+          maxLength: 128
+          example: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+        details:
+          $ref: '#/components/schemas/ErrorDetails'
+
+    ErrorDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        fields:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/FieldViolation'
+
+    FieldViolation:
+      type: object
+      additionalProperties: false
+      required:
+        - field
+        - code
+        - message
+      properties:
+        field:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: email
+        code:
+          $ref: '#/components/schemas/FieldViolationCode'
+        message:
+          type: string
+          minLength: 1
+          maxLength: 300
+          example: Email must be a valid email address.
+
+    FieldViolationCode:
+      type: string
+      enum:
+        - REQUIRED
+        - INVALID_TYPE
+        - INVALID_FORMAT
+        - INVALID_VALUE
+        - OUT_OF_RANGE
+        - TOO_SHORT
+        - TOO_LONG
+        - UNKNOWN_FIELD
+
+  responses:
+    BadRequest:
+      description: >
+        Request validation failed, JSON was malformed, or a required idempotency key
+        was absent
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validation:
+              value:
+                error:
+                  code: VALIDATION_FAILED
+                  message: The request is invalid.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+                  details:
+                    fields:
+                      - field: email
+                        code: INVALID_FORMAT
+                        message: Email must be a valid email address.
+            malformedJson:
+              value:
+                error:
+                  code: MALFORMED_JSON
+                  message: The request body is not valid JSON.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    InvalidCredentials:
+      description: Credentials could not be authenticated
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: INVALID_CREDENTIALS
+              message: Email or password is incorrect.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+    InvalidRefreshToken:
+      description: Refresh credential is invalid, expired, revoked or not accepted
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: INVALID_REFRESH_TOKEN
+              message: The refresh token is invalid or expired.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    AccessTokenFailure:
+      description: Bearer authentication is missing or cannot be accepted
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing:
+              value:
+                error:
+                  code: AUTHENTICATION_REQUIRED
+                  message: Authentication is required.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+            expired:
+              value:
+                error:
+                  code: ACCESS_TOKEN_EXPIRED
+                  message: The access token has expired.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+            invalid:
+              value:
+                error:
+                  code: INVALID_ACCESS_TOKEN
+                  message: The access token is invalid.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    RegistrationConflict:
+      description: Registration or idempotency state conflicts with the request
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            registration:
+              value:
+                error:
+                  code: REGISTRATION_CONFLICT
+                  message: Registration could not be completed with the supplied information.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+            idempotency:
+              value:
+                error:
+                  code: IDEMPOTENCY_KEY_CONFLICT
+                  message: The Idempotency-Key was already used with a different request.
+                  requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    UnsupportedMediaType:
+      description: Request media type is not supported
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: UNSUPPORTED_MEDIA_TYPE
+              message: Content-Type must be application/json.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    RateLimited:
+      description: Request was rejected by abuse protection
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: RATE_LIMIT_EXCEEDED
+              message: Too many requests. Try again later.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    InternalError:
+      description: Unexpected failure normalized at the public boundary
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: INTERNAL_ERROR
+              message: An unexpected error occurred.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC
+
+    ServiceUnavailable:
+      description: A required dependency is temporarily unavailable
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: SERVICE_UNAVAILABLE
+              message: The service is temporarily unavailable.
+              requestId: 01K1FQ0A7CXJY4KBRRXQDPEQAC

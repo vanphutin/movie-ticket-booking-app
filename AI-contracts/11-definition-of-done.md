@@ -11,6 +11,9 @@
 `DOD-009`: học viên giải thích invariant, decision, rejected alternative, trade-off, limitation.  
 `DOD-010`: mọi BLOCKER/HIGH resolved.  
 `DOD-011`: reviewer không cần suy đoán runtime state.
+`DOD-012`: application code tạo mới hoặc sửa đáng kể có code-comment review disposition
+theo `CCR-011`; required intent comments đã được thêm/cập nhật và comment sai, thừa hoặc
+TODO/FIXME không traceable đã được loại bỏ.
 
 Chỉ khi tất cả rule liên quan đạt mới là `VERIFIED`.
 

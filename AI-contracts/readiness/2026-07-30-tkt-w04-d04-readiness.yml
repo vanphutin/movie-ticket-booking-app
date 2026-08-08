@@ -1,0 +1,56 @@
+schema_version: 1
+ticket_id: TKT-W04-D04
+verdict: READY
+checks:
+  DOR-001:
+    status: PASSED
+    observation: Actor, contract-review outcome and API problem are defined in the approved design.
+  DOR-002:
+    status: PASSED
+    observation: Scope, non-scope, assumptions, rejected alternatives and zero unresolved requirement conflicts are recorded.
+  DOR-003:
+    status: PASSED
+    observation: Prerequisite TKT-W04-D03 is VERIFIED and its publication checkpoint is valid.
+  DOR-004:
+    status: PASSED
+    observation: CAP-IDN-01 and every referenced API, security, architecture and CCR identifier exist.
+  DOR-005:
+    status: PASSED
+    observation: DTO, disclosure, idempotency, session, trust-boundary and failure invariants are identified.
+  DOR-006:
+    status: PASSED
+    observation: AC-W04-D04-1 through AC-W04-D04-3 have explicit testable design coverage.
+  DOR-007:
+    status: PASSED
+    observation: OpenAPI design, classified contract tests, compatibility, rollback and security trade-offs are reviewed.
+  DOR-008:
+    status: PASSED
+    observation: Approved expected-files manifest bounds the contract-only diff and names the evidence/review artifacts.
+  DOR-009:
+    status: PASSED
+    observation: Learning gate LG-TKT-W04-D04 is PASSED at C4_DEFEND.
+summary_checks:
+  ticket_authorized: true
+  prerequisites_verified: true
+  learning_passed: true
+  analysis_complete: true
+  requirements_clear: true
+  contracts_referenced: true
+  design_reviewed: true
+  expected_files_reviewed: true
+  test_plan_defined: true
+  migration_and_rollback_addressed: true
+implementation_boundary:
+  permitted:
+    - AI-contracts/openapi/auth-api.v1.yaml
+    - AI-contracts/tests/auth-api-contract-test-matrix.md
+    - Evidence, review and canonical/generated control-plane paths explicitly listed in the approved expected-files manifest
+  forbidden:
+    - apps/**
+    - NestJS runtime controllers, DTO classes, services, guards or interceptors
+    - Database migrations or runtime implementation claims
+  unplanned_file_policy: RETURN_TO_DESIGN
+blockers: []
+reviewer: User / Reviewer
+reviewed_at: "2026-07-30"
+decision_source: Explicit READY verdict in the working session after design approval.

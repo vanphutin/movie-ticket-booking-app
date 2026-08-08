@@ -1,0 +1,35 @@
+{
+  "cases": [
+    {
+      "id": "missing-row",
+      "find": "endpoint_count: 55",
+      "replace": "endpoint_count: 54"
+    },
+    {
+      "id": "duplicate-route",
+      "find": "path: \"/api/v1/movies/{id}\"",
+      "replace": "path: \"/api/v1/movies\""
+    },
+    {
+      "id": "invalid-disposition",
+      "find": "disposition: POST_MVP",
+      "replace": "disposition: ACTIVE_NOW"
+    },
+    {
+      "id": "core-without-ticket",
+      "find": "ticket_ids: [TKT-W05-D03, TKT-W05-D04, TKT-W05-D05]",
+      "replace": "ticket_ids: []"
+    },
+    {
+      "id": "deferred-with-active-ticket",
+      "find": "capability_ids: [CAP-BKG-01], ticket_ids: []",
+      "replace": "capability_ids: [CAP-BKG-01], ticket_ids: [TKT-W08-D05]"
+    },
+    {
+      "id": "sensitive-raw-log-authorized",
+      "target": "security",
+      "find": "raw body, prompt chứa PII, signature, token, secret và internal URL bị cấm",
+      "replace": "raw body, prompt chứa PII, signature, token, secret và internal URL được phép"
+    }
+  ]
+}

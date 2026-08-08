@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "current-work.schema.json",
+  "title": "Canonical current work",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "effective_baseline",
+    "current_stage",
+    "ticket_id",
+    "candidate_ticket_id",
+    "statuses",
+    "blockers",
+    "required_output",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "current_stage": {
+      "enum": [
+        "FOUNDATION_GATE",
+        "STARTUP",
+        "LEARNING",
+        "ANALYSIS",
+        "DESIGN",
+        "READINESS",
+        "IMPLEMENTATION",
+        "VERIFICATION",
+        "REVIEW",
+        "HANDOFF",
+        "BLOCKED"
+      ]
+    },
+    "ticket_id": { "type": ["string", "null"] },
+    "candidate_ticket_id": { "type": ["string", "null"] },
+    "active_artifact": { "type": ["string", "null"] },
+    "statuses": {
+      "type": "object",
+      "required": [
+        "learning",
+        "analysis",
+        "design",
+        "readiness",
+        "implementation",
+        "evidence",
+        "review",
+        "handoff"
+      ]
+    },
+    "blockers": { "type": "array" },
+    "required_output": {
+      "type": "object",
+      "required": ["type", "path"]
+    },
+    "next_action": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "target",
+        "reason",
+        "completion_condition",
+        "on_success",
+        "on_failure"
+      ]
+    },
+    "coding_checkpoint": {
+      "$ref": "#/$defs/codingCheckpoint"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "codingCheckpoint": {
+      "type": "object",
+      "required": [
+        "step_id",
+        "ticket_id",
+        "scope",
+        "feature",
+        "layer",
+        "phase",
+        "status",
+        "problem",
+        "reason",
+        "previous_observed_step",
+        "allowed_paths",
+        "required_behaviors",
+        "exclusions",
+        "verification",
+        "completion_condition",
+        "evidence",
+        "updated_at",
+        "updated_by"
+      ],
+      "properties": {
+        "step_id": { "$ref": "#/$defs/nonEmptyString" },
+        "ticket_id": { "$ref": "#/$defs/nonEmptyString" },
+        "scope": { "const": "APPLICATION" },
+        "feature": { "$ref": "#/$defs/nonEmptyString" },
+        "layer": {
+          "enum": [
+            "DOMAIN",
+            "APPLICATION",
+            "INFRASTRUCTURE",
+            "TRANSPORT",
+            "COMPOSITION",
+            "CROSS_BOUNDARY"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "RED",
+            "GREEN",
+            "REFACTOR",
+            "IMPLEMENTATION",
+            "INTEGRATION",
+            "WIRING",
+            "MIGRATION",
+            "VERIFICATION"
+          ]
+        },
+        "status": {
+          "enum": [
+            "READY_TO_START",
+            "IN_PROGRESS",
+            "AWAITING_VERIFICATION",
+            "BLOCKED"
+          ]
+        },
+        "problem": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "previous_observed_step": { "$ref": "#/$defs/nonEmptyString" },
+        "allowed_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^apps/"
+          }
+        },
+        "required_behaviors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "exclusions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "verification": {
+          "type": "object",
+          "required": ["working_directory", "command", "expected_result"],
+          "properties": {
+            "working_directory": { "$ref": "#/$defs/nonEmptyString" },
+            "command": { "$ref": "#/$defs/nonEmptyString" },
+            "expected_result": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "completion_condition": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": {
+          "enum": ["NOT_RUN", "INTERRUPTED", "MISSING", "OBSERVED", "REJECTED"]
+        },
+        "updated_at": { "$ref": "#/$defs/nonEmptyString" },
+        "updated_by": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["coding_checkpoint"] },
+      "then": {
+        "properties": {
+          "current_stage": { "const": "IMPLEMENTATION" },
+          "ticket_id": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

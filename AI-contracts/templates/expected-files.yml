@@ -1,0 +1,16 @@
+schema_version: 1
+ticket_id: ""
+design_artifact: ""
+status: PROPOSED
+reviewed_by: ""
+reviewed_at: ""
+files:
+  - path: ""
+    action: CREATE
+    responsibility: ""
+    contract_ids: []
+    acceptance_criteria_ids: []
+    permitted_content: []
+    forbidden_content: []
+    verification: []
+unplanned_file_policy: RETURN_TO_DESIGN

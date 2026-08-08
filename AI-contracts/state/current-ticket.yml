@@ -1,36 +1,33 @@
+# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-ticket_id: null
-candidate_ticket_id: TKT-W04-D01
-phase_id: P0
-milestone_id: M0
+ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+phase_id: P2
+milestone_id: M2
 capability_ids:
-  - CAP-CON-01
+  - CAP-CAT-01
 contract_ids:
   - BUS-001
-  - ARCH-001
-  - ARCH-009
-definition_of_ready_status: BLOCKED
+  - DATA-SM-001
+  - ARCH-003
+  - CCR-013
+definition_of_ready_status: NOT_EVALUATED
 execution_status: NOT_STARTED
 review_status: NOT_REVIEWED
 evidence_status: MISSING
-evidence_confidence: LOW
+evidence_confidence: NOT_EVALUATED
 learning:
-  gate_id: null
+  gate_id: LG-TKT-W05-D01
   status: NOT_EVALUATED
-  mode: null
-  topics_presented: []
+  mode: REGULAR
+  topics_presented:
+    []
   observed_gaps: []
   remediation_focus: []
   design_unlocked: false
   skeleton_unlocked: false
-  last_observation: null
-blockers:
-  - id: FG-001
-    reason: "Foundation Gate has not been verified in this control plane."
-    evidence_status: MISSING
-  - id: CCR-001
-    reason: "PC-2026.2 is in review; effective baseline remains PC-2026.1."
-    evidence_status: MISSING
+  last_observation: "NOT_EVALUATED"
+blockers: []
 remediation_action: null
-updated_at: "2026-07-26"
+updated_at: "2026-08-08"
 updated_by: Codex

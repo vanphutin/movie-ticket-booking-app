@@ -350,7 +350,71 @@ input, textarea { font: inherit; color: var(--text); }
 .callout-important { border-left-color: var(--rose); background: rgba(251, 113, 133, 0.08); }
 .callout-tip { border-left-color: var(--emerald); background: rgba(52, 211, 153, 0.08); }
 .markdown-body img { max-width: 100%; }
-.markdown-body .mermaid { display: flex; justify-content: center; margin: 1em 0; overflow-x: auto; }
+.mermaid-card {
+  margin: 1.2em 0;
+  overflow: hidden;
+  background: #0b1020;
+  border: 1px solid #262f55;
+  border-radius: 12px;
+}
+.mermaid-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 10px;
+  background: #111731;
+  border-bottom: 1px solid #262f55;
+  color: #9aa5c9;
+  font: 11.5px Consolas, monospace;
+}
+.mermaid-expand {
+  padding: 4px 9px;
+  border: 1px solid #3b4775;
+  border-radius: 6px;
+  color: #e6eaf6;
+  background: #161d3a;
+}
+.mermaid-expand:hover { background: #1d2547; border-color: #4f8cff; }
+.markdown-body .mermaid {
+  display: flex; justify-content: center;
+  padding: 16px; overflow-x: auto;
+  background: #0b1020;
+}
+.markdown-body .mermaid svg { min-width: 720px; height: auto; }
+.mermaid-error {
+  width: 100%;
+  padding: 12px 14px;
+  color: #fecdd3;
+  background: #4c0519;
+  border: 1px solid #fb7185;
+  border-radius: 8px;
+}
+.mermaid-zoom-modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column;
+  background: rgba(5, 8, 20, 0.96);
+  backdrop-filter: blur(5px);
+}
+.mermaid-zoom-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 12px 18px;
+  background: #111731; border-bottom: 1px solid #262f55;
+  color: #e6eaf6;
+}
+.mermaid-zoom-actions { display: flex; align-items: center; gap: 8px; }
+.mermaid-zoom-actions button {
+  min-width: 34px; padding: 6px 10px;
+  border: 1px solid #3b4775; border-radius: 7px;
+  background: #161d3a; color: #e6eaf6;
+}
+.mermaid-zoom-actions button:hover { background: #1d2547; border-color: #4f8cff; }
+.mermaid-zoom-value { min-width: 48px; text-align: center; font: 12px Consolas, monospace; }
+.mermaid-zoom-viewport {
+  flex: 1; min-height: 0; overflow: auto;
+  padding: 40px; background: #0b1020;
+}
+.mermaid-zoom-canvas {
+  min-width: 100%;
+}
+.mermaid-zoom-canvas svg { display: block; height: auto; margin: 0 auto; }
 
 .task-check { font-family: Consolas, monospace; margin-right: 4px; }
 

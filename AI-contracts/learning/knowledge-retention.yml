@@ -1,0 +1,48 @@
+schema_version: 1
+policy:
+  first_exposure: FULL_THEORY_FIRST
+  repeated_risky_decision: RECALL_CHECK
+  observed_misconception: TARGETED_REMEDIATION_THEORY
+  evidence_only: NO_NEW_THEORY
+  rule: A prior PASSED record is reusable only when ticket scope, decision and contracts still match.
+concepts:
+  - concept_id: AUTHORITY_AND_EVIDENCE
+    first_gate: LG-TKT-W04-D01
+    recall_gates: [LG-TKT-W05-D05, LG-TKT-W09-D05, LG-TKT-W10-D01, LG-TKT-W10-D05]
+    recall_dimensions: [authority-order, observed-vs-reported, hard-gate]
+  - concept_id: IDENTITY_SESSION_LIFECYCLE
+    first_gate: LG-TKT-W04-D02
+    recall_gates: [LG-TKT-W04-D03, LG-TKT-W04-D05, LG-TKT-W10-D03]
+    recall_dimensions: [credential-vs-session, rotation, replay]
+  - concept_id: AUTHORIZATION_OWNERSHIP
+    first_gate: LG-TKT-W04-D03
+    recall_gates: [LG-TKT-W04-D04, LG-TKT-W07-D01, LG-TKT-W07-D04, LG-TKT-W08-D05]
+    recall_dimensions: [deny-default, actor-context, resource-owner]
+  - concept_id: DATA_CONSTRAINT
+    first_gate: LG-TKT-W05-D02
+    recall_gates: [LG-TKT-W06-D02, LG-TKT-W07-D02, LG-TKT-W09-D04]
+    recall_dimensions: [invariant-layer, migration, concurrency]
+  - concept_id: IDEMPOTENCY_REPLAY
+    first_gate: LG-TKT-W06-D03
+    recall_gates: [LG-TKT-W07-D03, LG-TKT-W08-D02, LG-TKT-W08-D03, LG-TKT-W10-D02]
+    recall_dimensions: [dedup-key, same-vs-different-payload, crash-window, durable-effect]
+  - concept_id: OUTBOX_AT_LEAST_ONCE
+    first_gate: LG-TKT-W06-D03
+    recall_gates: [LG-TKT-W06-D04, LG-TKT-W06-D05, LG-TKT-W08-D02, LG-TKT-W08-D05]
+    recall_dimensions: [atomicity, relay-duplicate, consumer-dedup]
+  - concept_id: TRANSACTION_CONCURRENCY
+    first_gate: LG-TKT-W07-D02
+    recall_gates: [LG-TKT-W07-D04, LG-TKT-W07-D05, LG-TKT-W10-D02]
+    recall_dimensions: [transaction-boundary, lock-vs-constraint, deadlock, real-db-evidence]
+  - concept_id: PAYMENT_VERIFICATION
+    first_gate: LG-TKT-W08-D01
+    recall_gates: [LG-TKT-W08-D03, LG-TKT-W08-D04, LG-TKT-W08-D05, LG-TKT-W10-D03]
+    recall_dimensions: [signature, reference-amount-currency, unknown-outcome, ticket-once]
+  - concept_id: OBSERVABILITY_CONTEXT
+    first_gate: LG-TKT-W09-D02
+    recall_gates: [LG-TKT-W09-D05, LG-TKT-W10-D05]
+    recall_dimensions: [signal-choice, propagation, redaction, cardinality]
+  - concept_id: BOUNDED_OPERATIONS
+    first_gate: LG-TKT-W09-D03
+    recall_gates: [LG-TKT-W09-D04, LG-TKT-W09-D05, LG-TKT-W10-D05]
+    recall_dimensions: [readiness, timeout-retry-budget, shutdown, recovery]

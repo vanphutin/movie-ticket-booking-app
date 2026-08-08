@@ -16,6 +16,12 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 
 ---
 
+Canonical inventory và delivery disposition nằm tại
+`AI-contracts/traceability/backlog-contract-map.yml` theo CCR-005. Các path dưới đây là
+projection không có prefix `/api/v1`; `:id` tương đương `{id}`. `CORE_REQUIRED` mới chặn
+MVP release; priority không tự động cấp quyền triển khai. Staff là `POST_MVP`; toàn bộ AI
+và preferences là `STRETCH`; trailer management và payment reconcile là `CORE_OPTIONAL`.
+
 ## 6.1. Public APIs
 
 | Method | Path | Actor | Purpose | Auth | Priority | Backlog |
@@ -48,18 +54,18 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 |--------|------|-------|---------|------|----------|---------|
 | GET | `/me` | Customer | Profile hiện tại | JWT | Must | BL-012 |
 | PATCH | `/me/preferences` | Customer | Cập nhật sở thích phim | JWT | Could | S-6 |
-| POST | `/showtimes/:id/seat-holds` | Customer | Giữ ghế | JWT | Must | BL-017 |
-| DELETE | `/seat-holds/:id` | Customer | Hủy giữ ghế | JWT | Must | BL-018 |
+| POST | `/showtimes/:id/holds` | Customer | Giữ ghế | JWT | Must | BL-017 |
+| DELETE | `/holds/:id` | Customer | Hủy giữ ghế | JWT | Must | BL-018 |
 | POST | `/bookings` | Customer | Tạo booking | JWT | Must | BL-020 |
-| GET | `/bookings/my` | Customer | Lịch sử booking | JWT | Must | BL-021 |
+| GET | `/bookings` | Customer | Lịch sử booking của actor hiện tại | JWT | Must | BL-021 |
 | GET | `/bookings/:id` | Customer | Chi tiết booking | JWT | Must | BL-021 |
 | POST | `/bookings/:id/cancel` | Customer | Hủy booking | JWT | Must | BL-022 |
-| GET | `/tickets/my` | Customer | Danh sách vé | JWT | Must | BL-024 |
+| GET | `/tickets` | Customer | Danh sách vé của actor hiện tại | JWT | Must | BL-024 |
 | GET | `/tickets/:id` | Customer | Chi tiết vé | JWT | Must | BL-024 |
 
 ---
 
-## 6.4. Staff APIs
+## 6.4. Staff APIs — `POST_MVP`
 
 | Method | Path | Actor | Purpose | Auth | Priority | Backlog |
 |--------|------|-------|---------|------|----------|---------|
@@ -80,14 +86,14 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 | POST | `/admin/movies/:id/trailer/unpublish` | Admin | Unpublish trailer | JWT | Should | BL-011 |
 | POST | `/admin/cinemas` | Admin | Tạo rạp | JWT | Must | BL-006 |
 | PATCH | `/admin/cinemas/:id` | Admin | Cập nhật rạp | JWT | Must | BL-006 |
-| POST | `/admin/screens` | Admin | Tạo phòng chiếu | JWT | Must | BL-007 |
+| POST | `/admin/cinemas/:id/screens` | Admin | Tạo phòng chiếu thuộc rạp | JWT | Must | BL-007 |
 | POST | `/admin/screens/:id/seats` | Admin | Tạo layout ghế | JWT | Must | BL-007 |
-| POST | `/admin/showtimes` | Admin | Tạo suất chiếu | JWT | Must | BL-008 |
+| POST | `/admin/screens/:id/showtimes` | Admin | Tạo suất chiếu thuộc phòng | JWT | Must | BL-008 |
 | PATCH | `/admin/showtimes/:id` | Admin | Cập nhật suất chiếu | JWT | Must | BL-009 |
 | POST | `/admin/showtimes/:id/cancel` | Admin | Hủy suất chiếu | JWT | Must | BL-009 |
 | GET | `/admin/bookings` | Admin | Quản lý bookings | JWT | Must | BL-021 |
 | GET | `/admin/payments` | Admin | Quản lý payments | JWT | Must | BL-030 |
-| POST | `/admin/payments/:id/sync` | Admin | Sync payment status | JWT | Should | BL-030 |
+| POST | `/admin/payments/:id/reconcile` | Admin | Yêu cầu reconciliation payment | JWT | Should | BL-030 |
 | GET | `/admin/audit-logs` | Admin | Xem audit logs | JWT | Must | BL-043 |
 | GET | `/admin/integration-logs` | Admin | Xem integration logs | JWT | Must | BL-044 |
 
@@ -97,7 +103,7 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 
 | Method | Path | Actor | Purpose | Auth | Priority | Backlog |
 |--------|------|-------|---------|------|----------|---------|
-| POST | `/bookings/:id/payments/payos` | Customer | Tạo payment link | JWT | Must | BL-027 |
+| POST | `/bookings/:id/payments` | Customer | Tạo payment qua provider-neutral port (payOS adapter) | JWT | Must | BL-027 |
 | GET | `/payments/:id` | Customer | Xem payment status | JWT | Must | BL-030 |
 
 ---
@@ -106,20 +112,20 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 
 | Method | Path | Actor | Purpose | Auth | Priority | Backlog |
 |--------|------|-------|---------|------|----------|---------|
-| POST | `/webhooks/payos` | System (payOS) | Nhận webhook thanh toán | Signature | Must | BL-028, BL-029 |
+| POST | `/webhooks/payments/payos` | System (payOS) | Nhận webhook thanh toán | Signature | Must | BL-028, BL-029 |
 
 ---
 
-## 6.8. AI APIs
+## 6.8. AI APIs — `STRETCH`
 
 | Method | Path | Actor | Purpose | Auth | Priority | Backlog |
 |--------|------|-------|---------|------|----------|---------|
 | POST | `/ai/movie-search` | Guest/Customer | Tìm phim bằng NLP | No/JWT | Must | BL-034 |
 | POST | `/ai/recommendations` | Customer | Gợi ý phim | JWT | Could | S-1 |
 | POST | `/ai/recommendations/feedback` | Customer | Feedback gợi ý | JWT | Could | S-2 |
-| POST | `/admin/movies/:id/ai/content-draft` | Admin | AI gợi ý nội dung phim | JWT | Must | BL-037 |
-| POST | `/admin/movies/:id/ai/trailer-description` | Admin | AI gợi ý mô tả trailer | JWT | Should | BL-038 |
-| POST | `/admin/movies/:id/ai-content/apply` | Admin | Duyệt AI content | JWT | Must | BL-039 |
+| POST | `/admin/movies/:id/ai/content-drafts` | Admin | AI gợi ý nội dung phim | JWT | Must | BL-037 |
+| POST | `/admin/movies/:id/ai/trailer-description-drafts` | Admin | AI gợi ý mô tả trailer | JWT | Should | BL-038 |
+| POST | `/admin/movies/:id/ai-content/:draftId/apply` | Admin | Duyệt AI content | JWT | Must | BL-039 |
 | POST | `/admin/movies/:id/embeddings/rebuild` | Admin | Rebuild embedding 1 phim | JWT | Must | BL-035 |
 | POST | `/admin/ai/embeddings/rebuild` | Admin | Rebuild tất cả embeddings | JWT | Must | BL-035 |
 | GET | `/admin/ai/logs` | Admin | Xem AI logs | JWT | Must | BL-040 |
@@ -139,4 +145,7 @@ Các AI endpoints ở mục 6.8 là **stretch backlog**, không thuộc release 
 | Payment | 2 | 2 | 0 | 0 |
 | Webhook | 1 | 1 | 0 | 0 |
 | AI | 10 | 5 | 3 | 2 |
-| **Tổng** | **55** | **45** | **7** | **3** |
+| **Tổng** | **55** | **46** | **6** | **3** |
+
+> Số đếm 46/6/3 là số đếm thực tế của 55 rows. Số 45/7/3 trước CCR-005 là lỗi
+> tổng hợp. Delivery scope được quyết định bởi disposition, không phải chỉ bởi priority.
