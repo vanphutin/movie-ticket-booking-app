@@ -1,6 +1,6 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.9
+effective_baseline: PC-2026.10
 current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
@@ -42,6 +42,7 @@ ticket_projection:
     - CCR-009
     - CCR-010
     - CCR-011
+    - CCR-012
   execution_status: IN_PROGRESS
   evidence_confidence: HIGH
   learning:
@@ -97,6 +98,6 @@ next_action_projection:
     - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
   decided_at: "2026-07-31"
   decided_by: Codex
-updated_at: "2026-07-31"
+updated_at: "2026-08-01"
 updated_by: Codex
-update_source: "Reviewer approved CCR-011; PC-2026.9 adds the code-comment review policy without changing the D05 ticket, readiness or implementation scope."
+update_source: "Reviewer approved CCR-012; PC-2026.10 adopts typed branch naming without changing the D05 ticket, readiness or implementation scope."

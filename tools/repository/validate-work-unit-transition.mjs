@@ -36,6 +36,33 @@ const status = scalar(checkpoint, "status");
 const currentBranchResult = git(["branch", "--show-current"]);
 const currentBranch = currentBranchResult.stdout.trim();
 const normalizedTicket = currentTicket?.toLowerCase();
+const defaultBranches = new Set(["main", "master"]);
+const typedBranchPattern = /^(feature|fix|refactor|migration|docs|chore|contract)\/[a-z0-9]+(?:-[a-z0-9]+)+(?:\/[a-z0-9]+(?:-[a-z0-9]+)+)*$/;
+const isHistoricalCodexBranch = currentBranch.startsWith("codex/") &&
+  git(["show-ref", "--verify", "--quiet", `refs/remotes/origin/${currentBranch}`]).status === 0;
+
+if (
+  currentBranch &&
+  !defaultBranches.has(currentBranch) &&
+  !typedBranchPattern.test(currentBranch) &&
+  !isHistoricalCodexBranch
+) {
+  errors.push(
+    `Branch '${currentBranch}' must use a CCR-012 typed prefix; only published codex/* branches are grandfathered`
+  );
+}
+
+if (
+  /^(feature|fix|refactor|migration)\//.test(currentBranch) &&
+  currentTicket &&
+  !currentBranch.includes(normalizedTicket)
+) {
+  errors.push(`Product branch '${currentBranch}' must contain current ticket ${normalizedTicket}`);
+}
+
+if (/^contract\//.test(currentBranch) && !/^contract\/ccr-\d{3}-/.test(currentBranch)) {
+  errors.push(`Contract branch '${currentBranch}' must contain a normalized CCR ID`);
+}
 
 if (stage === "STARTUP" && currentTicket && !currentBranch.toLowerCase().includes(normalizedTicket)) {
   errors.push(`STARTUP ticket ${currentTicket} must use a matching branch; current=${currentBranch}`);
@@ -51,7 +78,7 @@ if (stage === "STARTUP" && currentTicket && checkpoint) {
   if (status !== "VERIFIED") {
     errors.push(`Publication checkpoint status must be VERIFIED; found ${status ?? "MISSING"}`);
   }
-  if (["main", "master"].includes(branch)) {
+  if (defaultBranches.has(branch)) {
     errors.push(`Publication checkpoint cannot use default branch '${branch}'`);
   }
   if (!/^https:\/\/github\.com\/[^/]+\/[^/]+\/pull\/\d+$/.test(draftPr ?? "")) {

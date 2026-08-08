@@ -18,7 +18,7 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.9
+effective_baseline: PC-2026.10
 current_stage: IMPLEMENTATION
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
@@ -35,6 +35,9 @@ completion_condition: The D04-compatible Gateway-to-Identity auth slice, Postgre
 ## Shutdown
 
 After material work:
+<<<<<<< HEAD
+
+=======
 
 =======
 effective_baseline: PC-2026.8
@@ -134,6 +137,7 @@ Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created
 
 After material work:
 
+>>>>>>> origin/main
 >>>>>>> origin/main
 >>>>>>> origin/main
 >>>>>>> origin/main
