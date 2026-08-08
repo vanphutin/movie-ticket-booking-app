@@ -23,6 +23,8 @@ export interface PreparedIdempotencyRecordInput {
 export interface RegisterAtomicallyInput {
   readonly user: CustomerUser;
   readonly passwordHash: string;
+  readonly session: { readonly id: string; readonly tokenHash: string };
+  readonly result: RegisterResult;
   readonly idempotencyRecord: PreparedIdempotencyRecordInput;
 }
 

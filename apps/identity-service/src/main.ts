@@ -4,6 +4,7 @@ import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fa
 import 'reflect-metadata';
 
 import { IdentityModule } from './bootstrap/identity.module';
+import { InternalErrorFilter } from './transport/http/internal-error.filter';
 
 function requiredPort(name: string): number {
   const value = process.env[name];
@@ -27,10 +28,19 @@ function requiredHost(name: string): string {
 }
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    IdentityModule,
-    new FastifyAdapter(),
-  );
+  const adapter = new FastifyAdapter();
+  adapter.getInstance().addHook('preParsing', (request, _reply, payload, done) => {
+    const chunks: Buffer[] = [];
+    payload.on('data', (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+    payload.on('end', () => {
+      (request as unknown as Record<string, unknown>).rawBody = Buffer.concat(chunks);
+    });
+    done(null, payload);
+  });
+
+  const app = await NestFactory.create<NestFastifyApplication>(IdentityModule, adapter);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -39,6 +49,7 @@ async function bootstrap(): Promise<void> {
       whitelist: true,
     }),
   );
+  app.useGlobalFilters(new InternalErrorFilter());
 
   await app.listen({
     host: requiredHost('IDENTITY_SERVICE_HOST'),

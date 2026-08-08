@@ -20,13 +20,20 @@ import type {
   RefreshSessionRotationPort,
   RotateSessionInput,
 } from '../../application/ports/refresh-session-rotation.port';
+import type {
+  LogoutSessionPort,
+  LogoutSessionResult,
+} from '../../application/ports/logout-session.port';
+import type { ProfileReaderPort, UserProfile } from '../../application/ports/profile-reader.port';
 
 export class AuthPersistenceAdapter
   implements
     RegistrationPersistencePort,
     CredentialReaderPort,
     LoginSessionPort,
-    RefreshSessionRotationPort
+    RefreshSessionRotationPort,
+    LogoutSessionPort,
+    ProfileReaderPort
 {
   constructor(private readonly dataSource: DataSource) {}
 
@@ -63,6 +70,11 @@ export class AuthPersistenceAdapter
           customerRole.id,
         ]);
         await manager.query(
+          `INSERT INTO refresh_sessions (id, user_id, token_hash, family_id, created_at, expires_at)
+           VALUES ($1, $2, $3, $1, NOW(), NOW() + INTERVAL '30 days')`,
+          [input.session.id, input.user.id, input.session.tokenHash],
+        );
+        await manager.query(
           `INSERT INTO registration_idempotency_records
            (operation, key_hash, fingerprint_hash, fingerprint_key_id, user_id, encrypted_response, response_key_id, response_nonce, expires_at)
            VALUES ('REGISTER', $1, $2, $3, $4, $5, $6, $7, NOW() + INTERVAL '24 hours')`,
@@ -76,7 +88,7 @@ export class AuthPersistenceAdapter
             input.idempotencyRecord.responseNonce,
           ],
         );
-        return { kind: 'created', result: { user: input.user } };
+        return { kind: 'created', result: input.result };
       });
     } catch (error: unknown) {
       if (
@@ -175,10 +187,10 @@ export class AuthPersistenceAdapter
         user_id: string;
         family_id: string;
         revoked_at: Date | null;
-        revocation_reason: string | null;
         is_expired: boolean;
         email: string;
         user_status: string;
+        revocation_reason: string | null;
       }>;
 
       const currentSession = rows[0];
@@ -253,5 +265,100 @@ export class AuthPersistenceAdapter
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async revokeFamilyAtomically(input: { tokenHash: string }): Promise<LogoutSessionResult> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const rows = (await queryRunner.query(
+        `SELECT id, family_id, revoked_at,
+                expires_at <= NOW() AS is_expired
+         FROM refresh_sessions
+         WHERE token_hash = $1
+         FOR UPDATE;`,
+        [input.tokenHash],
+      )) as Array<{
+        id: string;
+        family_id: string;
+        revoked_at: Date | null;
+        is_expired: boolean;
+      }>;
+
+      const session = rows[0];
+      if (!session) {
+        await queryRunner.rollbackTransaction();
+        return { kind: 'session_not_found' };
+      }
+
+      if (session.revoked_at !== null) {
+        await queryRunner.rollbackTransaction();
+        return { kind: 'already_revoked' };
+      }
+
+      if (session.is_expired) {
+        await queryRunner.rollbackTransaction();
+        return { kind: 'expired' };
+      }
+
+      await queryRunner.query(
+        `SELECT id
+         FROM refresh_sessions
+         WHERE family_id = $1
+         ORDER BY id
+         FOR UPDATE;`,
+        [session.family_id],
+      );
+
+      await queryRunner.query(
+        `UPDATE refresh_sessions
+         SET revoked_at = NOW(), revocation_reason = 'LOGOUT'
+         WHERE family_id = $1 AND revoked_at IS NULL;`,
+        [session.family_id],
+      );
+
+      await queryRunner.commitTransaction();
+      return { kind: 'success' };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async findProfileById(actorId: string): Promise<UserProfile | null> {
+    const rows = await this.dataSource.query<
+      {
+        id: string;
+        email: string;
+        displayName: string;
+        roles: string[];
+      }[]
+    >(
+      `
+       SELECT
+  u.id AS "id",
+  u.email_normalized AS "email",
+  u.email_normalized AS "displayName",
+  COALESCE(ARRAY_AGG(r.code) FILTER (WHERE r.code IS NOT NULL), '{}') AS "roles"
+FROM users u
+LEFT JOIN user_roles ur ON u.id = ur.user_id
+LEFT JOIN roles r ON ur.role_id = r.id
+WHERE u.id = $1 AND u.status = 'ACTIVE'
+GROUP BY u.id;
+      `,
+      [actorId],
+    );
+    const row = rows[0];
+    return row
+      ? {
+          id: row.id,
+          email: row.email,
+          displayName: row.displayName,
+          roles: row.roles,
+        }
+      : null;
   }
 }

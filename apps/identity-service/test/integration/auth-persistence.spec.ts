@@ -2,10 +2,12 @@
  * Integration tests verifying AuthPersistenceAdapter against real PostgreSQL
  * database transactions, idempotency atomicity, and login session persistence boundaries.
  */
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import type { DataSource } from 'typeorm';
 import type { CustomerUser } from '../../src/domain/user';
 import type { RegisterAtomicallyInput } from '../../src/application/ports/registration-persistence.port';
+import type { LogoutSessionPort } from '../../src/application/ports/logout-session.port';
+import type { ProfileReaderPort } from '../../src/application/ports/profile-reader.port';
 import { seedIdentity } from '../../seeds/seed-identity';
 import { AuthPersistenceAdapter } from '../../src/infrastructure/database/auth-persistence.adapter';
 import { createIdentityDataSource } from '../../src/infrastructure/database/typeorm.config';
@@ -13,6 +15,24 @@ import { createIdentityDataSource } from '../../src/infrastructure/database/type
 const TEST_DATABASE_URL =
   process.env.IDENTITY_TEST_DATABASE_URL ||
   'postgresql://movie_ticket_test:movie_ticket_test@127.0.0.1:55432/movie_ticket_test';
+
+function registrationSessionFields(): Pick<RegisterAtomicallyInput, 'session' | 'result'> {
+  const nonce = randomUUID();
+  return {
+    session: { id: randomUUID(), tokenHash: createHash('sha256').update(nonce).digest('hex') },
+    result: {
+      accessToken: `access-${nonce}`,
+      refreshToken: `refresh-${nonce}`,
+      expiresIn: 3600,
+      user: {
+        id: randomUUID(),
+        email: 'fixture-result@example.com',
+        displayName: 'Fixture Result',
+        roles: ['CUSTOMER'],
+      },
+    },
+  };
+}
 
 describe('AuthPersistenceAdapter (Integration)', () => {
   let testDataSource: DataSource;
@@ -51,6 +71,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
         roles: ['CUSTOMER'],
       },
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$winnerhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: sharedKeyHash,
         fingerprintHash: 'fp_winner_hash',
@@ -69,6 +90,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
         roles: ['CUSTOMER'],
       },
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$loserhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: sharedKeyHash,
         fingerprintHash: 'fp_loser_hash',
@@ -120,6 +142,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
         roles: ['CUSTOMER'],
       },
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$userAhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_idem_user_a',
         fingerprintHash: 'fp_user_a',
@@ -141,6 +164,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
         roles: ['CUSTOMER'],
       },
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$userBhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_idem_user_b',
         fingerprintHash: 'fp_user_b',
@@ -182,6 +206,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
         roles: ['CUSTOMER'],
       },
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$validhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_login_active_001',
         fingerprintHash: 'fp_active',
@@ -214,6 +239,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: activeUser,
       passwordHash: '$argon2id$hash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_login_session_001',
         fingerprintHash: 'fp_session',
@@ -256,6 +282,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: disabledUser,
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$disabledhash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_login_disabled_001',
         fingerprintHash: 'fp_disabled',
@@ -270,6 +297,12 @@ describe('AuthPersistenceAdapter (Integration)', () => {
       disabledUser.id,
     ]);
 
+    const sessionsBeforeLogin = await testDataSource.query<Array<{ id: string }>>(
+      'SELECT id FROM refresh_sessions WHERE user_id = $1;',
+      [disabledUser.id],
+    );
+    expect(sessionsBeforeLogin).toHaveLength(1);
+
     const disabledSession = await adapter.issueForActiveUserAtomically(disabledUser);
     expect(disabledSession).toBeNull();
 
@@ -277,7 +310,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
       'SELECT id FROM refresh_sessions WHERE user_id = $1;',
       [disabledUser.id],
     );
-    expect(dbRows).toHaveLength(0);
+    expect(dbRows).toEqual(sessionsBeforeLogin);
   });
 
   it('rotateSessionAtomically rotates valid session atomically: revokes old token, creates exactly one successor in same family without storing plaintext token', async () => {
@@ -291,6 +324,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: activeUser,
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$rotatehash',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_rotate_001',
         fingerprintHash: 'fp_rotate',
@@ -366,6 +400,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: activeUser,
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$concurrent',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_concurrent_001',
         fingerprintHash: 'fp_concurrent',
@@ -454,6 +489,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: activeUser,
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$expired',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_expired_001',
         fingerprintHash: 'fp_expired',
@@ -502,6 +538,7 @@ describe('AuthPersistenceAdapter (Integration)', () => {
     await adapter.registerAtomically({
       user: activeUser,
       passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$revoked',
+      ...registrationSessionFields(),
       idempotencyRecord: {
         keyHash: 'hash_revoked_001',
         fingerprintHash: 'fp_revoked',
@@ -537,5 +574,192 @@ describe('AuthPersistenceAdapter (Integration)', () => {
       [nextSessionId],
     );
     expect(rows).toHaveLength(0);
+  });
+
+  it('revokeFamilyAtomically revokes active refresh-token family atomically in PostgreSQL, stores LOGOUT revocation reason, and remains replay-safe on repeated calls', async () => {
+    const activeUser: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'logout_integration@example.com',
+      displayName: 'Logout Integration User',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: activeUser,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$logouthash',
+      ...registrationSessionFields(),
+      idempotencyRecord: {
+        keyHash: 'hash_logout_integration_001',
+        fingerprintHash: 'fp_logout',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_logout',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_logout',
+      },
+    });
+
+    const session = await adapter.issueForActiveUserAtomically(activeUser);
+    expect(session).not.toBeNull();
+    const rawToken = session!.refreshToken;
+    const tokenHash = createHash('sha256').update(rawToken).digest('hex');
+
+    const logoutPort = adapter as unknown as LogoutSessionPort;
+    const result = await logoutPort.revokeFamilyAtomically({ tokenHash });
+
+    expect(result).toEqual({ kind: 'success' });
+
+    const rows = await testDataSource.query<
+      Array<{ revoked_at: Date | null; revocation_reason: string | null }>
+    >('SELECT revoked_at, revocation_reason FROM refresh_sessions WHERE token_hash = $1;', [
+      tokenHash,
+    ]);
+
+    expect(rows[0]?.revoked_at).not.toBeNull();
+    expect(rows[0]?.revocation_reason).toBe('LOGOUT');
+
+    // Repeated logout must be replay-safe
+    const repeatedResult = await logoutPort.revokeFamilyAtomically({ tokenHash });
+    expect(repeatedResult).toEqual({ kind: 'already_revoked' });
+  });
+
+  it('revokeFamilyAtomically leaves unrelated refresh-token family untouched', async () => {
+    const user1: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'user1_logout@example.com',
+      displayName: 'User One',
+      roles: ['CUSTOMER'],
+    };
+
+    const user2: CustomerUser = {
+      id: '22222222-2222-4222-a222-222222222222',
+      email: 'user2_logout@example.com',
+      displayName: 'User Two',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: user1,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$u1hash',
+      ...registrationSessionFields(),
+      idempotencyRecord: {
+        keyHash: 'hash_u1',
+        fingerprintHash: 'fp_u1',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_u1',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_u1',
+      },
+    });
+
+    await adapter.registerAtomically({
+      user: user2,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$u2hash',
+      ...registrationSessionFields(),
+      idempotencyRecord: {
+        keyHash: 'hash_u2',
+        fingerprintHash: 'fp_u2',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_u2',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_u2',
+      },
+    });
+
+    const session1 = await adapter.issueForActiveUserAtomically(user1);
+    const session2 = await adapter.issueForActiveUserAtomically(user2);
+
+    const tokenHash1 = createHash('sha256').update(session1!.refreshToken).digest('hex');
+    const tokenHash2 = createHash('sha256').update(session2!.refreshToken).digest('hex');
+
+    const logoutPort = adapter as unknown as LogoutSessionPort;
+    await logoutPort.revokeFamilyAtomically({ tokenHash: tokenHash1 });
+
+    const rows2 = await testDataSource.query<Array<{ revoked_at: Date | null }>>(
+      'SELECT revoked_at FROM refresh_sessions WHERE token_hash = $1;',
+      [tokenHash2],
+    );
+
+    expect(rows2[0]?.revoked_at).toBeNull();
+  });
+
+  it('findProfileById retrieves active customer profile with exact public allowlisted fields and no sensitive credentials', async () => {
+    const activeUser: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'profile_active@example.com',
+      displayName: 'Profile Active User',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: activeUser,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$secretpasswordhash',
+      ...registrationSessionFields(),
+      idempotencyRecord: {
+        keyHash: 'hash_profile_001',
+        fingerprintHash: 'fp_profile',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_profile',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_profile',
+      },
+    });
+
+    const profileReader = adapter as unknown as ProfileReaderPort;
+    const profile = await profileReader.findProfileById(activeUser.id);
+
+    expect(profile).not.toBeNull();
+    expect(profile).toEqual({
+      id: activeUser.id,
+      email: activeUser.email,
+      displayName: activeUser.email,
+      roles: ['CUSTOMER'],
+    });
+
+    const keys = Object.keys(profile!);
+    expect(keys.sort()).toEqual(['displayName', 'email', 'id', 'roles']);
+    expect(profile).not.toHaveProperty('password');
+    expect(profile).not.toHaveProperty('passwordHash');
+    expect(profile).not.toHaveProperty('password_hash');
+    expect(profile).not.toHaveProperty('token');
+    expect(profile).not.toHaveProperty('tokenHash');
+  });
+
+  it('findProfileById returns null for missing actor ID', async () => {
+    const profileReader = adapter as unknown as ProfileReaderPort;
+    const profile = await profileReader.findProfileById('99999999-9999-4999-a999-999999999999');
+
+    expect(profile).toBeNull();
+  });
+
+  it('findProfileById returns null when user status is disabled or inconsistent', async () => {
+    const disabledUser: CustomerUser = {
+      id: '11111111-1111-4111-a111-111111111111',
+      email: 'profile_disabled@example.com',
+      displayName: 'Disabled Profile User',
+      roles: ['CUSTOMER'],
+    };
+
+    await adapter.registerAtomically({
+      user: disabledUser,
+      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$disabledhash',
+      ...registrationSessionFields(),
+      idempotencyRecord: {
+        keyHash: 'hash_profile_disabled_001',
+        fingerprintHash: 'fp_profile_disabled',
+        fingerprintKeyId: 'k1',
+        encryptedResponse: 'enc_profile_disabled',
+        responseKeyId: 'rk1',
+        responseNonce: 'nonce_profile_disabled',
+      },
+    });
+
+    await testDataSource.query("UPDATE users SET status = 'DISABLED' WHERE id = $1;", [
+      disabledUser.id,
+    ]);
+
+    const profileReader = adapter as unknown as ProfileReaderPort;
+    const profile = await profileReader.findProfileById(disabledUser.id);
+
+    expect(profile).toBeNull();
   });
 });

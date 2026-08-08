@@ -1,5 +1,15 @@
 import type { CustomerUser } from '../domain/user';
 
+export interface TrustedInvocationContext {
+  readonly actor: {
+    readonly id: string;
+    readonly roles: readonly string[];
+  } | null;
+  readonly requestId: string;
+  readonly correlationId: string;
+  readonly issuedAt: number;
+}
+
 export interface RegisterCommand {
   readonly email: string;
   readonly password: string;
@@ -8,6 +18,9 @@ export interface RegisterCommand {
 }
 
 export interface RegisterResult {
+  readonly accessToken: string;
+  readonly refreshToken: string;
+  readonly expiresIn: number;
   readonly user: CustomerUser;
 }
 
@@ -19,6 +32,7 @@ export interface LoginCommand {
 export interface LoginResult {
   readonly accessToken: string;
   readonly refreshToken: string;
+  readonly expiresIn: number;
   readonly user: CustomerUser;
 }
 
@@ -29,5 +43,6 @@ export interface RefreshCommand {
 export interface RefreshResult {
   readonly accessToken: string;
   readonly refreshToken: string;
+  readonly expiresIn: number;
   readonly user: CustomerUser;
 }

@@ -12,6 +12,9 @@
     "test": "npm run test:unit",
     "test:unit": "jest --config jest.config.ts --runInBand --passWithNoTests",
     "test:integration": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/**/test/integration/**/*.spec.ts\"",
+    "test:migration": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/identity-service/test/integration/migration-seed.spec.ts\"",
+    "test:concurrency": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/identity-service/test/integration/refresh-concurrency.spec.ts\"",
+    "test:e2e": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/**/test/e2e/**/*.e2e-spec.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
@@ -20,8 +23,10 @@
     "@nestjs/core": "11.1.28",
     "@nestjs/platform-fastify": "11.1.28",
     "@nestjs/typeorm": "^11.0.3",
+    "@noble/hashes": "^2.2.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.2",
+    "hash-wasm": "^4.12.0",
     "pg": "^8.22.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",

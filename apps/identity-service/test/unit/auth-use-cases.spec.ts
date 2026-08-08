@@ -1,17 +1,20 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /**
- * Unit tests for RegisterUseCase, LoginUseCase, and RefreshUseCase verifying domain policy,
- * password redaction, idempotency replay, payload conflict rejection, and valid token rotation.
+ * Unit tests for RegisterUseCase, LoginUseCase, RefreshUseCase, and LogoutUseCase verifying domain policy,
+ * password redaction, idempotency replay, payload conflict rejection, valid token rotation, and family revocation.
  */
 import {
   IdempotencyKeyConflictError,
   InvalidCredentialsError,
   InvalidRefreshTokenError,
   RegistrationConflictError,
+  UnauthorizedError,
 } from '../../src/application/auth.errors';
 import type {
   LoginCommand,
   RefreshCommand,
   RegisterCommand,
+  TrustedInvocationContext,
 } from '../../src/application/auth.models';
 import type {
   AuthTokenPort,
@@ -25,6 +28,14 @@ import type {
   LoginSessionPort,
 } from '../../src/application/ports/login-session.port';
 import type {
+  LogoutSessionPort,
+  LogoutSessionResult,
+} from '../../src/application/ports/logout-session.port';
+import type {
+  ProfileReaderPort,
+  UserProfile,
+} from '../../src/application/ports/profile-reader.port';
+import type {
   RefreshRotationResult,
   RefreshSessionRotationPort,
 } from '../../src/application/ports/refresh-session-rotation.port';
@@ -35,13 +46,25 @@ import type {
 import { RegisterUseCase } from '../../src/application/register.use-case';
 import { LoginUseCase } from '../../src/application/login.use-case';
 import { RefreshUseCase } from '../../src/application/refresh.use-case';
+import type { LogoutCommand } from '../../src/application/logout.use-case';
+import { LogoutUseCase } from '../../src/application/logout.use-case';
+import { GetProfileUseCase } from '../../src/application/get-profile.use-case';
 
 describe('RegisterUseCase', () => {
   let persistence: jest.Mocked<RegistrationPersistencePort>;
   let passwordHasher: jest.Mocked<PasswordHasher>;
   let idGenerator: jest.Mocked<IdGenerator>;
   let idempotencyCrypto: jest.Mocked<IdempotencyCryptoPort>;
+  let refreshTokenCrypto: jest.Mocked<RefreshTokenCryptoPort>;
+  let authToken: jest.Mocked<AuthTokenPort>;
   let useCase: RegisterUseCase;
+
+  const mockContext: TrustedInvocationContext = {
+    actor: null,
+    requestId: 'test-req-id',
+    correlationId: 'test-req-id',
+    issuedAt: 1700000000,
+  };
 
   beforeEach(() => {
     passwordHasher = {
@@ -65,6 +88,9 @@ describe('RegisterUseCase', () => {
         responseNonce: 'nonce1',
       }),
       decryptResult: jest.fn().mockResolvedValue({
+        accessToken: 'replayed-access-token',
+        refreshToken: 'replayed-refresh-token',
+        expiresIn: 3600,
         user: {
           id: 'f2ad40a8-7d46-4a45-b4ec-fda33d17da8b',
           email: 'user@example.com',
@@ -76,12 +102,33 @@ describe('RegisterUseCase', () => {
 
     persistence = {
       findCompletedByKey: jest.fn().mockResolvedValue(null),
-      registerAtomically: jest.fn(({ user }) =>
-        Promise.resolve({ kind: 'created' as const, result: { user } }),
+      registerAtomically: jest.fn(({ result }) =>
+        Promise.resolve({ kind: 'created' as const, result }),
       ),
     };
 
-    useCase = new RegisterUseCase(passwordHasher, idGenerator, persistence, idempotencyCrypto);
+    refreshTokenCrypto = {
+      hashRefreshToken: jest.fn(),
+      prepareRefreshToken: jest.fn().mockReturnValue({
+        rawToken: 'register-refresh-token',
+        tokenHash: 'register-refresh-hash',
+      }),
+    };
+    authToken = {
+      signAccessToken: jest.fn().mockResolvedValue({
+        accessToken: 'register-access-token',
+        expiresIn: 3600,
+      }),
+    };
+
+    useCase = new RegisterUseCase(
+      passwordHasher,
+      idGenerator,
+      persistence,
+      idempotencyCrypto,
+      refreshTokenCrypto,
+      authToken,
+    );
   });
 
   it('registers a customer without exposing or persisting the plaintext password', async () => {
@@ -92,7 +139,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_001_valid',
     };
 
-    const result = await useCase.execute(command);
+    const result = await useCase.execute(command, mockContext);
 
     expect(result.user.email).toBe('user@example.com');
     expect(result.user.displayName).toBe('John Doe');
@@ -140,7 +187,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_001_valid',
     };
 
-    const result = await useCase.execute(command);
+    const result = await useCase.execute(command, mockContext);
 
     expect(idempotencyCrypto.hashKey).toHaveBeenCalledWith('idem_key_001_valid');
     expect(persistence.findCompletedByKey).toHaveBeenCalledWith(
@@ -183,7 +230,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_001_valid',
     };
 
-    const conflictPromise = useCase.execute(command);
+    const conflictPromise = useCase.execute(command, mockContext);
 
     await expect(conflictPromise).rejects.toThrow(IdempotencyKeyConflictError);
     await expect(conflictPromise).rejects.toMatchObject({
@@ -220,7 +267,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_001_valid',
     };
 
-    const duplicatePromise = useCase.execute(command);
+    const duplicatePromise = useCase.execute(command, mockContext);
 
     await expect(duplicatePromise).rejects.toThrow(RegistrationConflictError);
     await expect(duplicatePromise).rejects.toMatchObject({
@@ -246,9 +293,12 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_transaction_001',
     };
 
-    await useCase.execute(command);
+    await useCase.execute(command, mockContext);
 
     expect(idempotencyCrypto.encryptResult).toHaveBeenCalledWith({
+      accessToken: 'register-access-token',
+      refreshToken: 'register-refresh-token',
+      expiresIn: 3600,
       user: {
         id: 'f2ad40a8-7d46-4a45-b4ec-fda33d17da8b',
         email: 'user@example.com',
@@ -305,7 +355,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_race_001',
     };
 
-    const result = await useCase.execute(command);
+    const result = await useCase.execute(command, mockContext);
 
     expect(persistence.findCompletedByKey).toHaveBeenNthCalledWith(
       1,
@@ -349,7 +399,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_race_001',
     };
 
-    const racePromise = useCase.execute(command);
+    const racePromise = useCase.execute(command, mockContext);
 
     await expect(racePromise).rejects.toThrow(IdempotencyKeyConflictError);
     await expect(racePromise).rejects.toMatchObject({
@@ -383,7 +433,7 @@ describe('RegisterUseCase', () => {
       idempotencyKey: 'idem_key_race_001',
     };
 
-    const nullWinnerPromise = useCase.execute(command);
+    const nullWinnerPromise = useCase.execute(command, mockContext);
 
     await expect(nullWinnerPromise).rejects.toThrow(IdempotencyKeyConflictError);
     await expect(nullWinnerPromise).rejects.toMatchObject({
@@ -399,6 +449,13 @@ describe('LoginUseCase', () => {
     email: 'user@example.com',
     displayName: 'John Doe',
     roles: ['CUSTOMER'] as const,
+  };
+
+  const mockContext: TrustedInvocationContext = {
+    actor: null,
+    requestId: 'test-req-id',
+    correlationId: 'test-req-id',
+    issuedAt: 1700000000,
   };
 
   it('authenticates valid credentials and issues access token and refresh token session', async () => {
@@ -422,7 +479,10 @@ describe('LoginUseCase', () => {
     };
 
     const authTokenPort: jest.Mocked<AuthTokenPort> = {
-      signAccessToken: jest.fn().mockResolvedValue('jwt_access_token_abc'),
+      signAccessToken: jest.fn().mockResolvedValue({
+        accessToken: 'jwt_access_token_abc',
+        expiresIn: 3600,
+      }),
     };
 
     const command: LoginCommand = {
@@ -437,7 +497,7 @@ describe('LoginUseCase', () => {
       authTokenPort,
     );
 
-    const result = await loginUseCase.execute(command);
+    const result = await loginUseCase.execute(command, mockContext);
 
     expect(credentialReader.findCredentialByEmail).toHaveBeenCalledWith('user@example.com');
     expect(passwordHasher.verify).toHaveBeenCalledWith('Password123!', 'hashed_password_123');
@@ -446,6 +506,7 @@ describe('LoginUseCase', () => {
     expect(result).toMatchObject({
       accessToken: 'jwt_access_token_abc',
       refreshToken: 'opaque_refresh_token_xyz',
+      expiresIn: 3600,
       user: mockUser,
     });
     expect(result).not.toHaveProperty('password');
@@ -486,7 +547,9 @@ describe('LoginUseCase', () => {
       authTokenPort,
     );
 
-    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    await expect(loginUseCase.execute(command, mockContext)).rejects.toThrow(
+      InvalidCredentialsError,
+    );
     expect(passwordHasher.verify).not.toHaveBeenCalled();
     expect(loginSessionPort.issueForActiveUserAtomically).not.toHaveBeenCalled();
     expect(authTokenPort.signAccessToken).not.toHaveBeenCalled();
@@ -522,7 +585,9 @@ describe('LoginUseCase', () => {
       authTokenPort,
     );
 
-    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    await expect(loginUseCase.execute(command, mockContext)).rejects.toThrow(
+      InvalidCredentialsError,
+    );
     expect(passwordHasher.verify).not.toHaveBeenCalled();
   });
 
@@ -560,13 +625,22 @@ describe('LoginUseCase', () => {
       authTokenPort,
     );
 
-    await expect(loginUseCase.execute(command)).rejects.toThrow(InvalidCredentialsError);
+    await expect(loginUseCase.execute(command, mockContext)).rejects.toThrow(
+      InvalidCredentialsError,
+    );
     expect(loginSessionPort.issueForActiveUserAtomically).not.toHaveBeenCalled();
     expect(authTokenPort.signAccessToken).not.toHaveBeenCalled();
   });
 });
 
 describe('RefreshUseCase', () => {
+  const mockContext: TrustedInvocationContext = {
+    actor: null,
+    requestId: 'test-req-id',
+    correlationId: 'test-req-id',
+    issuedAt: 1700000000,
+  };
+
   it('rotates valid refresh token and issues new access token and refresh token', async () => {
     const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
       hashRefreshToken: jest.fn().mockReturnValue('hashed_old_refresh_token'),
@@ -589,7 +663,10 @@ describe('RefreshUseCase', () => {
     };
 
     const fakeTokenPort: jest.Mocked<AuthTokenPort> = {
-      signAccessToken: jest.fn().mockResolvedValue('signed_new_access_token'),
+      signAccessToken: jest.fn().mockResolvedValue({
+        accessToken: 'signed_new_access_token',
+        expiresIn: 3600,
+      }),
     };
 
     const fakeIdGenerator: jest.Mocked<IdGenerator> = {
@@ -607,7 +684,7 @@ describe('RefreshUseCase', () => {
       refreshToken: 'opaque_old_refresh_token_001',
     };
 
-    const result = await useCase.execute(command);
+    const result = await useCase.execute(command, mockContext);
 
     expect(fakeCryptoPort.hashRefreshToken).toHaveBeenCalledWith('opaque_old_refresh_token_001');
     expect(fakeCryptoPort.prepareRefreshToken).toHaveBeenCalled();
@@ -626,6 +703,7 @@ describe('RefreshUseCase', () => {
     expect(result).toEqual({
       accessToken: 'signed_new_access_token',
       refreshToken: 'new_opaque_refresh_token_002',
+      expiresIn: 3600,
       user: {
         id: '11111111-1111-4111-a111-111111111111',
         email: 'user@example.com',
@@ -670,7 +748,7 @@ describe('RefreshUseCase', () => {
         fakeIdGenerator,
       );
 
-      const action = useCase.execute({ refreshToken: 'invalid_opaque_token' });
+      const action = useCase.execute({ refreshToken: 'invalid_opaque_token' }, mockContext);
 
       await expect(action).rejects.toThrow(InvalidRefreshTokenError);
       expect(fakeTokenPort.signAccessToken).not.toHaveBeenCalled();
@@ -684,4 +762,122 @@ describe('RefreshUseCase', () => {
       });
     },
   );
+});
+
+describe('LogoutUseCase', () => {
+  const mockContext: TrustedInvocationContext = {
+    actor: null,
+    requestId: 'test-req-id',
+    correlationId: 'test-req-id',
+    issuedAt: 1700000000,
+  };
+
+  it('revokes active refresh token family atomically when given a valid refresh token', async () => {
+    const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
+      hashRefreshToken: jest.fn().mockReturnValue('hashed_logout_token_001'),
+      prepareRefreshToken: jest.fn(),
+    };
+
+    const fakeLogoutPort: jest.Mocked<LogoutSessionPort> = {
+      revokeFamilyAtomically: jest.fn().mockResolvedValue({ kind: 'success' }),
+    };
+
+    const useCase = new LogoutUseCase(fakeCryptoPort, fakeLogoutPort);
+
+    const command: LogoutCommand = {
+      refreshToken: 'opaque_logout_token_001',
+    };
+
+    await useCase.execute(command, mockContext);
+
+    expect(fakeCryptoPort.hashRefreshToken).toHaveBeenCalledWith('opaque_logout_token_001');
+    expect(fakeLogoutPort.revokeFamilyAtomically).toHaveBeenCalledWith({
+      tokenHash: 'hashed_logout_token_001',
+    });
+    expect(fakeLogoutPort.revokeFamilyAtomically).not.toHaveBeenCalledWith(
+      expect.objectContaining({ refreshToken: 'opaque_logout_token_001' }),
+    );
+  });
+
+  it('succeeds gracefully as a no-op when logout is repeated or session is already revoked', async () => {
+    const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
+      hashRefreshToken: jest.fn().mockReturnValue('hashed_logout_token_002'),
+      prepareRefreshToken: jest.fn(),
+    };
+
+    const fakeLogoutPort: jest.Mocked<LogoutSessionPort> = {
+      revokeFamilyAtomically: jest.fn().mockResolvedValue({ kind: 'already_revoked' }),
+    };
+
+    const useCase = new LogoutUseCase(fakeCryptoPort, fakeLogoutPort);
+
+    const command: LogoutCommand = {
+      refreshToken: 'opaque_logout_token_002',
+    };
+
+    await expect(useCase.execute(command, mockContext)).resolves.toBeUndefined();
+    expect(fakeCryptoPort.hashRefreshToken).toHaveBeenCalledWith('opaque_logout_token_002');
+    expect(fakeLogoutPort.revokeFamilyAtomically).toHaveBeenCalledWith({
+      tokenHash: 'hashed_logout_token_002',
+    });
+  });
+
+  it.each<[LogoutSessionResult]>([[{ kind: 'session_not_found' }], [{ kind: 'expired' }]])(
+    'throws InvalidRefreshTokenError when session revocation fails with outcome %p without leaking internal details',
+    async (failureOutcome) => {
+      const fakeCryptoPort: jest.Mocked<RefreshTokenCryptoPort> = {
+        hashRefreshToken: jest.fn().mockReturnValue('hashed_invalid_logout_token'),
+        prepareRefreshToken: jest.fn(),
+      };
+
+      const fakeLogoutPort: jest.Mocked<LogoutSessionPort> = {
+        revokeFamilyAtomically: jest.fn().mockResolvedValue(failureOutcome),
+      };
+
+      const useCase = new LogoutUseCase(fakeCryptoPort, fakeLogoutPort);
+
+      const action = useCase.execute({ refreshToken: 'invalid_logout_token' }, mockContext);
+
+      await expect(action).rejects.toThrow(InvalidRefreshTokenError);
+
+      await action.catch((err: unknown) => {
+        expect(err).toBeInstanceOf(InvalidRefreshTokenError);
+        expect(err).not.toHaveProperty('tokenHash');
+        expect((err as Error).message).not.toContain('hashed_invalid_logout_token');
+      });
+    },
+  );
+});
+
+describe('GetProfileUseCase', () => {
+  it('TRUSTED_ACTOR_ID_SELECTS_ALLOWLISTED_SELF_PROFILE', async () => {
+    const validActorId = '11111111-1111-4111-a111-111111111111';
+    const mockProfile: UserProfile = {
+      id: validActorId,
+      email: 'user@example.com',
+      displayName: 'Trusted User',
+      roles: ['CUSTOMER'],
+    };
+
+    const fakeProfileReader: jest.Mocked<ProfileReaderPort> = {
+      findProfileById: jest.fn().mockResolvedValue(mockProfile),
+    };
+
+    const useCase = new GetProfileUseCase(fakeProfileReader);
+    const result = await useCase.execute(validActorId);
+
+    expect(result).toEqual(mockProfile);
+    expect(fakeProfileReader.findProfileById).toHaveBeenCalledWith(validActorId);
+  });
+
+  it('MISSING_PROFILE_MAPS_TO_NEUTRAL_UNAUTHORIZED_ERROR', async () => {
+    const missingActorId = '99999999-9999-4999-a999-999999999999';
+    const fakeProfileReader: jest.Mocked<ProfileReaderPort> = {
+      findProfileById: jest.fn().mockResolvedValue(null),
+    };
+
+    const useCase = new GetProfileUseCase(fakeProfileReader);
+
+    await expect(useCase.execute(missingActorId)).rejects.toThrow(UnauthorizedError);
+  });
 });

@@ -38,7 +38,9 @@ export interface IdempotencyCryptoPort {
 }
 
 export interface AuthTokenPort {
-  readonly signAccessToken: (user: LoginResult['user']) => Promise<string>;
+  readonly signAccessToken: (
+    user: LoginResult['user'],
+  ) => Promise<Readonly<{ accessToken: string; expiresIn: number }>>;
 }
 export interface PreparedRefreshToken {
   readonly rawToken: string;
