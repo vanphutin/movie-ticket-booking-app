@@ -1,0 +1,53 @@
+schema_version: 1
+evidence_id: EVD-CCR-013-ROLLOUT-2026-08-04
+change_request_id: CCR-013
+ticket_id: TKT-W04-D05
+baseline_under_test: PC-2026.10
+effective_baseline: PC-2026.11
+scope: CONTROL_PLANE_ONLY
+prediction: >-
+  The rollout records PENDING_BOOTSTRAP, prohibits develop creation and new remote stack
+  layers during bootstrap, enforces a normal maximum stack depth of two, synchronizes
+  PC-2026.11 projections and changes no application path.
+working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+environment:
+  os: Windows
+  shell: PowerShell
+  observed_at: "2026-08-04"
+verification_runs:
+  - command: node tools/control-plane/validate-integration-state.mjs
+    exit_code: 0
+    observation: >-
+      Integration-state validation passed for PENDING_BOOTSTRAP, develop as the daily
+      integration branch and maximum normal stack depth two; negative fixtures rejected
+      premature develop creation, new bootstrap stack layers and depth above policy.
+  - command: npm run check:docs
+    exit_code: 0
+    observation: >-
+      Mermaid syntax passed for 11 diagrams, generated projections synchronized and the
+      repository consistency boundary passed including integration-state validation.
+  - command: node tools/repository/validate-repository.mjs
+    exit_code: 0
+    observation: >-
+      Repository consistency passed generated projections, control plane, integration
+      state, Mermaid, work-unit publication and local-reference boundaries.
+scope_review:
+  application_source_modified_by_rollout: false
+  application_test_modified_by_rollout: false
+  application_migration_modified_by_rollout: false
+  package_dependency_modified_by_rollout: false
+artifact_paths:
+  - AI-contracts/changes/CCR-013-integration-merge-and-stacked-pr-policy.md
+  - AI-contracts/expected-files/2026-08-04-ccr-013-rollout-expected-files.yml
+  - AI-contracts/state/integration-state.yml
+  - AI-contracts/schemas/integration-state.schema.json
+  - tools/control-plane/fixtures/integration-state-cases.json
+  - tools/control-plane/validate-integration-state.mjs
+  - AI-contracts/state/current-work.yml
+  - AI-contracts/state/contract-status.yml
+limitation: >-
+  This evidence verifies local control-plane rollout only. It does not assert current
+  GitHub PR status, CI success, review resolution, mergeability, a completed bootstrap,
+  an authorized merge or completion of the D05 nonce checkpoint.
+observation_source: OBSERVED
+confidence: HIGH

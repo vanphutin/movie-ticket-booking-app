@@ -1,0 +1,45 @@
+schema_version: 1
+change_request_id: CCR-013
+effective_baseline: PC-2026.11
+status: PENDING_BOOTSTRAP
+daily_integration_branch: develop
+release_branch: main
+new_work_base: origin/develop
+bootstrap_base: origin/main
+max_stack_depth: 2
+direct_push_prohibited:
+  - develop
+  - main
+bootstrap:
+  current_step: REMEDIATE_EXISTING_STACK
+  completion_condition: >-
+    PRs 3 through 6 are processed in approved dependency order, eligible prerequisites
+    and D05 are squash-merged under observed gates, CCR-012 is retargeted and verified,
+    and develop is created from fetched origin/main with equal starting SHAs.
+  develop_creation_authorized: false
+  new_remote_stack_layer_authorized: false
+legacy_stack_snapshot:
+  observed_at: "2026-08-01"
+  source: CCR-013_APPROVAL_RECORD
+  pull_requests:
+    - number: 3
+      parent: null
+      child: 4
+      state_at_observation: DRAFT
+    - number: 4
+      parent: 3
+      child: 5
+      state_at_observation: DRAFT
+    - number: 5
+      parent: 4
+      child: 6
+      state_at_observation: DRAFT
+    - number: 6
+      parent: 5
+      child: null
+      state_at_observation: DRAFT
+limitations:
+  - Historical four-layer stack is grandfathered only for merge-first bootstrap.
+  - No PR mergeability, CI success or reviewer verdict is inferred from this state.
+updated_at: "2026-08-04"
+updated_by: Codex

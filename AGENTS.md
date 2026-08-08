@@ -2,6 +2,11 @@
 
 ## Authority and startup
 
+Also read `AI-contracts/state/integration-state.yml` before branch, PR, ticket-transition
+or merge work. Under CCR-013, `PENDING_BOOTSTRAP` prohibits creating `develop` or adding
+a remote stack layer. Do not infer CI, review, mergeability or integration success from
+an existing branch or PR.
+
 Before project work, read in this order:
 
 1. `AI-contracts/state/current-work.yml`.

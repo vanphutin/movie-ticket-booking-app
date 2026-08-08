@@ -1,0 +1,77 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+change_request_id: CCR-013
+design_artifact: AI-contracts/changes/CCR-013-integration-merge-and-stacked-pr-policy.md
+status: APPROVED
+reviewed_by: Van Phu Tin
+reviewed_at: "2026-08-01"
+approval_evidence: Explicit approval recorded in CCR-013
+scope_statement: >-
+  Control-plane-only rollout of develop integration, gated squash merge, bounded stacked
+  PR and bootstrap policy. Product behavior and the D05 lifecycle remain unchanged.
+files:
+  - path: AI-contracts/changes/CCR-013-integration-merge-and-stacked-pr-policy.md
+    action: CREATE
+    responsibility: Approved integration and merge policy
+  - path: AI-contracts/expected-files/2026-08-04-ccr-013-rollout-expected-files.yml
+    action: CREATE
+    responsibility: Exact rollout boundary
+  - path: AI-contracts/state/integration-state.yml
+    action: CREATE
+    responsibility: Canonical bootstrap, base and bounded-stack state
+  - path: AI-contracts/schemas/integration-state.schema.json
+    action: CREATE
+    responsibility: Machine-readable integration-state contract
+  - path: tools/control-plane/fixtures/integration-state-cases.json
+    action: CREATE
+    responsibility: Positive and negative integration policy fixtures
+  - path: tools/control-plane/validate-integration-state.mjs
+    action: CREATE
+    responsibility: Mechanical baseline, bootstrap and stack-depth validation
+  - path: tools/repository/validate-repository.mjs
+    action: MODIFY
+    responsibility: Invoke integration-state validation
+  - path: AI-contracts/state/contract-status.yml
+    action: MODIFY
+    responsibility: Activate PC-2026.11 and record CCR-013 approval
+  - path: AI-contracts/state/current-work.yml
+    action: MODIFY
+    responsibility: Project effective baseline and CCR-013 without changing D05 lifecycle
+  - path: AI-contracts/state/README.md
+    action: MODIFY
+    responsibility: Define integration-state authority and bootstrap rule
+  - path: AI-contracts/09-next-task-decision-policy.md
+    action: MODIFY
+    responsibility: Require prerequisite integration before dependent work
+  - path: AI-contracts/15-git-and-pr-workflow.md
+    action: MODIFY
+    responsibility: Define develop base, squash gates, stack limit and bootstrap exception
+  - path: AGENTS.md
+    action: MODIFY
+    responsibility: Enforce integration-state startup reconciliation
+  - path: AI-contracts/evidence/2026-08-04-ccr-013-rollout-evidence.yml
+    action: CREATE
+    responsibility: Reproducible rollout evidence
+  - path: AI-contracts/state/current-ticket.yml
+    action: MODIFY
+    responsibility: Generated current-ticket projection
+  - path: AI-contracts/README.md
+    action: MODIFY
+    responsibility: Generated current-status projection
+  - path: CODEX-CONTEXT.md
+    action: MODIFY
+    responsibility: Generated compact handoff projection
+  - path: docs/plan/movie-ticket-booking-master-plan.md
+    action: MODIFY
+    responsibility: Generated baseline projection
+  - path: docs/plan/movie-ticket-booking-master-plan.html
+    action: MODIFY
+    responsibility: Generated baseline projection
+  - path: docs-viewer/docs-data.js
+    action: MODIFY
+    responsibility: Generated documentation viewer projection
+explicitly_excluded_paths:
+  - apps/**
+  - AI-contracts/contracts/**
+  - AI-contracts/openapi/**
+unplanned_file_policy: RETURN_TO_DESIGN

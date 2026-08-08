@@ -1,5 +1,17 @@
 # Runtime state model
 
+## Integration state under CCR-013
+
+`integration-state.yml` is the canonical record for the integration base, bootstrap
+status and stack-depth policy. While status is `PENDING_BOOTSTRAP`, `develop` creation
+and new remote stack layers are prohibited. The existing PR 3 through PR 6 chain is
+grandfathered only for the approved merge-first bootstrap and grants no new merge
+authority.
+
+A dependent work unit requires its prerequisite to be `VERIFIED`, have all required
+checks pass and be squash-merged into `develop`. Independent work units may proceed from
+the same fetched `origin/develop`. Missing remote evidence is never treated as success.
+
 State files là machine-readable observation/control records, không phải kế hoạch hoặc
 template. Chỉ cập nhật từ evidence, review hoặc explicit decision có nguồn.
 

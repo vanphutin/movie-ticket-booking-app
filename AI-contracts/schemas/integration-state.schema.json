@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "integration-state.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "change_request_id",
+    "effective_baseline",
+    "status",
+    "daily_integration_branch",
+    "release_branch",
+    "new_work_base",
+    "bootstrap_base",
+    "max_stack_depth",
+    "bootstrap",
+    "updated_at",
+    "updated_by"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "change_request_id": { "const": "CCR-013" },
+    "effective_baseline": { "const": "PC-2026.11" },
+    "status": { "enum": ["PENDING_BOOTSTRAP", "ACTIVE", "BLOCKED"] },
+    "daily_integration_branch": { "const": "develop" },
+    "release_branch": { "const": "main" },
+    "new_work_base": { "const": "origin/develop" },
+    "bootstrap_base": { "const": "origin/main" },
+    "max_stack_depth": { "const": 2 }
+  },
+  "additionalProperties": true
+}

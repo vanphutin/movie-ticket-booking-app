@@ -1,5 +1,11 @@
 # Next-task decision policy
 
+Under CCR-013, a dependent ticket is not eligible merely because its prerequisite has a
+pushed branch or Draft PR. The prerequisite must be `VERIFIED`, have required checks
+pass and be squash-merged into `develop`. During `PENDING_BOOTSTRAP`, preserve the
+current ticket and follow `AI-contracts/state/integration-state.yml`; do not create
+`develop`, add a remote stack layer or infer integration from historical PR existence.
+
 Chọn đúng một action đầu tiên thỏa thứ tự:
 
 Trong `IMPLEMENTATION`, trước khi chọn action mới cho `apps/**`, resume

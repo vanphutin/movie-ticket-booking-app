@@ -1,0 +1,8 @@
+{
+  "cases": [
+    { "id": "valid-pending-bootstrap", "status": "PENDING_BOOTSTRAP", "maxStackDepth": 2, "developCreationAuthorized": false, "newRemoteStackLayerAuthorized": false, "expectedValid": true },
+    { "id": "reject-develop-during-bootstrap", "status": "PENDING_BOOTSTRAP", "maxStackDepth": 2, "developCreationAuthorized": true, "newRemoteStackLayerAuthorized": false, "expectedValid": false },
+    { "id": "reject-stack-layer-during-bootstrap", "status": "PENDING_BOOTSTRAP", "maxStackDepth": 2, "developCreationAuthorized": false, "newRemoteStackLayerAuthorized": true, "expectedValid": false },
+    { "id": "reject-depth-above-policy", "status": "ACTIVE", "maxStackDepth": 3, "developCreationAuthorized": true, "newRemoteStackLayerAuthorized": true, "expectedValid": false }
+  ]
+}

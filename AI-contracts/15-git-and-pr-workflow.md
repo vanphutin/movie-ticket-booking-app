@@ -1,5 +1,22 @@
 # Git and PR workflow
 
+## CCR-013 integration and merge policy
+
+- After bootstrap, new work units start from fetched `origin/develop` and normally open
+  PRs to `develop`; milestone release branches start from `develop` and target `main`.
+- Direct pushes to `develop` and `main` are prohibited.
+- Normal stacks contain at most one parent and one child. A child records its parent,
+  base, dependency reason, merge order and unstack condition; it never merges first.
+- Codex may squash-merge only when the PR is non-Draft, conflict-free, correctly based,
+  scope-valid, acceptance-reviewed `VERIFIED`, green on all required checks, free of
+  blocking findings/threads, synchronized and permitted by branch protection without
+  administrative bypass.
+- Merge authority does not authorize force-push, direct push, review dismissal, branch
+  deletion, tagging, deployment, release publication or history rewriting.
+- While `integration-state.yml#status` is `PENDING_BOOTSTRAP`, no new `develop` branch or
+  remote stack layer may be created. The historical PR 3 through PR 6 chain is handled
+  only through the approved merge-first bootstrap.
+
 ## Branch and history
 
 1. Branch theo ticket: `feature/<ticket-id>-slug` hoặc `fix/<ticket-id>-slug`.
