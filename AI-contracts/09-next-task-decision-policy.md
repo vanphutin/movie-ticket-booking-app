@@ -2,6 +2,13 @@
 
 Chọn đúng một action đầu tiên thỏa thứ tự:
 
+Trong `IMPLEMENTATION`, trước khi chọn action mới cho `apps/**`, resume
+`current-work.yml#coding_checkpoint` nếu checkpoint hợp lệ và chưa hoàn thành. Checkpoint
+chỉ phân rã ticket-level `next_action`; nó không phải một action cạnh tranh và không được
+dùng để mở ticket, file hoặc behavior ngoài authority đã review. Nếu checkpoint mâu thuẫn
+ticket, stage, expected-files, branch, diff hoặc evidence, dừng coding và reconcile drift
+theo authority order.
+
 1. Security/data-loss blocker.
 2. Contract violation.
 3. Learning remediation đang active cho current ticket/finding.

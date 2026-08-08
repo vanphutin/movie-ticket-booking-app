@@ -1,0 +1,1025 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+checkpoint: REGISTRATION_PERSISTENCE_AND_IDEMPOTENCY
+verified_by: Codex
+verified_at: "2026-08-02"
+status: COMPLETE
+
+environment:
+  os: Windows
+  runtime: Node.js v20
+  database: PostgreSQL 16 (via Docker Compose apps/docker-compose.test.yml)
+  working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+
+evidence_items:
+  - id: EVI-D05-UNIT-TESTS
+    description: Unit test coverage for RegisterUseCase, Domain Invariants, Idempotency Replay, Payload Conflict, and Password Redaction
+    prediction: All unit tests in auth-use-cases.spec.ts pass cleanly without plaintext password leakage.
+    command: npm --prefix apps run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+    environment: Node.js v20 / Jest 29
+    exit_code: 0
+    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (8 tests passed, 0 failed)"
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Unit tests use in-memory mocks for ports and do not verify real PostgreSQL transaction boundaries.
+
+  - id: EVI-D05-INTEGRATION-TESTS
+    description: PostgreSQL 16 integration evidence for race conditions, single winner atomicity, and duplicate email transaction rollback
+    prediction: Concurrent registration requests with identical Idempotency-Key yield exactly 1 winner, zero orphan records, and clean replay.
+    command: npm --prefix apps run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp
+    environment: PostgreSQL 16 Docker / TypeORM QueryRunner
+    exit_code: 0
+    observation: "PASS identity-service/test/integration/auth-persistence.spec.ts (2 tests passed: 1 race winner, 1 duplicate email rollback with 0 orphan records)"
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Scope is strictly limited to Registration Persistence & Idempotency. Login, Refresh Token rotation, Logout, and API Gateway HTTP proxy flows are not yet verified in this checkpoint."
+
+  - id: EVI-D05-LOGOUT-RED
+    description: Clean RED unit evidence for replay-safe logout application behavior
+    prediction: Existing register, login and refresh tests pass while new typed logout tests fail only because LogoutUseCase behavior is intentionally not implemented.
+    command: npm run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 1
+    observation: "CLEAN RED observed: 16 tests passed and 4 LogoutUseCase tests failed only at the intentional 'Method not implemented.' boundary; no import, compilation, configuration or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Unit tests use controlled ports and do not verify PostgreSQL locking, transaction atomicity or retained-token replay behavior.
+
+  - id: EVI-D05-LOGOUT-GREEN
+    description: Clean GREEN unit evidence for replay-safe logout application behavior
+    prediction: Logout hashes the raw refresh token before persistence, treats an already-revoked logout as a successful no-op and maps unknown or expired sessions to InvalidRefreshTokenError without regressing existing auth behavior.
+    command: npm run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 0
+    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (20 tests passed, 0 failed: 8 register, 4 login, 4 refresh and 4 logout)."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: The application port was verified with Jest mocks only; the TypeORM adapter and real PostgreSQL replay-safe logout transaction remain unverified.
+
+  - id: EVI-D05-LOGOUT-INTEGRATION-RED
+    description: Clean RED PostgreSQL evidence for replay-safe logout persistence behavior
+    prediction: All existing PostgreSQL integration tests pass while the new logout tests fail only because AuthPersistenceAdapter does not implement the logout port.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker
+    exit_code: 1
+    observation: "CLEAN RED observed: 10 existing integration tests passed and 2 logout integration tests failed only because revokeFamilyAtomically is not implemented on AuthPersistenceAdapter."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: No logout persistence behavior is proven until the GREEN implementation passes the same PostgreSQL tests; transport behavior remains outside this checkpoint.
+
+  - id: EVI-D05-LOGOUT-INTEGRATION-GREEN
+    description: Clean GREEN PostgreSQL evidence and self-review for replay-safe logout persistence
+    prediction: All PostgreSQL integration tests pass after AuthPersistenceAdapter implements transactional logout, persists LOGOUT revocation, preserves unrelated families and retains verified refresh-reuse behavior.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker
+    exit_code: 0
+    observation: "PASS identity-service/test/integration/auth-persistence.spec.ts (12 tests passed, 0 failed); format:check and typecheck also exited 0. Self-review observed QueryRunner transaction ownership, expiry classification, stable ORDER BY id family locking, LOGOUT revocation persistence, rollback on exceptions and unconditional release."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: The logout cases prove sequential replay and unrelated-family isolation but do not contain a deterministically synchronized concurrent logout contender test; HTTP transport and Gateway behavior remain unverified.
+
+  - id: EVI-D05-PROFILE-RED
+    description: Clean RED unit evidence for trusted self-profile application behavior
+    prediction: Existing auth use-case tests pass while new typed GetProfileUseCase tests fail only because the allowlisted profile behavior is intentionally not implemented.
+    command: npm run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 1
+    observation: "CLEAN RED observed: 20 existing register, login, refresh and logout tests passed; 4 GetProfileUseCase tests failed only at the intentional 'Method not implemented.' boundary with no import, compilation, configuration or fixture failure."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Controlled-port unit tests do not prove the TypeORM profile query allowlist, trusted internal HTTP actor context or public Gateway /me behavior.
+
+  - id: EVI-D05-PROFILE-GREEN
+    description: Clean GREEN unit evidence for trusted self-profile application behavior
+    prediction: GetProfileUseCase reads only by trusted actor ID, returns the typed allowlisted profile and maps missing state to UnauthorizedError without regressing existing auth use cases.
+    command: npm run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 0
+    observation: "PASS identity-service/test/unit/auth-use-cases.spec.ts (24 tests passed, 0 failed); format:check and typecheck also exited 0. Self-review observed actorId as the only use-case input and no framework or infrastructure dependency."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: The controlled ProfileReaderPort does not prove the PostgreSQL query selects only allowlisted columns or handles missing/inconsistent persisted state.
+
+  - id: EVI-D05-PROFILE-INTEGRATION-RED
+    description: Clean RED PostgreSQL evidence for allowlisted trusted self-profile persistence
+    prediction: Existing PostgreSQL integration tests pass while new profile-reader tests fail only because AuthPersistenceAdapter does not implement ProfileReaderPort.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker
+    exit_code: 1
+    observation: "CLEAN RED observed: 12 existing integration tests passed and 3 profile-reader tests failed only because findProfileById is not implemented on AuthPersistenceAdapter; no import, compilation, configuration or database bootstrap failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: No real profile allowlist behavior is proven until the GREEN adapter implementation passes the same PostgreSQL tests; HTTP trusted-actor propagation remains outside this checkpoint.
+
+  - id: EVI-D05-PROFILE-INTEGRATION-GREEN
+    description: Clean GREEN PostgreSQL evidence for allowlisted trusted self-profile persistence
+    prediction: AuthPersistenceAdapter returns only the public profile allowlist for an active actor, returns null for missing or disabled state and preserves all existing auth persistence behavior.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker
+    exit_code: 0
+    observation: "PASS identity-service/test/integration/auth-persistence.spec.ts (15 tests passed, 0 failed); format:check and typecheck also exited 0. Self-review observed explicit id/email/displayName/roles selection with no SELECT *, password or refresh-session field in findProfileById."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: PostgreSQL evidence does not prove the internal HTTP controller receives only authenticated trusted actor context or that the public Gateway rejects spoofed actor headers.
+
+  - id: EVI-D05-INTERNAL-AUTH-CONTRACT
+    description: Shared DTO-independent internal authentication contract implementation evidence
+    prediction: The auth-contract library exports canonical signed-input, minimal trusted-context, header-name and bounded failure types without raw body or framework/service-private dependencies.
+    command: npm run typecheck
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / TypeScript 5
+    exit_code: 0
+    observation: "Typecheck and format:check exited 0. Self-review observed canonicalQuery and bodySha256 binding, method/path/audience/actor/requestId/issuedAt/nonce/keyId fields, internal auth/correlation header constants, minimal actor context and no NestJS, HTTP framework, TypeORM or service-private import."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Type-level evidence does not prove deterministic canonicalization, HMAC correctness, tamper rejection, freshness enforcement or nonce replay prevention.
+
+  - id: EVI-D05-GATEWAY-INTERNAL-SIGNING-RED
+    description: Clean RED integration evidence for deterministic versioned Gateway internal-request signing
+    prediction: Existing PostgreSQL integration tests pass while the new Gateway signing tests fail only because deterministic versioned HMAC production behavior is intentionally not implemented.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker
+    exit_code: 1
+    observation: "CLEAN RED observed after apps/docker-compose.test.yml PostgreSQL became healthy: 15 existing Identity persistence integration tests passed and 3 Gateway signing tests failed only at the intentional 'Not implemented: versioned deterministic HMAC signer' boundary; no import, compilation, configuration or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: The RED tests do not prove HMAC correctness until GREEN. Raw body non-exposure is currently enforced structurally because CanonicalSignedInput carries only bodySha256; the runtime assertion directly checks signing-secret non-exposure but does not pass a raw-body fixture.
+
+  - id: EVI-D05-GATEWAY-INTERNAL-SIGNING-GREEN
+    description: Clean GREEN integration evidence and self-review for deterministic versioned Gateway internal-request signing
+    prediction: All integration tests pass with an unambiguous length-prefixed D03 signing input, stable known-good HMAC output, complete protected-field binding and no signing-secret or raw-body exposure.
+    command: "npm run test:integration; $integrationExit = $LASTEXITCODE; npm run typecheck; $typecheckExit = $LASTEXITCODE; npm run format:check; $formatExit = $LASTEXITCODE; Get-FileHash api-gateway/src/infrastructure/security/internal-request-hmac-signer.adapter.ts -Algorithm SHA256; Get-FileHash api-gateway/test/integration/internal-request-signing.spec.ts -Algorithm SHA256"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker
+    exit_code: 0
+    observation: "PASS: 19 integration tests passed across 2 suites; typecheck and format:check exited 0. Pre/post-run SHA-256 hashes were unchanged for the signer adapter (78552A64A5B2A758F981FB420BF3BC5EBF78C160E1440A9E8DF41123AB2C592B) and signing spec (3282065A8B18AC1CE7B69EF0CED3C8979A5DFB44007DD64A6F5132C985F33978). Self-review observed fixed-order UTF-8 byte-length prefixes, role sorting/de-duplication, bodySha256 rather than raw body, HMAC-SHA-256 base64url output and an independent known-good header literal."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Gateway signing evidence does not prove Identity-side constant-time verification, audience/key acceptance policy, freshness enforcement or nonce replay prevention.
+
+  - id: EVI-D05-IDENTITY-INTERNAL-VERIFIER-RED
+    description: Clean RED unit evidence for Identity-side D03 internal-request verification
+    prediction: Existing Identity unit tests pass while the five verifier behavior tests fail only because the verifier implementation is intentionally absent.
+    command: npm run test:unit
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 1
+    observation: "CLEAN RED observed: 24 existing auth use-case tests passed and 5 InternalRequestVerifierAdapter tests failed only at the intentional 'Not implemented: internal request verifier adapter' boundary; no import, compilation, configuration or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: RED evidence proves test reachability and the intended failure boundary only; it does not prove D03 canonical-byte verification, audience/key policy, freshness enforcement or constant-time comparison until GREEN.
+
+  - id: EVI-D05-IDENTITY-INTERNAL-VERIFIER-GREEN
+    description: Clean GREEN unit evidence and self-review for strict Identity-side D03 internal-request verification
+    prediction: All Identity unit tests pass with exact Gateway-compatible canonical bytes, fail-closed audience/key policy, strict header parsing, bounded freshness and constant-time equal-length signature comparison.
+    command: "npm run test:unit; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 0
+    observation: "PASS: 29 unit tests passed across 2 suites; typecheck and format:check exited 0. Self-review observed Gateway-compatible D03 UTF-8 byte-length canonicalization, strict rejection of missing/malformed/duplicate/unknown header fields, safe-integer issued-at parsing, bounded audience/key acceptance, equal-length timingSafeEqual signature comparison and a minimal TrustedRequestContext. Verified file hashes: verifier FD44EF87DB4BD3E6E10108E2C97F6F857C6561F5BC795AAF88E7AC784941B1B9; unit spec 57EF3EC47F23A841551E3D2F9AADC98A4EB457F91D41AA1F45875FB9A7938014."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Unit evidence does not prove atomic nonce claiming, replay rejection, nonce-store failure handling, HTTP guard behavior or live Gateway-to-Identity transport.
+
+  - id: EVI-D05-IDENTITY-INTERNAL-NONCE-RED
+    description: Clean RED PostgreSQL integration evidence for atomic single-use internal nonce claims
+    prediction: Existing integration tests pass while the five nonce-store behavior tests fail only because atomic claim behavior is intentionally not implemented.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed after PostgreSQL became healthy: 19 existing integration tests passed and 5 InternalNonceStoreAdapter tests failed at the intentional 'Not implemented: internal nonce store adapter' boundary; no import, compilation, configuration, database bootstrap or fixture failure occurred. The RED specification covers complete nonce identity, persisted SHA-256 hash, replay single-record invariant, five contenders with exactly one expected winner, explicit expiry/reclaim behavior and fail-closed store failure."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove the PostgreSQL behavior until GREEN. Concurrent promises are launched together but do not yet include a test-only database barrier; final GREEN self-review must confirm real overlapping claims rather than sequential pool execution. Verified file hashes: entity B7D7CCEF439CF506C75EBE95D2B424ED17B3B2DAF906E9869D686C31ECBD3406; adapter 3B6FE3BDE9F4D88EBC0B1AB4851B5F1A5FABDA5C76026B3EEB548B1FBD541A42; integration spec 39B911BBC497BCDD1B26821B062C8569582952738E2A5B0E95B2F93C8BD4C7C1."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-NONCE-GREEN
+    description: Clean GREEN PostgreSQL evidence and self-review for atomic single-use internal nonce claims
+    prediction: All integration tests pass with one persisted winner per audience/nonce hash, replay rejection, expiry reclaim and fail-closed storage errors; typecheck and format also pass.
+    command: "npm run test:integration; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 24 integration tests passed across 3 suites; typecheck and format:check exited 0. The nonce concurrency test installed a test-only PostgreSQL BEFORE INSERT delay trigger, observed at least two independent active INSERT sessions through pg_stat_activity, then observed exactly one winner, four losers and one persisted row. Production adapter contains no test hook, hashes raw nonce with SHA-256, uses the audience/nonce_hash primary key with INSERT ON CONFLICT DO NOTHING, reclaims only expired rows and maps storage errors to fail-closed rejection."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The integration fixture creates and drops its own nonce table and test-only trigger; it does not prove the reviewed production migration, cleanup scheduling, internal guard wiring or HTTP transport. Verified file hashes: entity B7D7CCEF439CF506C75EBE95D2B424ED17B3B2DAF906E9869D686C31ECBD3406; adapter 36370E74BDFF8475B1A8502562C4E002911BB457B309ECA7E2D3B8C8E5A6B29E; integration spec 9817FA2292D62C66A607F443DB2176D2F72AFB7992164DCDFD0B779F12643878."
+
+  - id: EVI-D05-IDENTITY-AUTH-MIGRATION-RED
+    description: Clean RED PostgreSQL evidence for clean and upgrade-safe Identity auth schema migration
+    prediction: The migration fixture boots successfully; clean and upgrade tests fail only because production up() is intentionally unimplemented, while the safe-failure boundary remains observable.
+    command: npm run test:migration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: PostgreSQL fixture booted; 2 clean/upgrade migration tests failed only at 'IDENTITY_AUTH_SCHEMA_MIGRATION_NOT_IMPLEMENTED: RED phase intentional boundary'; 1 safe-failure/down-boundary test passed. No import, compilation, configuration, connection or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove schema creation, upgrade preservation, named constraints, indexes or production down behavior until GREEN. Verified file hashes: migration 72CB0E4567AED96C2331CFED56282E617CDE764B7418DF34C5E9140372E981FA; migration spec 4BF4DF3F896E7FA7D494F30778BE25B4FCE68F6064D627995562109E56AA3B16."
+
+  - id: EVI-D05-IDENTITY-AUTH-MIGRATION-GREEN
+    description: Clean GREEN PostgreSQL evidence and self-review for clean, upgrade-safe and forward-only Identity auth migration
+    prediction: Clean creation, compatible upgrade preservation, named schema objects, nonce composite identity and non-destructive forward-only down behavior pass; typecheck and format also pass.
+    command: "npm run test:migration; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 4 migration tests passed; typecheck and format:check exited 0. Clean schema creation, compatible users upgrade with sentinel preservation, named constraints/indexes and nonce composite identity were observed. down() is explicitly forward-only and rejected without executing destructive SQL; both clean-created schema and pre-existing empty/data tables remained intact after the rejected down request."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The migration test invokes the class directly rather than a packaged migration CLI and does not yet prove idempotent seed execution, the separate refresh-session migration or deployment rollback orchestration. Verified file hashes: migration 95BCE97D8A07E9AB731FD777C71D65CA256E322AF813ABFD35B6E210554D3B92; migration spec D81295B25EB0350E667A340D4D44FC56DC84BDBEEA9D41D27CEFA577291F7181."
+
+  - id: EVI-D05-IDENTITY-CUSTOMER-ROLE-SEED-RED
+    description: Clean RED PostgreSQL evidence for minimal idempotent Customer-role seed
+    prediction: Existing migration tests pass while first-run, repeat-run and preservation seed tests fail only because Customer-role seed behavior is intentionally unimplemented.
+    command: npm run test:migration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 4 existing migration tests passed; 3 Customer-role seed behavior tests failed only at 'IDENTITY_CUSTOMER_ROLE_SEED_NOT_IMPLEMENTED: RED phase intentional boundary'; the database-failure rejection test passed. No import, compilation, configuration, connection or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove idempotent seed behavior until GREEN. The failure test currently proves rejection only; GREEN self-review must confirm the original DataSource/query failure is propagated rather than replaced by a generic seed error. Verified file hashes: seed C3D0F189E2FF21A1989E1124E4446D2A72C9CC6425B685486E79962011B4ED18; migration-seed spec 84E7F98784814F847E019DDDABD10493522E7EB7E9EB24B63E445325165468C8."
+
+  - id: EVI-D05-IDENTITY-CUSTOMER-ROLE-SEED-GREEN
+    description: Clean GREEN PostgreSQL evidence for minimal idempotent Customer-role seed
+    prediction: Migration and seed tests pass with exactly one stable Customer role, existing role preservation, zero seeded users/credentials and original DataSource failures propagated; typecheck and format also pass.
+    command: "npm run test:migration; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 8 migration/seed tests passed; typecheck and format:check exited 0. Seed uses one INSERT ON CONFLICT DO NOTHING statement, creates exactly one CUSTOMER role on first run, remains stable after a second run, preserves an existing custom description, leaves users empty and allows the original DataSource query rejection to propagate."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Evidence invokes the seed function directly and does not prove packaged CLI/bootstrap wiring, the separate refresh-session migration, guard composition or HTTP transport. Verified file hashes: seed 4C9FF8BD49929A8E392F713732CB5116A4A723F30E6DBADE4E04061D7BB21C9E; migration-seed spec 84E7F98784814F847E019DDDABD10493522E7EB7E9EB24B63E445325165468C8."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-NONCE-GREEN
+    description: Clean GREEN PostgreSQL integration evidence and self-review for atomic single-use internal nonce claims
+    prediction: All 24 integration tests pass; production adapter has zero test-only hooks; test-only Postgres trigger and pg_stat_activity query confirm >= 2 active database sessions running INSERT simultaneously at the insertion boundary before release, with exactly 1 winner and 1 physical record persisted.
+    command: npm run test:integration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 24 integration tests passed across 3 suites; typecheck and format:check exited 0. Production InternalNonceStoreAdapter remains 100% clean with no test-only hook parameters. Integration spec uses a test-only BEFORE INSERT Postgres trigger with pg_sleep(0.3) to keep sessions in insertion execution, observing active backend sessions via pg_stat_activity (activeCount >= 2) before release. Exactly 1 winner succeeded, 4 lost, and 1 physical row was persisted."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: Nonce store evidence verifies PostgreSQL claim atomicity and retention; HTTP auth guard wiring and live Gateway-to-Identity transport remain to be integrated in subsequent checkpoints.
+
+  - id: EVI-D05-IDENTITY-REFRESH-SESSION-MIGRATION-RED
+    description: Clean RED PostgreSQL evidence for the second forward-only Identity refresh-session migration
+    prediction: Existing migration and seed tests pass; the new clean-schema and state-preservation tests fail only because the second production migration is intentionally unimplemented; the forward-only down boundary passes.
+    command: npm run test:migration
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 9 of 11 migration/seed tests passed, including all 8 existing tests and the new forward-only down test. The 2 new clean-schema and existing-user-state-preservation tests failed only at 'IDENTITY_REFRESH_SESSION_MIGRATION_NOT_IMPLEMENTED: RED phase intentional boundary'; no import, compilation, configuration, connection or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves test reachability and the intentional failure boundary only; it does not prove refresh-session schema creation, constraints, indexes or state preservation until GREEN. Verified file hashes: migration E5CDD65ED9EE1691AC104442BA8F36B0DC56F503415215AF8813C5303C9D396C; migration-seed spec D16F174290694E469243E9CBBA1C90EFDD9E10E4446704508F46EDCDF33D9DEA."
+
+  - id: EVI-D05-IDENTITY-REFRESH-SESSION-MIGRATION-GREEN
+    description: Clean GREEN PostgreSQL evidence and self-review for the second forward-only Identity refresh-session migration
+    prediction: All migration/seed tests pass for clean refresh-session creation, state preservation, constraints, metadata, indexes and non-destructive forward-only down behavior; typecheck and format also pass.
+    command: "npm run test:migration; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: all 11 migration/seed tests passed; typecheck and format:check exited 0. Self-review observed the refresh_sessions UUID primary key, local user FK with cascade, unique token hash, family linkage, revocation reason/time, expiry check, user/family indexes and an explicitly rejecting forward-only down() with no destructive SQL. Existing user and role sentinel data remained intact."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The migration is invoked directly by the PostgreSQL test fixture rather than a packaged deployment runner. It does not prove deterministic concurrent refresh overlap, production rollout orchestration or HTTP guard/transport behavior. Verified file hashes: migration 9E0505B10EE68A4D0CAB9EF16771683B6588E7E7F11A3664FE3216D6DE4ED6FE; migration-seed spec D16F174290694E469243E9CBBA1C90EFDD9E10E4446704508F46EDCDF33D9DEA."
+
+  - id: EVI-D05-IDENTITY-REFRESH-CONCURRENCY-RED
+    description: Clean RED PostgreSQL evidence for deterministic concurrent refresh rotation and reuse detection
+    prediction: The dedicated test reaches two real rotation calls and fails only because deterministic PostgreSQL lock-overlap observation is intentionally absent; existing migration and integration behavior remains intact.
+    command: "npm run test:concurrency; npm run test:migration; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: the dedicated concurrency test initialized real PostgreSQL state, completed both AuthPersistenceAdapter rotation calls and failed only at 'EXPECTED_DETERMINISTIC_LOCK_OVERLAP_NOT_OBSERVED: RED phase intentional concurrency boundary'. All 11 migration tests passed. In the full integration run, the other 35 tests across auth persistence, migration/seed, internal nonce and Gateway signing passed; only the same intentional concurrency boundary failed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove actual transaction overlap because lockOverlapObserved is intentionally false. GREEN must use test-only PostgreSQL synchronization/observation, avoid production hooks and retain exact final-family assertions. Verified file hashes: package 1F18FCD264E8B16664EFCBF6253B3DAF50CD3EA20ADFE48FF34FB7E3E7B25BA8; concurrency spec FE739722652B7534906F58CEAABDA3DAD1C3CC88A6A9F736B6C126B39A145335."
+
+  - id: EVI-D05-IDENTITY-REFRESH-CONCURRENCY-GREEN-ATTEMPT-01
+    description: Insufficient GREEN attempt for deterministic PostgreSQL refresh concurrency observation
+    prediction: The dedicated test passes only when two independent PostgreSQL refresh transactions are observed overlapping at the lock boundary, with one rotation, one replay and no active successor.
+    command: "npm run test:concurrency; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "Commands passed: 1 concurrency test, typecheck and format:check. Self-review did not accept the overlap proof: observePostgresLockContention selects sessions regardless of state and returns true for rows.length >= 2, so idle pooled sessions whose last query contains refresh_sessions can produce a false positive without a contemporaneous lock wait. Test-only trigger/function cleanup is present and no production test hook was found."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Exit 0 is not sufficient evidence of the required overlap. The observer must identify the two relevant backend sessions and require contemporaneous active execution/lock-wait evidence, rather than row count or historical idle query text."
+
+  - id: EVI-D05-IDENTITY-REFRESH-CONCURRENCY-GREEN
+    description: Clean GREEN PostgreSQL evidence for deterministic concurrent refresh rotation and reuse handling
+    prediction: The dedicated test observes contemporaneous active/lock-waiting PostgreSQL refresh sessions, produces one rotation and one replay outcome, leaves no active successor and passes without production test hooks.
+    command: "npm run test:concurrency; npm run typecheck; npm run format:check; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: the dedicated concurrency test passed after the observer excluded idle sessions and required either a PostgreSQL lock wait or two distinct active sessions. The test-only BEFORE UPDATE delay trigger created an observable contention window, both adapter calls completed with the required rotation/replay outcome, and the final family had zero active successors. Typecheck and format passed; the full integration run passed 36 tests across 5 suites. The trigger and function are removed in finally, and source inspection found no production test hook."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The overlap proof is local PostgreSQL 16 integration evidence using a test-only delay trigger; it does not claim production load characteristics, distributed-process timing or live HTTP guard behavior. Verified concurrency-spec hash: 9CBB36A90E6F85E180F26701D5FAA50DE21ABA5E3B8769B90783E4EB57E7B03A."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED-ATTEMPT-01
+    description: Insufficient RED attempt for the Identity internal-auth HTTP guard seam
+    prediction: Live transport requests reach the planned Identity HTTP guard seam and the four behavior cases fail only because guard composition is intentionally unimplemented, while existing suites remain green.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run test:unit; npm run test:integration; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / TypeScript 5 / Prettier / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "The four proposed guard cases failed only at 'IDENTITY_INTERNAL_AUTH_GUARD_NOT_IMPLEMENTED: RED phase intentional boundary'. Regression evidence passed: 29 unit tests, 36 integration tests, typecheck and format. Self-review did not accept CLEAN RED because the test calls InternalAuthGuard.canActivate directly using a fabricated ExecutionContext and undefined verifier/nonce dependencies; no live HTTP request, Nest guard pipeline or business-use-case sentinel is exercised. The production skeleton also uses untyped any dependencies."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "This attempt proves only direct class reachability, not the approved transport seam or rejection-before-use-case behavior. RED must exercise an actual Nest/Fastify request pipeline with typed controlled verifier and nonce seams and a sentinel handler/use case that remains uncalled on rejection. Verified hashes: package 7B54DCEA6F2DEA3C391C74DB2CD51AC523359D7374C264F34932A005D0BA7722; guard 489D8DC7989FF9F21B09718B8F3C65D4206703C2CFEF003D7E75AB2F758D9A0F; E2E spec DAD39299DE687BBDB226DACC88F3AAC7770E6D516601E46E76750AD846A2F78A."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED-ATTEMPT-02
+    description: Insufficient RED attempt with live Nest/Fastify pipeline but uncontrolled dependency seams
+    prediction: Four independently controlled HTTP cases reach the Nest guard pipeline, rejected cases leave the sentinel handler uncalled, and failures occur only at the intentionally unimplemented composition boundary.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run lint"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint
+    exit_code: 1
+    observation: "The four HTTP injections reached the real Nest/Fastify guard pipeline and returned 500 at 'IDENTITY_INTERNAL_AUTH_GUARD_NOT_IMPLEMENTED'; the sentinel handler remained uncalled for rejected cases. Typecheck passed. CLEAN RED was not accepted because verifier and nonce providers are empty objects, so the cases cannot independently control verify/claim outcomes and all fail only because canActivate throws unconditionally. Lint also failed with 26 repository errors, including relevant errors for async-without-await/unused context in the guard and unused import, missing return type, explicit any and unsafe request access in the E2E spec."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The next RED revision must supply typed controlled verifier and nonce doubles with observable calls/outcomes, use a typed request extension, and retain live HTTP plus sentinel assertions. Unrelated existing lint findings remain outside this checkpoint. Verified hashes: guard B74A0F36D4B18089E60A99BC0DCBBA1EDC8A14D7B605345871D2A2B057CB974A; E2E spec 1127CDF216C4F6524430D65447B81A284C719CDA2C933C0A0B40F806E554D183."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED-ATTEMPT-03
+    description: Insufficient RED attempt with controlled doubles but effective-contract drift
+    prediction: Typed controlled doubles and canonical D03/D05 request vocabulary independently specify missing, invalid, replay and accepted HTTP behavior while the guard remains intentionally unimplemented.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint
+    exit_code: 1
+    observation: "All four live HTTP cases failed at the intentional guard boundary and typecheck passed. Controlled Jest functions and a typed Fastify request extension existed. CLEAN RED was not accepted because requests used x-internal-auth rather than the effective INTERNAL_AUTH_HEADER value x-internal-gateway-auth; verifier outcomes and valid-response expectations used audience/keyId/issuedAt instead of the contract TrustedRequestContext fields actor/requestId/correlationId/issuedAt; and the doubles were not statically constrained to the real verify/claim signatures. Scoped lint reported three relevant errors."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "This attempt was verified while the filesystem sandbox prevented canonical recording; it is now recorded without changing its historical observation. Verified hashes: guard B74A0F36D4B18089E60A99BC0DCBBA1EDC8A14D7B605345871D2A2B057CB974A; E2E spec 06881785892285A1E222514A41D22DFFCBF14C27397A0F33BE964AAA4ED752CF."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED-ATTEMPT-04
+    description: Nearly clean RED attempt with live HTTP and contract-shaped controlled outcomes
+    prediction: The RED specification uses canonical contract constants and statically safe controlled seams, makes mandatory verify-before-claim assertions, and fails only at the intentional guard boundary.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint
+    exit_code: 1
+    observation: "All four live HTTP cases failed only at IDENTITY_INTERNAL_AUTH_GUARD_NOT_IMPLEMENTED; scoped lint and typecheck exited 0. The request extension and verifier outcome now use the real TrustedRequestContext shape, and cases configure verify/claim outcomes and assertions. CLEAN RED was not accepted because the header is still a duplicated string rather than imported INTERNAL_AUTH_HEADER, mocks are created with 'as unknown as jest.Mocked<...>' rather than a structurally typed method Pick, and verify-before-claim assertions are wrapped in conditionals that can silently skip."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Replace the duplicated header with the shared constant, remove unsafe mock casts through method-level structural typing, and make call-order assertions unconditional after required call assertions. Verified hashes: guard 4292E0523FAF22E76947ACF9A8988360F268B13A620FC041AE547C1832774BF5; E2E spec 43C9E63C26A01050872A10245F6C6ECC480483D67E47E5A2D605987B2DDE3304."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED-ATTEMPT-05
+    description: Nearly clean RED attempt with shared header and mandatory order checks but remaining unsafe casts
+    prediction: The HTTP specification fails only at the intentional guard boundary and contains no unsafe cast, optional assertion or scoped lint finding.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint
+    exit_code: 1
+    observation: "All four live HTTP cases failed only at IDENTITY_INTERNAL_AUTH_GUARD_NOT_IMPLEMENTED and typecheck exited 0. The test now imports INTERNAL_AUTH_HEADER, declares method-level jest.Mocked<Pick<...>> doubles and performs unconditional verify-before-claim expectations. CLEAN RED was not accepted because both Nest useValue entries cast through unknown to full adapter/port types, invocation order values are forced with 'as number', and scoped lint reports one unused eslint-disable warning."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Pass the structurally typed doubles directly as useValue, remove the unused file-level suppression, and prove order values are defined before comparing without numeric casts. Verified hashes: guard 4292E0523FAF22E76947ACF9A8988360F268B13A620FC041AE547C1832774BF5; E2E spec 343F838370AEBC85247A1CD6EAC7430841CC6C6E04FF5209C7B854DC621A492D."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-RED
+    description: Clean RED live Nest/Fastify evidence for Identity internal-auth guard composition
+    prediction: Four contract-aligned HTTP cases fail only at the intentionally unimplemented guard boundary while scoped quality checks and existing behavior remain green.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: all four live Nest/Fastify HTTP cases failed only at IDENTITY_INTERNAL_AUTH_GUARD_NOT_IMPLEMENTED with 500 instead of the specified 401/200 outcomes. The test uses INTERNAL_AUTH_HEADER, the effective TrustedRequestContext shape, structurally typed method doubles, direct Nest useValue providers, required verifier/claim inputs, mandatory verify-before-claim order and sentinel assertions. Scoped lint and typecheck exited 0; all 29 unit tests and 36 integration tests passed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves HTTP seam reachability and the intentional failure boundary only; it does not prove canonical request extraction, neutral failure mapping, nonce claim composition or trusted-context attachment until GREEN. Verified hashes: guard 4292E0523FAF22E76947ACF9A8988360F268B13A620FC041AE547C1832774BF5; E2E spec C331939BEFBED49BCE247416421E356677271F58DD36E9440F80D6A05D4EFA6B."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-GREEN-ATTEMPT-01
+    description: Insufficient GREEN attempt for complete D03 canonical body and actor binding
+    prediction: Live guard tests pass only when verification input is derived from the actual forwarded method, path, canonical query, raw body digest, signed actor claims and request identity before nonce claim and handler invocation.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "Commands passed: 4 E2E guard cases, scoped lint, typecheck, 29 unit tests and 36 integration tests. Missing, verifier failure, replay and controlled valid-context cases map to the expected HTTP outcomes. GREEN was not accepted: production guard sends the constant SHA-256 digest of an empty body for every request and always supplies actor:null to the verifier. Because the verifier returns actor from requestInput, a signed /me actor can never reach TrustedRequestContext, and non-empty POST body bytes are not bound to signature verification. Current GET/mock cases do not detect either defect."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Raw forwarded bytes require an Identity Fastify bootstrap capture boundary before parsing; signed X-User-Id/X-User-Roles claims and raw-body digest must be included in verifier input and covered by positive plus tamper tests. Verified hashes: guard 31F1EEE12AE0AED75B57A26FCEEC6BD59E2DB2D8AFA2D1FD38D8DFDC2F3DB737; E2E spec C331939BEFBED49BCE247416421E356677271F58DD36E9440F80D6A05D4EFA6B."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-GREEN-ATTEMPT-02
+    description: Insufficient GREEN attempt with raw-body and actor binding but non-canonical identity-header fallback
+    prediction: Guard passes live cases only with exact raw-body digest and the approved D03 X-User-Id, X-User-Roles and X-Correlation-Id inputs, failing closed when canonical correlation is absent and never fabricating production identity data.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/main.ts identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "Commands passed: 7 E2E guard cases, scoped lint, typecheck, 29 unit tests and 36 integration tests. The Fastify preParsing hook captures raw bytes; a non-empty POST digest and an actor value reach verifier input; tampered verifier outcome fails before nonce claim/handler. GREEN was not accepted because production guard falls back to the literal test-req-id when X-Request-Id/X-Correlation-Id is absent and accepts x-internal-actor-* plus x-actor-* aliases in addition to approved X-User-Id/X-User-Roles. The E2E suite relies on the fabricated fallback and uses the undocumented aliases, so it does not prove the approved D03 identity-header boundary."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Remove test identity fallback and undocumented aliases, use approved correlation/user headers, add missing-correlation and alias-spoof negative cases, and preserve raw-body/actor tamper plus verifier-before-claim evidence. Verified hashes: main BBA32D14DAA67EA872684F00684F26CA196237D96EB2A2374F56CEC5F93DEBE2; guard BFCDD829E481D1DB8F6099BD0CE57A9EFF2D11D9C9D6190768EF8622A5273100; E2E spec C033295B7C870580AB571A402F4A8AE11088B0051E21A837A1FD8782BF2C2CF7."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-GREEN-ATTEMPT-03
+    description: Insufficient GREEN attempt with canonical identity headers but mocked non-canonical auth-header wire format
+    prediction: Live guard cases use the exact semicolon-separated header emitted by the Gateway signer and accepted by the strict Identity verifier, without mock-only wire vocabulary.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/main.ts identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "Commands passed: 9 E2E guard cases, scoped lint, typecheck, 29 unit tests and 36 integration tests. Missing correlation fails closed, only X-User-Id/X-User-Roles are consumed, undocumented aliases are ignored, and raw POST digest reaches verifier input. GREEN was not accepted because all non-empty E2E authHeader fixtures use commas between v/kid/iat/nonce/sig, while InternalRequestHmacSignerAdapter emits semicolons and InternalRequestVerifierAdapter strictly splits on semicolons. Mock verifier outcomes mask this wire-format mismatch."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Replace mocked comma-separated fixtures with the real semicolon wire format and restrict guard-side post-verification parsing to that format; retain all canonical identity/raw-body assertions and checks. Verified hashes: main BBA32D14DAA67EA872684F00684F26CA196237D96EB2A2374F56CEC5F93DEBE2; guard 44F90C8413D97966767EE0F7C8E79C6344116532B06E500853C7425541B557F5; E2E spec 8F24026FD9123A0F06C9611670ABD854BD4E23B3D695C1867B3612067AEC86EB."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-AUTH-GUARD-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for canonical Identity internal-auth guard composition
+    prediction: All guard cases pass with exact raw-body, approved identity/correlation headers, semicolon Gateway wire format, verify-before-claim ordering and fail-closed rejection; quality and regressions remain green.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/main.ts identity-service/src/transport/http/internal-auth.guard.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 9 live guard E2E cases, scoped lint, typecheck, 29 unit tests and 36 integration tests. Fastify captures raw forwarded bytes before parsing; guard hashes those bytes, consumes only X-Correlation-Id/X-User-Id/X-User-Roles, ignores unapproved actor aliases, uses the semicolon Gateway signer header format, verifies before nonce claim, fails closed on missing auth/correlation, verifier failure, replay and store errors, and attaches only verifier-returned TrustedRequestContext after claim success."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Evidence uses a controlled verifier and nonce store at the guard seam; the real multi-service Gateway-to-Identity network path, internal registration controller and public contract remain for subsequent checkpoints. Verified hashes: main BBA32D14DAA67EA872684F00684F26CA196237D96EB2A2374F56CEC5F93DEBE2; guard B5539EC771015EDF948CEBBA94F20A11C519653E9BBC561604C13456EF1413A2; E2E spec 85C60A110382146C0D9901BEF3EE1AC50D842267856EFD3D5427621F430AC94B."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-REGISTER-TRANSPORT-RED
+    description: Clean RED live Nest/Fastify evidence for guarded Identity registration transport
+    prediction: The guarded registration route rejects invalid transport input without invoking business logic, while one valid request fails only because the controller has not yet invoked RegisterUseCase and mapped its allowlisted result.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 13 of 14 live HTTP cases passed. Missing internal auth, missing Idempotency-Key, invalid DTO and mass-assignment input were rejected before RegisterUseCase invocation. The sole failure expected 201 but received 500 from IDENTITY_INTERNAL_REGISTER_TRANSPORT_NOT_IMPLEMENTED. The valid case specifies the D04 command allowlist, idempotency key, separately forwarded trusted context and allowlisted response. Scoped lint and typecheck exited 0; all 29 unit tests and 36 integration tests passed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses controlled guard, nonce and RegisterUseCase doubles at the live HTTP seam; it does not prove production use-case invocation or response mapping until GREEN. Verified hashes: E2E spec 665579276D43E325E083D05187B6110F97DBF3324AF3FA049FA2EFA0EEC8E221; design F213F90625F785D58A9BA274F963E5830B037003B736CA7F00BF0DABD6B3C58B; expected-files 57645B7B19051AAF078A169E7231E30265DB306FD0350F763D2AE2954A867F02."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-REGISTER-TRANSPORT-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for guarded Identity registration transport
+    prediction: All 14 HTTP cases pass when valid registration invokes RegisterUseCase with the D04 command, trimmed Idempotency-Key and separate verifier-created trusted context, while invalid input causes no business invocation and the response exposes only allowlisted user fields.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/application/auth.models.ts identity-service/src/application/register.use-case.ts identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/unit/auth-use-cases.spec.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 14 live HTTP E2E cases, scoped lint, typecheck, 27 unit tests and 36 integration tests. Valid registration returns 201, passes only email/password/displayName/trimmed Idempotency-Key as command plus the separate verifier-created trusted context, and maps only id/email/displayName. Missing authentication, missing Idempotency-Key, invalid DTO and extra role/admin fields fail before RegisterUseCase invocation. The first integration attempt was contaminated by two orphaned npm/Jest E2E processes from an interrupted turn; after stopping only those exact test runner PIDs, the isolated integration rerun passed all 36 tests."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controller evidence uses controlled verifier, nonce-store and RegisterUseCase doubles; real Gateway-to-Identity networking, login/refresh/logout transport and public D04 response mapping remain unverified. Verified hashes: auth models 95CDA8B1914488153A232C0147D05E4CB142BE0010710512BC10036006EBD136; register use case 0A254B7374223F8E49AE9C43D1B67DCDDCC605C5F5CB5A7462D701AEB8DB4702; controller A0F6814984C1D2595337EF9F23B391576F272D276B6CEB17EBE1D95DD211FA0B; DTO 497280D7144F9DB101A412AFD1DAA15F8AE56BAB6279797D761C70AF688AEEB7; unit spec 5D0EE4D697F868960702CB1D6C2FAEA4D468F7855EDA46FA617E5F7E4F0B3AFE; E2E spec 9859B092B6F7F1A3C4BA14486E52493C1AA67E727CE82514F1716B25897EA267."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-LOGIN-TRANSPORT-RED
+    description: Clean RED live Nest/Fastify evidence for guarded Identity login transport
+    prediction: Existing 14 transport cases and invalid login cases pass while one valid login fails only because the controller has not invoked LoginUseCase and mapped its allowlisted session result.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 17 of 18 live HTTP cases passed. The guarded login route rejects missing authentication, invalid email/empty password and extra role fields before LoginUseCase invocation. The sole valid-login failure expected 200 but received 500 from IDENTITY_INTERNAL_LOGIN_TRANSPORT_NOT_IMPLEMENTED. Its specification requires the email/password command, separate verifier-created trusted context and an access-token/refresh-token/user allowlist. Scoped lint and typecheck exited 0; 27 unit and 36 integration tests passed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves the live HTTP seam and intentional boundary with controlled collaborators; it does not prove production LoginUseCase invocation, trusted-context forwarding or session response mapping until GREEN. Verified hashes: controller 38D4A2341655FDDF3E9BC4C756DF39AE785F9A848248EDD2B8E9AE162778ABEA; DTO 5DDB4368ACF027364D3381871AEE7C0DE66496F4B4FF5A9CE18D8D3B5C4030F7; E2E spec 6C30CB75FFBFB7FD153F7790BE7FF8FD8CA20735FF0FBEDF277926BBB7202F02."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-LOGIN-TRANSPORT-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for guarded Identity login transport
+    prediction: All 18 HTTP cases pass when valid login invokes LoginUseCase with only email/password and a separate verifier-created trusted context, while invalid input causes no business invocation and the response excludes private user state.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/application/auth.models.ts identity-service/src/application/login.use-case.ts identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/unit/auth-use-cases.spec.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 18 live HTTP E2E cases, scoped lint, typecheck, 27 unit tests and 36 integration tests. Valid login returns 200, forwards only email/password plus the separate verified trusted context, and maps accessToken, refreshToken and id/email/displayName while excluding roles and private state. Missing auth, invalid email/empty password and extra role fields fail before LoginUseCase invocation. No competing Jest runner was present before integration."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controller evidence uses controlled verifier, nonce-store and LoginUseCase doubles; real Gateway-to-Identity networking, refresh/logout transport and public D04 session-envelope enrichment remain unverified. Verified hashes: auth models 95CDA8B1914488153A232C0147D05E4CB142BE0010710512BC10036006EBD136; login use case 8524B890069D66976B37B5EBD80B9490B11B6092194BC0F08724E7387B4EE52F; controller 960483216290428C39BF1AE22FD0C2E3EFDB9A24CEC373D10F5E7BE82BBF0D54; DTO 5DDB4368ACF027364D3381871AEE7C0DE66496F4B4FF5A9CE18D8D3B5C4030F7; unit spec D7B9A7EB40249E30FA815629E84B725792123FA59F23BBF7824A62C1024FFA9C; E2E spec 6C30CB75FFBFB7FD153F7790BE7FF8FD8CA20735FF0FBEDF277926BBB7202F02."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-REFRESH-TRANSPORT-RED
+    description: Clean RED live Nest/Fastify evidence for guarded Identity refresh transport
+    prediction: Existing 18 transport cases and invalid refresh cases pass while one valid refresh fails only because the controller has not invoked RefreshUseCase and mapped its rotated-session result.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 22 of 23 live HTTP cases passed. The guarded refresh route rejects missing authentication, empty or over-2048-character tokens and extra role fields before RefreshUseCase invocation. The sole valid-refresh failure expected 200 but received 500 from IDENTITY_INTERNAL_REFRESH_TRANSPORT_NOT_IMPLEMENTED. Its specification requires the refreshToken-only command, separate verifier-created trusted context and rotated access-token/refresh-token/public-user allowlist. Scoped lint and typecheck exited 0; 27 unit and 36 integration tests passed with no competing Jest runner."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves the live HTTP seam and intentional boundary with controlled collaborators; it does not prove production RefreshUseCase invocation, trusted-context forwarding or rotated-session mapping until GREEN. Verified hashes: controller 1B20971D16676C37AF6B317230BD5E61599011D02E59010303E428FAA67CB900; DTO 4306B4DCDEB3D2D7A993A343C64C1BB7F73341688C519C8C4F3F7D5703A69500; E2E spec 219F3265A63DAB5DD74C1D112FCB4C66AC1CEF61433DF073C9C573CACB126A36."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-REFRESH-TRANSPORT-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for guarded Identity refresh transport
+    prediction: All 23 HTTP cases pass when valid refresh invokes RefreshUseCase with only refreshToken and a separate verifier-created trusted context, while invalid input causes no business invocation and rotated output excludes private user state.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/application/auth.models.ts identity-service/src/application/refresh.use-case.ts identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/unit/auth-use-cases.spec.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 23 live HTTP E2E cases, scoped lint, typecheck, 27 unit tests and 36 integration tests. Valid refresh returns 200, forwards only refreshToken plus the separate verified trusted context, and maps rotated accessToken, refreshToken and id/email/displayName while excluding roles and private state. Missing auth, empty/oversized token and extra role fields fail before RefreshUseCase invocation. No competing Jest runner was present before integration."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controller evidence uses controlled verifier, nonce-store and RefreshUseCase doubles; real Gateway-to-Identity networking, logout transport and public D04 session-envelope enrichment remain unverified. Verified hashes: auth models 95CDA8B1914488153A232C0147D05E4CB142BE0010710512BC10036006EBD136; refresh use case 15A4C0C1A154B3F7E62453F4AD61AEC9A0F8BE58F36F1652440DAC166AE77F0B; controller 67454947A37D3EB2AFFA27544E8BF8F57DAF4328EB9DED92B2C76942016485A0; DTO 4306B4DCDEB3D2D7A993A343C64C1BB7F73341688C519C8C4F3F7D5703A69500; unit spec FAE4516657EA1C6C9B6107576D3F58E7EC442B6971BD9A05891CE92966E35E21; E2E spec 219F3265A63DAB5DD74C1D112FCB4C66AC1CEF61433DF073C9C573CACB126A36."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-LOGOUT-TRANSPORT-RED
+    description: Clean RED live Nest/Fastify evidence for guarded Identity logout transport
+    prediction: Existing 23 transport cases and invalid logout cases pass while one valid logout fails only because the controller has not invoked LogoutUseCase and returned an empty 204 response.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed: 27 of 28 live HTTP cases passed. The guarded logout route rejects missing authentication, empty or over-2048-character tokens and extra role fields before LogoutUseCase invocation. The sole valid-logout failure expected 204 but received 500 from IDENTITY_INTERNAL_LOGOUT_TRANSPORT_NOT_IMPLEMENTED. Its specification requires the refreshToken-only command, separate verifier-created trusted context and an empty response body. Scoped lint and typecheck exited 0; 27 unit and 36 integration tests passed with no competing Jest runner."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves the live HTTP seam and intentional boundary with controlled collaborators; it does not prove production LogoutUseCase invocation, trusted-context forwarding or empty 204 behavior until GREEN. Verified hashes: controller 3EDE08F1FF5198375BD6E9C054912D2A2EB8044747F4E02E853A1CE907224399; DTO 0D7BBB4EA7095239DCB875524C1EF274D5187A1264BC76FC46551BBED0227437; E2E spec 99350D84AA8D64356F745154A52F2E1EE167A176D1A2061E854C113D37825E84."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-LOGOUT-TRANSPORT-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for guarded Identity logout transport
+    prediction: All 28 HTTP cases pass when valid logout invokes LogoutUseCase with only refreshToken and a separate verifier-created trusted context, while invalid input causes no business invocation and success returns an empty 204 response.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/application/auth.models.ts identity-service/src/application/logout.use-case.ts identity-service/src/transport/http/internal-auth.controller.ts identity-service/src/transport/http/internal-auth.dto.ts identity-service/test/unit/auth-use-cases.spec.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 28 live HTTP E2E cases, scoped lint, typecheck, 27 unit tests and 36 integration tests. Valid logout forwards only refreshToken plus the separate verified trusted context and returns 204 with an empty body. Missing auth, empty/oversized token and extra role fields fail before LogoutUseCase invocation. No competing Jest runner was present before integration."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controller evidence uses controlled verifier, nonce-store and LogoutUseCase doubles; real Gateway-to-Identity networking, typed internal error mapping and the authenticated profile transport remain unverified. Verified hashes: auth models 95CDA8B1914488153A232C0147D05E4CB142BE0010710512BC10036006EBD136; logout use case 37733D96FCEB2E3BA193C1FD2D8ADBB40EA48BE6F507FC33D4F815203DA0F581; controller F2648BA01F7F2BA452364AC72010714C2FEC4BD8029F0B48B178A07D998EBD0B; DTO 0D7BBB4EA7095239DCB875524C1EF274D5187A1264BC76FC46551BBED0227437; unit spec 1580B2651BDA1EC28FD5BA6B82CE616ACF0A8CB2BBDB52C090DDC9264A429D2B; E2E spec 99350D84AA8D64356F745154A52F2E1EE167A176D1A2061E854C113D37825E84."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-PROFILE-TRANSPORT-RED
+    description: Clean RED live Nest/Fastify evidence for guarded Identity profile transport
+    prediction: Existing 28 transport cases plus missing/spoofed actor cases pass while one verified-actor request fails only because InternalProfileController has not invoked GetProfileUseCase and mapped its public result.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-profile.controller.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 1
+    observation: "CLEAN RED observed after scope remediation: 31 of 32 live HTTP cases passed. InternalProfileController is a separate allowed file and is registered in the live test module; internal-auth.controller.ts no longer owns the profile route. Missing internal auth, verifier-returned actor:null and spoofed actor query/alias input return 401 without invoking GetProfileUseCase. The sole verified-actor case expected 200 but received 500 from IDENTITY_INTERNAL_PROFILE_TRANSPORT_NOT_IMPLEMENTED. Scoped lint and typecheck exited 0; 27 unit and 36 integration tests passed with no competing Jest runner."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses controlled verifier, nonce-store and GetProfileUseCase doubles; it does not prove production use-case invocation or public profile mapping until GREEN. Verified hashes: profile controller A332C9BEFF120B2EF95A4D4D1EFDC850B8E9448E0C12CBFDE8E46AFCDD3FBD90; E2E spec A0CCA75F4C1C018E0AB623487F312F1E86F79BC4082494F73D8AFCD45A2000CB."
+
+  - id: EVI-D05-IDENTITY-INTERNAL-PROFILE-TRANSPORT-GREEN
+    description: Clean GREEN live Nest/Fastify evidence for guarded Identity profile transport
+    prediction: All 32 HTTP cases pass when only a verifier-created actor ID reaches GetProfileUseCase, missing or spoofed actor input causes no business invocation and output contains only the public profile allowlist.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npx eslint identity-service/src/transport/http/internal-profile.controller.ts identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeScript 5 / ESLint / PostgreSQL 16 Docker healthy on 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: 32 live HTTP E2E cases, scoped lint, typecheck, 27 unit tests and 36 integration tests. Verified actor ID alone is passed to GetProfileUseCase; response maps only id/email/displayName and omits roles/private state. Missing auth, actor:null and spoofed query/alias actor input return 401 without business invocation. No competing Jest runner was present before integration."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controller evidence uses controlled verifier, nonce-store and GetProfileUseCase doubles in a test composition root; production IdentityModule wiring, real Gateway-to-Identity networking and public D04 /me behavior remain unverified. Verified hashes: profile controller 0711C139DC42FB3E2A82B7FD3F07AB6C44A98BE879A6F5430CD70B6ED4DC7E6F; E2E spec A0CCA75F4C1C018E0AB623487F312F1E86F79BC4082494F73D8AFCD45A2000CB."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-COMPOSITION-RED
+    description: Clean RED live Nest/Fastify evidence for the production IdentityModule composition root
+    prediction: The existing 32 controlled transport cases pass while the six production-composition cases fail only because IdentityModule does not yet expose the internal routes, register concrete providers/use cases or reject missing required production configuration.
+    command: npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify
+    exit_code: 1
+    observation: "CLEAN RED observed: all 32 existing transport cases passed and all six production-composition cases failed at the intended missing-wiring boundary. Auth and profile routes returned 404 instead of guarded 401; InternalAuthGuard, InternalRequestVerifierAdapter, nonce-store and auth use cases were absent from the production provider graph; and application initialization resolved instead of failing when the required signing secret was absent. No import, compilation or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove production composition behavior until the same 38 E2E cases pass after GREEN wiring. Unit, integration and typecheck regressions were not rerun in this RED verification turn. Real Gateway-to-Identity networking remains outside this checkpoint."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-COMPOSITION-GREEN-TEST-GATES
+    description: Passing command gates with failed production security self-review for IdentityModule composition
+    prediction: All 38 Identity E2E cases, typecheck, unit tests and PostgreSQL integration tests pass only if the production module exposes the verified routes/providers without regressions.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:unit; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / PostgreSQL 16 Docker at 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS after starting the approved Docker test database: 38 E2E cases, typecheck, 27 unit tests and 36 integration tests passed. The first integration attempt exited 1 with 32 ECONNREFUSED failures because Docker Desktop/PostgreSQL was not running; after Docker Desktop started and Compose reported PostgreSQL healthy, the unchanged integration suite passed all 36 cases."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Implementation self-review failed despite green commands. identity.module.ts contains a hard-coded access-token signing secret and symmetric HS256 token, Base64 encoding presented as encrypted idempotency output, an unkeyed SHA-256 fingerprint over password-bearing input, and crypto implementations inside the composition root instead of the three reviewed infrastructure adapter paths. Therefore IDENTITY-PRODUCTION-COMPOSITION-GREEN-01 is not accepted as complete."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-SECURITY-ADAPTERS-RED
+    description: Clean RED unit evidence for reviewed Identity production cryptography adapters and configuration validation
+    prediction: Existing internal-request verifier tests pass while new Argon2id, asymmetric JWT, refresh-token, keyed-fingerprint, authenticated-encryption and configuration tests fail only at explicit not-yet-implemented boundaries.
+    command: npm run test:unit -- --runTestsByPath identity-service/test/unit/security-adapters.spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5
+    exit_code: 1
+    observation: "CLEAN RED observed: all five existing InternalRequestVerifierAdapter tests passed. Nine new behavior tests failed only at the explicit Argon2PasswordAdapter.hash, AuthTokenAdapter.signAccessToken, IdempotencyCryptoAdapter hash/fingerprint/encrypt and validateIdentityConfig not-implemented boundaries. Three new constructor/config fail-closed tests passed. No import, compilation or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove any production password, token, fingerprint or encryption behavior until GREEN passes the same tests. The current bootstrap-local insecure implementations remain present and must not be treated as accepted production behavior."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-SECURITY-ADAPTERS-GREEN-TEST-GATES
+    description: Passing security-adapter command gates with failed cryptographic self-review
+    prediction: All 17 focused tests, typecheck and formatting pass only if the production security adapters implement the reviewed algorithms and fail-closed configuration.
+    command: "npm run test:unit -- --runTestsByPath identity-service/test/unit/security-adapters.spec.ts; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 0
+    observation: "PASS command gates: 17 focused security tests, typecheck and format check passed. Static self-review observed that Argon2PasswordAdapter calls node:crypto PBKDF2 and merely serializes its result with an $argon2id$ prefix. AuthTokenAdapter accepts RS256, EdDSA or ES256 labels but always uses createSign/createVerify with RSA-SHA256. The added @noble/hashes dependency is not used by the password adapter."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The green test result is rejected as a false positive: regex and round-trip assertions validate a self-consistent label, not interoperability with a real Argon2id implementation, and the JWT test covers only the default RS256 path. IDENTITY-PRODUCTION-SECURITY-ADAPTERS-GREEN-01 is not complete until independent algorithm tests and a compliant implementation pass."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-SECURITY-HARDENING-RED-NOT-OBSERVED
+    description: Unexpected-green verification showing the assigned security-hardening RED cases were not added
+    prediction: The existing 17 security tests remain green and new independent Argon2 interoperability and JWT algorithm-mismatch tests fail against the current implementation.
+    command: npm run test:unit -- --runTestsByPath identity-service/test/unit/security-adapters.spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29
+    exit_code: 0
+    observation: "UNEXPECTED GREEN: exactly the same 17 existing tests passed. Source inspection and enumerated test names found no independent Argon2 verifier/interoperability case, no PBKDF2-masquerade rejection case and no EdDSA/ES256 versus RSA-SHA256 mismatch case."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "A green unchanged suite is not evidence for the assigned RED step. The current PBKDF2 implementation still emits an $argon2id$ label and the token adapter still permits algorithm labels that are not bound to the actual signing primitive."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-SECURITY-HARDENING-RED
+    description: Clean RED evidence for genuine Argon2id interoperability and fail-closed JWT algorithm binding
+    prediction: The 17 existing focused security tests pass while three new hardening tests fail only because the current adapter uses PBKDF2 under an Argon2id label and accepts unsupported JWT algorithm labels.
+    command: npm run test:unit -- --runTestsByPath identity-service/test/unit/security-adapters.spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / hash-wasm independent Argon2id verifier
+    exit_code: 1
+    observation: "CLEAN RED observed: 17 existing tests passed. ARGON2_INTEROPERABILITY_PROVES_GENUINE_ARGON2ID_COMPUTE failed because the independently computed Argon2id key differed; REJECTS_PBKDF2_HASHES_PSEUDO_LABELED_AS_ARGON2ID failed because the adapter returned true; JWT_ALGORITHM_MISMATCH_IS_REJECTED failed because constructing an EdDSA-labeled adapter did not throw. No import, compilation or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove genuine Argon2id or fail-closed JWT algorithm behavior until the same 20-test suite passes after GREEN. The test dependency is non-secret and does not authorize weakening interoperability assertions."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-SECURITY-HARDENING-GREEN
+    description: Clean GREEN evidence and self-review for genuine Argon2id and fail-closed JWT algorithm binding
+    prediction: All 20 focused security tests, typecheck and formatting pass after production password hashing becomes interoperable Argon2id and unsupported JWT algorithms are rejected.
+    command: "npm run test:unit -- --runTestsByPath identity-service/test/unit/security-adapters.spec.ts; npm run typecheck; npm run format:check"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / hash-wasm Argon2id
+    exit_code: 0
+    observation: "PASS: all 20 focused security tests, typecheck and format check passed. Self-review observed hash-wasm Argon2id for hash and verification, no PBKDF2 import in production, timing-safe digest comparison, pseudo-PBKDF2 rejection, fixed RS256 header/signing primitive and explicit rejection of EdDSA and ES256 options."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The interoperability test computes directly with the same vetted hash-wasm primitive used by the adapter, so it proves adapter parameter/PHC compatibility rather than cross-library compatibility. Production composition still injects DataSource optionally and has not proven a real configured database provider lifecycle."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-DATASOURCE-RED
+    description: Clean RED live Nest/Fastify evidence for required production PostgreSQL DataSource composition
+    prediction: The existing 38 production/transport cases and synchronize-false assertion pass while missing DATABASE_URL, required DataSource provider and shared adapter ownership cases fail only at the current optional-connection boundary.
+    command: npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / Fastify / TypeORM 0.3
+    exit_code: 1
+    observation: "CLEAN RED observed: 39 cases passed, comprising all 38 previous E2E cases plus TYPEORM_CONFIG_ENFORCES_SYNCHRONIZE_FALSE. MISSING_DATABASE_URL_FAILS_EXPLICITLY failed because initialization resolved; DATASOURCE_PROVIDER_IS_REQUIRED_NOT_OPTIONAL and PERSISTENCE_AND_NONCE_STORE_SHARE_SAME_DATASOURCE failed because Nest could not find DataSource. No import, compilation, fixture or network-connection failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove DataSource initialization, shutdown or live PostgreSQL behavior. The GREEN command must preserve the existing 36 real integration cases and remove optional DataSource injection/casts."
+
+  - id: EVI-D05-IDENTITY-PRODUCTION-DATASOURCE-GREEN
+    description: Clean GREEN evidence and self-review for required production PostgreSQL DataSource composition
+    prediction: All 42 Identity E2E cases, typecheck and 36 integration tests pass after DATABASE_URL becomes required and both persistence adapters share one non-optional synchronize-false DataSource.
+    command: "npm run test:e2e -- --runTestsByPath identity-service/test/e2e/auth-flow.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS 11 / TypeORM 0.3 / PostgreSQL 16 Docker healthy at 127.0.0.1:55432
+    exit_code: 0
+    observation: "PASS: all 42 Identity E2E cases, typecheck and 36 integration tests passed. Self-review observed required DATABASE_URL validation, one DataSource provider created through createIdentityDataSource, synchronize false, required DataSource injection into AuthPersistenceAdapter and InternalNonceStoreAdapter, the exact same instance in both adapters and no optional injection or undefined cast."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The production E2E composition resolves a configured DataSource instance but does not initialize a network connection as part of Nest lifecycle; real PostgreSQL transaction behavior remains covered by the separate 36 integration tests. Gateway-to-Identity HTTP networking and public D04 routes remain unverified."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway Identity HTTP RED execution rejected by test self-review
+    prediction: The controlled local Identity peer starts, constructor validation passes and forwarding/mapping cases fail only at explicit adapter not-implemented boundaries with contract-correct assertions.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled local peer
+    exit_code: 1
+    observation: "Execution produced five failures at IdentityHttpAdapter register/login/getProfile/refresh not-implemented boundaries and one passing constructor fail-closed case. The local Fastify peer started without import, port or fixture failure. Self-review rejected the RED because EXACT_BODY_BYTES_AND_SIGNATURE_BINDING expects X-Internal-Gateway-Auth to contain bodySha256, while the effective D03 header contains only v, kid, iat, nonce and sig; bodySha256 is bound inside the canonical signed input."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The RED cannot authorize GREEN until the test observes the signer input or independently verifies the HMAC using the exact body hash. The contract must not be changed merely to satisfy the invalid header-content assertion."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED-TIMEOUT-REMEDIATION-REQUIRED
+    description: Corrected body-signing RED execution rejected because timeout/network fixture remains unreliable
+    prediction: Corrected D03 body-hash binding is observable through signer input, and timeout plus connection-failure cases deterministically reach their intended network boundaries before adapter mapping assertions.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled local peer
+    exit_code: 1
+    observation: "Execution again produced five adapter-boundary failures and one passing constructor case. The body-hash test now correctly observes CanonicalSignedInput.bodySha256 through a signer spy and compares the outbound header only to the signer's returned header. Self-review found the timeout test constructs baseUrl by appending /internal/auth/delay even though refresh must append or resolve its own /internal/auth/refresh route, so the fixture cannot guarantee a timeout rather than 404/wrong-path behavior; the named network-failure behavior also has no separate closed-port case."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is not authorized until a deterministic delayed refresh endpoint and a distinct connection-refused target exercise TIMEOUT and SERVICE_UNAVAILABLE mapping separately."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED-NETWORK-CASE-REMEDIATION-REQUIRED
+    description: Delayed-route RED execution rejected because connection failure is not independently observable
+    prediction: Timeout and connection-refused scenarios run as independent test cases against deterministic targets and each fails only at the current adapter implementation boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled local peer
+    exit_code: 1
+    observation: "The refresh endpoint now delays deterministically for correlation ID corr_timeout_004. Execution produced five failing behavior tests and one passing constructor case. However TIMEOUT and SERVICE_UNAVAILABLE assertions are inside the same test; the timeout-side not-implemented failure is caught and fails its assertion before the connection-refused branch executes. The latter also assumes fixed port 59999 is unused rather than reserving an ephemeral port and closing its listener."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "No evidence yet shows the connection-failure fixture executes. Split the scenarios and derive a closed ephemeral port deterministically before GREEN."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED
+    description: Clean RED controlled-network evidence for the Gateway Identity HTTP client
+    prediction: Constructor validation passes while exact-body signing, headers, actor forwarding, timeout, connection refusal and response allowlisting cases fail independently only at explicit adapter not-implemented boundaries.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled Identity peer and closed ephemeral-port fixture
+    exit_code: 1
+    observation: "CLEAN RED observed: six behavior cases failed independently at IdentityHttpAdapter register, login, getProfile or refresh not-implemented boundaries; the constructor fail-closed case passed. The body-hash assertion observes CanonicalSignedInput through the signer spy, the outbound header is compared with the signer result, timeout uses a delayed /internal/auth/refresh request selected by correlation ID and connection failure uses an OS-assigned port after its temporary listener is closed. No import, compile, port-allocation or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove logout forwarding or non-2xx Identity status mapping with a dedicated assertion, although the typed port includes logout and bounded failures. GREEN self-review must not claim those unasserted behaviors without adding planned cases."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED-02-STATUS-REMEDIATION-REQUIRED
+    description: Logout RED observed but status-mapping table rejected because cases do not execute independently
+    prediction: Logout and every representative Identity status mapping appear as independent Jest cases that each fail at the explicit adapter not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled Identity peer
+    exit_code: 1
+    observation: "Execution produced eight failing tests and one passing constructor test. Logout failed independently at IdentityHttpAdapter.logout. The HTTP status mapping is implemented as one it block with a for-loop; its first 400 case failed the IdentityClientError assertion and stopped the loop, so 401, 403, 404, 409, 500, 503 and malformed-response mappings were not executed or observed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED-02 remains incomplete until the eight mapping rows use it.each/test.each or equivalent independent Jest cases so one failure cannot mask the remaining mappings."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-RED-02
+    description: Clean RED evidence for complete Gateway Identity HTTP client behavior
+    prediction: Fifteen exact-byte, header, actor, logout, status, malformed, timeout, connection and allowlisting cases fail independently only at adapter boundaries while constructor validation passes.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled Identity peer / closed ephemeral-port fixture
+    exit_code: 1
+    observation: "CLEAN RED observed: 15 behavior cases failed independently and one constructor fail-closed case passed. The eight status/malformed rows execute through it.each and each failed the expected IdentityClientError assertion against the current generic not-implemented error. Logout, timeout and connection-refused cases also failed independently; existing exact-body, header, actor and response-allowlist cases remained at explicit adapter method boundaries."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED does not prove production fetch/abort behavior or response validation until all 16 cases pass after GREEN. The controlled peer does not represent TLS, service discovery or production deployment."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-GREEN-REMEDIATION-REQUIRED
+    description: Partial GREEN verification for Gateway Identity HTTP adapter
+    prediction: All 16 focused Gateway HTTP E2E cases, typecheck and 36 integration tests pass with deterministic normal/timeout isolation and contract-compatible signed correlation.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled Identity peer / PostgreSQL 16 Docker healthy
+    exit_code: 1
+    observation: "PARTIAL GREEN: 14 of 16 Gateway E2E cases passed; typecheck and all 36 integration tests passed. The normal register request timed out at the shared 100ms adapter timeout during cold execution. Its delayed/late request record then remained at index zero and caused the following login correlation assertion to observe corr_reg_001 instead of corr_login_002. Static self-review also observed CanonicalSignedInput.requestId uses input.requestId while X-Correlation-Id sends input.correlationId; Identity verification derives the signed request identifier from the correlation header, so unequal fixture values can produce a real signature mismatch."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is incomplete. Use a safe normal adapter timeout and a separate short timeout adapter/fixture, isolate or await late requests between cases, and bind the signed requestId to the same trusted correlation identifier sent internally (or prove an effective-contract-compatible alternative) without weakening timeout/error tests."
+
+  - id: EVI-D05-GATEWAY-IDENTITY-HTTP-GREEN
+    description: Clean GREEN evidence and self-review for the Gateway Identity HTTP client
+    prediction: All 16 focused Gateway HTTP E2E cases, typecheck and 36 integration tests pass after deterministic timeout isolation and signed correlation compatibility are restored.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / Fastify controlled Identity peer / PostgreSQL 16 Docker healthy
+    exit_code: 0
+    observation: "PASS: all 16 Gateway HTTP E2E cases, typecheck and 36 integration tests passed. Self-review observed exact single serialization and SHA-256 binding, signer output forwarding, signed requestId equal to X-Correlation-Id, actor header allowlisting, 204 logout, eight independent status/malformed mappings, separate 50ms timeout adapter, closed ephemeral-port connection failure, response allowlisting and no Identity implementation import."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The controlled peer does not authenticate the HMAC end-to-end with Identity verifier code and does not represent TLS or service discovery. Public Gateway controllers, access-token verification and production Gateway composition remain unverified."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-VERIFIER-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway access-token verifier RED rejected because security claim cases are not independent or complete
+    prediction: Existing Gateway HTTP cases and constructor validation pass while every algorithm, issuer, audience, temporal, key, integrity and actor-claim behavior fails independently only at the explicit verifier not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / generated RSA key pairs
+    exit_code: 1
+    observation: "Execution produced 17 passing and 10 failing tests: all existing 16 Gateway HTTP cases and the verifier constructor fail-closed case passed, while ten token behavior cases failed at JwtAccessTokenVerifierAdapter.verifyAccessToken's explicit not-implemented error. No import, compile, RSA key-generation or fixture failure occurred. Self-review rejected CLEAN RED because the kid case exercises only an unknown kid despite naming missing kid, no missing-exp case exists, and one token combines empty sub with non-array roles so the first validation failure can mask the other claim boundary."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is not authorized until missing and unknown kid cases execute independently, a missing exp token is rejected explicitly, and invalid sub and roles variants execute as independent Jest cases so no security condition is masked."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-VERIFIER-RED
+    description: Clean RED evidence for Gateway access-token verification
+    prediction: Existing Gateway HTTP and constructor cases pass while all algorithm, issuer, audience, temporal, key, integrity and actor-claim behaviors fail independently only at the explicit verifier not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / generated RSA key pairs
+    exit_code: 1
+    observation: "CLEAN RED observed: 17 cases passed and 18 token behavior cases failed independently. All 16 existing Gateway HTTP cases and the verifier constructor fail-closed case passed. Valid RS256, wrong algorithm, unknown kid, missing kid, wrong issuer, wrong audience, expired, missing exp, future nbf, tampered, malformed, two sub variants, three non-array roles variants and two non-string role-element variants each reached JwtAccessTokenVerifierAdapter.verifyAccessToken's explicit not-implemented boundary. No import, compile, RSA key-generation or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves test reachability and independent assertions, not cryptographic correctness. GREEN must pass all 35 cases and preserve RS256-only verification plus minimal actor projection."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-VERIFIER-GREEN-REMEDIATION-REQUIRED
+    description: Passing focused Gateway verifier GREEN rejected by security self-review
+    prediction: All focused Gateway E2E cases and typecheck pass, and every malformed decoded JWT structure or invalid temporal claim fails closed through a bounded AccessTokenVerificationError.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / generated RSA key pairs
+    exit_code: 0
+    observation: "PASS: all 35 focused Gateway E2E cases and TypeScript typecheck passed. Static self-review confirmed RS256 header allowlisting, configured kid selection, RSA-SHA256 signature verification, exact issuer/audience checks, mandatory exp, future nbf rejection, sub/roles validation and minimal actor projection. It also found JSON.parse results are cast directly to Record without rejecting null/non-object decoded headers or payloads, so a cryptographically valid token containing JSON null can escape as an unbounded TypeError. A present nbf with a non-number value is silently ignored rather than rejected fail closed."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is incomplete until independent tests cover decoded null/non-object header and payload structures plus a present invalid-type nbf, and the adapter maps them to bounded INVALID_TOKEN or the reviewed temporal error without weakening current 35 cases."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-VERIFIER-GREEN
+    description: Clean GREEN evidence and self-review for Gateway access-token verification
+    prediction: All focused Gateway E2E cases, typecheck and integration regressions pass after malformed decoded structures and invalid nbf values are made fail closed.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / generated RSA key pairs / PostgreSQL 16 Docker healthy
+    exit_code: 0
+    observation: "PASS: all 38 focused Gateway E2E cases, TypeScript typecheck and all 36 integration tests passed. Self-review confirmed RS256-only header allowlisting, configured kid selection, RSA-SHA256 verification, exact issuer/audience, mandatory finite exp, finite nbf when present, sub/roles validation, minimal actor projection and bounded rejection of null/non-object decoded JWT structures. The payload-null case uses a valid trusted-key signature, so it reaches post-signature structure validation."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The adapter uses locally configured PEM keys and does not implement remote JWKS discovery or rotation refresh, which are outside the reviewed D05 scope. Public bearer parsing, request actor attachment, controllers and multi-service runtime remain unverified."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-GUARD-RED
+    description: Clean RED evidence for Gateway bearer access-token guard
+    prediction: Existing Gateway verifier and HTTP cases remain green while each bearer parsing, verifier delegation, actor attachment, spoof resistance and neutral unauthorized behavior fails independently only at the explicit guard not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Nest ExecutionContext and verifier port
+    exit_code: 1
+    observation: "CLEAN RED observed: 39 cases passed and 11 guard behavior cases failed independently. All 38 prior Gateway HTTP/verifier cases and the guard constructor fail-closed case passed. Valid bearer attachment, missing authorization, three non-bearer schemes, two empty bearer forms, header-array and comma-separated multiple credentials, spoofed actor headers and verifier-error neutralization each reached AccessTokenGuard.canActivate's explicit not-implemented boundary. No import, compile or mock-context failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses a mocked Nest ExecutionContext and verifier port; it proves guard behavior reachability, not live Fastify/Nest registration or real JWT verification through a public route."
+
+  - id: EVI-D05-GATEWAY-ACCESS-TOKEN-GUARD-GREEN
+    description: Clean GREEN evidence and self-review for Gateway bearer access-token guard
+    prediction: All focused Gateway E2E cases, typecheck and integration regressions pass with exact single-bearer parsing, verifier-only actor creation, spoof resistance and neutral verifier failure mapping.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Nest ExecutionContext and verifier port / PostgreSQL 16 Docker healthy
+    exit_code: 0
+    observation: "PASS: all 50 focused Gateway E2E cases, TypeScript typecheck and all 36 integration tests passed. Self-review confirmed rejection of absent, array, comma-separated, empty and non-Bearer authorization values; exactly the extracted token is delegated; request.actor is overwritten solely from verifier output; spoofed user headers are not consulted; verifier errors become bounded UnauthorizedException messages without crypto detail."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The guard is tested through a mocked ExecutionContext and is not yet registered on a live /me controller. Public request correlation, normalized error envelopes and full Fastify HTTP behavior remain unverified."
+
+  - id: EVI-D05-GATEWAY-REQUEST-CONTEXT-HOOK-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway request-context hook RED rejected because spoofed-header removal is grouped and incomplete
+    prediction: Trusted request-ID creation and each untrusted public/internal actor or correlation header removal execute as independent cases and fail only at the explicit hook not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Gateway request and response
+    exit_code: 1
+    observation: "Execution produced 50 passing prior Gateway cases and three hook failures at requestContextHook's explicit not-implemented boundary. Request-ID generation/response propagation and client correlation replacement are reached. Self-review rejected CLEAN RED because x-user-id, x-user-roles, x-internal-gateway-auth and x-correlation-id are asserted sequentially in one test, so an early failure masks later removal boundaries; the client x-request-id case proves it cannot select trusted correlation but never asserts the untrusted header is removed before downstream processing."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is not authorized until x-request-id, x-correlation-id, x-user-id, x-user-roles and x-internal-gateway-auth stripping execute independently, while an unrelated content-type header is shown to remain intact."
+
+  - id: EVI-D05-GATEWAY-REQUEST-CONTEXT-HOOK-RED
+    description: Clean RED evidence for trusted Gateway request-context hook
+    prediction: Trusted request-ID creation and every untrusted public/internal actor or correlation header removal execute independently and fail only at the explicit hook not-implemented boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Gateway request and response
+    exit_code: 1
+    observation: "CLEAN RED observed: 50 prior Gateway cases passed and seven hook cases failed independently at requestContextHook's explicit not-implemented boundary. Trusted ID creation/response propagation and client correlation replacement each execute, while it.each creates separate x-request-id, x-correlation-id, x-user-id, x-user-roles and x-internal-gateway-auth stripping cases that also assert content-type preservation. No import, compile or fixture failure occurred."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses mocked request/response shapes; live Fastify hook registration, response behavior on errors and controller integration remain unverified."
+
+  - id: EVI-D05-GATEWAY-REQUEST-CONTEXT-HOOK-GREEN
+    description: Clean GREEN evidence and self-review for trusted Gateway request context
+    prediction: All focused Gateway E2E cases, typecheck and integration regressions pass with server-generated correlation and case-insensitive removal of every untrusted public/internal actor header.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npm run test:integration"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Gateway request and response / PostgreSQL 16 Docker healthy
+    exit_code: 0
+    observation: "PASS: all 57 focused Gateway E2E cases, TypeScript typecheck and all 36 integration tests passed. Self-review confirmed cryptographic randomUUID generation, case-insensitive deletion of x-request-id, x-correlation-id, x-user-id, x-user-roles and x-internal-gateway-auth, preservation of unrelated headers, and one trusted identifier bound to req.requestId plus response X-Request-Id."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The hook is exercised through structural mocks and is not yet registered in a live Fastify/Nest pipeline. Error responses and controller propagation of the trusted ID remain unverified."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-ERROR-FILTER-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway public error-filter RED rejected for message leakage and missing response correlation assertion
+    prediction: Every reviewed error class maps independently to an exact public status/code/message envelope, error.requestId matches response X-Request-Id, and Identity/infrastructure detail cannot cross the boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Nest ArgumentsHost response
+    exit_code: 1
+    observation: "Execution produced 57 passing prior Gateway cases and 12 independent filter failures at PublicErrorFilter.catch's explicit not-implemented boundary. Validation, unauthorized, eight IdentityClientError kinds, unknown error and exact-envelope cases execute independently. Self-review rejected CLEAN RED because every IdentityClientError assertion expects its original message to be returned unchanged, although SERVICE_UNAVAILABLE can contain raw fetch/connection text and other adapter messages describe internal response parsing. The response mock also has no header assertion, so ERR-002 equality between X-Request-Id and error.requestId is unproved."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is not authorized until Identity client rows inject sensitive internal messages but expect fixed reviewed public messages, and every error mapping proves response X-Request-Id equals the trusted requestId in the three-field body."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-ERROR-FILTER-RED
+    description: Clean RED evidence for Gateway public error normalization
+    prediction: Every reviewed error class maps independently to an exact public status/code/message envelope, error.requestId matches response X-Request-Id, and Identity/infrastructure detail cannot cross the boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked Nest ArgumentsHost response
+    exit_code: 1
+    observation: "CLEAN RED observed: 57 prior Gateway cases passed and 12 filter cases failed independently at PublicErrorFilter.catch's explicit not-implemented boundary. Bad request, unauthorized, eight IdentityClientError kinds, unknown error and exact-envelope cases each execute. Identity rows inject PostgreSQL, host, internal path and token detail but expect fixed bounded messages; every mapping asserts response X-Request-Id equals the trusted body requestId, and unknown/Identity cases assert sensitive fragments are absent."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses a mocked ArgumentsHost and response. It does not prove Fastify adapter compatibility, global filter registration or live validation-pipe error shapes until composition and public-route E2E run."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-ERROR-FILTER-GREEN
+    description: Clean GREEN evidence and self-review for Gateway public error normalization
+    prediction: All 69 focused Gateway E2E cases pass, the checkpoint paths satisfy Prettier and TypeScript typecheck passes with explicit bounded mappings, exact three-field error envelopes, trusted response correlation and sensitive-detail redaction.
+    command: "npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/transport/http/public-error.filter.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\"; npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 0
+    observation: "PASS: all three checkpoint paths satisfy Prettier, all 69 focused Gateway E2E cases passed and TypeScript typecheck exited 0. Self-review observed explicit validation, unauthorized, eight Identity-client-kind and unknown-error mappings; exact code/message/requestId bodies; response X-Request-Id equality; fixed public Identity messages; and neutral unknown-error handling without injected token, SQL, crypto, host, path or stack detail."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The filter is exercised through a mocked Nest ArgumentsHost and response. Live Fastify compatibility, global filter registration, validation-pipe shapes, controllers and full Gateway-to-Identity runtime remain unverified. The repository-wide format check still reports Gateway files outside this checkpoint's allowed paths; this evidence covers only the three approved checkpoint paths."
+
+  - id: EVI-D05-GATEWAY-PROXY-AUTH-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway proxy-auth RED rejected because five operation boundaries are grouped and partially masked
+    prediction: All 69 existing focused Gateway cases remain green and each new register, login, refresh, logout, profile, context-isolation and propagation behavior fails independently only at the explicit ProxyAuthUseCase missing-production boundary.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5
+    exit_code: 1
+    observation: "Execution produced 70 passing cases and five failures at explicit ProxyAuthUseCase Not implemented boundaries; the prior 69 Gateway cases and the new static dependency test passed, and typecheck exited 0. Self-review rejected CLEAN RED because the exactly-once case invokes register, login, refresh, logout and profile sequentially and stops at register, masking the login, refresh, logout and profile assertions. Other cases independently reach register, login and profile, but no independent case reaches refresh or logout."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "CLEAN RED is not established until register, login, refresh, logout and profile delegation each execute as independent cases, while trusted correlation, actor isolation, result/error propagation and dependency-direction assertions remain independently observable."
+
+  - id: EVI-D05-GATEWAY-PROXY-AUTH-RED-REMEDIATION-RESULT-ERROR
+    description: Second Gateway proxy-auth RED rejected because result and typed-failure propagation remain grouped
+    prediction: All 69 existing focused Gateway cases remain green and register, login, refresh, logout, profile, correlation, actor isolation, result propagation and typed-failure propagation each reach an independent missing-production boundary.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/application/proxy-auth.use-case.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 1
+    observation: "Execution produced 70 passing cases and nine failures; all 69 prior Gateway cases and the static dependency test passed, typecheck passed and all checkpoint paths satisfied Prettier. Register, login, refresh, logout and profile delegation now fail independently at their matching Not implemented boundaries. Self-review still rejected CLEAN RED because the result/error propagation case invokes login success before register typed failure, stops at login and masks the typed-failure propagation boundary."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "CLEAN RED remains unproved only for independent result-versus-typed-failure propagation. Split those into separate cases so both production boundaries execute without changing the RED skeleton."
+
+  - id: EVI-D05-GATEWAY-PROXY-AUTH-RED
+    description: Clean RED evidence for framework-free Gateway auth proxy orchestration
+    prediction: All 69 existing focused Gateway cases and the static dependency assertion remain green while each register, login, refresh, logout, profile, correlation, actor-isolation, result and typed-failure behavior fails independently only at the explicit ProxyAuthUseCase missing-production boundary.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/application/proxy-auth.use-case.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 1
+    observation: "CLEAN RED observed: all 69 prior Gateway cases plus the new static dependency case passed; ten new application behavior cases failed independently at matching ProxyAuthUseCase Not implemented boundaries. Register, login, refresh, logout and profile each execute separately; correlation, verified actor isolation, public actor-spoof rejection, success-result propagation and typed IdentityClientError propagation are independently reachable. Typecheck passed and all three checkpoint paths satisfy Prettier."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves test reachability and boundary shape only. Exact client input mapping, one-call delegation, result identity and typed-failure propagation remain unproved until GREEN; controllers, DTO validation, composition wiring and live HTTP remain outside this checkpoint."
+
+  - id: EVI-D05-GATEWAY-PROXY-AUTH-GREEN
+    description: Clean GREEN evidence and self-review for framework-free Gateway auth proxy orchestration
+    prediction: All 80 focused Gateway cases pass with exact one-call client delegation, trusted correlation, verified actor isolation, unchanged results and typed failures, and no forbidden framework or Identity-private dependency.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/application/proxy-auth.use-case.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier
+    exit_code: 0
+    observation: "PASS: all 80 focused Gateway E2E cases passed, TypeScript typecheck exited 0 and all three checkpoint paths satisfy Prettier. Self-review observed explicit allowlisted input construction for register, login, refresh and logout; requestId-to-correlation propagation; fail-closed profile actor requirement; exact verified actor forwarding; direct promise return preserving result identity and typed IdentityClientError rejection; and no NestJS, TypeORM or Identity-private import."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "The application use case is verified with a mocked IdentityAuthClientPort. DTO validation, controllers, provider wiring, live Fastify routes and full Gateway-to-Identity HTTP behavior remain unverified."
+
+  - id: EVI-D05-GATEWAY-AUTH-DTO-RED-REMEDIATION-REQUIRED
+    description: Initial Gateway public-auth DTO RED rejected because required fields and validation bounds are grouped
+    prediction: All 80 existing focused Gateway cases remain green and every D04 DTO contract dimension fails independently because its validation decorator or allowlist behavior is not implemented.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / Nest ValidationPipe
+    exit_code: 1
+    observation: "Execution produced 88 passing and eight failing cases; all 80 prior Gateway cases remained green, valid DTO and extra-field rejection cases passed, typecheck passed and both checkpoint paths satisfy Prettier. Eight cases failed because @Allow-only DTOs accept missing/invalid/bounded values. Self-review rejected CLEAN RED because register missing email/password/displayName share one case; invalid email, short password and long displayName share another; login dimensions are similarly grouped; and refresh/logout missing and empty token behavior share cases. These groupings can pass after only one validator is added while adjacent D04 bounds remain unproved."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Split each required field, format, minimum and maximum boundary into an independently executing case. Add direct evidence that password whitespace/bytes are not normalized and independently reject actor, role, id and internal fields where required by the card."
+
+  - id: EVI-D05-GATEWAY-AUTH-DTO-RED-REMEDIATION-FIXTURE
+    description: Second Gateway public-auth DTO RED rejected because the short-password fixture is not below the D04 minimum
+    prediction: All 80 existing focused Gateway cases remain green and each independently isolated D04 DTO contract dimension fails only because its validation decorator is not implemented, using fixtures that actually cross the documented boundary.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / Nest ValidationPipe
+    exit_code: 1
+    observation: "Execution produced 100 passing and 21 failing cases; all 80 prior cases remained green, DTO required/format/min/max cases now execute independently, allowlist and password-preservation cases pass, typecheck passed and both checkpoint paths satisfy Prettier. Self-review rejected CLEAN RED because REGISTER_DTO_SHORT_PASSWORD_REJECTED uses 'short_pass_11', which is 13 characters and therefore does not cross the OpenAPI minLength 12 boundary despite the test description claiming it is under 12."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Replace the register short-password fixture with an explicitly verified 11-character value, ideally asserting its length in the test, then rerun unchanged RED production DTOs."
+
+  - id: EVI-D05-GATEWAY-AUTH-DTO-RED
+    description: Clean RED evidence for strict D04 Gateway public-auth DTO allowlists
+    prediction: All 80 existing focused Gateway cases remain green, valid/allowlist/password-preservation DTO cases pass, and each required, format, minimum and maximum validation boundary fails independently because production decorators are not implemented.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / Nest ValidationPipe
+    exit_code: 1
+    observation: "CLEAN RED observed: all 80 prior Gateway cases remained green; 20 new valid, extra-field allowlist and password-whitespace-preservation cases passed; 21 required/format/min/max cases failed independently because @Allow-only DTOs accepted invalid values. The register minimum-password fixture is explicitly asserted as 11 characters before validation. Typecheck passed and both checkpoint paths satisfy Prettier."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED proves ValidationPipe reachability, independent boundary fixtures and current allowlist behavior only. Correct decorators and complete 121-case GREEN remain unproved; controllers and live HTTP routes are outside this checkpoint."
+
+  - id: EVI-D05-GATEWAY-AUTH-DTO-GREEN
+    description: Clean GREEN evidence and self-review for strict D04 Gateway public-auth DTO allowlists
+    prediction: All 121 focused Gateway cases pass with exact D04 required, format, minimum, maximum and allowlist behavior while preserving password bytes.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / Nest ValidationPipe
+    exit_code: 0
+    observation: "PASS: all 121 focused Gateway E2E cases passed, TypeScript typecheck exited 0 and both checkpoint paths satisfy Prettier. Self-review observed D04 email format/max 254, register password 12..128, login password 1..128, displayName 1..100 and refresh/logout token 1..2048 decorators; whitelist rejection of actor/role/id/internal fields; and no Transform or trimming decorator on password fields."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "DTO behavior is exercised directly through Nest ValidationPipe, not through a live Fastify controller route. Idempotency-Key header parsing, public response mapping, controller status codes and composition remain unverified."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-RED-DESIGN-GAP
+    description: Initial Gateway public-auth controller RED rejected because the public session response cannot be derived from the approved internal port and HTTP status/header boundaries are not exercised
+    prediction: All 121 existing focused Gateway cases remain green and each new route, status, trusted-context, idempotency-header and response-allowlist case fails independently only at explicit missing controller behavior using inputs and outputs available from reviewed contracts.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/application/proxy-auth.use-case.ts\" \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/src/transport/http/auth.controller.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / mocked controller invocation
+    exit_code: 1
+    observation: "Execution produced 122 passing and nine failing cases; all 121 prior cases and the controller constructor fail-closed case passed, nine route cases reached explicit Not implemented controller boundaries, typecheck passed and all checkpoint paths satisfy Prettier. Self-review rejected CLEAN RED: RegisterClientResult exposes only user while D04 register requires accessToken and refreshToken; LoginClientResult and RefreshClientResult expose no expiresIn while tests invent 900; direct controller method calls do not prove the declared 201/200/200/204 HTTP statuses; no missing/invalid Idempotency-Key case exists; and the nominal key 'idemp_key_12345' is 15 characters although D04 requires at least 16."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "GREEN is blocked pending a reviewed design decision for the source and propagation of register session credentials and expiresIn. RED must then use a valid 16..128 Idempotency-Key, independently reject missing/invalid keys and verify route/status metadata or live HTTP behavior rather than inferring status from direct method calls."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-RED-DESIGN-GAP-RECHECK
+    description: Controller RED remediation recheck retains the internal session-result design gap despite improved header and status coverage
+    prediction: Remediation resolves both the RED fixture gaps and the reviewed production source for every required D04 AuthSessionResponse field before GREEN is authorized.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/application/ports/identity-auth-client.port.ts\" \"api-gateway/src/application/proxy-auth.use-case.ts\" \"api-gateway/src/transport/http/auth.dto.ts\" \"api-gateway/src/transport/http/auth.controller.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / mocked controller invocation
+    exit_code: 1
+    observation: "Execution produced 123 passing and 11 failing cases; all 121 prior cases plus constructor and exact @HttpCode metadata cases passed. Valid Idempotency-Key length, missing/blank key and 15-character rejection are now covered; 11 route behaviors fail at explicit controller skeleton boundaries; typecheck and checkpoint formatting pass. However, production IdentityHttpAdapter still parses register as user-only and login/refresh without expiresIn, while the port change marks required D04 session fields optional. Mock fixtures returning tokens and expiresIn therefore do not prove that the real Gateway-to-Identity boundary can supply the mandatory public response."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Checkpoint remains blocked. A reviewed design amendment must make register accessToken/refreshToken and all session expiresIn values required at their authoritative result boundary, identify the source of expiresIn, and authorize the corresponding Identity/internal HTTP paths and adapter tests; optional fields or mock-only values are insufficient."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-RED
+    description: Clean RED evidence for the Gateway public auth controller after approved DA-D05-002
+    prediction: All prior focused Gateway cases and controller constructor/status metadata cases remain green while every route delegation, Idempotency-Key, trusted-context, response-allowlist and no-body behavior fails only at an explicit missing controller implementation boundary.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / mocked controller invocation / DA-D05-002 approved
+    exit_code: 1
+    observation: "CLEAN RED observed after updating the stale register-adapter allowlist assertion to the approved mandatory session result: 123 cases passed and 11 controller cases failed. All failures originate from explicit Not implemented registerRoute, loginRoute, refreshRoute or logoutRoute skeletons. Constructor fail-closed and exact 201/200/200/204 @HttpCode metadata pass; valid, missing/blank and 15-character Idempotency-Key cases execute; no import, compilation, decorator-metadata, mock or fixture failure remains."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "RED uses direct controller invocation and decorator metadata rather than a live Fastify route. Delegation, trusted requestId mapping, exact D04 session allowlists, Idempotency-Key enforcement and logout no-body behavior remain unproved until GREEN."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-GREEN-REMEDIATION-REQUIRED
+    description: Initial controller GREEN execution passes tests but self-review rejects an empty trusted-request fallback
+    prediction: All focused cases, typecheck and scoped formatting pass, and controller production code delegates only a present non-blank trusted requestId rather than fabricating correlation context.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.controller.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / mocked controller invocation
+    exit_code: 0
+    observation: "Execution PASS: all 134 focused Gateway cases passed, TypeScript typecheck exited 0 and both scoped files satisfy Prettier. Self-review REJECTED checkpoint completion because register, login, refresh and logout each construct context with req?.requestId || ''. Missing hook/context therefore reaches ProxyAuthUseCase with a fabricated blank requestId instead of failing closed, and no negative test covers the missing or blank trusted requestId boundary."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Happy-path delegation, status metadata, session response allowlists, Idempotency-Key cases and logout void behavior pass. Completion requires an independently executing missing/blank trusted-requestId test and explicit fail-closed controller behavior before any use-case call."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-GREEN-REMEDIATION-TEST-INDEPENDENCE
+    description: Controller fail-closed implementation passes but missing and blank request-context boundaries remain grouped
+    prediction: Missing and blank trusted requestId failures for register, login, refresh and logout each execute independently and prove no delegation.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.controller.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / mocked controller invocation
+    exit_code: 0
+    observation: "Execution PASS: 138 focused Gateway cases passed, typecheck exited 0 and scoped Prettier passed. Production now centralizes getTrustedRequestId and rejects absent or whitespace-only context before delegation. Self-review still rejects completion because each of tests 8a through 8d invokes the missing case and then the blank case sequentially; an early missing-case failure masks the blank boundary for that operation, so the required eight failure boundaries are represented by only four independently executing Jest cases."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Split or parameterize operation and requestId variant so register/login/refresh/logout × missing/blank execute as eight separate Jest cases, each asserting its matching use-case method was not called; production behavior does not need expansion."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-AUTH-CONTROLLER-GREEN
+    description: Clean GREEN evidence and self-review for Gateway public auth controllers
+    prediction: All focused Gateway cases pass with exact register/login/refresh/logout delegation, D04 responses and statuses, Idempotency-Key enforcement, trusted request correlation, fail-closed missing context and no logout body; typecheck and scoped formatting pass.
+    command: "npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts; npm run typecheck; npx prettier --check \"api-gateway/src/transport/http/auth.controller.ts\" \"api-gateway/test/e2e/auth-gateway.e2e-spec.ts\""
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / TypeScript 5 / Prettier / mocked controller invocation
+    exit_code: 0
+    observation: "PASS: all 142 focused Gateway cases passed, TypeScript typecheck exited 0 and both scoped files satisfy Prettier. Self-review observed exact allowlisted body and trusted requestId delegation; 16..128 Idempotency-Key enforcement; 201/200/200/204 metadata; accessToken, refreshToken, Bearer, expiresIn and user response allowlists; void logout; no actor reconstruction; and eight independently executing register/login/refresh/logout × missing/blank requestId cases that reject before their matching use-case method is called."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Controller behavior is exercised by direct invocation plus decorator metadata. Live Fastify routing, global pipes/filters/hooks, provider composition and real Gateway-to-Identity session data remain outside this checkpoint."
+
+  - id: EVI-D05-GATEWAY-PUBLIC-ME-CONTROLLER-GREEN
+    description: Clean GREEN evidence and self-review for the authenticated public profile controller
+    prediction: The exact GET /api/v1/me metadata, access-token guard, trusted actor/requestId delegation, D04 allowlist and fail-closed boundaries all pass independently.
+    command: npm run test:e2e -- --runTestsByPath api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Node.js v20 / Jest 29 / NestJS decorator metadata
+    exit_code: 0
+    observation: "PASS: all 150 focused Gateway cases passed. The controller declares GET /api/v1/me with AccessTokenGuard and HTTP 200, delegates only the verified actor and trusted requestId, returns only id/email/displayName/roles, and rejects missing/blank requestId or missing actor before delegation."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "Focused Gateway E2E uses mocked Identity HTTP responses; the real Identity persistence boundary is covered separately by PostgreSQL integration and Identity E2E suites."
+
+  - id: EVI-D05-FULL-VERIFICATION
+    description: Reproducible full D05 implementation verification across unit, PostgreSQL integration, E2E, compiler, lint, formatting and production builds
+    prediction: Every planned auth boundary passes with no failing test, compiler diagnostic, lint error, formatting difference or Nest production build failure.
+    command: "$ErrorActionPreference='Stop'; npm run test:unit; npm run test:integration; npm run test:e2e; npm run typecheck; npm run lint; npm run format:check; npm run build"
+    working_directory: D:\back-end\EDUCATION-BACKEND\MovieTicketBookingApp\apps
+    environment: Windows / Node.js v20 / Jest 29 / TypeScript 5 / PostgreSQL 16 Docker / NestJS 11
+    exit_code: 0
+    observation: "PASS: 46 unit tests, 36 PostgreSQL/infrastructure integration tests and 192 E2E tests passed (274 total). Typecheck, ESLint, Prettier check, Gateway build and Identity build all exited 0. Registration/login/refresh results carry mandatory accessToken, refreshToken and configuration-derived expiresIn; registration persists its initial refresh session atomically."
+    artifact_path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    limitation: "This is local reproducible evidence. CCR-013 integration state remains PENDING_BOOTSTRAP, so no CI, remote-stack integration or mergeability claim is made."

@@ -2,11 +2,7 @@
 
 ## Branch and history
 
-1. Branch mới dùng đúng một typed pattern theo CCR-012:
-   `feature/<ticket-id>-<slug>`, `fix/<ticket-id>-<slug>`,
-   `refactor/<ticket-id>-<slug>`, `migration/<ticket-id>-<slug>`,
-   `docs/<work-unit>-<slug>`, `chore/<work-unit>-<slug>` hoặc
-   `contract/<ccr-id>-<slug>`.
+1. Branch theo ticket: `feature/<ticket-id>-slug` hoặc `fix/<ticket-id>-slug`.
 2. Commit nhỏ, imperative, dùng Conventional Commits và ghi ticket/contract/evidence
    trong body khi liên quan.
 3. Không trộn refactor ngoài scope; không rewrite published evidence/history.
@@ -43,8 +39,8 @@ từng commit khi tất cả điều kiện sau đạt:
 - canonical state/projection đã đồng bộ khi bị ảnh hưởng;
 - checkpoint có thể hiểu và revert độc lập.
 
-Theo CCR-007 và amendment CCR-012, Codex được tự tạo/switch typed branch, non-force push
-branch đã verify và tạo/cập nhật Draft PR. Codex không được push trực tiếp `main`, force-push,
+Theo CCR-007, Codex được tự tạo/switch branch `codex/<work-unit>`, non-force push branch
+đã verify và tạo/cập nhật Draft PR. Codex không được push trực tiếp `main`, force-push,
 auto-merge/merge, tag, release, xóa branch hoặc rewrite published history.
 
 ## Repository consistency enforcement
@@ -64,12 +60,6 @@ Theo CCR-008:
 
 - Branch theo ticket, approved CCR hoặc coherent remediation; không tạo branch theo tên
   thư mục.
-- Developer và Codex dùng cùng typed convention; không dùng namespace riêng theo công cụ.
-- Mỗi branch có một primary commit stream. Product branch chỉ được mang supporting
-  artifacts bắt buộc của cùng ticket và các artifact đó vẫn phải tách commit theo CCR-006.
-- `docs`/`contract` branch không chứa implementation dưới `apps/**`; product branch không
-  chứa CCR, curriculum, viewer hoặc tooling không liên quan.
-- Branch `codex/*` đã publish trước CCR-012 là lịch sử hợp lệ và không bị đổi tên.
 - Tạo branch trước khi có product/contract work mới khi đang ở default branch.
 - Chỉ push khi branch không phải default, remote đã verify, diff/commits rõ ownership,
   secret review sạch và checks phù hợp pass hoặc limitation được ghi thật.
@@ -100,7 +90,7 @@ Theo CCR-010, trước khi thay đổi canonical ticket/work unit, Codex MUST:
 4. xác minh checkpoint commit reachable từ remote-tracking ref;
 5. tạo/cập nhật Draft PR;
 6. ghi `AI-contracts/state/work-unit-checkpoint.yml`; và
-7. chỉ sau đó mới authorize ticket mới và create/switch typed branch theo CCR-012.
+7. chỉ sau đó mới authorize ticket mới và create/switch branch `codex/<work-unit>`.
 
 `HANDOFF` chưa hoàn tất nếu publication gate chưa hoàn tất. Push/check/ownership/PR thất
 bại thì ticket cũ vẫn là current ticket và next action duy nhất là remediation tương ứng.

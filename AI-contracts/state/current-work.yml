@@ -1,7 +1,7 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.10
-current_stage: IMPLEMENTATION
+effective_baseline: PC-2026.11
+current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
@@ -9,7 +9,8 @@ completed_ticket_ids:
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+  - TKT-W04-D05
+active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 ticket_projection:
   phase_id: P0
   milestone_id: M0
@@ -43,7 +44,8 @@ ticket_projection:
     - CCR-010
     - CCR-011
     - CCR-012
-  execution_status: IN_PROGRESS
+    - CCR-013
+  execution_status: COMPLETE
   evidence_confidence: HIGH
   learning:
     gate_id: LG-TKT-W04-D05
@@ -64,40 +66,36 @@ statuses:
   analysis: COMPLETE
   design: APPROVED
   readiness: READY
-  implementation: IN_PROGRESS
-  evidence: MISSING
-  review: NOT_REVIEWED
-  handoff: NOT_STARTED
+  implementation: COMPLETE
+  evidence: COMPLETE
+  review: APPROVED
+  handoff: COMPLETE
 blockers: []
 required_output:
-  type: SCOPED_DIFF_AND_SELF_REVIEW
+  type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
   path:
     - apps/package.json
     - apps/api-gateway/src/main.ts
     - apps/identity-service/src/main.ts
     - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W04-D05-IMPLEMENT
-  type: IMPLEMENT_AUTH_VERTICAL_SLICE
-  target: TKT-W04-D05
-  reason: Reviewer resolved EF-D05-001 by approving apps as one NestJS package/lockfile authority; design and readiness are approved with no blocker.
-  completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
-  on_success: PROCEED_TO_VERIFICATION
-  on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
+  id: ACTION-AUTHORIZE-TKT-W05-D01
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: TKT-W05-D01
+  reason: TKT-W04-D05 publication checkpoint is VERIFIED and recorded in work-unit-checkpoint.yml; handoff is COMPLETE.
+  completion_condition: Reviewer authorizes TKT-W05-D01 as the new current ticket.
+  on_success: BEGIN_LEARNING_GATE
+  on_failure: RETAIN_CANDIDATE_STATUS
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
-    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
-    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
-    - AI-contracts/state/current-work.yml
+    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    - AI-contracts/state/work-unit-checkpoint.yml
   source_evidence:
-    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
-    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
-    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
-  decided_at: "2026-07-31"
-  decided_by: Codex
-updated_at: "2026-08-01"
+    - AI-contracts/state/work-unit-checkpoint.yml
+  decided_at: "2026-08-08"
+  decided_by: User / Reviewer and Codex
+updated_at: "2026-08-08"
 updated_by: Codex
-update_source: "Reviewer approved CCR-012; PC-2026.10 adopts typed branch naming without changing the D05 ticket, readiness or implementation scope."
+update_source: "Publication checkpoint for TKT-W04-D05 verified in work-unit-checkpoint.yml; handoff completed successfully."

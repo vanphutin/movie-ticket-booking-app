@@ -88,6 +88,11 @@ const qualityContract = read("AI-contracts/contracts/quality-contract.md");
 const securityContract = read("AI-contracts/contracts/security-contract.md");
 const apiBacklog = read("docs/product-backlog/06-api-backlog-summary.md");
 const negativeCases = read("tools/control-plane/fixtures/backlog-contract-negative-cases.json");
+const codingCheckpointCases = read("tools/control-plane/fixtures/coding-checkpoint-cases.json");
+const currentWorkSchema = read("AI-contracts/schemas/current-work.schema.json");
+const d05ExpectedFiles = read(
+  "AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml"
+);
 
 requireKeys(currentWork, currentWorkPath, [
   "schema_version",
@@ -130,6 +135,111 @@ const workAction = nestedScalar(currentWork, "next_action", "type");
 const projectedAction = scalar(nextAction, "action");
 const baseline = scalar(currentWork, "effective_baseline");
 const effectiveBaseline = scalar(contractStatus, "effective_baseline");
+
+function checkpointModelFindings(model, expectedTicket, expectedStage, approvedPaths) {
+  const findings = [];
+  const requiredFields = [
+    "step_id", "ticket_id", "scope", "feature", "layer", "phase", "status", "problem",
+    "reason", "previous_observed_step", "allowed_paths", "required_behaviors", "exclusions",
+    "verification", "completion_condition", "evidence", "updated_at", "updated_by"
+  ];
+  for (const field of requiredFields) {
+    if (!(field in model)) findings.push(`checkpoint missing ${field}`);
+  }
+  if (expectedStage !== "IMPLEMENTATION") findings.push("checkpoint requires IMPLEMENTATION stage");
+  if (!expectedTicket || model.ticket_id !== expectedTicket) findings.push("checkpoint ticket mismatch");
+  if (!Array.isArray(model.allowed_paths) || model.allowed_paths.length === 0) {
+    findings.push("checkpoint requires allowed_paths");
+  } else {
+    for (const allowedPath of model.allowed_paths) {
+      if (!approvedPaths.has(allowedPath)) findings.push(`unauthorized checkpoint path ${allowedPath}`);
+    }
+  }
+  const forbiddenKeys = new Set(["password", "secret", "credential", "raw_token", "raw_refresh_token"]);
+  for (const key of Object.keys(model)) {
+    if (forbiddenKeys.has(key)) findings.push(`forbidden sensitive checkpoint field ${key}`);
+  }
+  return findings;
+}
+
+const approvedD05Paths = new Set(
+  [...d05ExpectedFiles.matchAll(/^  - path:\s+(.+)$/gm)].map((match) => match[1].trim())
+);
+const checkpointText = section(currentWork, "coding_checkpoint");
+if (checkpointText) {
+  const normalized = checkpointText.replace(/^ {2}/gm, "");
+  const requiredCheckpointScalars = [
+    "step_id", "ticket_id", "scope", "feature", "layer", "phase", "status", "problem",
+    "reason", "previous_observed_step", "completion_condition", "evidence", "updated_at", "updated_by"
+  ];
+  for (const key of requiredCheckpointScalars) {
+    if (scalar(normalized, key) === undefined) errors.push(`${currentWorkPath}: coding_checkpoint missing '${key}'`);
+  }
+  for (const key of ["allowed_paths", "required_behaviors", "exclusions", "verification"]) {
+    if (!new RegExp(`^${key}:`, "m").test(normalized)) {
+      errors.push(`${currentWorkPath}: coding_checkpoint missing '${key}'`);
+    }
+  }
+  const allowedPaths = section(normalized, "allowed_paths")
+    .split(/\r?\n/)
+    .map((line) => line.match(/^\s*-\s+(.+)$/)?.[1])
+    .filter(Boolean);
+  const model = {
+    step_id: scalar(normalized, "step_id"),
+    ticket_id: scalar(normalized, "ticket_id"),
+    scope: scalar(normalized, "scope"),
+    feature: scalar(normalized, "feature"),
+    layer: scalar(normalized, "layer"),
+    phase: scalar(normalized, "phase"),
+    status: scalar(normalized, "status"),
+    problem: scalar(normalized, "problem"),
+    reason: scalar(normalized, "reason"),
+    previous_observed_step: scalar(normalized, "previous_observed_step"),
+    allowed_paths: allowedPaths,
+    required_behaviors: section(normalized, "required_behaviors"),
+    exclusions: section(normalized, "exclusions"),
+    verification: section(normalized, "verification"),
+    completion_condition: scalar(normalized, "completion_condition"),
+    evidence: scalar(normalized, "evidence"),
+    updated_at: scalar(normalized, "updated_at"),
+    updated_by: scalar(normalized, "updated_by")
+  };
+  for (const finding of checkpointModelFindings(model, workTicket, stage, approvedD05Paths)) {
+    errors.push(`${currentWorkPath}: ${finding}`);
+  }
+  if (/^\s+(?:password|secret|credential|raw_token|raw_refresh_token):/m.test(checkpointText)) {
+    errors.push(`${currentWorkPath}: forbidden sensitive checkpoint field`);
+  }
+}
+
+for (const marker of ["coding_checkpoint", "allowed_paths", "completion_condition", "verification"]) {
+  if (!currentWorkSchema.includes(`\"${marker}\"`)) {
+    errors.push(`Current-work schema missing checkpoint marker '${marker}'`);
+  }
+}
+
+try {
+  const fixtures = JSON.parse(codingCheckpointCases);
+  for (const fixture of fixtures.cases ?? []) {
+    const checkpoint = {
+      ...fixtures.base_checkpoint,
+      ...(fixture.overrides ?? {})
+    };
+    for (const key of fixture.delete ?? []) delete checkpoint[key];
+    const findings = checkpointModelFindings(
+      checkpoint,
+      fixture.ticket_id,
+      fixture.stage,
+      approvedD05Paths
+    );
+    const accepted = findings.length === 0;
+    if (accepted !== fixture.expected_valid) {
+      errors.push(`Coding-checkpoint fixture '${fixture.id}' produced unexpected result`);
+    }
+  }
+} catch (error) {
+  errors.push(`Invalid coding-checkpoint fixture JSON: ${error.message}`);
+}
 
 if (workTicket !== projectedTicket) {
   errors.push(`Ticket projection drift: current-work=${workTicket}, current-ticket=${projectedTicket}`);
@@ -398,4 +508,5 @@ console.log(`- learning gate references: ${gateIds.size}/35`);
 console.log(`- reference profiles: ${profileLinks.size}`);
 console.log("- endpoint registry: 55/55");
 console.log("- endpoint negative fixtures: passed");
+console.log("- coding checkpoint fixtures: passed");
 for (const warning of warnings) console.warn(`- warning: ${warning}`);

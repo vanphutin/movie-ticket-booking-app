@@ -4,6 +4,8 @@ import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fa
 import 'reflect-metadata';
 
 import { ApiGatewayModule } from './bootstrap/api-gateway.module';
+import { PublicErrorFilter } from './transport/http/public-error.filter';
+import { requestContextHook } from './transport/http/request-context.hook';
 
 function requiredPort(name: string): number {
   const value = process.env[name];
@@ -39,6 +41,8 @@ async function bootstrap(): Promise<void> {
       whitelist: true,
     }),
   );
+  app.useGlobalFilters(new PublicErrorFilter());
+  app.getHttpAdapter().getInstance().addHook('onRequest', requestContextHook);
 
   await app.listen({
     host: requiredHost('API_GATEWAY_HOST'),

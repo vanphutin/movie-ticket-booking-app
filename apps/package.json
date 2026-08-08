@@ -11,6 +11,10 @@
     "lint": "eslint \"{api-gateway,identity-service,libs,test}/**/*.ts\"",
     "test": "npm run test:unit",
     "test:unit": "jest --config jest.config.ts --runInBand --passWithNoTests",
+    "test:integration": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/**/test/integration/**/*.spec.ts\"",
+    "test:migration": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/identity-service/test/integration/migration-seed.spec.ts\"",
+    "test:concurrency": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/identity-service/test/integration/refresh-concurrency.spec.ts\"",
+    "test:e2e": "jest --config jest.config.ts --runInBand --testMatch \"<rootDir>/**/test/e2e/**/*.e2e-spec.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
@@ -18,10 +22,15 @@
     "@nestjs/config": "4.0.4",
     "@nestjs/core": "11.1.28",
     "@nestjs/platform-fastify": "11.1.28",
+    "@nestjs/typeorm": "^11.0.3",
+    "@noble/hashes": "^2.2.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.2",
+    "hash-wasm": "^4.12.0",
+    "pg": "^8.22.0",
     "reflect-metadata": "0.2.2",
-    "rxjs": "7.8.2"
+    "rxjs": "7.8.2",
+    "typeorm": "^0.3.31"
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",
@@ -29,6 +38,7 @@
     "@nestjs/testing": "11.1.28",
     "@types/jest": "29.5.14",
     "@types/node": "20.19.9",
+    "@types/pg": "^8.20.3",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "globals": "16.3.0",

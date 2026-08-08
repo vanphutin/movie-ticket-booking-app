@@ -142,6 +142,14 @@ const remediationFocus = listFromBlock(
 const designUnlocked = boolOrScalar(currentWork, "ticket_projection", "design_unlocked");
 const skeletonUnlocked = boolOrScalar(currentWork, "ticket_projection", "skeleton_unlocked");
 const lastObservation = boolOrScalar(currentWork, "ticket_projection", "last_observation");
+const hasCodingCheckpoint = /^coding_checkpoint:\s*$/m.test(currentWork);
+const codingCheckpoint = hasCodingCheckpoint ? block(currentWork, "coding_checkpoint").replace(/^ {2}/gm, "") : "";
+const codingStepId = hasCodingCheckpoint ? topScalar(codingCheckpoint, "step_id") : null;
+const codingPhase = hasCodingCheckpoint ? topScalar(codingCheckpoint, "phase") : null;
+const codingStatus = hasCodingCheckpoint ? topScalar(codingCheckpoint, "status") : null;
+const codingCompletion = hasCodingCheckpoint
+  ? topScalar(codingCheckpoint, "completion_condition")
+  : null;
 
 const currentTicket = `# GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
@@ -222,7 +230,12 @@ required_output: ${blockScalar(currentWork, "required_output", "type")}
 evidence_status: ${evidence}
 review_status: ${review}
 next_action: ${action}
-completion_condition: ${completion}`;
+completion_condition: ${completion}${hasCodingCheckpoint ? `
+coding_checkpoint:
+  step_id: ${codingStepId}
+  phase: ${codingPhase}
+  status: ${codingStatus}
+  completion_condition: ${codingCompletion}` : ""}`;
 
 let context = read("CODEX-CONTEXT.md");
 if (!context.includes("<!-- GENERATED:CURRENT-HANDOFF:START -->")) {
@@ -238,9 +251,11 @@ context = replaceRegion(
 );
 writeIfChanged("CODEX-CONTEXT.md", context);
 
-const approvedIds = [...contractStatus.matchAll(/^\s+- id: (CCR-\d+)$/gm)].map(
-  (match) => match[1]
-);
+const approvedIds = [
+  ...block(contractStatus, "approved_change_requests").matchAll(
+    /^\s+- id: (CCR-\d+)$/gm
+  )
+].map((match) => match[1]);
 const openInline = contractStatus.match(/^open_change_requests:\s*\[(.*?)\]\s*$/m);
 const openCount = openInline
   ? openInline[1].trim()

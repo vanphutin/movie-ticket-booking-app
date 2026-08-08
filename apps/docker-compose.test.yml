@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: movie_ticket_test
+      POSTGRES_USER: movie_ticket_test
+      POSTGRES_PASSWORD: movie_ticket_test
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movie_ticket_test -d movie_ticket_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30

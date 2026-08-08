@@ -50,6 +50,24 @@ try {
     throw new Error("README current-status drift was not rejected");
   }
 
+  const contextPath = path.join(temporaryRoot, "CODEX-CONTEXT.md");
+  const contextSource = fs.readFileSync(contextPath, "utf8");
+  if (contextSource.includes("coding_checkpoint:")) {
+    const staleCheckpoint = contextSource.replace(
+      /step_id:\s*[^\r\n]+/,
+      "step_id: STALE-SESSION-STEP"
+    );
+    fs.writeFileSync(contextPath, staleCheckpoint, "utf8");
+    const checkpointDrift = runCheck();
+    if (
+      checkpointDrift.status === 0 ||
+      !`${checkpointDrift.stderr}${checkpointDrift.stdout}`.includes("CODEX-CONTEXT.md")
+    ) {
+      throw new Error("Stale coding-checkpoint handoff projection was not rejected");
+    }
+    fs.writeFileSync(contextPath, contextSource, "utf8");
+  }
+
   fs.copyFileSync(path.join(root, "AI-contracts/README.md"), readmePath);
   const planPath = path.join(temporaryRoot, "docs/plan/movie-ticket-booking-master-plan.md");
   const stalePlan = fs.readFileSync(planPath, "utf8").replace(
@@ -71,6 +89,7 @@ try {
   console.log("- synchronized fixture accepted");
   console.log("- stale README generated region rejected");
   console.log("- stale plan progress generated region rejected");
+  console.log("- stale coding-checkpoint handoff rejected when checkpoint is active");
 } finally {
   fs.rmSync(temporaryRoot, { recursive: true, force: true });
 }

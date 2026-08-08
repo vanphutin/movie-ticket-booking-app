@@ -63,7 +63,126 @@
         "on_success",
         "on_failure"
       ]
+    },
+    "coding_checkpoint": {
+      "$ref": "#/$defs/codingCheckpoint"
     }
   },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "codingCheckpoint": {
+      "type": "object",
+      "required": [
+        "step_id",
+        "ticket_id",
+        "scope",
+        "feature",
+        "layer",
+        "phase",
+        "status",
+        "problem",
+        "reason",
+        "previous_observed_step",
+        "allowed_paths",
+        "required_behaviors",
+        "exclusions",
+        "verification",
+        "completion_condition",
+        "evidence",
+        "updated_at",
+        "updated_by"
+      ],
+      "properties": {
+        "step_id": { "$ref": "#/$defs/nonEmptyString" },
+        "ticket_id": { "$ref": "#/$defs/nonEmptyString" },
+        "scope": { "const": "APPLICATION" },
+        "feature": { "$ref": "#/$defs/nonEmptyString" },
+        "layer": {
+          "enum": [
+            "DOMAIN",
+            "APPLICATION",
+            "INFRASTRUCTURE",
+            "TRANSPORT",
+            "COMPOSITION",
+            "CROSS_BOUNDARY"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "RED",
+            "GREEN",
+            "REFACTOR",
+            "IMPLEMENTATION",
+            "INTEGRATION",
+            "WIRING",
+            "MIGRATION",
+            "VERIFICATION"
+          ]
+        },
+        "status": {
+          "enum": [
+            "READY_TO_START",
+            "IN_PROGRESS",
+            "AWAITING_VERIFICATION",
+            "BLOCKED"
+          ]
+        },
+        "problem": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "previous_observed_step": { "$ref": "#/$defs/nonEmptyString" },
+        "allowed_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^apps/"
+          }
+        },
+        "required_behaviors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "exclusions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "verification": {
+          "type": "object",
+          "required": ["working_directory", "command", "expected_result"],
+          "properties": {
+            "working_directory": { "$ref": "#/$defs/nonEmptyString" },
+            "command": { "$ref": "#/$defs/nonEmptyString" },
+            "expected_result": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "completion_condition": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": {
+          "enum": ["NOT_RUN", "INTERRUPTED", "MISSING", "OBSERVED", "REJECTED"]
+        },
+        "updated_at": { "$ref": "#/$defs/nonEmptyString" },
+        "updated_by": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["coding_checkpoint"] },
+      "then": {
+        "properties": {
+          "current_stage": { "const": "IMPLEMENTATION" },
+          "ticket_id": { "type": "string" }
+        }
+      }
+    }
+  ],
   "additionalProperties": true
 }

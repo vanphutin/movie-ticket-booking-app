@@ -52,6 +52,17 @@ Nếu người học yêu cầu hỗ trợ bắt đầu code, Codex chỉ tạo 
 `PASSED`, SE-1 complete, SE-2 reviewed và DoR `READY`; boundary skeleton tuân theo
 `19-learning-first-policy.md`.
 
+Theo `CCR-012`, trước mọi thay đổi trong `apps/**`, Codex MUST reconcile
+`current-work.yml#coding_checkpoint` với ticket, expected-files, branch, diff và evidence.
+Khi giao một bước mới hoặc thay đổi materially bước hiện tại, Codex MUST dùng Coding
+Action Card gồm: current position; problem; reason; required behavior; affected files;
+concrete coding work; explicit exclusions; verification và completion condition. Khi
+`step_id` không đổi, progress update MAY rút gọn còn observed delta, remaining work và
+completion condition.
+
+Checkpoint không cấp scope. Báo cáo `done`/`fixed` của người học chỉ kích hoạt kiểm chứng;
+Codex chỉ cập nhật trạng thái từ evidence đã quan sát hoặc explicit reviewer decision.
+
 ## SE-4 — Verify, Review & Decide
 
 Ghi prediction trước command, command/exit code/observation thật, positive + negative/failure case, evidence manifest, PR-style review và feedback resolution. Reviewer trả đúng một trạng thái rồi mới chọn một next action.

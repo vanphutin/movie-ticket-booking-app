@@ -74,6 +74,13 @@ Before modifying application files, confirm:
 - `expected-files.yml` permits the target;
 - the acceptance criterion and verification boundary are known.
 
+For work under `apps/**`, also read and reconcile
+`AI-contracts/state/current-work.yml#coding_checkpoint` before selecting or performing a
+coding step. Follow approved `CCR-012`: a newly assigned or materially changed coding
+step requires the eight-section Coding Action Card; an unchanged step may use a compact
+progress update. A learner report such as `done` or `fixed` triggers verification and
+does not advance the checkpoint without observed evidence.
+
 If implementation needs an unplanned file, return to `DESIGN` and update/review the
 expected-files manifest first.
 
@@ -126,9 +133,8 @@ Follow `AI-contracts/15-git-and-pr-workflow.md` and approved `CCR-006`.
 - Keep canonical state and affected projections in the same control-plane commit.
 - Preserve ambiguous user changes unstaged and report them.
 - Local commits are autonomous when policy gates pass.
-- Under approved CCR-007 and CCR-012, create/switch typed work-unit branches
-  (`feature/`, `fix/`, `refactor/`, `migration/`, `docs/`, `chore/`, `contract/`),
-  non-force push verified branches and create/update Draft PRs autonomously.
+- Under approved CCR-007, create/switch `codex/<work-unit>` branches, non-force push
+  verified branches and create/update Draft PRs autonomously.
 - Under approved CCR-010, do not change the canonical ticket/work unit until the outgoing
   branch is coherently committed, non-force pushed, verified against its remote-tracking
   ref, represented by a Draft PR and recorded in
