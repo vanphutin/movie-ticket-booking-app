@@ -1,60 +1,32 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-ticket_id: TKT-W04-D05
-candidate_ticket_id: TKT-W05-D01
-phase_id: P0
-milestone_id: M0
+ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+phase_id: P2
+milestone_id: M2
 capability_ids:
-  - CAP-IDN-01
-  - CAP-SEC-01
+  - CAP-CAT-01
 contract_ids:
-  - ARCH-001
-  - ARCH-002
+  - BUS-001
+  - DATA-SM-001
   - ARCH-003
-  - ARCH-004
-  - ARCH-005
-  - ARCH-006
-  - ARCH-007
-  - ARCH-008
-  - ARCH-009
-  - ARCH-010
-  - ARCH-011
-  - ARCH-012
-  - ARCH-013
-  - ARCH-014
-  - ARCH-015
-  - ARCH-016
-  - DATA-IDN-001
-  - TEST-001
-  - DOD-001
-  - CCR-006
-  - CCR-007
-  - CCR-008
-  - CCR-009
-  - CCR-010
-  - CCR-011
-  - CCR-012
   - CCR-013
-definition_of_ready_status: READY
-execution_status: COMPLETE
-review_status: APPROVED
-evidence_status: COMPLETE
-evidence_confidence: HIGH
+definition_of_ready_status: NOT_EVALUATED
+execution_status: NOT_STARTED
+review_status: NOT_REVIEWED
+evidence_status: MISSING
+evidence_confidence: NOT_EVALUATED
 learning:
-  gate_id: LG-TKT-W04-D05
-  status: PASSED
+  gate_id: LG-TKT-W05-D01
+  status: NOT_EVALUATED
   mode: REGULAR
   topics_presented:
-    - "Clean Architecture vertical-slice responsibility and dependency direction"
-    - "Registration transaction, idempotency, unique-constraint and failure windows"
-    - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
-    - "Authenticated Gateway-to-Identity request context and correlation"
-    - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
+    []
   observed_gaps: []
   remediation_focus: []
-  design_unlocked: true
-  skeleton_unlocked: true
-  last_observation: "PASSED"
+  design_unlocked: false
+  skeleton_unlocked: false
+  last_observation: "NOT_EVALUATED"
 blockers: []
 remediation_action: null
 updated_at: "2026-08-08"

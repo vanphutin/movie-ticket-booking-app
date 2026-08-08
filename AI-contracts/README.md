@@ -6,8 +6,8 @@ Thư mục này là nguồn sự thật chuẩn cho cách AI và học viên đi
 
 <!-- GENERATED:CURRENT-STATUS:START -->
 - Baseline đang có hiệu lực: `PC-2026.11` — `APPROVED_FOR_TRAINING`.
-- Ticket hiện tại: `TKT-W04-D05`; candidate: `TKT-W05-D01`.
-- Stage hiện tại: `HANDOFF`; next action: `AUTHORIZE_CANDIDATE_TICKET`.
+- Ticket hiện tại: `TKT-W05-D01`; candidate: `TKT-W05-D02`.
+- Stage hiện tại: `STARTUP`; next action: `RECONCILE_REPOSITORY_AND_CONTRACT_STATE`.
 - Open change requests: không có.
 - Approved change requests: `CCR-001` đến `CCR-013`.
 <!-- GENERATED:CURRENT-STATUS:END -->

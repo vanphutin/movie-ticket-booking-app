@@ -19,16 +19,16 @@
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
 effective_baseline: PC-2026.11
-current_stage: HANDOFF
-ticket_id: TKT-W04-D05
-candidate_ticket_id: TKT-W05-D01
-active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+current_stage: STARTUP
+ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+active_artifact: null
 primary_blocker: NONE
-required_output: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
-evidence_status: COMPLETE
-review_status: APPROVED
-next_action: AUTHORIZE_CANDIDATE_TICKET
-completion_condition: Reviewer authorizes TKT-W05-D01 as the new current ticket.
+required_output: REPOSITORY_RECONCILIATION_REPORT
+evidence_status: MISSING
+review_status: NOT_REVIEWED
+next_action: RECONCILE_REPOSITORY_AND_CONTRACT_STATE
+completion_condition: Repository reconciliation report is produced with zero unresolved drift or blockers.
 ```
 <!-- GENERATED:CURRENT-HANDOFF:END -->
 

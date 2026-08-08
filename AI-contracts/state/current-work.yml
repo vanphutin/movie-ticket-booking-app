@@ -1,96 +1,63 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.11
-current_stage: HANDOFF
-ticket_id: TKT-W04-D05
-candidate_ticket_id: TKT-W05-D01
+current_stage: STARTUP
+ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
   - TKT-W04-D05
-active_artifact: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+active_artifact: null
 ticket_projection:
-  phase_id: P0
-  milestone_id: M0
+  phase_id: P2
+  milestone_id: M2
   capability_ids:
-    - CAP-IDN-01
-    - CAP-SEC-01
+    - CAP-CAT-01
   contract_ids:
-    - ARCH-001
-    - ARCH-002
+    - BUS-001
+    - DATA-SM-001
     - ARCH-003
-    - ARCH-004
-    - ARCH-005
-    - ARCH-006
-    - ARCH-007
-    - ARCH-008
-    - ARCH-009
-    - ARCH-010
-    - ARCH-011
-    - ARCH-012
-    - ARCH-013
-    - ARCH-014
-    - ARCH-015
-    - ARCH-016
-    - DATA-IDN-001
-    - TEST-001
-    - DOD-001
-    - CCR-006
-    - CCR-007
-    - CCR-008
-    - CCR-009
-    - CCR-010
-    - CCR-011
-    - CCR-012
     - CCR-013
-  execution_status: COMPLETE
-  evidence_confidence: HIGH
+  execution_status: NOT_STARTED
+  evidence_confidence: NOT_EVALUATED
   learning:
-    gate_id: LG-TKT-W04-D05
+    gate_id: LG-TKT-W05-D01
     mode: REGULAR
-    topics_presented:
-      - "Clean Architecture vertical-slice responsibility and dependency direction"
-      - "Registration transaction, idempotency, unique-constraint and failure windows"
-      - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
-      - "Authenticated Gateway-to-Identity request context and correlation"
-      - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
+    topics_presented: []
     observed_gaps: []
     remediation_focus: []
-    design_unlocked: true
-    skeleton_unlocked: true
-    last_observation: PASSED
+    design_unlocked: false
+    skeleton_unlocked: false
+    last_observation: NOT_EVALUATED
 statuses:
-  learning: PASSED
-  analysis: COMPLETE
-  design: APPROVED
-  readiness: READY
-  implementation: COMPLETE
-  evidence: COMPLETE
-  review: APPROVED
-  handoff: COMPLETE
+  learning: NOT_EVALUATED
+  analysis: NOT_STARTED
+  design: NOT_STARTED
+  readiness: NOT_EVALUATED
+  implementation: NOT_STARTED
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: CANONICAL_STATE_UPDATE_AND_COMPACT_CONTEXT_PROJECTION
+  type: REPOSITORY_RECONCILIATION_REPORT
   path:
-    - apps/package.json
-    - apps/api-gateway/src/main.ts
-    - apps/identity-service/src/main.ts
-    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    - AI-contracts/audits/2026-08-08-tkt-w05-d01-startup.md
 next_action:
-  id: ACTION-AUTHORIZE-TKT-W05-D01
-  type: AUTHORIZE_CANDIDATE_TICKET
+  id: ACTION-TKT-W05-D01-STARTUP-RECONCILIATION
+  type: RECONCILE_REPOSITORY_AND_CONTRACT_STATE
   target: TKT-W05-D01
-  reason: TKT-W04-D05 publication checkpoint is VERIFIED and recorded in work-unit-checkpoint.yml; handoff is COMPLETE.
-  completion_condition: Reviewer authorizes TKT-W05-D01 as the new current ticket.
+  reason: Reviewer authorized TKT-W05-D01 as the new current ticket. Reconcile repository state, active branch, dependencies, and contract baseline before proceeding to learning.
+  completion_condition: Repository reconciliation report is produced with zero unresolved drift or blockers.
   on_success: BEGIN_LEARNING_GATE
-  on_failure: RETAIN_CANDIDATE_STATUS
+  on_failure: REPORT_DRIFT_OR_BLOCKER
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
     - AI-contracts/state/work-unit-checkpoint.yml
   source_evidence:
     - AI-contracts/state/work-unit-checkpoint.yml
@@ -98,4 +65,4 @@ next_action_projection:
   decided_by: User / Reviewer and Codex
 updated_at: "2026-08-08"
 updated_by: Codex
-update_source: "Publication checkpoint for TKT-W04-D05 verified in work-unit-checkpoint.yml; handoff completed successfully."
+update_source: "Reviewer authorized TKT-W05-D01 as current ticket; stage advanced to STARTUP."

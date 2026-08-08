@@ -1,17 +1,16 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D05
-candidate_ticket_id: TKT-W05-D01
-action: AUTHORIZE_CANDIDATE_TICKET
+next_ticket_id: TKT-W05-D01
+candidate_ticket_id: TKT-W05-D02
+action: RECONCILE_REPOSITORY_AND_CONTRACT_STATE
 target: TKT-W05-D01
-priority_reason: "TKT-W04-D05 publication checkpoint is VERIFIED and recorded in work-unit-checkpoint.yml; handoff is COMPLETE."
-completion_condition: "Reviewer authorizes TKT-W05-D01 as the new current ticket."
+priority_reason: "Reviewer authorized TKT-W05-D01 as the new current ticket. Reconcile repository state, active branch, dependencies, and contract baseline before proceeding to learning."
+completion_condition: "Repository reconciliation report is produced with zero unresolved drift or blockers."
 on_success: BEGIN_LEARNING_GATE
-on_failure: RETAIN_CANDIDATE_STATUS
+on_failure: REPORT_DRIFT_OR_BLOCKER
 blocking_ids: []
 required_evidence:
-  - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
   - AI-contracts/state/work-unit-checkpoint.yml
 source_evidence:
   - AI-contracts/state/work-unit-checkpoint.yml

@@ -13,9 +13,9 @@
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
 - Baseline: `PC-2026.11`
-- Ticket hiện tại: `TKT-W04-D05` — stage `HANDOFF`
+- Ticket hiện tại: `TKT-W05-D01` — stage `STARTUP`
 - Hoàn thành có xác minh: **5/35**
-- Next action: `AUTHORIZE_CANDIDATE_TICKET`
+- Next action: `RECONCILE_REPOSITORY_AND_CONTRACT_STATE`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
@@ -24,8 +24,8 @@
 | ☑ | `TKT-W04-D03` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D04` | `VERIFIED` | Canonical completed ticket |
 | ☑ | `TKT-W04-D05` | `VERIFIED` | Canonical completed ticket |
-| ☐ | `TKT-W05-D01` | `CANDIDATE` | Not authorized |
-| ☐ | `TKT-W05-D02` | `PLANNED` | Not started |
+| ◉ | `TKT-W05-D01` | `STARTUP` | Current authorized ticket |
+| ☐ | `TKT-W05-D02` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W05-D03` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D04` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D05` | `PLANNED` | Not started |
