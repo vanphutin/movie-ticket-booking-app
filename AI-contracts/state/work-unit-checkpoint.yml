@@ -3,14 +3,14 @@ status: VERIFIED
 outgoing_work_unit: TKT-W04-D05
 incoming_work_unit: TKT-W05-D01
 outgoing_branch: feature/tkt-w04-d05-auth-vertical-slice
-published_checkpoint_commit: fdd3df889a32413cd3017fd7d61935fac52b3ce1
+published_checkpoint_commit: d1ac0833db59402564a0cb3762c14c7d8f01afdf
 remote_tracking_ref: origin/feature/tkt-w04-d05-auth-vertical-slice
 draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/7
 verification:
-  command: git merge-base --is-ancestor fdd3df889a32413cd3017fd7d61935fac52b3ce1 origin/feature/tkt-w04-d05-auth-vertical-slice
+  command: git merge-base --is-ancestor d1ac0833db59402564a0cb3762c14c7d8f01afdf origin/feature/tkt-w04-d05-auth-vertical-slice
   working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
   exit_code: 0
-  observation: Local and remote branch heads both resolved to fdd3df889a32413cd3017fd7d61935fac52b3ce1 after a non-force push; Draft PR 7 remained open and draft with the verified D05 scope and evidence.
+  observation: Local and remote branch heads both resolved to d1ac0833db59402564a0cb3762c14c7d8f01afdf after a non-force push; Draft PR 7 remained open and draft with the verified D05 scope and evidence.
   limitation: Remote reachability is verified against the fetched origin remote-tracking ref and the successful push response; merge and CI completion are outside this checkpoint.
 verified_at: "2026-08-08"
 verified_by: Codex
