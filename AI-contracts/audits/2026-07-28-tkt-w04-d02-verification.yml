@@ -1,0 +1,41 @@
+schema_version: 1
+evidence_id: EV-TKT-W04-D02-01
+ticket_id: TKT-W04-D02
+capability_ids:
+  - CAP-IDN-01
+contract_ids:
+  - DATA-IDN-001
+  - DATA-001
+  - SEC-001
+  - SEC-002
+  - CCR-008
+  - CCR-009
+acceptance_criteria_ids:
+  - AC-W04-D02-1
+  - AC-W04-D02-2
+  - AC-W04-D02-3
+test_ids:
+  - TEST-REPOSITORY-VALIDATION-01
+prediction: "The reviewed design, expected-files manifest, readiness verdict, canonical state, and generated projections are repository-consistent with no invalid local references."
+command: "node tools/repository/validate-repository.mjs"
+working_directory: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
+environment: "Windows; Node.js v20.20.1; application module tooling unavailable"
+started_at: "2026-07-28T10:53:59Z"
+finished_at: "2026-07-28T10:54:00Z"
+exit_code: 0
+artifact_paths:
+  - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  - AI-contracts/expected-files/2026-07-28-tkt-w04-d02-expected-files.yml
+  - AI-contracts/readiness/2026-07-28-tkt-w04-d02-readiness.yml
+observation: "Repository consistency: PASSED; generated projections synchronized; control plane valid; Markdown/HTML/CSS local references valid."
+observation_source: OBSERVED
+limitations:
+  - "TKT-W04-D02 is a design-only ticket; no application module, migration, or runtime database behavior was implemented."
+  - "No application lint, typecheck, unit test, or PostgreSQL runtime test was run because application module tooling does not exist."
+  - "The legacy docs/traceability-matrix.md warning is declared and does not affect current artifact validity."
+redaction_applied: true
+commit_sha: null
+pull_request: null
+reviewer: Codex
+review_status: SUBMITTED
+confidence: HIGH

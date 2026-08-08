@@ -1,0 +1,370 @@
+schema_version: 1
+ticket_id: "TKT-W04-D02"
+design_artifact: "AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md"
+status: APPROVED
+reviewed_by: "Codex"
+reviewed_at: "2026-07-28"
+
+files:
+
+* path: "AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md"
+  action: CREATE
+  responsibility: "PostgreSQL-first Identity and Refresh Session data design for TKT-W04-D02 under effective baseline PC-2026.7"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * DATA-005
+  * DATA-008
+  * DATA-009
+  * DATA-010
+  * DATA-011
+  * SEC-001
+  * SEC-002
+  * SEC-003
+  * SEC-007
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Identity Service data ownership and trust boundaries"
+  * "PostgreSQL 16 ERD and logical table definitions"
+  * "users, roles, user_roles, and refresh_sessions schema design"
+  * "Primary key, foreign key, unique constraint, check constraint, and index design"
+  * "Normalized email uniqueness and concurrent registration behavior"
+  * "Password hashing and refresh-token hashing decisions"
+  * "Refresh-token rotation, revocation, token-family, and replay-detection lifecycle"
+  * "Registration, token rotation, family revocation, logout, and user-disable transaction boundaries"
+  * "Clean migration, upgrade migration, seed, retention, purge, and forward-fix plans"
+  * "Rejected alternatives, trade-offs, limitations, and reviewer decisions"
+  * "Positive, negative, security, transaction, migration, and real PostgreSQL concurrency test matrix"
+  * "Expected implementation projection explicitly marked as not yet authorized"
+    forbidden_content:
+  * "NestJS application source code"
+  * "TypeORM entity or repository implementation"
+  * "Executable database migration"
+  * "Application package installation or dependency claims"
+  * "TypeORM decorators used as the schema design authority"
+  * "synchronize: true"
+  * "Plaintext password or refresh token"
+  * "Real credential, secret, cookie, access token, or refresh token"
+  * "Gateway JWT pipeline design belonging to TKT-W04-D03"
+  * "OpenAPI endpoint implementation belonging to later tickets"
+  * "Staff or ticket check-in authorization implementation"
+  * "Unapproved contract modification"
+  * "Claim that runtime behavior or performance has been verified"
+    verification:
+  * "Review every design section against DATA-IDN-001, DATA-001, SEC-001, SEC-002, and CCR-009"
+  * "Confirm PostgreSQL vocabulary is authoritative and ORM-independent"
+  * "Confirm all AC-W04-D02 acceptance criteria are traceable"
+  * "Confirm owner, invariant, transaction, failure, security, migration, retention, and test boundaries are explicit"
+  * "Confirm unanswered requirement conflicts equal zero or record a blocking design finding"
+  * "Confirm no application implementation is authorized by this artifact"
+
+* path: "AI-contracts/expected-files/2026-07-28-tkt-w04-d02-expected-files.yml"
+  action: CREATE
+  responsibility: "Expected-files manifest controlling the permitted artifact scope for TKT-W04-D02"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * SEC-001
+  * SEC-002
+  * CCR-006
+  * CCR-007
+  * CCR-008
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Planned artifact paths"
+  * "CREATE or MODIFY action for each planned artifact"
+  * "Artifact responsibility"
+  * "Contract and acceptance-criteria traceability"
+  * "Permitted and forbidden content boundaries"
+  * "Artifact-specific verification requirements"
+  * "RETURN_TO_DESIGN policy for unplanned files"
+    forbidden_content:
+  * "Application implementation authorization"
+  * "Unreviewed apps/** source-file permissions"
+  * "Executable migration permission"
+  * "Files unrelated to the current ticket outcome"
+  * "Claims that proposed files already exist"
+  * "Claims that proposed verification has passed"
+    verification:
+  * "Validate against AI-contracts/templates/expected-files.yml"
+  * "Confirm every listed path directly supports TKT-W04-D02"
+  * "Confirm no application source or migration file is authorized"
+  * "Confirm unplanned_file_policy is RETURN_TO_DESIGN"
+
+* path: "AI-contracts/readiness/2026-07-28-tkt-w04-d02-readiness.yml"
+  action: CREATE
+  responsibility: "Readiness verdict created only after the TKT-W04-D02 Design Note and expected-files manifest receive reviewer approval"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * DATA-009
+  * DATA-010
+  * DATA-011
+  * SEC-001
+  * SEC-002
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Definition of Ready checks"
+  * "Design-review result"
+  * "Acceptance-criteria evaluation"
+  * "Resolved and unresolved design findings"
+  * "Explicit READY or BLOCKED verdict"
+  * "Reviewer identity and review timestamp"
+  * "Authorized next action and completion condition"
+    forbidden_content:
+  * "READY verdict before design review"
+  * "Implementation authorization while blocking findings remain"
+  * "Application source code"
+  * "Executable migration"
+  * "Unobserved verification claims"
+  * "Automatic progression to TKT-W04-D03"
+    verification:
+  * "Review against AI-contracts/templates/readiness-verdict.yml"
+  * "Confirm Design Note status is APPROVED before evaluating readiness"
+  * "Confirm all required design decisions have reviewer dispositions"
+  * "Confirm AC-W04-D02-1 through AC-W04-D02-3 are satisfied"
+  * "Confirm readiness verdict does not bypass implementation prerequisites"
+
+* path: "AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml"
+  action: CREATE
+  responsibility: "Reproducible evidence manifest for the reviewed TKT-W04-D02 design artifacts"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * SEC-001
+  * SEC-002
+  * CCR-008
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Prediction, exact command, working directory, environment, exit code, and observation"
+  * "Artifact paths and explicit verification limitations"
+  * "Observed repository-validation result"
+    forbidden_content:
+  * "Runtime database behavior claims"
+  * "Application test claims"
+  * "Invented command output or commit SHA"
+    verification:
+  * "Review against AI-contracts/templates/evidence-manifest.yml"
+  * "Re-run the recorded command from the recorded working directory"
+  * "Confirm limitations state that no application or PostgreSQL runtime test was performed"
+
+* path: "AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml"
+  action: CREATE
+  responsibility: "Acceptance-criteria review verdict for TKT-W04-D02"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * SEC-001
+  * SEC-002
+  * CCR-008
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Acceptance-criteria verdicts linked to observed evidence"
+  * "Open findings and one next action"
+  * "Reviewer identity and review timestamp"
+    forbidden_content:
+  * "VERIFIED verdict without evidence"
+  * "Application implementation authorization"
+  * "Automatic ticket transition before canonical handoff"
+    verification:
+  * "Review against AI-contracts/templates/acceptance-review.yml"
+  * "Confirm every acceptance criterion cites evidence"
+  * "Confirm open findings are empty before APPROVED"
+
+* path: "AI-contracts/state/current-work.yml"
+  action: MODIFY
+  responsibility: "Canonical runtime state updated from TKT-W04-D02 DESIGN to the reviewer-observed next stage"
+  contract_ids:
+
+  * DATA-IDN-001
+  * DATA-001
+  * SEC-001
+  * SEC-002
+  * CCR-008
+  * CCR-009
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Current stage and authorized ticket"
+  * "Design, readiness, evidence, and review statuses"
+  * "Active artifact path"
+  * "Observed blockers"
+  * "Required output"
+  * "Exactly one next action"
+  * "Completion condition and required evidence paths"
+  * "Updater, update date, and update source"
+    forbidden_content:
+  * "Duplicated technical contract text"
+  * "Unapproved implementation status"
+  * "PASSED, APPROVED, READY, or VERIFIED state without reviewer evidence"
+  * "Automatic authorization of TKT-W04-D03"
+  * "Stale artifact paths"
+    verification:
+  * "Run node tools/control-plane/sync-control-plane.mjs"
+  * "Run node tools/repository/validate-repository.mjs"
+  * "Review the canonical state and generated projections together"
+  * "Confirm current stage reflects the actual reviewer verdict"
+
+* path: "AI-contracts/state/current-ticket.yml"
+  action: MODIFY
+  responsibility: "Generated current-ticket projection synchronized from canonical current-work state"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Generated ticket identity and capability projection"
+  * "Contract references"
+  * "Learning, analysis, design, readiness, implementation, evidence, and review statuses"
+  * "Observed blockers"
+    forbidden_content:
+  * "Manual technical-contract duplication"
+  * "Manual divergence from current-work.yml"
+  * "Implementation authorization without a READY verdict"
+  * "Stale stage or blocker information"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm projection matches AI-contracts/state/current-work.yml"
+  * "Confirm generated-file header remains intact"
+
+* path: "AI-contracts/state/next-action.yml"
+  action: MODIFY
+  responsibility: "Generated next-action projection synchronized from the canonical reviewer decision for TKT-W04-D02"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Exactly one authorized next action"
+  * "Target ticket"
+  * "Decision status"
+  * "Blocking identifiers"
+  * "Completion condition"
+  * "Required evidence"
+  * "Success and failure transitions"
+    forbidden_content:
+  * "Multiple parallel primary actions"
+  * "Implementation action before readiness approval"
+  * "Automatic activation of TKT-W04-D03"
+  * "Action inconsistent with current-work.yml"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm action and completion condition match current-work.yml"
+  * "Confirm blockers and required evidence are current"
+
+* path: "CODEX-CONTEXT.md"
+  action: MODIFY
+  responsibility: "Compact generated handoff updated with the canonical TKT-W04-D02 state and exactly one next action"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Generated compact current-handoff block"
+  * "Current ticket, stage, active artifact, blocker, and required output"
+  * "Observed repository snapshot"
+  * "Exactly one next action and completion condition"
+    forbidden_content:
+  * "Full duplicated schema design"
+  * "Full duplicated security or data contracts"
+  * "Unreviewed implementation authorization"
+  * "Stale branch, stage, artifact, or next-action claims"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm generated handoff matches current-work.yml"
+  * "Review CODEX-CONTEXT.md together with canonical state changes"
+
+* path: "AI-contracts/README.md"
+  action: MODIFY
+  responsibility: "Generated current-status projection synchronized from canonical handoff state"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Generator-owned current-status region"
+    forbidden_content:
+  * "Manual edits to generated region"
+  * "Duplicated technical design"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm check mode reports no drift"
+
+* path: "docs/plan/movie-ticket-booking-master-plan.md"
+  action: MODIFY
+  responsibility: "Generated canonical ticket-progress projection updated by TKT-W04-D02 handoff"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Generator-owned canonical progress region"
+    forbidden_content:
+  * "Manual edits to generated region"
+  * "Technical contract changes"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm TKT-W04-D02 is VERIFIED and TKT-W04-D03 is current"
+
+* path: "docs/plan/movie-ticket-booking-master-plan.html"
+  action: MODIFY
+  responsibility: "Generated HTML ticket-progress projection updated by TKT-W04-D02 handoff"
+  contract_ids:
+
+  * CCR-008
+    acceptance_criteria_ids:
+  * AC-W04-D02-1
+  * AC-W04-D02-2
+  * AC-W04-D02-3
+    permitted_content:
+  * "Generator-owned canonical progress region"
+    forbidden_content:
+  * "Manual edits to generated region"
+  * "Technical contract changes"
+    verification:
+  * "Generate through node tools/control-plane/sync-control-plane.mjs"
+  * "Confirm TKT-W04-D02 is VERIFIED and TKT-W04-D03 is current"
+
+unplanned_file_policy: RETURN_TO_DESIGN

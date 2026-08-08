@@ -13,16 +13,16 @@
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
 - Baseline: `PC-2026.7`
-- Ticket hiện tại: `TKT-W04-D02` — stage `DESIGN`
-- Hoàn thành có xác minh: **1/35**
-- Next action: `PROCEED_TO_DESIGN`
+- Ticket hiện tại: `TKT-W04-D03` — stage `STARTUP`
+- Hoàn thành có xác minh: **2/35**
+- Next action: `RECONCILE_REPOSITORY`
 
 | | Ticket | Trạng thái | Ý nghĩa |
 |---|---|---|---|
 | ☑ | `TKT-W04-D01` | `VERIFIED` | Canonical completed ticket |
-| ◉ | `TKT-W04-D02` | `DESIGN` | Current authorized ticket |
-| ☐ | `TKT-W04-D03` | `CANDIDATE` | Not authorized |
-| ☐ | `TKT-W04-D04` | `PLANNED` | Not started |
+| ☑ | `TKT-W04-D02` | `VERIFIED` | Canonical completed ticket |
+| ◉ | `TKT-W04-D03` | `STARTUP` | Current authorized ticket |
+| ☐ | `TKT-W04-D04` | `CANDIDATE` | Not authorized |
 | ☐ | `TKT-W04-D05` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D01` | `PLANNED` | Not started |
 | ☐ | `TKT-W05-D02` | `PLANNED` | Not started |

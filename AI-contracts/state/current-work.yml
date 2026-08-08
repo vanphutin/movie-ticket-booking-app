@@ -1,22 +1,30 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
 effective_baseline: PC-2026.7
-current_stage: DESIGN
-ticket_id: TKT-W04-D02
-candidate_ticket_id: TKT-W04-D03
+current_stage: STARTUP
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
 completed_ticket_ids:
   - TKT-W04-D01
-active_artifact: AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+  - TKT-W04-D02
+active_artifact: null
 ticket_projection:
   phase_id: P0
   milestone_id: M0
   capability_ids:
-    - CAP-IDN-01
+    - CAP-SEC-01
   contract_ids:
-    - DATA-IDN-001
-    - DATA-001
     - SEC-001
     - SEC-002
+    - SEC-003
+    - SEC-004
+    - SEC-005
+    - SEC-006
+    - SEC-007
+    - API-AUTH-002
+    - API-AUTH-003
+    - API-AUTH-004
+    - ARCH-008
     - CCR-006
     - CCR-007
     - CCR-008
@@ -24,21 +32,17 @@ ticket_projection:
   execution_status: NOT_STARTED
   evidence_confidence: HIGH
   learning:
-    gate_id: LG-TKT-W04-D02
+    gate_id: LG-TKT-W04-D03
     mode: REGULAR
-    topics_presented:
-      - identity versus credential versus session
-      - password hashing versus token hashing
-      - refresh session lifecycle and token rotation replay detection
-      - duplicate email handling and database unique constraints
+    topics_presented: []
     observed_gaps: []
     remediation_focus: []
     design_unlocked: false
     skeleton_unlocked: false
-    last_observation: 2026-07-28-tkt-w04-d02-learning.md
+    last_observation: null
 statuses:
-  learning: PASSED
-  analysis: PASSED
+  learning: NOT_STARTED
+  analysis: NOT_STARTED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
   implementation: NOT_STARTED
@@ -47,27 +51,27 @@ statuses:
   handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: DESIGN_NOTE
-  path: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+  type: REPOSITORY_RECONCILIATION_REPORT
+  path: AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
 next_action:
-  id: ACTION-TKT-W04-D02-DESIGN
-  type: PROCEED_TO_DESIGN
-  target: TKT-W04-D02
-  reason: Analysis Note 2026-07-28-tkt-w04-d02-analysis.md completed. Advancing to Design stage for TKT-W04-D02.
-  completion_condition: Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
-  on_success: PROCEED_TO_READINESS
-  on_failure: RECORD_DESIGN_BLOCKERS
+  id: ACTION-TKT-W04-D03-STARTUP
+  type: RECONCILE_REPOSITORY
+  target: TKT-W04-D03
+  reason: TKT-W04-D02 has VERIFIED acceptance criteria and completed handoff; prerequisite for TKT-W04-D03 is satisfied.
+  completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
+  on_success: PROCEED_TO_LEARNING
+  on_failure: RECORD_STARTUP_BLOCKERS
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
-    - AI-contracts/designs/2026-07-28-tkt-w04-d02-expected-files.yml
+    - AI-contracts/audits/2026-07-28-tkt-w04-d03-startup.md
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/audits/2026-07-28-tkt-w04-d02-analysis.md
+    - AI-contracts/audits/2026-07-28-tkt-w04-d02-review.yml
+    - AI-contracts/audits/2026-07-28-tkt-w04-d02-verification.yml
   decided_at: "2026-07-28"
-  decided_by: "Codex (TKT-W04-D02 analysis completed)"
+  decided_by: "Codex (TKT-W04-D02 acceptance review approved)"
 updated_at: "2026-07-28"
 updated_by: Codex
-update_source: "CCR-009 approved PostgreSQL-first design and TypeORM implementation baseline; ticket stage and next action unchanged."
+update_source: "TKT-W04-D02 design remediated to conform to DATA-IDN-001, readiness READY, all acceptance criteria VERIFIED, and handoff completed; TKT-W04-D03 authorized at STARTUP."

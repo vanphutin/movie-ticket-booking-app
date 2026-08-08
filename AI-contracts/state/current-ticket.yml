@@ -1,16 +1,23 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-ticket_id: TKT-W04-D02
-candidate_ticket_id: TKT-W04-D03
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
 phase_id: P0
 milestone_id: M0
 capability_ids:
-  - CAP-IDN-01
+  - CAP-SEC-01
 contract_ids:
-  - DATA-IDN-001
-  - DATA-001
   - SEC-001
   - SEC-002
+  - SEC-003
+  - SEC-004
+  - SEC-005
+  - SEC-006
+  - SEC-007
+  - API-AUTH-002
+  - API-AUTH-003
+  - API-AUTH-004
+  - ARCH-008
   - CCR-006
   - CCR-007
   - CCR-008
@@ -21,19 +28,16 @@ review_status: NOT_REVIEWED
 evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
-  gate_id: LG-TKT-W04-D02
-  status: PASSED
+  gate_id: LG-TKT-W04-D03
+  status: NOT_STARTED
   mode: REGULAR
   topics_presented:
-    - identity versus credential versus session
-    - password hashing versus token hashing
-    - refresh session lifecycle and token rotation replay detection
-    - duplicate email handling and database unique constraints
+    []
   observed_gaps: []
   remediation_focus: []
   design_unlocked: false
   skeleton_unlocked: false
-  last_observation: "2026-07-28-tkt-w04-d02-learning.md"
+  last_observation: ""
 blockers: []
 remediation_action: null
 updated_at: "2026-07-28"
