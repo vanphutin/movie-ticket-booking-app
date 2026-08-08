@@ -1,86 +1,102 @@
 schema_version: 1
 project: Movie Ticket Booking Microservices
-effective_baseline: PC-2026.8
-current_stage: HANDOFF
-ticket_id: TKT-W04-D04
-candidate_ticket_id: TKT-W04-D05
+effective_baseline: PC-2026.9
+current_stage: IMPLEMENTATION
+ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
 completed_ticket_ids:
   - TKT-W04-D01
   - TKT-W04-D02
   - TKT-W04-D03
   - TKT-W04-D04
-active_artifact: AI-contracts/reviews/2026-07-30-tkt-w04-d04-review.md
+active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
 ticket_projection:
   phase_id: P0
   milestone_id: M0
   capability_ids:
     - CAP-IDN-01
+    - CAP-SEC-01
   contract_ids:
-    - API-AUTH-001
-    - API-AUTH-002
-    - API-AUTH-003
-    - API-AUTH-004
-    - API-AUTH-005
-    - API-COM-001
-    - API-COM-002
-    - API-COM-003
-    - API-COM-004
-    - API-COM-005
-    - API-COM-006
-    - SEC-003
+    - ARCH-001
+    - ARCH-002
+    - ARCH-003
+    - ARCH-004
+    - ARCH-005
+    - ARCH-006
+    - ARCH-007
     - ARCH-008
+    - ARCH-009
+    - ARCH-010
+    - ARCH-011
+    - ARCH-012
+    - ARCH-013
+    - ARCH-014
+    - ARCH-015
+    - ARCH-016
+    - DATA-IDN-001
+    - TEST-001
+    - DOD-001
     - CCR-006
     - CCR-007
     - CCR-008
     - CCR-009
     - CCR-010
-  execution_status: SUBMITTED
+    - CCR-011
+  execution_status: IN_PROGRESS
   evidence_confidence: HIGH
   learning:
-    gate_id: LG-TKT-W04-D04
+    gate_id: LG-TKT-W04-D05
     mode: REGULAR
     topics_presented:
-      - "OpenAPI 3.0/3.1 REST specification for auth APIs"
-      - "Request and Response DTO schemas and Mass Assignment prevention"
-      - "RBAC Deny Matrix and Enumeration attack mitigations"
-      - "Standard Error Response format (API-COM-001..006)"
-      - "OpenAPI Contract Testing design"
+      - "Clean Architecture vertical-slice responsibility and dependency direction"
+      - "Registration transaction, idempotency, unique-constraint and failure windows"
+      - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
+      - "Authenticated Gateway-to-Identity request context and correlation"
+      - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
     observed_gaps: []
     remediation_focus: []
     design_unlocked: true
-    skeleton_unlocked: false
+    skeleton_unlocked: true
     last_observation: PASSED
 statuses:
   learning: PASSED
   analysis: COMPLETE
   design: APPROVED
   readiness: READY
-  implementation: COMPLETE
-  evidence: OBSERVED
-  review: VERIFIED
-  handoff: COMPLETE
+  implementation: IN_PROGRESS
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
 blockers: []
 required_output:
-  type: NEXT_WORK_UNIT_AUTHORIZATION
-  path: AI-contracts/state/work-unit-checkpoint.yml
+  type: SCOPED_DIFF_AND_SELF_REVIEW
+  path:
+    - apps/package.json
+    - apps/api-gateway/src/main.ts
+    - apps/identity-service/src/main.ts
+    - AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
 next_action:
-  id: ACTION-TKT-W04-D05-AUTHORIZE
-  type: AUTHORIZE_NEXT_WORK_UNIT
+  id: ACTION-TKT-W04-D05-IMPLEMENT
+  type: IMPLEMENT_AUTH_VERTICAL_SLICE
   target: TKT-W04-D05
-  reason: TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4.
-  completion_condition: TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report.
-  on_success: PROCEED_TO_D05_STARTUP
-  on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
+  reason: Reviewer resolved EF-D05-001 by approving apps as one NestJS package/lockfile authority; design and readiness are approved with no blocker.
+  completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+  on_success: PROCEED_TO_VERIFICATION
+  on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
 next_action_projection:
   decision_status: READY
   blocking_ids: []
   required_evidence:
-    - AI-contracts/state/work-unit-checkpoint.yml
+    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
     - AI-contracts/state/current-work.yml
   source_evidence:
-    - AI-contracts/state/work-unit-checkpoint.yml
-  decided_at: "2026-07-30"
+    - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+  decided_at: "2026-07-31"
   decided_by: Codex
-updated_at: "2026-07-30"
+updated_at: "2026-07-31"
 updated_by: Codex
-update_source: "D04 publication checkpoint verified against origin and Draft PR 4; HANDOFF completed and D05 authorization is next."
+update_source: "Reviewer approved CCR-011; PC-2026.9 adds the code-comment review policy without changing the D05 ticket, readiness or implementation scope."

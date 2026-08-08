@@ -51,6 +51,13 @@ failure_cases: []
 security_cases: []
 design_requirements: []
 implementation_constraints: []
+code_comment_review:
+  required: true
+  dispositions:
+    - COMMENTS_ADDED
+    - COMMENTS_NOT_REQUIRED
+    - COMMENTS_UPDATED
+    - STALE_COMMENTS_REMOVED
 expected_files: []
 tooling_commands:
   availability: NOT_AVAILABLE

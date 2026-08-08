@@ -18,6 +18,25 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
+effective_baseline: PC-2026.9
+current_stage: IMPLEMENTATION
+ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
+active_artifact: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+primary_blocker: NONE
+required_output: SCOPED_DIFF_AND_SELF_REVIEW
+evidence_status: MISSING
+review_status: NOT_REVIEWED
+next_action: IMPLEMENT_AUTH_VERTICAL_SLICE
+completion_condition: The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review.
+```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
+
+## Shutdown
+
+After material work:
+
+=======
 effective_baseline: PC-2026.8
 current_stage: HANDOFF
 ticket_id: TKT-W04-D04
@@ -115,6 +134,7 @@ Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created
 
 After material work:
 
+>>>>>>> origin/main
 >>>>>>> origin/main
 >>>>>>> origin/main
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.

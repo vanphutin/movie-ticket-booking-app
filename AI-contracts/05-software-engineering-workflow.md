@@ -42,6 +42,12 @@ Feature branch, diff nhỏ đúng scope, commit có chủ đích, dependency dir
 `ARCH-017..026`, migration và tests theo risk, security/observability, self-review,
 docs/traceability. Debug theo hypothesis → prediction → experiment → observation; không sửa ngẫu nhiên.
 
+Self-review MUST include the `CCR-011` code-comment review for every authored or
+materially modified application-code unit. Record `COMMENTS_ADDED`,
+`COMMENTS_NOT_REQUIRED`, `COMMENTS_UPDATED` or `STALE_COMMENTS_REMOVED` with a concise
+reason. Comments preserve non-obvious intent, invariants and safety constraints; they do
+not narrate obvious code or replace executable checks and tests.
+
 Nếu người học yêu cầu hỗ trợ bắt đầu code, Codex chỉ tạo skeleton/TODO khi learning
 `PASSED`, SE-1 complete, SE-2 reviewed và DoR `READY`; boundary skeleton tuân theo
 `19-learning-first-policy.md`.

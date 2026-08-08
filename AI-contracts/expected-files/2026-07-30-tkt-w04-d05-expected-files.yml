@@ -1,0 +1,889 @@
+schema_version: 1
+ticket_id: TKT-W04-D05
+design_artifact: AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+status: APPROVED
+reviewed_by: User / Reviewer
+reviewed_at: "2026-07-31"
+previous_approval:
+  reviewed_by: User / Reviewer
+  reviewed_at: "2026-07-30"
+amendment_finding: EF-D05-001
+amendment_resolution: APPROVED_SINGLE_PACKAGE_NEST_MONOREPO
+
+defaults:
+  contract_ids:
+    - ARCH-001
+    - ARCH-002
+    - ARCH-003
+    - ARCH-004
+    - ARCH-005
+    - ARCH-006
+    - ARCH-007
+    - ARCH-008
+    - ARCH-009
+    - ARCH-010
+    - ARCH-011
+    - ARCH-012
+    - ARCH-013
+    - ARCH-014
+    - ARCH-015
+    - ARCH-016
+    - DATA-IDN-001
+    - TEST-001
+    - DOD-001
+  acceptance_criteria_ids:
+    - TKT-W04-D05
+  forbidden_content:
+    - Unreviewed public API or effective-contract changes
+    - Plaintext passwords, refresh tokens, private keys or working secrets
+    - Cross-service database access or shared TypeORM entities
+    - TypeORM synchronize true
+    - Fabricated runtime results
+
+files:
+  - path: README.md
+    action: MODIFY
+    responsibility: Current repository topology documentation
+    permitted_content:
+      - Root client boundary and apps backend workspace description
+    verification:
+      - Reviewer topology check
+      - npm run check:docs
+
+  - path: AI-contracts/designs/2026-07-28-tkt-w04-d02-design.md
+    action: MODIFY
+    responsibility: Non-destructive clarification of the superseded historical path projection
+    permitted_content:
+      - D05 topology clarification that preserves D02 data decisions and approval history
+    verification:
+      - Reviewer confirms no D02 data decision changed
+      - npm run check:docs
+
+  - path: AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+    action: CREATE
+    responsibility: Reviewed vertical-slice architecture, transaction, trust, migration and verification design
+    permitted_content:
+      - Approved design decisions, alternatives, risks and review checklist
+    verification:
+      - Reviewer design approval
+      - npm run check:docs
+
+  - path: AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+    action: CREATE
+    responsibility: Exact D05 implementation and lifecycle file boundary
+    permitted_content:
+      - Planned paths, responsibilities and verification boundaries
+    verification:
+      - Reviewer manifest approval
+      - node tools/repository/validate-repository.mjs
+
+  - path: apps/AGENTS.md
+    action: CREATE
+    responsibility: Backend-wide dependency, formatting, lint and test rules
+    permitted_content:
+      - Rules backed by real backend tooling
+    verification:
+      - Scoped coding-guideline review
+
+  - path: apps/package.json
+    action: CREATE
+    responsibility: Single-package backend scripts and dependency authority
+    permitted_content:
+      - Reproducible build, lint, migration and test commands
+    verification:
+      - npm install --ignore-scripts
+      - npm run typecheck
+
+  - path: apps/package-lock.json
+    action: CREATE
+    responsibility: Reproducible backend dependency lock
+    permitted_content:
+      - npm-generated lock data
+    verification:
+      - npm ci --ignore-scripts
+
+  - path: apps/nest-cli.json
+    action: CREATE
+    responsibility: Nest monorepo application and library project mapping
+    permitted_content:
+      - Gateway, Identity and shared-library compiler configuration
+    verification:
+      - npm run build
+
+  - path: apps/tsconfig.json
+    action: CREATE
+    responsibility: Strict backend TypeScript and project path configuration
+    permitted_content:
+      - Strict compiler and approved workspace aliases
+    verification:
+      - npm run typecheck
+
+  - path: apps/tsconfig.build.json
+    action: CREATE
+    responsibility: Production build exclusions
+    permitted_content:
+      - Test and build-output exclusions
+    verification:
+      - npm run build
+
+  - path: apps/eslint.config.mjs
+    action: CREATE
+    responsibility: Backend lint and architecture-aware TypeScript rules
+    permitted_content:
+      - ESLint flat configuration
+    verification:
+      - npm run lint
+
+  - path: apps/.prettierrc.json
+    action: CREATE
+    responsibility: Backend formatting rules
+    permitted_content:
+      - Prettier configuration
+    verification:
+      - npm run format:check
+
+  - path: apps/jest.config.ts
+    action: CREATE
+    responsibility: Shared Jest projects and path mapping
+    permitted_content:
+      - Unit, integration, contract and E2E project configuration
+    verification:
+      - npm run test:unit
+
+  - path: apps/docker-compose.test.yml
+    action: CREATE
+    responsibility: Isolated PostgreSQL 16 verification service
+    permitted_content:
+      - Local test-only database service and health check
+    verification:
+      - PostgreSQL health and integration-test bootstrap
+
+  - path: apps/.env.example
+    action: CREATE
+    responsibility: Non-secret backend configuration variable documentation
+    permitted_content:
+      - Placeholder variable names and safe local examples
+    verification:
+      - Secret scan
+
+  - path: apps/api-gateway/AGENTS.md
+    action: CREATE
+    responsibility: Gateway ownership, dependency and verification rules
+    permitted_content:
+      - Gateway-specific commands and forbidden Identity coupling
+    verification:
+      - Scoped coding-guideline review
+
+  - path: apps/api-gateway/tsconfig.app.json
+    action: CREATE
+    responsibility: Gateway Nest application compiler configuration
+    permitted_content:
+      - Gateway source and output configuration
+    verification:
+      - npm run build:gateway
+
+  - path: apps/api-gateway/src/main.ts
+    action: CREATE
+    responsibility: Gateway Fastify runtime entry point
+    permitted_content:
+      - Process bootstrap and graceful shutdown
+    verification:
+      - npm run build:gateway
+
+  - path: apps/api-gateway/src/bootstrap/api-gateway.module.ts
+    action: CREATE
+    responsibility: Gateway composition root
+    permitted_content:
+      - Concrete provider wiring
+    verification:
+      - Gateway integration test
+
+  - path: apps/api-gateway/src/bootstrap/gateway-config.ts
+    action: CREATE
+    responsibility: Validated Gateway runtime configuration
+    permitted_content:
+      - Environment parsing without secrets
+    verification:
+      - Configuration unit test
+
+  - path: apps/api-gateway/src/application/ports/identity-auth-client.port.ts
+    action: CREATE
+    responsibility: Behavioral Identity client boundary
+    permitted_content:
+      - Public auth operation inputs and typed results
+    verification:
+      - Architecture test
+
+  - path: apps/api-gateway/src/application/ports/access-token-verifier.port.ts
+    action: CREATE
+    responsibility: Access-token verification boundary
+    permitted_content:
+      - Verified minimal actor result
+    verification:
+      - Gateway authentication tests
+
+  - path: apps/api-gateway/src/application/ports/internal-request-signer.port.ts
+    action: CREATE
+    responsibility: Authenticated internal-request signing boundary
+    permitted_content:
+      - Canonical signed request input and result
+    verification:
+      - Signature and tamper tests
+
+  - path: apps/api-gateway/src/application/proxy-auth.use-case.ts
+    action: CREATE
+    responsibility: Gateway-to-Identity orchestration without Identity domain logic
+    permitted_content:
+      - Correlation, trusted actor and client-port orchestration
+    verification:
+      - Gateway application tests
+
+  - path: apps/api-gateway/src/infrastructure/http/identity-http.adapter.ts
+    action: CREATE
+    responsibility: Authenticated internal HTTP adapter for Identity
+    permitted_content:
+      - Exact-byte forwarding, timeout and typed failure mapping
+    verification:
+      - Gateway-to-Identity integration tests
+
+  - path: apps/api-gateway/src/infrastructure/security/jwt-access-token-verifier.adapter.ts
+    action: CREATE
+    responsibility: Asymmetric access-token verification
+    permitted_content:
+      - Algorithm, issuer, audience, expiry and kid enforcement
+    verification:
+      - JWT positive and negative tests
+
+  - path: apps/api-gateway/src/infrastructure/security/internal-request-hmac-signer.adapter.ts
+    action: CREATE
+    responsibility: Versioned internal-request signer
+    permitted_content:
+      - D03 canonical input signing
+    verification:
+      - Canonicalization and tamper tests
+
+  - path: apps/api-gateway/src/transport/http/auth.controller.ts
+    action: CREATE
+    responsibility: D04 register, login, refresh and logout public routes
+    permitted_content:
+      - Strict DTO binding and response mapping
+    verification:
+      - Auth contract tests
+
+  - path: apps/api-gateway/src/transport/http/me.controller.ts
+    action: CREATE
+    responsibility: D04 authenticated profile route
+    permitted_content:
+      - Trusted actor forwarding and profile response mapping
+    verification:
+      - Actor-spoof E2E test
+
+  - path: apps/api-gateway/src/transport/http/auth.dto.ts
+    action: CREATE
+    responsibility: Strict public auth request DTO allowlists
+    permitted_content:
+      - Fields present in D04 OpenAPI only
+    verification:
+      - DTO negative tests
+
+  - path: apps/api-gateway/src/transport/http/access-token.guard.ts
+    action: CREATE
+    responsibility: Access-token authentication and verified actor creation
+    permitted_content:
+      - Bearer parsing and verifier-port invocation
+    verification:
+      - Missing, invalid and spoofed-token tests
+
+  - path: apps/api-gateway/src/transport/http/request-context.hook.ts
+    action: CREATE
+    responsibility: Trusted correlation creation and untrusted header stripping
+    permitted_content:
+      - X-Request-Id and actor/internal header boundary
+    verification:
+      - Correlation E2E test
+
+  - path: apps/api-gateway/src/transport/http/public-error.filter.ts
+    action: CREATE
+    responsibility: D04 public error-envelope mapping
+    permitted_content:
+      - Explicit typed-error mapping and neutral fallback
+    verification:
+      - Error contract tests
+
+  - path: apps/api-gateway/test/integration/internal-request-signing.spec.ts
+    action: CREATE
+    responsibility: Internal signature binding integration evidence
+    permitted_content:
+      - Method, path, query, body, audience, actor, request ID, iat, nonce and kid cases
+    verification:
+      - npm run test:integration
+
+  - path: apps/api-gateway/test/e2e/auth-gateway.e2e-spec.ts
+    action: CREATE
+    responsibility: Live Gateway auth HTTP contract coverage
+    permitted_content:
+      - D04 positive and negative public cases
+    verification:
+      - npm run test:contract
+
+  - path: apps/identity-service/AGENTS.md
+    action: CREATE
+    responsibility: Identity ownership, clean-boundary, migration and test rules
+    permitted_content:
+      - Identity-specific commands and dependency constraints
+    verification:
+      - Scoped coding-guideline review
+
+  - path: apps/identity-service/tsconfig.app.json
+    action: CREATE
+    responsibility: Identity Nest application compiler configuration
+    permitted_content:
+      - Identity source and output configuration
+    verification:
+      - npm run build:identity
+
+  - path: apps/identity-service/src/main.ts
+    action: CREATE
+    responsibility: Identity internal Fastify runtime entry point
+    permitted_content:
+      - Process bootstrap and graceful shutdown
+    verification:
+      - npm run build:identity
+
+  - path: apps/identity-service/src/bootstrap/identity.module.ts
+    action: CREATE
+    responsibility: Identity composition root
+    permitted_content:
+      - Concrete adapter and use-case provider wiring
+    verification:
+      - Identity integration test
+
+  - path: apps/identity-service/src/bootstrap/identity-config.ts
+    action: CREATE
+    responsibility: Validated Identity runtime configuration
+    permitted_content:
+      - Database, crypto, retention and freshness configuration
+    verification:
+      - Configuration unit test
+
+  - path: apps/identity-service/src/domain/user.ts
+    action: CREATE
+    responsibility: Framework-free user aggregate behavior
+    permitted_content:
+      - Customer factory and authenticatable-state invariants
+    verification:
+      - Domain unit tests
+
+  - path: apps/identity-service/src/domain/refresh-session.ts
+    action: CREATE
+    responsibility: Framework-free refresh-session lifecycle
+    permitted_content:
+      - Rotation, revocation and expiry decisions
+    verification:
+      - Domain unit tests
+
+  - path: apps/identity-service/src/domain/auth.errors.ts
+    action: CREATE
+    responsibility: Framework-free invariant errors
+    permitted_content:
+      - Domain error types without HTTP status
+    verification:
+      - Architecture test
+
+  - path: apps/identity-service/src/application/auth.models.ts
+    action: CREATE
+    responsibility: Application command, result and trusted-context models
+    permitted_content:
+      - Framework-free typed models
+    verification:
+      - Typecheck and architecture test
+
+  - path: apps/identity-service/src/application/auth.errors.ts
+    action: CREATE
+    responsibility: Typed use-case outcome errors
+    permitted_content:
+      - Neutral auth and idempotency outcome categories
+    verification:
+      - Error-mapping unit tests
+
+  - path: apps/identity-service/src/application/ports/auth-crypto.ports.ts
+    action: CREATE
+    responsibility: Password, token, encryption, clock, UUID and randomness ports
+    permitted_content:
+      - Framework-free behavioral interfaces
+    verification:
+      - Architecture test
+
+  - path: apps/identity-service/src/application/ports/registration-persistence.port.ts
+    action: CREATE
+    responsibility: Atomic registration and completed-replay behavior
+    permitted_content:
+      - findCompletedByKey and registerAtomically operations
+    verification:
+      - Register application and PostgreSQL tests
+
+  - path: apps/identity-service/src/application/ports/login-session.port.ts
+    action: CREATE
+    responsibility: Credential read and atomic active-user login session behavior
+    permitted_content:
+      - Minimal credential lookup and issueForActiveUserAtomically
+    verification:
+      - Login application and PostgreSQL tests
+
+  - path: apps/identity-service/src/application/ports/refresh-session-rotation.port.ts
+    action: CREATE
+    responsibility: Atomic refresh rotation or family-reuse revocation
+    permitted_content:
+      - Stable-lock-order behavioral transaction
+    verification:
+      - Refresh PostgreSQL concurrency tests
+
+  - path: apps/identity-service/src/application/ports/logout-session.port.ts
+    action: CREATE
+    responsibility: Atomic replay-safe logout behavior
+    permitted_content:
+      - Logout/reuse typed transaction result
+    verification:
+      - Logout PostgreSQL tests
+
+  - path: apps/identity-service/src/application/ports/profile-reader.port.ts
+    action: CREATE
+    responsibility: Allowlisted self-profile read boundary
+    permitted_content:
+      - Trusted actor lookup and public projection
+    verification:
+      - Profile unit and E2E tests
+
+  - path: apps/identity-service/src/application/register.use-case.ts
+    action: CREATE
+    responsibility: Registration, idempotency and credential orchestration
+    permitted_content:
+      - Crypto preparation and atomic persistence invocation
+    verification:
+      - Register unit and integration tests
+
+  - path: apps/identity-service/src/application/login.use-case.ts
+    action: CREATE
+    responsibility: Neutral credential verification and session issuance
+    permitted_content:
+      - Credential reader, password verifier and session-port orchestration
+    verification:
+      - Login unit and integration tests
+
+  - path: apps/identity-service/src/application/refresh.use-case.ts
+    action: CREATE
+    responsibility: Opaque-token rotation/reuse orchestration
+    permitted_content:
+      - Token hashing, successor preparation and rotation-port invocation
+    verification:
+      - Refresh unit and concurrency tests
+
+  - path: apps/identity-service/src/application/logout.use-case.ts
+    action: CREATE
+    responsibility: Replay-safe logout orchestration
+    permitted_content:
+      - Token hashing and logout-port invocation
+    verification:
+      - Logout unit and integration tests
+
+  - path: apps/identity-service/src/application/get-profile.use-case.ts
+    action: CREATE
+    responsibility: Trusted self-profile orchestration
+    permitted_content:
+      - Actor-ID profile lookup and allowlisted result
+    verification:
+      - Profile unit test
+
+  - path: apps/identity-service/src/infrastructure/database/typeorm.config.ts
+    action: CREATE
+    responsibility: Identity PostgreSQL TypeORM configuration
+    permitted_content:
+      - Explicit entities, migrations and synchronize false
+    verification:
+      - Configuration and repository scan
+
+  - path: apps/identity-service/src/infrastructure/database/entities/user.orm-entity.ts
+    action: CREATE
+    responsibility: Identity user persistence mapping
+    permitted_content:
+      - D02-compatible columns and named constraints
+    verification:
+      - Migration integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/entities/role.orm-entity.ts
+    action: CREATE
+    responsibility: Role persistence mapping
+    permitted_content:
+      - Customer role natural key
+    verification:
+      - Seed integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/entities/user-role.orm-entity.ts
+    action: CREATE
+    responsibility: Local user-role association mapping
+    permitted_content:
+      - Local FKs and uniqueness
+    verification:
+      - Constraint integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/entities/refresh-session.orm-entity.ts
+    action: CREATE
+    responsibility: Refresh session and family history mapping
+    permitted_content:
+      - Token hash, expiry, revocation reason and family columns
+    verification:
+      - Refresh integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/entities/registration-idempotency.orm-entity.ts
+    action: CREATE
+    responsibility: Completed encrypted registration outcome mapping
+    permitted_content:
+      - Reviewed hashes, key IDs, ciphertext, nonce and retention columns
+    verification:
+      - Idempotency integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/entities/internal-request-nonce.orm-entity.ts
+    action: CREATE
+    responsibility: Single-use internal nonce claim mapping
+    permitted_content:
+      - Audience/nonce primary key and retention fields
+    verification:
+      - Nonce integration tests
+
+  - path: apps/identity-service/src/infrastructure/database/auth-persistence.adapter.ts
+    action: CREATE
+    responsibility: TypeORM implementation of registration, login, refresh, logout and profile ports
+    permitted_content:
+      - Short transactions, named-constraint mapping and stable row-lock order
+    verification:
+      - PostgreSQL integration and concurrency tests
+
+  - path: apps/identity-service/src/infrastructure/database/internal-nonce-store.adapter.ts
+    action: CREATE
+    responsibility: Atomic nonce claim adapter
+    permitted_content:
+      - Insert-on-conflict returning and expiry cleanup boundary
+    verification:
+      - Replay and store-failure tests
+
+  - path: apps/identity-service/src/infrastructure/security/argon2-password.adapter.ts
+    action: CREATE
+    responsibility: Argon2id password hashing and verification
+    permitted_content:
+      - Validated Argon2id configuration
+    verification:
+      - Crypto adapter tests
+
+  - path: apps/identity-service/src/infrastructure/security/auth-token.adapter.ts
+    action: CREATE
+    responsibility: Opaque refresh generation/hash and asymmetric access-token signing
+    permitted_content:
+      - Secure randomness, token hashing and versioned JWT signing
+    verification:
+      - Token adapter tests
+
+  - path: apps/identity-service/src/infrastructure/security/idempotency-crypto.adapter.ts
+    action: CREATE
+    responsibility: Keyed request fingerprint and authenticated outcome encryption
+    permitted_content:
+      - Key IDs, HMAC-SHA-256 and AEAD behavior
+    verification:
+      - Replay, mismatch and key-version tests
+
+  - path: apps/identity-service/src/infrastructure/security/internal-request-verifier.adapter.ts
+    action: CREATE
+    responsibility: Internal request authentication and integrity verification
+    permitted_content:
+      - D03 canonical verification, freshness, audience and kid handling
+    verification:
+      - Tamper and replay tests
+
+  - path: apps/identity-service/src/transport/http/internal-auth.guard.ts
+    action: CREATE
+    responsibility: Verify and claim internal request before business invocation
+    permitted_content:
+      - Raw-byte verification and TrustedRequestContext creation
+    verification:
+      - Missing, tampered and replayed request tests
+
+  - path: apps/identity-service/src/transport/http/internal-auth.controller.ts
+    action: CREATE
+    responsibility: Internal register, login, refresh and logout transport
+    permitted_content:
+      - Strict DTO binding and use-case invocation
+    verification:
+      - Identity transport integration tests
+
+  - path: apps/identity-service/src/transport/http/internal-profile.controller.ts
+    action: CREATE
+    responsibility: Internal trusted profile transport
+    permitted_content:
+      - Trusted actor context and allowlisted profile output
+    verification:
+      - Profile integration test
+
+  - path: apps/identity-service/src/transport/http/internal-auth.dto.ts
+    action: CREATE
+    responsibility: Strict internal auth DTO allowlists
+    permitted_content:
+      - Fields derived from D04 transport contract
+    verification:
+      - DTO negative tests
+
+  - path: apps/identity-service/src/transport/http/internal-error.filter.ts
+    action: CREATE
+    responsibility: Typed application-to-internal error mapping
+    permitted_content:
+      - Bounded error categories without infrastructure leakage
+    verification:
+      - Error mapping tests
+
+  - path: apps/identity-service/migrations/202607300001-create-identity-auth-schema.ts
+    action: CREATE
+    responsibility: Immutable Identity auth, idempotency and nonce schema migration
+    permitted_content:
+      - Reviewed PostgreSQL tables, named constraints and indexes
+    verification:
+      - Clean and upgrade migration tests
+
+  - path: apps/identity-service/seeds/seed-identity.ts
+    action: CREATE
+    responsibility: Minimal idempotent Customer-role seed
+    permitted_content:
+      - Stable non-secret local/test seed behavior
+    verification:
+      - Seed twice with identical logical state
+
+  - path: apps/identity-service/test/unit/domain.spec.ts
+    action: CREATE
+    responsibility: Framework-free domain invariant tests
+    permitted_content:
+      - User and refresh-session behavior
+    verification:
+      - npm run test:unit
+
+  - path: apps/identity-service/test/unit/auth-use-cases.spec.ts
+    action: CREATE
+    responsibility: Register, login, refresh, logout and profile application tests
+    permitted_content:
+      - Controlled ports and typed outcomes
+    verification:
+      - npm run test:unit
+
+  - path: apps/identity-service/test/unit/security-adapters.spec.ts
+    action: CREATE
+    responsibility: Crypto, JWT, idempotency and internal-signature adapter tests
+    permitted_content:
+      - Positive, tamper and key-version cases
+    verification:
+      - npm run test:unit
+
+  - path: apps/identity-service/test/integration/migration-seed.spec.ts
+    action: CREATE
+    responsibility: Clean, upgrade and seed-repeat PostgreSQL evidence
+    permitted_content:
+      - Real PostgreSQL 16 schema and preservation assertions
+    verification:
+      - npm run test:migration
+
+  - path: apps/identity-service/test/integration/auth-persistence.spec.ts
+    action: CREATE
+    responsibility: Registration/login/logout transaction and constraint evidence
+    permitted_content:
+      - Rollback, uniqueness, disable race and replay-safe cases
+    verification:
+      - npm run test:integration
+
+  - path: apps/identity-service/test/integration/refresh-concurrency.spec.ts
+    action: CREATE
+    responsibility: Deterministically synchronized refresh reuse evidence
+    permitted_content:
+      - Test-only barrier, contender outcomes and final family state
+    verification:
+      - npm run test:concurrency
+
+  - path: apps/identity-service/test/integration/internal-nonce.spec.ts
+    action: CREATE
+    responsibility: Single-use nonce and fail-closed store evidence
+    permitted_content:
+      - Atomic claim, replay, expiry and failure cases
+    verification:
+      - npm run test:integration
+
+  - path: apps/identity-service/test/contract/auth-openapi.contract-spec.ts
+    action: CREATE
+    responsibility: Live public behavior validation against D04 OpenAPI
+    permitted_content:
+      - D04 matrix positive, negative, disclosure and header cases
+    verification:
+      - npm run test:contract
+
+  - path: apps/identity-service/test/e2e/auth-flow.e2e-spec.ts
+    action: CREATE
+    responsibility: Client-to-Gateway-to-Identity-to-PostgreSQL auth flow
+    permitted_content:
+      - Register, me, refresh, logout, spoofing and correlation cases
+    verification:
+      - npm run test:e2e
+
+  - path: apps/identity-service/test/e2e/log-redaction.e2e-spec.ts
+    action: CREATE
+    responsibility: Captured runtime sensitive-log absence evidence
+    permitted_content:
+      - Marker credentials and structured-log assertions
+    verification:
+      - npm run test:redaction
+
+  - path: apps/test/architecture/dependency-rules.spec.ts
+    action: CREATE
+    responsibility: Static clean-architecture and service-isolation enforcement
+    permitted_content:
+      - Import-direction and forbidden-dependency assertions
+    verification:
+      - npm run test:architecture
+
+  - path: apps/test/fixtures/previous-identity-baseline.sql
+    action: CREATE
+    responsibility: Reviewed D02-compatible upgrade-test checkpoint
+    permitted_content:
+      - Non-secret representative baseline schema and data
+    verification:
+      - Upgrade migration test
+
+  - path: apps/libs/auth-contract/tsconfig.lib.json
+    action: CREATE
+    responsibility: Auth transport-contract library compiler configuration
+    permitted_content:
+      - TypeScript library configuration
+    verification:
+      - npm run build
+
+  - path: apps/libs/auth-contract/src/index.ts
+    action: CREATE
+    responsibility: Public exports for versioned internal transport contracts
+    permitted_content:
+      - DTO-independent wire types and bounded error categories
+    verification:
+      - Architecture and type tests
+
+  - path: apps/libs/auth-contract/src/internal-auth.contract.ts
+    action: CREATE
+    responsibility: Canonical internal request and trusted-context contract
+    permitted_content:
+      - Header names, signed input fields and minimal actor shape
+    verification:
+      - Gateway/Identity compatibility tests
+
+  - path: apps/libs/observability/tsconfig.lib.json
+    action: CREATE
+    responsibility: Observability primitive library compiler configuration
+    permitted_content:
+      - TypeScript library configuration
+    verification:
+      - npm run build
+
+  - path: apps/libs/observability/src/index.ts
+    action: CREATE
+    responsibility: Public exports for correlation and redaction primitives
+    permitted_content:
+      - Framework-neutral telemetry primitives
+    verification:
+      - Architecture test
+
+  - path: apps/libs/observability/src/safe-auth-logger.ts
+    action: CREATE
+    responsibility: Structured allowlist logging and sensitive-field redaction
+    permitted_content:
+      - Request ID, operation, outcome, duration and bounded categories
+    verification:
+      - Log-redaction E2E test
+
+  - path: AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+    action: CREATE
+    responsibility: D05 readiness verdict after assembled design approval
+    permitted_content:
+      - DoR observations, boundary, blockers and evidence references
+    verification:
+      - Readiness template and repository validation
+
+  - path: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    action: CREATE
+    responsibility: Reproducible boundary-specific verification evidence
+    permitted_content:
+      - Predictions, commands, environment, exits, observations, artifacts and limitations
+    verification:
+      - Evidence completeness review
+
+  - path: AI-contracts/reviews/2026-07-30-tkt-w04-d05-review.md
+    action: CREATE
+    responsibility: D05 acceptance and finding review verdict
+    permitted_content:
+      - Criterion verdicts, findings and evidence links
+    verification:
+      - Reviewer acceptance review
+
+  - path: AI-contracts/state/current-work.yml
+    action: MODIFY
+    responsibility: Canonical D05 lifecycle, status, artifact and next action
+    permitted_content:
+      - Observed reviewer, readiness, implementation and verification state
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs
+
+  - path: AI-contracts/state/current-ticket.yml
+    action: MODIFY
+    responsibility: Generated current-ticket projection
+    permitted_content:
+      - Generated projection only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: AI-contracts/state/next-action.yml
+    action: MODIFY
+    responsibility: Generated next-action projection
+    permitted_content:
+      - Generated projection only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: CODEX-CONTEXT.md
+    action: MODIFY
+    responsibility: Generated compact handoff projection
+    permitted_content:
+      - Generated handoff region only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: AI-contracts/README.md
+    action: MODIFY
+    responsibility: Generated current-state projection
+    permitted_content:
+      - Generated current-state region only
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs --check
+
+  - path: docs/plan/movie-ticket-booking-master-plan.md
+    action: MODIFY
+    responsibility: Generated canonical progress projection
+    permitted_content:
+      - Generated progress region only
+    verification:
+      - npm run check:docs
+
+  - path: docs/plan/movie-ticket-booking-master-plan.html
+    action: MODIFY
+    responsibility: Generated HTML progress projection
+    permitted_content:
+      - Generated progress region only
+    verification:
+      - npm run check:docs
+
+  - path: docs-viewer/docs-data.js
+    action: MODIFY
+    responsibility: Generated documentation viewer data
+    permitted_content:
+      - Generated content only
+    verification:
+      - npm run check:docs
+
+unplanned_file_policy: RETURN_TO_DESIGN

@@ -1,51 +1,59 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
-ticket_id: TKT-W04-D04
-candidate_ticket_id: TKT-W04-D05
+ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
 phase_id: P0
 milestone_id: M0
 capability_ids:
   - CAP-IDN-01
+  - CAP-SEC-01
 contract_ids:
-  - API-AUTH-001
-  - API-AUTH-002
-  - API-AUTH-003
-  - API-AUTH-004
-  - API-AUTH-005
-  - API-COM-001
-  - API-COM-002
-  - API-COM-003
-  - API-COM-004
-  - API-COM-005
-  - API-COM-006
-  - SEC-003
+  - ARCH-001
+  - ARCH-002
+  - ARCH-003
+  - ARCH-004
+  - ARCH-005
+  - ARCH-006
+  - ARCH-007
   - ARCH-008
+  - ARCH-009
+  - ARCH-010
+  - ARCH-011
+  - ARCH-012
+  - ARCH-013
+  - ARCH-014
+  - ARCH-015
+  - ARCH-016
+  - DATA-IDN-001
+  - TEST-001
+  - DOD-001
   - CCR-006
   - CCR-007
   - CCR-008
   - CCR-009
   - CCR-010
+  - CCR-011
 definition_of_ready_status: READY
-execution_status: SUBMITTED
-review_status: VERIFIED
-evidence_status: OBSERVED
+execution_status: IN_PROGRESS
+review_status: NOT_REVIEWED
+evidence_status: MISSING
 evidence_confidence: HIGH
 learning:
-  gate_id: LG-TKT-W04-D04
+  gate_id: LG-TKT-W04-D05
   status: PASSED
   mode: REGULAR
   topics_presented:
-    - "OpenAPI 3.0/3.1 REST specification for auth APIs"
-    - "Request and Response DTO schemas and Mass Assignment prevention"
-    - "RBAC Deny Matrix and Enumeration attack mitigations"
-    - "Standard Error Response format (API-COM-001..006)"
-    - "OpenAPI Contract Testing design"
+    - "Clean Architecture vertical-slice responsibility and dependency direction"
+    - "Registration transaction, idempotency, unique-constraint and failure windows"
+    - "Refresh-token row locking, concurrent reuse and unknown commit outcome"
+    - "Authenticated Gateway-to-Identity request context and correlation"
+    - "Clean/upgrade migration, idempotent seed and real-boundary evidence"
   observed_gaps: []
   remediation_focus: []
   design_unlocked: true
-  skeleton_unlocked: false
+  skeleton_unlocked: true
   last_observation: "PASSED"
 blockers: []
 remediation_action: null
-updated_at: "2026-07-30"
+updated_at: "2026-07-31"
 updated_by: Codex

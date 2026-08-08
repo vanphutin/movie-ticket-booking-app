@@ -1,19 +1,23 @@
 # GENERATED FILE — run: node tools/control-plane/sync-control-plane.mjs
 schema_version: 1
 decision_status: READY
-next_ticket_id: TKT-W04-D04
-candidate_ticket_id: TKT-W04-D05
-action: AUTHORIZE_NEXT_WORK_UNIT
+next_ticket_id: TKT-W04-D05
+candidate_ticket_id: TKT-W05-D01
+action: IMPLEMENT_AUTH_VERTICAL_SLICE
 target: TKT-W04-D05
-priority_reason: "TKT-W04-D04 is VERIFIED and its publication checkpoint is recorded against the fetched remote-tracking branch and Draft PR 4."
-completion_condition: "TKT-W04-D05 is authorized in canonical state and started on a matching codex/tkt-w04-d05 branch with a repository reconciliation report."
-on_success: PROCEED_TO_D05_STARTUP
-on_failure: RECORD_D05_AUTHORIZATION_REMEDIATION
+priority_reason: "Reviewer resolved EF-D05-001 by approving apps as one NestJS package/lockfile authority; design and readiness are approved with no blocker."
+completion_condition: "The D04-compatible Gateway-to-Identity auth slice, PostgreSQL migration/seed and planned tests exist only at approved paths and pass implementation self-review."
+on_success: PROCEED_TO_VERIFICATION
+on_failure: RETURN_TO_DESIGN_OR_REMEDIATE_IMPLEMENTATION
 blocking_ids: []
 required_evidence:
-  - AI-contracts/state/work-unit-checkpoint.yml
+  - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+  - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+  - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
   - AI-contracts/state/current-work.yml
 source_evidence:
-  - AI-contracts/state/work-unit-checkpoint.yml
-decided_at: "2026-07-30"
+  - AI-contracts/designs/2026-07-30-tkt-w04-d05-design.md
+  - AI-contracts/expected-files/2026-07-30-tkt-w04-d05-expected-files.yml
+  - AI-contracts/readiness/2026-07-30-tkt-w04-d05-readiness.yml
+decided_at: "2026-07-31"
 decided_by: "Codex"
