@@ -36,6 +36,87 @@ completion_condition: TKT-W04-D05 is authorized in canonical state and started o
 
 After material work:
 
+=======
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
+active_artifact: AI-contracts/readiness/2026-07-28-tkt-w04-d03-readiness.yml
+primary_blocker: NONE
+required_output: PUBLISHED_WORK_UNIT_CHECKPOINT
+evidence_status: OBSERVED
+review_status: VERIFIED
+next_action: PUBLISH_WORK_UNIT_CHECKPOINT
+completion_condition: D03 authorized changes committed; branch pushed non-force; checkpoint commit reachable from origin/codex/tkt-w04-d03-token-gateway-design; Draft PR updated; publication checkpoint recorded.
+```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
+
+## Shutdown
+
+After material work:
+
+=======
+effective_baseline: PC-2026.7
+current_stage: STARTUP
+ticket_id: TKT-W04-D03
+candidate_ticket_id: TKT-W04-D04
+active_artifact: null
+primary_blocker: NONE
+required_output: REPOSITORY_RECONCILIATION_REPORT
+evidence_status: MISSING
+review_status: NOT_REVIEWED
+next_action: RECONCILE_REPOSITORY
+completion_condition: Repository reconciliation report for TKT-W04-D03 records canonical state, Git state, active evidence, and any drift or blockers.
+```
+<!-- GENERATED:CURRENT-HANDOFF:END -->
+
+## Repository snapshot
+
+```yaml
+captured_at: "2026-07-28"
+repository_root: "D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp"
+branch: codex/control-plane-governance
+head_commit_before_control_plane_change: f35852b
+working_tree: MODIFIED
+application_modules: NOT_SCAFFOLDED
+application_tooling: NOT_AVAILABLE
+services_running: POSTGRESQL_CONTAINER_ACTIVE
+last_application_test: NOT_RUN
+automation_validator: AVAILABLE (Observed: PASSED)
+```
+
+Observed notes:
+
+- Effective baseline and current ticket values are owned by the generated handoff block above.
+- Prerequisite ticket `TKT-W04-D01` is `VERIFIED` and `APPROVED`.
+- Authorized current ticket is `TKT-W04-D02` (`CAP-IDN-01`: Identity & Session Data Design).
+- Learning Gate `LG-TKT-W04-D02` is `PASSED` (`C3_INTEGRATE` level).
+- Analysis Note `2026-07-28-tkt-w04-d02-analysis.md` created with 0 unanswered conflicts.
+- Automated validator script `tools/control-plane/validate-control-plane.mjs` verified `PASSED` with exit code `0`.
+
+## Active artifact and output
+
+The current required control-plane output is:
+
+```text
+Create Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest for TKT-W04-D02
+→ define schema design, table definitions, indexing strategy, and expected-files manifest.
+```
+
+## One next action
+
+Proceed to Design stage for `TKT-W04-D02`.
+
+Completion condition:
+
+```text
+Design Note 2026-07-28-tkt-w04-d02-design.md and expected-files manifest created and reviewed.
+```
+
+## Shutdown
+
+After material work:
+
+>>>>>>> origin/main
+>>>>>>> origin/main
 1. Update `AI-contracts/state/current-work.yml` from observations or explicit decisions.
 2. Run `node tools/control-plane/sync-control-plane.mjs`.
 3. Run `node tools/repository/validate-repository.mjs`.
