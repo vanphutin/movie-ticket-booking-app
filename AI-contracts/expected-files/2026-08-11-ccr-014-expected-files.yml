@@ -27,6 +27,7 @@ allowed_paths:
   - clients/contracts/state/current-work.yml
   - clients/contracts/state/current-ticket.yml
   - clients/contracts/state/next-action.yml
+  - clients/contracts/state/work-unit-checkpoint.yml
   - clients/contracts/roadmap/capability-map.yml
   - clients/contracts/roadmap/curriculum-map.md
   - clients/contracts/tickets/FE-TKT-W00-D01.yml

@@ -27,6 +27,14 @@ entries:
       - clients/contracts/README.md
       - tools/frontend-control-plane/validate-frontend-control-plane.mjs
     limitation: Repository validation is deterministic structural evidence and does not prove future React application behavior.
+  - id: EVD-CCR-014-003
+    prediction: The verified CCR-014 branch is recoverable from its remote-tracking ref and represented by a Draft PR before the first frontend learning ticket is authorized.
+    command: git push --set-upstream origin contract/ccr-014-independent-fe-control-plane; git rev-parse HEAD; git rev-parse origin/contract/ccr-014-independent-fe-control-plane; gh pr create --draft
+    exit_code: 0
+    observation: Local and remote SHA matched at 4374abdb22bf5e6be63ff536805135781bbe8387 and Draft PR 9 was created.
+    artifact_paths:
+      - clients/contracts/state/work-unit-checkpoint.yml
+    limitation: Merge and remote CI completion remain reviewer/external concerns.
 scope_review:
   application_files_created: false
   backend_application_files_changed: false
