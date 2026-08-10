@@ -1,0 +1,12 @@
+schema_version: 1
+dependencies:
+  - backend_capability_ids: [CAP-IDN-01, CAP-SEC-01]
+    backend_ticket: TKT-W04-D05
+    backend_status: VERIFIED
+    verification_source: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
+    frontend_target: FE-W04-AUTH
+    allowed_boundary: API Gateway public authentication API
+    forbidden_dependencies:
+      - apps/** source imports
+      - internal entity or persistence model
+      - internal gateway authentication headers

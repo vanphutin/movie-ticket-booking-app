@@ -1,0 +1,17 @@
+ticket_id: FE-TKT-W00-D01
+title: Bootstrap independent frontend learning control plane
+status: COMPLETE
+scope:
+  - frontend contracts and resumable state
+  - routed workstream selection
+  - deterministic sync, validation and status output
+out_of_scope:
+  - React/Vite scaffold
+  - UI implementation
+  - backend application change
+acceptance_criteria:
+  - FE-AC-001: FE and BE canonical states are independent.
+  - FE-AC-002: A generic status query resolves one routed next action.
+  - FE-AC-003: Curriculum traces foundation through Senior technical scope and project use.
+  - FE-AC-004: Sync and validation commands are deterministic.
+completion_condition: All acceptance criteria have observed evidence and VERIFIED review.
