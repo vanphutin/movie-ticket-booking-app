@@ -39,8 +39,11 @@ if ((state.match(/^next_action:$/gm) ?? []).length !== 1) errors.push("Frontend 
 if (scalar(state, "current_stage") === "HANDOFF" && scalar(checkpoint, "status") !== "VERIFIED") {
   errors.push("Frontend HANDOFF requires a VERIFIED work-unit publication checkpoint");
 }
-if (scalar(checkpoint, "incoming_work_unit") !== scalar(state, "candidate_ticket_id")) {
-  errors.push("Frontend publication checkpoint must target the canonical candidate ticket");
+const checkpointTarget = scalar(state, "current_stage") === "HANDOFF"
+  ? scalar(state, "candidate_ticket_id")
+  : scalar(state, "ticket_id");
+if (scalar(checkpoint, "incoming_work_unit") !== checkpointTarget) {
+  errors.push(`Frontend publication checkpoint must target ${checkpointTarget}`);
 }
 if (fs.existsSync(path.join(root, "clients/package.json")) || fs.existsSync(path.join(root, "clients/src"))) {
   errors.push("CCR-014 forbids frontend application scaffolding");
