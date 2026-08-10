@@ -1,0 +1,13 @@
+gate_id: ""
+capability_id: ""
+target_level: C1_EXPLAIN
+status: NOT_EVALUATED
+concepts_presented: []
+learner_observations:
+  correct: []
+  partial: []
+  incorrect: []
+observed_gaps: []
+remediation_focus: []
+project_application: null
+next_prompt: null

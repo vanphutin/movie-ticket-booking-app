@@ -1,0 +1,58 @@
+schema_version: 1
+work_unit: CCR-014
+status: REVIEWED
+reviewed_by: Van Phu Tin / Reviewer and Codex
+reviewed_at: "2026-08-11"
+allowed_paths:
+  - AGENTS.md
+  - package.json
+  - AI-contracts/state/current-work.yml
+  - AI-contracts/state/contract-status.yml
+  - AI-contracts/changes/CCR-014-independent-frontend-control-plane.md
+  - AI-contracts/designs/2026-08-11-ccr-014-frontend-control-plane-design.md
+  - AI-contracts/expected-files/2026-08-11-ccr-014-expected-files.yml
+  - AI-contracts/readiness/2026-08-11-ccr-014-readiness.yml
+  - AI-contracts/evidence/2026-08-11-ccr-014-evidence.yml
+  - AI-contracts/reviews/2026-08-11-ccr-014-review.md
+  - project-control/active-workstream.yml
+  - project-control/full-stack-status.yml
+  - clients/AGENTS.md
+  - clients/CODEX-CONTEXT.md
+  - clients/DESIGN.md
+  - clients/contracts/README.md
+  - clients/contracts/00-charter.md
+  - clients/contracts/01-learning-and-delivery-lifecycle.md
+  - clients/contracts/02-senior-capability-standard.md
+  - clients/contracts/03-integration-and-design-standard.md
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/contracts/state/work-unit-checkpoint.yml
+  - clients/contracts/roadmap/capability-map.yml
+  - clients/contracts/roadmap/curriculum-map.md
+  - clients/contracts/tickets/FE-TKT-W00-D01.yml
+  - clients/contracts/tickets/FE-TKT-W01-D01.yml
+  - clients/contracts/learning/checkpoints/2026-08-11-fe-bootstrap-learning.yml
+  - clients/contracts/integration/backend-capability-map.yml
+  - clients/contracts/employment-market/README.md
+  - clients/contracts/templates/coding-action-card.md
+  - clients/contracts/templates/learning-checkpoint.yml
+  - clients/contracts/templates/screen-acceptance.yml
+  - clients/contracts/schemas/current-work.schema.json
+  - tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - tools/frontend-control-plane/validate-frontend-control-plane.mjs
+  - tools/frontend-control-plane/status-work.mjs
+  - tools/control-plane/generated-targets.json
+  - CODEX-CONTEXT.md
+  - AI-contracts/state/current-ticket.yml
+  - AI-contracts/state/next-action.yml
+  - AI-contracts/README.md
+  - docs/plan/movie-ticket-booking-master-plan.md
+  - docs/plan/movie-ticket-booking-master-plan.html
+  - docs-viewer/docs-data.js
+forbidden_paths:
+  - apps/**
+  - clients/src/**
+  - clients/package.json
+  - docs/postman/**
+  - .vscode/**

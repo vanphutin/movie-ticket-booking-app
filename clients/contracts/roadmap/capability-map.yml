@@ -1,0 +1,24 @@
+schema_version: 1
+capability_families:
+  - { id: FE-CAP-WEB, name: Web platform }
+  - { id: FE-CAP-HTML, name: Semantic HTML }
+  - { id: FE-CAP-CSS, name: CSS layout and responsive design }
+  - { id: FE-CAP-JS, name: JavaScript browser and async }
+  - { id: FE-CAP-TS, name: TypeScript modeling }
+  - { id: FE-CAP-RCT, name: React mental model }
+  - { id: FE-CAP-CMP, name: Component architecture }
+  - { id: FE-CAP-ROU, name: Routing and URL state }
+  - { id: FE-CAP-STA, name: Redux Toolkit and Zustand client state }
+  - { id: FE-CAP-DAT, name: TanStack Query and API state }
+  - { id: FE-CAP-FRM, name: Forms and Zod validation }
+  - { id: FE-CAP-DSN, name: Tailwind Radix and design systems }
+  - { id: FE-CAP-A11Y, name: Accessibility }
+  - { id: FE-CAP-TST, name: Vitest RTL MSW and Playwright }
+  - { id: FE-CAP-SEC, name: Frontend security }
+  - { id: FE-CAP-PERF, name: Performance engineering }
+  - { id: FE-CAP-REL, name: Reliability and realtime }
+  - { id: FE-CAP-OBS, name: Observability }
+  - { id: FE-CAP-DEL, name: Build CI/CD and delivery }
+  - { id: FE-CAP-ARCH, name: Frontend system design }
+  - { id: FE-CAP-LEAD, name: Technical leadership }
+  - { id: FE-CAP-MKT, name: Market adaptability }

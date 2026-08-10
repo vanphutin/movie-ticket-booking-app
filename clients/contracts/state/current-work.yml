@@ -1,0 +1,54 @@
+schema_version: 1
+project: Movie Ticket Booking Frontend
+workstream: frontend
+effective_baseline: FE-PC-2026.1
+current_stage: HANDOFF
+ticket_id: FE-TKT-W00-D01
+candidate_ticket_id: FE-TKT-W01-D01
+completed_ticket_ids:
+  - FE-TKT-W00-D01
+active_artifact: AI-contracts/evidence/2026-08-11-ccr-014-evidence.yml
+ticket_projection:
+  phase_id: FE-P0
+  milestone_id: FE-M0
+  capability_ids:
+    - FE-CAP-CTL-01
+    - FE-CAP-LRN-01
+  contract_ids:
+    - FE-CHARTER-001
+    - FE-LIFE-001
+    - FE-SENIOR-001
+    - FE-INT-001
+    - CCR-014
+  execution_status: COMPLETE
+  evidence_confidence: HIGH
+statuses:
+  learning: PASSED
+  analysis: COMPLETE
+  design: APPROVED
+  readiness: READY
+  implementation: COMPLETE
+  evidence: COMPLETE
+  review: VERIFIED
+  handoff: COMPLETE
+learning_checkpoint:
+  gate_id: LG-FE-TKT-W00-D01
+  target_level: C5_COMPARE
+  status: PASSED
+  observed_decisions:
+    - independent FE and BE canonical states
+    - one routed active workstream
+    - foundations-to-Senior curriculum with immediate project application
+  observed_gaps: []
+  remediation_focus: []
+blockers: []
+next_action:
+  id: FE-ACTION-AUTHORIZE-W01-D01
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: FE-TKT-W01-D01
+  reason: Frontend control-plane bootstrap is verified; web-platform foundation is the first learning unit.
+  completion_condition: Reviewer authorizes FE-TKT-W01-D01 and begins its learning gate.
+  on_success: BEGIN_LEARNING_GATE
+  on_failure: RETAIN_CANDIDATE_STATUS
+updated_at: "2026-08-11"
+updated_by: Codex

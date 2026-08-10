@@ -18,7 +18,7 @@
 ```yaml
 schema_version: 1
 canonical_state: AI-contracts/state/current-work.yml
-effective_baseline: PC-2026.11
+effective_baseline: PC-2026.12
 current_stage: HANDOFF
 ticket_id: TKT-W04-D05
 candidate_ticket_id: TKT-W05-D01

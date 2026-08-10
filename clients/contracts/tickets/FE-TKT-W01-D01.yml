@@ -1,0 +1,15 @@
+ticket_id: FE-TKT-W01-D01
+title: Learn browser, HTTP and semantic HTML foundations
+status: CANDIDATE
+target_level: C3_APPLY
+prerequisites:
+  - FE-TKT-W00-D01 VERIFIED
+scope:
+  - browser and HTTP mental model
+  - semantic document and form structure
+  - accessible static authentication shell exercises
+out_of_scope:
+  - CSS layout implementation
+  - JavaScript behavior
+  - React, TypeScript, Tailwind and API integration
+completion_condition: Learner explains and applies browser/HTTP/semantic HTML foundations in reviewed exercises.

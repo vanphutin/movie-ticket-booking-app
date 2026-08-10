@@ -1,0 +1,14 @@
+schema_version: 1
+active_workstream: frontend
+workstreams:
+  backend:
+    canonical_state: AI-contracts/state/current-work.yml
+    status: PARKED
+    resume_condition: FE-TKT-W04-AUTH-VERIFIED
+  frontend:
+    canonical_state: clients/contracts/state/current-work.yml
+    status: ACTIVE
+selection_reason: Backend Week 4 authentication is complete; frontend foundations and matching UI follow next.
+switch_condition: Frontend authentication capability is VERIFIED before backend Week 5 delivery starts.
+updated_at: "2026-08-11"
+updated_by: Van Phu Tin / Reviewer and Codex

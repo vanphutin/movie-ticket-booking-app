@@ -1,0 +1,8 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+ticket_id: FE-TKT-W00-D01
+candidate_ticket_id: FE-TKT-W01-D01
+action: AUTHORIZE_CANDIDATE_TICKET
+target: FE-TKT-W01-D01
+priority_reason: "Frontend control-plane bootstrap is verified; web-platform foundation is the first learning unit."
+completion_condition: "Reviewer authorizes FE-TKT-W01-D01 and begins its learning gate."

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frontend current work",
+  "type": "object",
+  "required": ["schema_version", "workstream", "current_stage", "ticket_id", "statuses", "next_action"]
+}
