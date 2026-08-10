@@ -1,0 +1,22 @@
+gate_id: LG-FE-TKT-W01-D01
+ticket_id: FE-TKT-W01-D01
+status: IN_PROGRESS
+target_level: C3_APPLY
+current_questions:
+  - id: LG-FE-TKT-W01-D01-Q1
+    dimension: EXPLAIN
+    prompt: Explain request, response and HTTP statelessness in your own words; then explain how a login session can still exist.
+  - id: LG-FE-TKT-W01-D01-Q2
+    dimension: APPLY
+    prompt: A user enters /login and sees HTML, CSS, a logo and JavaScript. Describe the likely resource requests and identify which response starts the document.
+  - id: LG-FE-TKT-W01-D01-Q3
+    dimension: COMPARE
+    prompt: Choose link, button or div for submit login, open a decorative panel and navigate to registration; defend each choice.
+  - id: LG-FE-TKT-W01-D01-Q4
+    dimension: FAILURE
+    prompt: A password input has only placeholder Password and no label. What fails after typing and for keyboard or assistive-technology users, and how would semantic HTML repair it?
+learner_answers: []
+observed_gaps: []
+remediation_focus: []
+project_application: NOT_UNLOCKED
+next_action: WAIT_FOR_LEARNER_ANSWERS
