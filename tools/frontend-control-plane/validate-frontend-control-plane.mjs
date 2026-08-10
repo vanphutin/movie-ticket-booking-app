@@ -25,6 +25,7 @@ read("clients/contracts/schemas/current-work.schema.json");
 read("clients/contracts/tickets/FE-TKT-W00-D01.yml");
 read("clients/contracts/tickets/FE-TKT-W01-D01.yml");
 read("clients/AGENTS.md");
+const checkpoint = read("clients/contracts/state/work-unit-checkpoint.yml");
 
 const active = scalar(router, "active_workstream");
 if (!new Set(["backend", "frontend"]).has(active)) errors.push(`Invalid active_workstream: ${active}`);
@@ -35,6 +36,12 @@ if (!scalar(state, "ticket_id") || !scalar(state, "candidate_ticket_id")) {
   errors.push("Frontend state must declare current and candidate tickets");
 }
 if ((state.match(/^next_action:$/gm) ?? []).length !== 1) errors.push("Frontend state must own one next_action block");
+if (scalar(state, "current_stage") === "HANDOFF" && scalar(checkpoint, "status") !== "VERIFIED") {
+  errors.push("Frontend HANDOFF requires a VERIFIED work-unit publication checkpoint");
+}
+if (scalar(checkpoint, "incoming_work_unit") !== scalar(state, "candidate_ticket_id")) {
+  errors.push("Frontend publication checkpoint must target the canonical candidate ticket");
+}
 if (fs.existsSync(path.join(root, "clients/package.json")) || fs.existsSync(path.join(root, "clients/src"))) {
   errors.push("CCR-014 forbids frontend application scaffolding");
 }
