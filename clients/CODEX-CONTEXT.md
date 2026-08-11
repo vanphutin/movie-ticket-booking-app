@@ -7,7 +7,7 @@ This is a generated compact projection. Canonical frontend state lives at
 ```yaml
 schema_version: 1
 canonical_state: clients/contracts/state/current-work.yml
-effective_baseline: FE-PC-2026.1
+effective_baseline: FE-PC-2026.2
 current_stage: LEARNING
 ticket_id: FE-TKT-W01-D01
 candidate_ticket_id: null
