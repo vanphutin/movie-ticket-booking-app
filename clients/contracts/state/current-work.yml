@@ -23,7 +23,7 @@ ticket_projection:
   execution_status: NOT_STARTED
   evidence_confidence: MISSING
 statuses:
-  learning: IN_PROGRESS
+  learning: PASSED
   analysis: NOT_STARTED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
@@ -34,8 +34,8 @@ statuses:
 learning_checkpoint:
   gate_id: LG-FE-TKT-W01-D01
   target_level: C3_APPLY
-  status: IN_PROGRESS
-  current_unit: WEB_HTTP_SEMANTIC_HTML
+  status: PASSED
+  current_unit: COMPLETE
   concepts_presented:
     - browser as user agent and runtime
     - HTTP request and response
@@ -47,13 +47,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-ANSWER-W01-D01-CHECK
-  type: ANSWER_LEARNING_CHECK
-  target: LG-FE-TKT-W01-D01-Q1-Q4
-  reason: Reviewer authorized the first frontend ticket; learner understanding must be observed before analysis or implementation.
-  completion_condition: Learner answers Q1-Q4 in their own words with HTTP, semantic-element, accessibility and failure reasoning.
-  on_success: REVIEW_LEARNING_ANSWERS
+  id: FE-ACTION-AUTHOR-W01-D01-ANALYSIS
+  type: AUTHOR_ANALYSIS_ARTIFACT
+  target: FE-TKT-W01-D01-ANALYSIS
+  reason: The C3_APPLY learning gate passed with a reviewed semantic authentication shell; analysis is the next lifecycle stage.
+  completion_condition: A reviewed analysis artifact identifies the static auth-shell user goal, semantic requirements, failure cases, scope boundaries and verified-versus-unverified dependencies.
+  on_success: ENTER_DESIGN
   on_failure: REMEDIATE_OBSERVED_GAPS
-updated_at: "2026-08-11"
+updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-CCR-001 approved and applied; FE-TKT-W01-D01 resumes at its preserved learning checkpoint."
+update_source: "C3_APPLY learning gate passed after reviewed semantic static authentication shell and native failure reasoning."
