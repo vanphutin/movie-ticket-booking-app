@@ -1,0 +1,16 @@
+schema_version: 1
+status: VERIFIED
+outgoing_work_unit: FE-TKT-W00-D01
+incoming_work_unit: FE-TKT-W01-D01
+outgoing_branch: contract/ccr-014-independent-fe-control-plane
+published_checkpoint_commit: 4374abdb22bf5e6be63ff536805135781bbe8387
+remote_tracking_ref: origin/contract/ccr-014-independent-fe-control-plane
+draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/9
+verification:
+  command: git rev-parse HEAD; git rev-parse origin/contract/ccr-014-independent-fe-control-plane
+  working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+  exit_code: 0
+  observation: Local and remote branch heads both resolved to 4374abdb22bf5e6be63ff536805135781bbe8387 after a non-force push; Draft PR 9 was created in draft state.
+  limitation: Merge and remote CI completion are outside this checkpoint.
+verified_at: "2026-08-11"
+verified_by: Codex

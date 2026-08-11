@@ -12,7 +12,7 @@
 > Vùng này được sinh từ `AI-contracts/state/current-work.yml`. Dấu ☑ chỉ dành cho ticket có review
 > `VERIFIED` và handoff; ◉ là ticket đang được authorize. Không sửa checkbox bằng tay.
 
-- Baseline: `PC-2026.11`
+- Baseline: `PC-2026.12`
 - Ticket hiện tại: `TKT-W04-D05` — stage `HANDOFF`
 - Hoàn thành có xác minh: **5/35**
 - Next action: `AUTHORIZE_CANDIDATE_TICKET`

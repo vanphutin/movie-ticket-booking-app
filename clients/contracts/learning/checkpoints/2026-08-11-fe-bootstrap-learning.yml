@@ -1,0 +1,12 @@
+gate_id: LG-FE-TKT-W00-D01
+status: PASSED
+target_level: C5_COMPARE
+observed_at: "2026-08-11"
+observations:
+  - Learner selected clients/contracts as an independent FE authority.
+  - Learner selected alternating BE/FE delivery with one active lane.
+  - Learner required foundation-before-library learning and immediate Movie Ticket application.
+  - Learner distinguished design reference from functional acceptance after discussion.
+  - Learner required Senior technical depth and job-market traceability without Next.js.
+observed_gaps: []
+limitation: This checkpoint observes governance decisions, not web or React implementation mastery.

@@ -1,0 +1,8 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+ticket_id: FE-TKT-W01-D01
+candidate_ticket_id: null
+action: ANSWER_LEARNING_CHECK
+target: LG-FE-TKT-W01-D01-Q1-Q4
+priority_reason: "Reviewer authorized the first frontend ticket; learner understanding must be observed before analysis or implementation."
+completion_condition: "Learner answers Q1-Q4 in their own words with HTTP, semantic-element, accessibility and failure reasoning."
