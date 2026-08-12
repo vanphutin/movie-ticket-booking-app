@@ -3,7 +3,7 @@ work_unit: FE-CCR-002
 finding: FE-BLOCKER-CCR-002-CI-DRIFT
 status: LOCAL_VERIFIED_REMOTE_PENDING
 environment: Windows PowerShell; Node.js repository toolchain
-root_cause: docs-viewer/build-data.js serialized filesystem modification times, which are checkout metadata and differ across Windows worktrees and Linux CI runners.
+root_cause: docs-viewer/build-data.js serialized filesystem modification times and raw source line endings, both checkout metadata that differ across Windows worktrees and Linux CI runners.
 entries:
   - id: EVI-FE-CCR-002-MTIME-DETERMINISM
     prediction: Changing only a source file modification time cannot change generated docs data.
@@ -29,3 +29,7 @@ entries:
     observation: Frontend control plane, Mermaid 13 diagrams, generated projections, publication checkpoint and local references all passed.
     artifact: clients/contracts/state/current-work.yml
     limitation: Remote CI is pending the remediation push.
+post_push_observation:
+  run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577298190
+  result: FAILED
+  finding: Stable dates removed mtime drift, but the first remediation run proved raw CRLF/LF source content still changed docs-data.js across platforms; LF normalization was then added before serialization.
