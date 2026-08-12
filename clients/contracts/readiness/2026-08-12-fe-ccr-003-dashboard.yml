@@ -1,0 +1,12 @@
+schema_version: 1
+work_unit: FE-CCR-003
+verdict: READY
+review_status: APPROVED
+checks:
+  authority: PASSED
+  source_boundaries: PASSED
+  standalone_file_boundary: PASSED
+  deterministic_generation_boundary: PASSED
+  read_only_security_boundary: PASSED
+  expected_files: PASSED
+implementation_boundary: Generate one HTML dashboard and its validation/tooling only; no application behavior.
