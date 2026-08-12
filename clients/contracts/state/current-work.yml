@@ -2,11 +2,12 @@ schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
 effective_baseline: FE-PC-2026.2
-current_stage: REVIEW
+current_stage: HANDOFF
 ticket_id: FE-TKT-W01-D01
 candidate_ticket_id: null
 completed_ticket_ids:
   - FE-TKT-W00-D01
+  - FE-TKT-W01-D01
 active_artifact: clients/contracts/reviews/2026-08-12-fe-tkt-w01-d01-review.md
 ticket_projection:
   phase_id: FE-P1
@@ -30,7 +31,7 @@ statuses:
   implementation: PASSED
   evidence: OBSERVED
   review: VERIFIED
-  handoff: NOT_STARTED
+  handoff: COMPLETE
 learning_checkpoint:
   gate_id: LG-FE-TKT-W01-D01
   target_level: C3_APPLY
@@ -47,13 +48,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-PUBLISH-W01-D01-WORK-UNIT
-  type: PUBLISH_VERIFIED_WORK_UNIT
-  target: codex/fe-tkt-w01-d01-learning-review
-  reason: Acceptance is VERIFIED, the fifteen-path handoff manifest is APPROVED and ticket completion is recorded; the outgoing branch must now be committed, pushed and represented by its Draft PR before checkpoint finalization.
-  completion_condition: Authorized frontend paths are committed in coherent streams, pushed non-force, local checkpoint commit is reachable from the remote-tracking branch, and Draft PR metadata is observed for checkpoint recording.
-  on_success: RECORD_PUBLICATION_CHECKPOINT
-  on_failure: REMEDIATE_PUBLICATION
+  id: FE-ACTION-AUTHORIZE-NEXT-FRONTEND-TICKET
+  type: AUTHORIZE_SUCCESSOR_TICKET
+  target: FRONTEND_SUCCESSOR_TICKET
+  reason: FE-TKT-W01-D01 acceptance is VERIFIED and its publication checkpoint is VERIFIED with Draft PR 12; no successor ticket is currently defined or authorized.
+  completion_condition: Reviewer selects and authorizes exactly one successor frontend ticket with prerequisites, scope, expected files and first learning action.
+  on_success: BEGIN_SUCCESSOR_STARTUP
+  on_failure: RETAIN_COMPLETED_HANDOFF
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "Reviewer approved the corrected fifteen-path handoff authority and recorded evidence-backed ticket completion before publication."
+update_source: "FE-TKT-W01-D01 was committed, pushed non-force, verified against its remote-tracking ref, represented by Draft PR 12 and completed through HANDOFF."

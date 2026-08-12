@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-TKT-W01-D01
 candidate_ticket_id: null
-action: PUBLISH_VERIFIED_WORK_UNIT
-target: codex/fe-tkt-w01-d01-learning-review
-priority_reason: "Acceptance is VERIFIED, the fifteen-path handoff manifest is APPROVED and ticket completion is recorded; the outgoing branch must now be committed, pushed and represented by its Draft PR before checkpoint finalization."
-completion_condition: "Authorized frontend paths are committed in coherent streams, pushed non-force, local checkpoint commit is reachable from the remote-tracking branch, and Draft PR metadata is observed for checkpoint recording."
+action: AUTHORIZE_SUCCESSOR_TICKET
+target: FRONTEND_SUCCESSOR_TICKET
+priority_reason: "FE-TKT-W01-D01 acceptance is VERIFIED and its publication checkpoint is VERIFIED with Draft PR 12; no successor ticket is currently defined or authorized."
+completion_condition: "Reviewer selects and authorizes exactly one successor frontend ticket with prerequisites, scope, expected files and first learning action."

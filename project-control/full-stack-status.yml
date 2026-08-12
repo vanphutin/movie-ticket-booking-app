@@ -9,9 +9,9 @@ backend:
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
   ticket_id: FE-TKT-W01-D01
-  stage: REVIEW
+  stage: HANDOFF
   review_status: VERIFIED
-  next_action: PUBLISH_VERIFIED_WORK_UNIT
+  next_action: AUTHORIZE_SUCCESSOR_TICKET
 full_stack:
   bootstrap_status: VERIFIED
   product_status: PARTIAL
