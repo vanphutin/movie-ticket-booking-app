@@ -1,0 +1,104 @@
+# Design Note — FE-TKT-W01-D01
+
+- **Repository facts:**
+  - Active workstream: `frontend` (`project-control/active-workstream.yml`).
+  - Canonical state: `clients/contracts/state/current-work.yml`.
+  - Effective baseline: `FE-PC-2026.2`.
+  - Analysis stage: `PASSED` (`clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-analysis.md`).
+  - Application source code (`apps/client`) is not scaffolded by design for this foundation ticket.
+- **Actor/outcome; scope/non-scope:**
+  - **Actor:** Frontend Engineer / Web Application Learner.
+  - **Outcome:** Design and evaluate the functional static authentication shell (`/login` & `/register`) specifying exact HTML semantic structure, document landmarks, explicit form labels, input control types, native submit vs navigation affordances, explicit acceptance criteria, comprehensive expected-files manifest for all 15 lifecycle stage outputs (including handoff ticket completion and publication checkpoint entries), and reproducible verification procedures.
+  - **Implementation Boundary:** This design note evaluates and specifies the static HTML structure of the submitted learning exercise (`LG-FE-TKT-W01-D01-APP-01` in `clients/contracts/learning/checkpoints/2026-08-11-fe-w01-d01.yml`). No new application source files or `.html` files under `apps/client` are scaffolded or created in this foundation ticket (`apps/client` remains unscaffolded by design per `FE-TKT-W01-D01` ticket scope).
+  - **Scope:** Semantic HTML markup design for login form and registration navigation, accessibility attributes, native form constraint validation rules, explicit acceptance criteria definition, expected-files manifest definition for all 15 permitted frontend workstream files across all lifecycle stages.
+  - **Out of scope:** Scaffolding `apps/client`, creating `.html` application files, CSS layout/styling, JavaScript event handling, React/TypeScript build setup, live API integration.
+- **Contract/capability IDs:**
+  - Capabilities: `FE-CAP-WEB`, `FE-CAP-HTML`
+  - Contracts: `FE-CHARTER-001`, `FE-LIFE-001`, `FE-SENIOR-001`, `FE-INT-001`, `FE-CCR-001`
+- **Acceptance Criteria Definitions:**
+  - `FE-AC-W01-D01-STATE`: Canonical state file `clients/contracts/state/current-work.yml` reflects the active lifecycle stage (`DESIGN` during draft/review, `READINESS` after design approval, `IMPLEMENTATION`, `VERIFICATION`, `REVIEW`, `HANDOFF`) and corresponding stage status (`IN_PROGRESS` / `PASSED`) backed by reviewer evidence; generated control-plane projections match canonical state 100%, and sync commands exit with code `0`.
+  - `FE-AC-W01-D01-DESIGN`: Design note defines document landmarks (`header`, `nav`, `main`, `footer`), explicit `<label for="...">` matching input `id`, submit button vs navigation link distinction, zero unverified API endpoint assertions, and `npm run check:docs` exits code `0`.
+  - `FE-AC-W01-D01-MANIFEST`: Expected-files manifest `clients/contracts/expected-files/2026-08-12-fe-tkt-w01-d01-expected-files.yml` lists all 15 permitted modified/created frontend files (including analysis audit, design note, expected-files manifest, readiness verdict, implementation self-review, verification evidence manifest, review verdict, ticket completion file, and work-unit checkpoint file) with zero unplanned files, and `node tools/repository/validate-repository.mjs` exits code `0`.
+  - `FE-AC-W01-D01-READINESS`: Readiness verdict file `clients/contracts/readiness/2026-08-12-fe-tkt-w01-d01-readiness.yml` verifies that: (1) Learning (`LG-FE-TKT-W01-D01`) and analysis (`FE-TKT-W01-D01-ANALYSIS`) are `PASSED`; (2) Design note and expected-files manifest are approved by reviewer; (3) Zero application source files under `apps/client` are permitted or created in this ticket; (4) Public API integration remains unverified/out of scope; (5) Readiness verdict is evaluated based on observed evidence checks, never inferred from file existence alone; (6) Docs check (`npm run check:docs`) and repository validation (`node tools/repository/validate-repository.mjs`) exit with code `0`.
+  - `FE-AC-W01-D01-EVIDENCE`: Evidence manifest file `clients/contracts/evidence/2026-08-12-fe-tkt-w01-d01-evidence.yml` records reproducible execution evidence for all verification commands with exit code 0.
+  - `FE-AC-W01-D01-REVIEW`: Review verdict file `clients/contracts/reviews/2026-08-12-fe-tkt-w01-d01-review.md` records the reviewer acceptance review verdict.
+- **Assumptions/questions/invariants:**
+  - `FE-INV-01`: Authority Order (`Approved CCR → Effective contracts → Authorized ticket → Code → Evidence`).
+  - `FE-INV-02`: Semantic Integrity (`<label for="...">` matching input `id` required for all controls; placeholders cannot replace labels).
+  - `FE-INV-03`: Native Affordance Distinction (`<button type="submit">` for form submission; `<a href="...">` for page navigation).
+  - `FE-INV-04`: Lifecycle Gating (No implementation or code edit before readiness verdict is `READY`).
+- **Dependencies/trust boundaries:**
+  - **Static Shell Dependency:** Pure HTML document specification; zero dependency on CSS or JS runtime.
+  - **Unverified Boundary:** Network submission path is an unverified boundary (no live API calls in this ticket).
+- **Proposed design:**
+  - **Document Structure:**
+    - `<!DOCTYPE html>` with `<html lang="vi">`.
+    - `<head>` containing `<meta charset="UTF-8">`, `<meta name="viewport" content="width=device-width, initial-scale=1.0">`, `<title>Đăng nhập - Movie Ticket Booking</title>`.
+    - `<body>` with standard landmarks:
+      - `<header>`: Site branding (`<h1>Rạp Chiếu Phim - Đăng Nhập</h1>`).
+      - `<nav aria-label="Điều hướng chính">`: Navigation link to registration page (`<a href="/register">Đăng ký tài khoản</a>`).
+      - `<main>`: Authentication card container containing `<form action="#" method="POST">`.
+      - `<footer>`: Copyright and structural landmark.
+  - **Form Control Specifications:**
+    - Email field: `<label for="email">Email</label>` + `<input type="email" id="email" name="email" autocomplete="email" required>`.
+    - Password field: `<label for="password">Mật khẩu</label>` + `<input type="password" id="password" name="password" autocomplete="current-password" required>`.
+    - Submit control: `<button type="submit">Đăng nhập</button>`.
+    - Registration link: `<a href="/register">Chưa có tài khoản? Đăng ký ngay</a>`.
+- **Service owner; domain/application/adapter/transport impact:**
+  - Client Browser User Agent owns DOM element rendering, focus navigation, and native form validation.
+- **Ports, adapters và composition root:**
+  - Pure static HTML document; no JS composition root or API adapters.
+- **Cross-service contracts và forbidden dependency checks:**
+  - Forbidden: Adding inline CSS styles, `<style>` blocks, external CSS links, `<script>` tags, or framework dependencies in this functional static shell step.
+- **Rejected alternative and reason:**
+  - *Rejected:* Using `<div>` with `onclick` or `<a>` as a submit button. *Reason:* Violates `FE-INV-03`, fails native form submission contracts, and loses reliable keyboard accessibility.
+  - *Rejected:* Using `placeholder` as a label. *Reason:* Violates `FE-INV-02`, fails persistent visual context and accessible naming standards.
+- **Trade-off/limitation:**
+  - Unstyled HTML document looks basic in browser by design; visual polish belongs strictly to the downstream `VISUAL_UX` phase after `FUNCTIONAL_UI` verification.
+- **API/data/event delta:** None (static HTML).
+- **Sequence/state/ERD:** N/A for static HTML shell.
+- **Failure/security cases:**
+  - Empty required field submission → Browser prevents form submission due to failed native HTML5 constraint validation.
+  - Invalid email string → Browser triggers native type validation error.
+  - Visually hidden password → Visual masking via `type="password"` (visual shoulder surfing reduction only; network security deferred to HTTPS).
+- **Test matrix and reproducible verification procedures:**
+  1. **Control Plane & Projections Consistency:**
+     - Target: `clients/contracts/state/current-work.yml`
+     - Command: `node tools/frontend-control-plane/sync-frontend-control-plane.mjs`
+     - Working directory: Repository root (`d:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp`)
+     - Expected result: Exit code `0`, output `Frontend generated projections: synchronized`.
+  2. **Documentation & Mermaid Diagrams Validation:**
+     - Target: `clients/contracts/designs/2026-08-12-fe-tkt-w01-d01-design.md`
+     - Command: `npm run check:docs`
+     - Working directory: Repository root
+     - Expected result: Exit code `0`, output `Mermaid syntax (10.9.6): PASSED`, `Repository consistency: PASSED`.
+  3. **Repository State & Expected-Files Integrity:**
+     - Target: `clients/contracts/expected-files/2026-08-12-fe-tkt-w01-d01-expected-files.yml`
+     - Command: `node tools/repository/validate-repository.mjs`
+     - Working directory: Repository root
+     - Expected result: Exit code `0`, output `Repository consistency: PASSED`.
+  4. **Learning Checkpoint Evidence Audit:**
+     - Target: `clients/contracts/learning/checkpoints/2026-08-11-fe-w01-d01.yml` (`LG-FE-TKT-W01-D01-APP-01`)
+     - Manual procedure: Inspect recorded review observations, criteria checks, and verdict `PASS` within `clients/contracts/learning/checkpoints/2026-08-11-fe-w01-d01.yml` (lines 46–68).
+     - Expected observation: Reviewer evaluation records `verdict: PASS` at line 59 for `LG-FE-TKT-W01-D01-APP-01`.
+     - Explicit limitation: Raw submitted HTML is not stored as an independent file in the repository; therefore, verification audits the recorded review observations, criteria checks, and verdict PASS within the checkpoint evidence file, rather than re-parsing raw source HTML.
+- **Expected files (100% synchronized with manifest - 15 files total):**
+  - `clients/contracts/state/current-work.yml` (MODIFY)
+  - `clients/contracts/state/current-ticket.yml` (MODIFY - generated)
+  - `clients/contracts/state/next-action.yml` (MODIFY - generated)
+  - `clients/CODEX-CONTEXT.md` (MODIFY - generated)
+  - `project-control/full-stack-status.yml` (MODIFY - generated)
+  - `docs-viewer/docs-data.js` (MODIFY - generated)
+  - `clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-analysis.md` (CREATE)
+  - `clients/contracts/designs/2026-08-12-fe-tkt-w01-d01-design.md` (CREATE)
+  - `clients/contracts/expected-files/2026-08-12-fe-tkt-w01-d01-expected-files.yml` (CREATE)
+  - `clients/contracts/readiness/2026-08-12-fe-tkt-w01-d01-readiness.yml` (CREATE)
+  - `clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-implementation-self-review.md` (CREATE)
+  - `clients/contracts/evidence/2026-08-12-fe-tkt-w01-d01-evidence.yml` (CREATE)
+  - `clients/contracts/reviews/2026-08-12-fe-tkt-w01-d01-review.md` (CREATE)
+  - `clients/contracts/tickets/FE-TKT-W01-D01.yml` (MODIFY - updating ticket completion status)
+  - `clients/contracts/state/work-unit-checkpoint.yml` (MODIFY - recording publication checkpoint for FE-TKT-W01-D01)
+- **Review status:** `PASSED`
+- **Reviewer:** Codex
+- **Reviewed at:** `2026-08-12`
+- **Review observations:** Fifteen-path authority correctly permits evidence-backed ticket completion and the full existing publication-checkpoint schema; two tracked handoff paths are classified NOT_MODIFIED until observed handoff edits.

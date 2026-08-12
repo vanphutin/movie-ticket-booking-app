@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-TKT-W01-D01
 candidate_ticket_id: null
-action: ANSWER_LEARNING_CHECK
-target: LG-FE-TKT-W01-D01-Q1-Q4
-priority_reason: "Reviewer authorized the first frontend ticket; learner understanding must be observed before analysis or implementation."
-completion_condition: "Learner answers Q1-Q4 in their own words with HTTP, semantic-element, accessibility and failure reasoning."
+action: AUTHORIZE_SUCCESSOR_TICKET
+target: FRONTEND_SUCCESSOR_TICKET
+priority_reason: "FE-TKT-W01-D01 acceptance is VERIFIED and its publication checkpoint is VERIFIED with Draft PR 12; no successor ticket is currently defined or authorized."
+completion_condition: "Reviewer selects and authorizes exactly one successor frontend ticket with prerequisites, scope, expected files and first learning action."

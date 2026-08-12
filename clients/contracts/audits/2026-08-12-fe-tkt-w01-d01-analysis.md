@@ -1,0 +1,63 @@
+# Analysis — FE-TKT-W01-D01
+
+- **Actor and business outcome:** Frontend Engineer / Web Application Learner. Business outcome: Establish verified mental model and semantic HTML requirements for the static authentication shell (`/login` & `/register`), defining document structure, form landmarks, explicit label associations, input types, native submit/link navigation affordances, browser/HTTP interaction boundary, and native error handling, as a prerequisite for downstream CSS visual design and JS/TS interactive state.
+- **Scope:**
+  - Audit browser rendering lifecycle and HTTP request/response mental model (document GET request vs asset subresource requests, stateless HTTP vs session management).
+  - Define semantic document structure and HTML5 landmarks (`header`, `nav`, `main`, `footer`, `h1`).
+  - Specify accessible static authentication shell requirements for login and registration forms (`<form>`, `<label for="...">`, `<input type="email">`, `<input type="password">`, `<button type="submit">`, `<a href="...">`).
+  - Analyze native HTML5 constraint validation behaviors and failure cases.
+  - Establish clear boundaries between semantic HTML, CSS layout/styling, JS behavior, and backend API integration.
+- **Out of scope:**
+  - CSS layout, styling, responsive breakpoints, visual design tokens, or Tailwind CSS integration.
+  - JavaScript event handlers (`addEventListener`, `e.preventDefault()`), client-side routing, or dynamic state management.
+  - React / TypeScript component architecture or build tooling setup (Vite, Next.js).
+  - Live backend API integration or HTTP network requests (`fetch`, `axios`).
+- **Repository facts:**
+  - Active workstream: `frontend` (configured in `project-control/active-workstream.yml`).
+  - Canonical state: `clients/contracts/state/current-work.yml`.
+  - Effective baseline: `FE-PC-2026.2`.
+  - Authorized ticket: `FE-TKT-W01-D01` (`IN_PROGRESS`).
+  - Learning Gate `LG-FE-TKT-W01-D01` status: `PASSED` at target level `C3_APPLY` (checkpoint recorded in `clients/contracts/learning/checkpoints/2026-08-11-fe-w01-d01.yml`).
+  - Prerequisite ticket `FE-TKT-W00-D01` is `VERIFIED`.
+  - Application source code (`apps/client`) is not scaffolded by design for this foundation ticket.
+- **Assumptions:**
+  - Browsers implement standard W3C / HTML5 spec for semantic elements and form constraint validation (`required`, `type="email"`).
+  - User authentication entry point on client side begins with a login form and navigation link to registration.
+  - Public API integration is an unverified dependency in the current ticket; static shell analysis treats network submission as an abstract boundary and does not assert specific backend endpoint paths without verified API contracts.
+- **Invariants:**
+  - `FE-INV-01` (Authority Order): `Approved CCR → Effective contracts → Authorized current ticket → Code → Observed test/evidence`.
+  - `FE-INV-02` (Semantic Integrity & Accessibility): Every form input MUST have an explicitly associated visible `<label for="...">` matching input `id`; placeholders CANNOT replace visible labels.
+  - `FE-INV-03` (Native Affordance Distinction): Actions that mutate state or submit forms MUST use `<button type="submit">`; navigation between pages MUST use `<a href="...">`.
+  - `FE-INV-04` (Lifecycle Gating): Analysis artifact MUST exist and be reviewed prior to advancing to `DESIGN` stage.
+- **Service/data owner:**
+  - **Client App (Browser User Agent):** Owns DOM rendering, native keyboard navigation, accessibility tree construction, and client-side form control state prior to submission.
+  - **Identity Service (Backend - Future Integration):** Owns authentication logic, credential verification, JWT token generation, and user session issuance.
+- **Dependencies and trust boundaries:**
+  - **Client-to-Network Boundary:** External user inputs typed into form controls are untrusted until sanitized and validated.
+  - **Static Shell Dependency:** HTML semantic structure is independent of CSS stylesheets and JS scripts; accessibility and form semantics must function correctly in raw unstyled HTML.
+- **Failure cases:**
+  - Empty required input submission → Browser prevents form submission due to failed native HTML5 constraint validation (exact validation message UI and localized text are user-agent behaviors).
+  - Invalid email format (e.g., missing `@` or domain) → Browser triggers native type validation error.
+  - Missing explicit `<label>` → Screen readers fail to announce input purpose reliably; click target area is restricted to text field box.
+  - Using `<div>` or `<a>` for form submission → Fails to provide native form submit semantics and reliable keyboard submit behavior, unlike `<button type="submit">`.
+- **Security risks:**
+  - Password input masking → `<input type="password">` visually masks characters on screen to reduce visual shoulder surfing; it does not protect plaintext credentials in DOM, memory, or network transmission (transmission security relies on HTTPS, and backend/server processes credentials securely).
+  - Insecure credential transmission → Mitigated by enforcing HTTPS POST submission in integration phase (out of scope for static HTML shell analysis, but noted for trust boundary).
+  - Phishing / Clickjacking vulnerability → Noted requirement for future security headers (`X-Frame-Options`, `CSP`).
+- **Contract and capability IDs:**
+  - Capabilities: `FE-CAP-WEB`, `FE-CAP-HTML`
+  - Contracts: `FE-CHARTER-001`, `FE-LIFE-001`, `FE-SENIOR-001`, `FE-INT-001`, `FE-CCR-001`
+- **Unanswered questions:**
+  - None (`0` unresolved requirement conflicts).
+- **Review verdict:** `PASSED`
+- **Reviewed at:** `2026-08-12`
+- **Review observations:**
+  - Static authentication-shell user goal, semantic requirements, failure cases and scope boundaries are explicit.
+  - Public API integration remains an unverified dependency; no endpoint path is asserted as current authority.
+  - Native validation behavior is described without fixing user-agent UI or localized messages.
+  - Password masking is correctly separated from transport and server-side credential security.
+- **Status:** `PASSED`
+- **Completion evidence:**
+  - Analysis artifact drafted at `clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-analysis.md`.
+  - Learning Gate `LG-FE-TKT-W01-D01` `PASSED` (`C3_APPLY`).
+  - Reviewer observed the remediated artifact and accepted the analysis completion condition on `2026-08-12`.
