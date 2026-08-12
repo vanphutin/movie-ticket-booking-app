@@ -9,9 +9,9 @@ backend:
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
   ticket_id: FE-CCR-002
-  stage: HANDOFF
+  stage: VERIFICATION
   review_status: VERIFIED
-  next_action: AUTHORIZE_CANDIDATE_TICKET
+  next_action: REMEDIATE_VERIFICATION_FINDINGS
 full_stack:
   bootstrap_status: VERIFIED
   product_status: PARTIAL

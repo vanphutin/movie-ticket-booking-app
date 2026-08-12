@@ -1,8 +1,8 @@
 schema_version: 1
 phases:
   - { id: FE-P0, name: Control plane bootstrap, exit: FE-TKT-W00-D01 VERIFIED }
-  - { id: FE-P1, name: Web and application foundations, exit: FE-GATE-FOUNDATIONS VERIFIED }
-  - { id: FE-P2, name: Identity and catalog UI, exit: FE-W05 VERIFIED }
-  - { id: FE-P3, name: Scheduling and booking UI, exit: FE-W07 VERIFIED }
-  - { id: FE-P4, name: Payment and reliability UI, exit: FE-W09 VERIFIED }
-  - { id: FE-P5, name: Release and Senior technical synthesis, exit: FE-W10 VERIFIED }
+  - { id: FE-P1, name: Web and application foundations, exit: FE-TKT-FND-RCT-D01 VERIFIED }
+  - { id: FE-P2, name: Identity and catalog UI, exit: FE-W05-VERIFIED }
+  - { id: FE-P3, name: Scheduling and booking UI, exit: FE-W07-VERIFIED }
+  - { id: FE-P4, name: Payment and reliability UI, exit: FE-W09-VERIFIED }
+  - { id: FE-P5, name: Release and Senior technical synthesis, exit: FE-W10-VERIFIED }

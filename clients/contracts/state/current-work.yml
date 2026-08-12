@@ -2,7 +2,7 @@ schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
 effective_baseline: FE-PC-2026.3
-current_stage: HANDOFF
+current_stage: VERIFICATION
 ticket_id: FE-CCR-002
 candidate_ticket_id: FE-TKT-FND-CSS-D01
 completed_ticket_ids:
@@ -31,7 +31,7 @@ statuses:
   implementation: COMPLETE
   evidence: OBSERVED
   review: VERIFIED
-  handoff: COMPLETE
+  handoff: BLOCKED
 learning_checkpoint:
   gate_id: LG-FE-CCR-002
   target_level: C6_DEFEND
@@ -44,15 +44,16 @@ learning_checkpoint:
     - just-in-time ticket materialization from a validated catalog
   observed_gaps: []
   remediation_focus: []
-blockers: []
+blockers:
+  - FE-BLOCKER-CCR-002-CI-DRIFT
 next_action:
-  id: FE-ACTION-AUTHORIZE-FND-CSS-D01
-  type: AUTHORIZE_CANDIDATE_TICKET
-  target: FE-TKT-FND-CSS-D01
-  reason: FE-CCR-002 is VERIFIED and published; CSS foundations are the first unmet prerequisite before the backend-gated FE Week 4 slice.
-  completion_condition: Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED.
-  on_success: BEGIN_CSS_FOUNDATION_LEARNING
-  on_failure: RETAIN_CANDIDATE_STATUS
+  id: FE-ACTION-REMEDIATE-CCR-002-CI-MAPPING
+  type: REMEDIATE_VERIFICATION_FINDINGS
+  target: FE-CCR-002
+  reason: Remote CI found cross-platform docs projection drift and audit found incomplete gate and topology enforcement.
+  completion_condition: Cross-platform generation is deterministic, canonical gate references match, strengthened negative tests pass and PR 13 consistency checks are green.
+  on_success: RESTORE_VERIFIED_HANDOFF
+  on_failure: RETAIN_REMEDIATION_BLOCKER
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-CCR-002 was validated, reviewed VERIFIED, committed, pushed non-force, represented by Draft PR 13 and recorded in the publication checkpoint."
+update_source: "Post-handoff audit reopened verification after PR 13 CI drift and roadmap mapping enforcement findings."

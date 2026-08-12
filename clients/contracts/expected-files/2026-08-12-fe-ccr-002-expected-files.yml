@@ -14,6 +14,7 @@ allowed_paths:
   - clients/contracts/expected-files/2026-08-12-fe-ccr-002-expected-files.yml
   - clients/contracts/readiness/2026-08-12-fe-ccr-002-readiness.yml
   - clients/contracts/evidence/2026-08-12-fe-ccr-002-evidence.yml
+  - clients/contracts/evidence/2026-08-12-fe-ccr-002-remediation-evidence.yml
   - clients/contracts/reviews/2026-08-12-fe-ccr-002-review.md
   - clients/contracts/roadmap/capability-map.yml
   - clients/contracts/roadmap/curriculum-map.md
@@ -39,6 +40,8 @@ allowed_paths:
   - clients/CODEX-CONTEXT.md
   - project-control/full-stack-status.yml
   - docs-viewer/docs-data.js
+  - docs-viewer/build-data.js
+  - clients/AGENTS.md
 forbidden_paths:
   - apps/**
   - clients/src/**

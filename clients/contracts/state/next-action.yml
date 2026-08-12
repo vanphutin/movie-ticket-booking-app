@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-CCR-002
 candidate_ticket_id: FE-TKT-FND-CSS-D01
-action: AUTHORIZE_CANDIDATE_TICKET
-target: FE-TKT-FND-CSS-D01
-priority_reason: "FE-CCR-002 is VERIFIED and published; CSS foundations are the first unmet prerequisite before the backend-gated FE Week 4 slice."
-completion_condition: "Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED."
+action: REMEDIATE_VERIFICATION_FINDINGS
+target: FE-CCR-002
+priority_reason: "Remote CI found cross-platform docs projection drift and audit found incomplete gate and topology enforcement."
+completion_condition: "Cross-platform generation is deterministic, canonical gate references match, strengthened negative tests pass and PR 13 consistency checks are green."

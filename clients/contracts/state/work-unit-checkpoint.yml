@@ -1,7 +1,7 @@
 schema_version: 1
 status: VERIFIED
 outgoing_work_unit: FE-CCR-002
-incoming_work_unit: FE-TKT-FND-CSS-D01
+incoming_work_unit: FE-CCR-002
 outgoing_branch: codex/fe-ccr-002-backend-first-roadmap
 published_checkpoint_commit: abdba45cdb7f34991f3c2b46a771dfee1717c762
 remote_tracking_ref: origin/codex/fe-ccr-002-backend-first-roadmap

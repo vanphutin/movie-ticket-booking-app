@@ -4,11 +4,11 @@ workstreams:
   backend:
     canonical_state: AI-contracts/state/current-work.yml
     status: PARKED
-    resume_condition: FE-TKT-W04-AUTH-VERIFIED
+    resume_condition: FE-W04-VERIFIED
   frontend:
     canonical_state: clients/contracts/state/current-work.yml
     status: ACTIVE
 selection_reason: Backend Week 4 authentication is VERIFIED; the approved backend-first roadmap keeps frontend active through its prerequisite foundations and matching Week 4 authentication slice.
-switch_condition: Frontend authentication capability is VERIFIED before backend Week 5 delivery starts.
+switch_condition: FE-W04-VERIFIED returns control to BE-W05; each later FE-WNN-VERIFIED gate returns control to BE-W(N+1).
 updated_at: "2026-08-12"
 updated_by: Van Phu Tin / Reviewer and Codex
