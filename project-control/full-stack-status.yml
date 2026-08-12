@@ -8,10 +8,10 @@ backend:
   review_status: APPROVED
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
-  ticket_id: FE-CCR-003
-  stage: HANDOFF
+  ticket_id: FE-CCR-004
+  stage: REVIEW
   review_status: VERIFIED
-  next_action: AUTHORIZE_CANDIDATE_TICKET
+  next_action: PUBLISH_VERIFIED_DASHBOARD_POLISH
 full_stack:
   bootstrap_status: VERIFIED
   product_status: PARTIAL
