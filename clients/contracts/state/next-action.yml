@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-CCR-003
 candidate_ticket_id: FE-TKT-FND-CSS-D01
-action: PUBLISH_VERIFIED_DASHBOARD
-target: FE-CCR-003
-priority_reason: "Dashboard acceptance is VERIFIED locally; publication checkpoint remains required before handoff."
-completion_condition: "Scoped commits are pushed non-force, Draft PR is created, remote consistency passes and checkpoint is recorded."
+action: AUTHORIZE_CANDIDATE_TICKET
+target: FE-TKT-FND-CSS-D01
+priority_reason: "FE-CCR-003 dashboard is VERIFIED and published; CSS foundations remain the first unmet prerequisite before FE Week 4."
+completion_condition: "Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED."

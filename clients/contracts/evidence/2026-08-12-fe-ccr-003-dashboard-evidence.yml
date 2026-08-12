@@ -30,6 +30,12 @@ entries:
     observation: Clean isolated fixture passed and stale README, plan progress and active coding-checkpoint projections remained rejected.
     artifact: tools/control-plane/test-consistency.mjs
     limitation: Final Linux confirmation is recorded by PR 14 CI after publication.
+remote_verification:
+  head_sha: 04c2dd37e6acf8084536b8eff99de5638be5a25a
+  push_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31578463281
+  pull_request_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31578465828
+  result: SUCCESS
+  observation: Linux validation, negative fixtures and clean regeneration no-diff proof passed for push and pull_request workflows.
   - id: EVI-FE-CCR-003-ROADMAP
     prediction: Dashboard work does not weaken the backend-first frontend roadmap.
     command: npm run check:frontend-roadmap; npm run check:frontend-control
