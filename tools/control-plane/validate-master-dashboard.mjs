@@ -23,7 +23,10 @@ if (data) {
 for (const selector of ["form", "input", "button", "select", "textarea", "[contenteditable]"]) if (document.querySelector(selector)) errors.push(`Read-only dashboard contains forbidden control ${selector}`);
 if (/\b(?:localStorage|sessionStorage|fetch\s*\(|XMLHttpRequest|method\s*:\s*["'](?:POST|PUT|PATCH|DELETE))/i.test(html)) errors.push("Dashboard contains a stateful or network mutation surface");
 if (/opaque-(?:access|refresh)-token|correct horse battery staple/i.test(html)) errors.push("Dashboard embeds credential-like example data");
-if (document.querySelectorAll("script[src],link[rel=stylesheet]").length) errors.push("Standalone dashboard has external runtime assets");
+const localAssets = [...document.querySelectorAll("script[src],link[rel=stylesheet]")].map((node) => node.getAttribute("src") || node.getAttribute("href"));
+if (localAssets.some((asset) => /^(?:https?:)?\/\//.test(asset))) errors.push("Standalone dashboard has external network assets");
+for (const asset of localAssets) if (!fs.existsSync(`docs/plan/${asset}`)) errors.push(`Dashboard local asset is missing: ${asset}`);
+if (!localAssets.includes("movie-ticket-booking-dashboard.css") || !localAssets.includes("movie-ticket-booking-dashboard.js")) errors.push("Dashboard visual assets are not linked");
 if (!html.includes("prefers-reduced-motion:reduce")) errors.push("Dashboard lacks reduced-motion support");
 
 if (process.argv.includes("--self-test")) {
