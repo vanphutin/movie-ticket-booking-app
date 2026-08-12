@@ -1,0 +1,44 @@
+schema_version: 1
+work_unit: CCR-014
+captured_at: "2026-08-11"
+working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+environment:
+  shell: PowerShell
+  platform: Windows
+entries:
+  - id: EVD-CCR-014-001
+    prediction: Frontend synchronization is idempotent and validation observes one active frontend lane without an application scaffold.
+    command: npm run sync:frontend-control; npm run check:frontend-control; npm run status:work
+    exit_code: 0
+    observation: Frontend projections synchronized; validation passed with frontend active, FE-TKT-W00-D01 current, FE-TKT-W01-D01 candidate, and application scaffold absent. Status output selected AUTHORIZE_CANDIDATE_TICKET with its exact completion condition.
+    artifact_paths:
+      - clients/contracts/state/current-ticket.yml
+      - clients/contracts/state/next-action.yml
+      - clients/CODEX-CONTEXT.md
+      - project-control/full-stack-status.yml
+    limitation: This proves deterministic routing and projection shape, not semantic mastery or UI behavior.
+  - id: EVD-CCR-014-002
+    prediction: Documentation, backend projections, frontend projections, Mermaid syntax and repository references remain consistent together.
+    command: npm run check:docs
+    exit_code: 0
+    observation: Mermaid 10.9.6 passed 11 diagrams; frontend projections were synchronized; repository consistency passed generated projections, both control planes, work-unit publication checkpoint and local references.
+    artifact_paths:
+      - AI-contracts/changes/CCR-014-independent-frontend-control-plane.md
+      - clients/contracts/README.md
+      - tools/frontend-control-plane/validate-frontend-control-plane.mjs
+    limitation: Repository validation is deterministic structural evidence and does not prove future React application behavior.
+  - id: EVD-CCR-014-003
+    prediction: The verified CCR-014 branch is recoverable from its remote-tracking ref and represented by a Draft PR before the first frontend learning ticket is authorized.
+    command: git push --set-upstream origin contract/ccr-014-independent-fe-control-plane; git rev-parse HEAD; git rev-parse origin/contract/ccr-014-independent-fe-control-plane; gh pr create --draft
+    exit_code: 0
+    observation: Local and remote SHA matched at 4374abdb22bf5e6be63ff536805135781bbe8387 and Draft PR 9 was created.
+    artifact_paths:
+      - clients/contracts/state/work-unit-checkpoint.yml
+    limitation: Merge and remote CI completion remain reviewer/external concerns.
+scope_review:
+  application_files_created: false
+  backend_application_files_changed: false
+  unrelated_user_changes_preserved:
+    - .gitignore
+    - docs/postman/movie_ticket_api.postman_collection.json
+    - .vscode/

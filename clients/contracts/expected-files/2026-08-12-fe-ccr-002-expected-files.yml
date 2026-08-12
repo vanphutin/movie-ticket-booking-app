@@ -1,0 +1,50 @@
+schema_version: 1
+work_unit: FE-CCR-002
+status: REVIEWED
+reviewed_by: Van Phu Tin / Reviewer and Codex
+reviewed_at: "2026-08-12"
+allowed_paths:
+  - clients/contracts/README.md
+  - clients/contracts/00-charter.md
+  - clients/contracts/05-backend-first-delivery-policy.md
+  - clients/contracts/changes/FE-CCR-002-backend-first-alternating-roadmap.md
+  - clients/contracts/audits/2026-08-12-fe-ccr-002-analysis.md
+  - clients/contracts/audits/2026-08-12-fe-ccr-002-implementation-self-review.md
+  - clients/contracts/designs/2026-08-12-fe-ccr-002-backend-first-roadmap.md
+  - clients/contracts/expected-files/2026-08-12-fe-ccr-002-expected-files.yml
+  - clients/contracts/readiness/2026-08-12-fe-ccr-002-readiness.yml
+  - clients/contracts/evidence/2026-08-12-fe-ccr-002-evidence.yml
+  - clients/contracts/evidence/2026-08-12-fe-ccr-002-remediation-evidence.yml
+  - clients/contracts/reviews/2026-08-12-fe-ccr-002-review.md
+  - clients/contracts/roadmap/capability-map.yml
+  - clients/contracts/roadmap/curriculum-map.md
+  - clients/contracts/roadmap/phases.yml
+  - clients/contracts/roadmap/milestones.yml
+  - clients/contracts/roadmap/ticket-catalog.yml
+  - clients/contracts/roadmap/dependency-graph.md
+  - clients/contracts/integration/backend-capability-map.yml
+  - clients/contracts/integration/coverage-matrix.yml
+  - clients/contracts/templates/frontend-ticket-profile.yml
+  - clients/contracts/schemas/ticket-catalog.schema.json
+  - tools/frontend-control-plane/validate-frontend-roadmap.mjs
+  - tools/frontend-control-plane/validate-frontend-control-plane.mjs
+  - tools/frontend-control-plane/status-work.mjs
+  - tools/repository/validate-repository.mjs
+  - package.json
+  - project-control/active-workstream.yml
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/work-unit-checkpoint.yml
+  - clients/contracts/tickets/FE-TKT-FND-CSS-D01.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/CODEX-CONTEXT.md
+  - project-control/full-stack-status.yml
+  - docs-viewer/docs-data.js
+  - docs-viewer/build-data.js
+  - clients/AGENTS.md
+forbidden_paths:
+  - apps/**
+  - clients/src/**
+  - clients/package.json
+  - docs/postman/**
+  - .vscode/**

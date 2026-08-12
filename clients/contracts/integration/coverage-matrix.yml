@@ -1,0 +1,9 @@
+schema_version: 1
+rows:
+  - { backend_week: W4, backend_outcome: Identity and Gateway auth, frontend_week: FE-W04, frontend_outcome: Auth and profile UI, return_gate: FE-W04-VERIFIED, next_backend: W5 }
+  - { backend_week: W5, backend_outcome: Movie and trailer catalog, frontend_week: FE-W05, frontend_outcome: Catalog discovery and admin UI, return_gate: FE-W05-VERIFIED, next_backend: W6 }
+  - { backend_week: W6, backend_outcome: Cinema seat showtime and events, frontend_week: FE-W06, frontend_outcome: Scheduling discovery UI, return_gate: FE-W06-VERIFIED, next_backend: W7 }
+  - { backend_week: W7, backend_outcome: Seat hold and booking consistency, frontend_week: FE-W07, frontend_outcome: Race-aware booking UI, return_gate: FE-W07-VERIFIED, next_backend: W8 }
+  - { backend_week: W8, backend_outcome: Payment ticket and worker, frontend_week: FE-W08, frontend_outcome: Checkout recovery and ticket UI, return_gate: FE-W08-VERIFIED, next_backend: W9 }
+  - { backend_week: W9, backend_outcome: Operability and deployment, frontend_week: FE-W09, frontend_outcome: Performance observability reliability and delivery, return_gate: FE-W09-VERIFIED, next_backend: W10 }
+  - { backend_week: W10, backend_outcome: Release evidence, frontend_week: FE-W10, frontend_outcome: Full-stack release and Senior scope synthesis, return_gate: FE-W10-VERIFIED, next_backend: RELEASE }

@@ -2,7 +2,14 @@
   "schema_version": 1,
   "canonical_sources": [
     "AI-contracts/state/current-work.yml",
-    "AI-contracts/state/contract-status.yml"
+    "AI-contracts/state/contract-status.yml",
+    "clients/contracts/state/current-work.yml",
+    "project-control/active-workstream.yml",
+    "AI-contracts/roadmap/weeks-4-10.md",
+    "clients/contracts/roadmap/ticket-catalog.yml",
+    "clients/contracts/roadmap/capability-map.yml",
+    "clients/contracts/integration/backend-capability-map.yml",
+    "clients/contracts/integration/coverage-matrix.yml"
   ],
   "targets": [
     {
@@ -30,11 +37,27 @@
     },
     {
       "path": "docs/plan/movie-ticket-booking-master-plan.html",
-      "ownership": "delimited-region",
-      "region": "PLAN-PROGRESS"
+      "ownership": "full-file"
     },
     {
       "path": "docs-viewer/docs-data.js",
+      "ownership": "full-file"
+    },
+    {
+      "path": "clients/contracts/state/current-ticket.yml",
+      "ownership": "full-file"
+    },
+    {
+      "path": "clients/contracts/state/next-action.yml",
+      "ownership": "full-file"
+    },
+    {
+      "path": "clients/CODEX-CONTEXT.md",
+      "ownership": "delimited-region",
+      "region": "FRONTEND-HANDOFF"
+    },
+    {
+      "path": "project-control/full-stack-status.yml",
       "ownership": "full-file"
     }
   ]

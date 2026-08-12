@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { createRequire } from "node:module";
+import { spawnSync } from "node:child_process";
 
 const require = createRequire(import.meta.url);
 
@@ -303,31 +304,12 @@ const planMarkdown = replaceRegion(
 );
 writeIfChanged("docs/plan/movie-ticket-booking-master-plan.md", planMarkdown);
 
-const planCards = planTicketIds.map((id) => {
-  const status = completedSet.has(id)
-    ? "VERIFIED"
-    : id === ticket
-      ? stage
-      : id === candidate
-        ? "CANDIDATE"
-        : "PLANNED";
-  const symbol = status === "VERIFIED" ? "✓" : id === ticket ? "●" : "○";
-  const css = status === "VERIFIED" ? "verified" : id === ticket ? "current" : "planned";
-  return `<span class="canonical-ticket ${css}" title="${status}">${symbol} ${id}<small>${status}</small></span>`;
-}).join("\n        ");
-const planHtmlProgress = `<section class="canonical-progress" aria-label="Tiến độ canonical">
-      <div class="section-title"><div><div class="eyebrow">Canonical progress · generated</div><h2>${completedTickets.length}/${planTicketIds.length} ticket VERIFIED</h2></div><p>Baseline ${baseline} · Current ${ticket ?? "NONE"} · ${stage}</p></div>
-      <div class="canonical-summary"><strong>Next action</strong><code>${action}</code><span>✓ chỉ xuất hiện sau review VERIFIED và handoff.</span></div>
-      <div class="canonical-tickets">
-        ${planCards}
-      </div>
-    </section>`;
-const planHtml = replaceRegion(
-  read("docs/plan/movie-ticket-booking-master-plan.html"),
-  "PLAN-PROGRESS",
-  planHtmlProgress
-);
-writeIfChanged("docs/plan/movie-ticket-booking-master-plan.html", planHtml);
+const dashboardArgs = ["tools/control-plane/build-master-dashboard.mjs", ...(checkOnly ? ["--check"] : [])];
+const dashboard = spawnSync(process.execPath, dashboardArgs, { cwd: root, encoding: "utf8" });
+if (dashboard.status !== 0) {
+  console.error((dashboard.stderr || dashboard.stdout).trim());
+  process.exit(dashboard.status ?? 1);
+}
 
 const docsViewerBuilder = path.join(root, "docs-viewer/build-data.js");
 if (fs.existsSync(docsViewerBuilder)) {

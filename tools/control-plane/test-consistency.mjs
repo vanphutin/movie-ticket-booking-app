@@ -15,7 +15,19 @@ const files = [
   "CODEX-CONTEXT.md",
   "docs/plan/movie-ticket-booking-master-plan.md",
   "docs/plan/movie-ticket-booking-master-plan.html",
-  "tools/control-plane/sync-control-plane.mjs"
+  "tools/control-plane/sync-control-plane.mjs",
+  "tools/control-plane/build-master-dashboard.mjs",
+  "project-control/active-workstream.yml",
+  "AI-contracts/state/work-unit-checkpoint.yml",
+  "AI-contracts/roadmap/weeks-4-10.md",
+  "clients/contracts/state/current-work.yml",
+  "clients/contracts/state/work-unit-checkpoint.yml",
+  "clients/contracts/roadmap/ticket-catalog.yml",
+  "clients/contracts/roadmap/capability-map.yml",
+  "clients/contracts/roadmap/phases.yml",
+  "clients/contracts/roadmap/milestones.yml",
+  "clients/contracts/integration/backend-capability-map.yml",
+  "clients/contracts/integration/coverage-matrix.yml"
 ];
 
 for (const relativePath of files) {
