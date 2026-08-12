@@ -2,13 +2,13 @@ schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
 effective_baseline: FE-PC-2026.3
-current_stage: REVIEW
+current_stage: HANDOFF
 ticket_id: FE-CCR-002
 candidate_ticket_id: FE-TKT-FND-CSS-D01
 completed_ticket_ids:
   - FE-TKT-W00-D01
   - FE-TKT-W01-D01
-active_artifact: clients/contracts/designs/2026-08-12-fe-ccr-002-backend-first-roadmap.md
+active_artifact: clients/contracts/reviews/2026-08-12-fe-ccr-002-review.md
 ticket_projection:
   phase_id: FE-P0
   milestone_id: FE-M0
@@ -31,7 +31,7 @@ statuses:
   implementation: COMPLETE
   evidence: OBSERVED
   review: VERIFIED
-  handoff: NOT_STARTED
+  handoff: COMPLETE
 learning_checkpoint:
   gate_id: LG-FE-CCR-002
   target_level: C6_DEFEND
@@ -46,13 +46,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-PUBLISH-CCR-002-ROADMAP
-  type: PUBLISH_VERIFIED_ROADMAP
-  target: FE-CCR-002
-  reason: FE-CCR-002 acceptance is VERIFIED; publication checkpoint remains required before HANDOFF.
-  completion_condition: Authorized commits are pushed non-force, local and remote refs match, and a Draft PR plus VERIFIED checkpoint are recorded.
-  on_success: COMPLETE_FE_CCR_002_HANDOFF
-  on_failure: REMEDIATE_PUBLICATION
+  id: FE-ACTION-AUTHORIZE-FND-CSS-D01
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: FE-TKT-FND-CSS-D01
+  reason: FE-CCR-002 is VERIFIED and published; CSS foundations are the first unmet prerequisite before the backend-gated FE Week 4 slice.
+  completion_condition: Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED.
+  on_success: BEGIN_CSS_FOUNDATION_LEARNING
+  on_failure: RETAIN_CANDIDATE_STATUS
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-CCR-002 explicitly approved the full backend-first alternating frontend roadmap and its candidate successor."
+update_source: "FE-CCR-002 was validated, reviewed VERIFIED, committed, pushed non-force, represented by Draft PR 13 and recorded in the publication checkpoint."

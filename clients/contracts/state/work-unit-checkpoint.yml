@@ -1,16 +1,16 @@
 schema_version: 1
 status: VERIFIED
-outgoing_work_unit: FE-TKT-W01-D01
-incoming_work_unit: FE-CCR-002
-outgoing_branch: codex/fe-tkt-w01-d01-learning-review
-published_checkpoint_commit: ea7daefcaafc2f4d688a79672c2b1df7e6cf584c
-remote_tracking_ref: origin/codex/fe-tkt-w01-d01-learning-review
-draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/12
+outgoing_work_unit: FE-CCR-002
+incoming_work_unit: FE-TKT-FND-CSS-D01
+outgoing_branch: codex/fe-ccr-002-backend-first-roadmap
+published_checkpoint_commit: abdba45cdb7f34991f3c2b46a771dfee1717c762
+remote_tracking_ref: origin/codex/fe-ccr-002-backend-first-roadmap
+draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/13
 verification:
-  command: git rev-parse HEAD; git rev-parse origin/codex/fe-tkt-w01-d01-learning-review; git merge-base --is-ancestor HEAD origin/codex/fe-tkt-w01-d01-learning-review
+  command: git rev-parse HEAD; git rev-parse origin/codex/fe-ccr-002-backend-first-roadmap; git merge-base --is-ancestor HEAD origin/codex/fe-ccr-002-backend-first-roadmap
   working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
   exit_code: 0
-  observation: Local and remote branch heads both resolved to ea7daefcaafc2f4d688a79672c2b1df7e6cf584c after a non-force push; ancestor verification exited 0; Draft PR 12 is OPEN and Draft.
+  observation: Local and remote branch heads both resolved to abdba45cdb7f34991f3c2b46a771dfee1717c762 after a non-force push; ancestor verification exited 0; Draft PR 13 is OPEN and Draft.
   limitation: The later canonical handoff commit is pushed after this outgoing checkpoint; merge and remote CI completion remain outside this checkpoint.
 verified_at: "2026-08-12"
 verified_by: Codex

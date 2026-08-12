@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-CCR-002
 candidate_ticket_id: FE-TKT-FND-CSS-D01
-action: PUBLISH_VERIFIED_ROADMAP
-target: FE-CCR-002
-priority_reason: "FE-CCR-002 acceptance is VERIFIED; publication checkpoint remains required before HANDOFF."
-completion_condition: "Authorized commits are pushed non-force, local and remote refs match, and a Draft PR plus VERIFIED checkpoint are recorded."
+action: AUTHORIZE_CANDIDATE_TICKET
+target: FE-TKT-FND-CSS-D01
+priority_reason: "FE-CCR-002 is VERIFIED and published; CSS foundations are the first unmet prerequisite before the backend-gated FE Week 4 slice."
+completion_condition: "Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED."
