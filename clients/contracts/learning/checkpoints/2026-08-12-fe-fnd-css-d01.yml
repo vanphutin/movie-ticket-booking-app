@@ -1,0 +1,27 @@
+gate_id: LG-FE-TKT-FND-CSS-D01
+ticket_id: FE-TKT-FND-CSS-D01
+status: IN_PROGRESS
+target_level: C3_APPLY
+current_questions:
+  - id: LG-FE-TKT-FND-CSS-D01-Q1
+    dimension: EXPLAIN
+    prompt: Two rules target the same input: .auth-form input { color: navy; } and #login-email { color: red; }. Predict the computed color, explain why, and propose a maintainable way to avoid escalating specificity.
+  - id: LG-FE-TKT-FND-CSS-D01-Q2
+    dimension: APPLY
+    prompt: A form control has width 100%, padding 12px and border 1px inside a narrow container. Compare content-box with border-box, predict the overflow risk, and write the sizing rule you would choose.
+  - id: LG-FE-TKT-FND-CSS-D01-Q3
+    dimension: COMPARE
+    prompt: Choose between px, rem, em and percent for body text, component padding, a full-width input and a thin border. Defend each choice and state when you would change it.
+  - id: LG-FE-TKT-FND-CSS-D01-Q4
+    dimension: FAILURE
+    prompt: A designer uses fixed heights, removes outlines and hides visible labels to make the login form compact. Explain the failures and propose CSS that preserves resizing, focus visibility and semantic labeling.
+learner_answers: []
+observed_gaps: []
+remediation_focus: []
+project_application: NOT_UNLOCKED
+project_application_task:
+  id: LG-FE-TKT-FND-CSS-D01-APP-01
+  title: Explainable base stylesheet for the semantic authentication shell
+  unlock_condition: Conceptual questions pass or remediation closes all observed gaps.
+  completion_condition: Learner predicts the important computed styles, applies the stylesheet, and explains one cascade decision, one box-model decision and one resilient-unit decision.
+next_action: WAIT_FOR_LEARNER_ANSWERS
