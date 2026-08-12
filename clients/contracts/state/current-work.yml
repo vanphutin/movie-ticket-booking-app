@@ -2,18 +2,18 @@ schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
 effective_baseline: FE-PC-2026.3
-current_stage: HANDOFF
-ticket_id: FE-CCR-004
-candidate_ticket_id: FE-TKT-FND-CSS-D01
+current_stage: LEARNING
+ticket_id: FE-TKT-FND-CSS-D01
+candidate_ticket_id: FE-TKT-FND-CSS-D02
 completed_ticket_ids:
   - FE-TKT-W00-D01
   - FE-TKT-W01-D01
-active_artifact: clients/contracts/reviews/2026-08-12-fe-ccr-004-dashboard-review.md
+active_artifact: clients/contracts/learning/checkpoints/2026-08-12-fe-fnd-css-d01.yml
 ticket_projection:
-  phase_id: FE-P0
-  milestone_id: FE-M0
+  phase_id: FE-P1
+  milestone_id: FE-M1
   capability_ids:
-    - FE-CAP-WEB
+    - FE-CAP-CSS
   contract_ids:
     - FE-CHARTER-001
     - FE-LIFE-001
@@ -21,40 +21,38 @@ ticket_projection:
     - FE-INT-001
     - FE-CCR-001
     - FE-CCR-002
-    - FE-CCR-003
-    - FE-CCR-004
-  execution_status: COMPLETE
-  evidence_confidence: HIGH
+  execution_status: NOT_STARTED
+  evidence_confidence: MISSING
 statuses:
-  learning: PASSED
-  analysis: PASSED
-  design: APPROVED
-  readiness: READY
-  implementation: COMPLETE
-  evidence: OBSERVED
-  review: VERIFIED
-  handoff: COMPLETE
+  learning: IN_PROGRESS
+  analysis: NOT_STARTED
+  design: NOT_STARTED
+  readiness: NOT_EVALUATED
+  implementation: NOT_STARTED
+  evidence: MISSING
+  review: NOT_REVIEWED
+  handoff: NOT_STARTED
 learning_checkpoint:
-  gate_id: LG-FE-CCR-004
-  target_level: C6_DEFEND
-  status: PASSED
-  current_unit: COMPLETE
+  gate_id: LG-FE-TKT-FND-CSS-D01
+  target_level: C3_APPLY
+  status: IN_PROGRESS
+  current_unit: CSS_CASCADE_BOX_MODEL_UNITS
   concepts_presented:
-    - visual hierarchy and executive dashboard information architecture
-    - viewport-driven motion and reduced-motion fallback
-    - responsive tables, navigation and semantic status presentation
-    - local asset separation without authority drift
+    - cascade, inheritance, specificity and source order
+    - content-box versus border-box sizing
+    - resilient relative units and bounded sizing
+    - focus and visible-label preservation
   observed_gaps: []
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-AUTHORIZE-FND-CSS-D01
-  type: AUTHORIZE_CANDIDATE_TICKET
-  target: FE-TKT-FND-CSS-D01
-  reason: FE-CCR-004 visual polish is VERIFIED and published; CSS foundations remain the first unmet prerequisite before FE Week 4.
-  completion_condition: Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED.
-  on_success: BEGIN_CSS_FOUNDATION_LEARNING
-  on_failure: RETAIN_CANDIDATE_STATUS
+  id: FE-ACTION-ANSWER-FND-CSS-D01-C3
+  type: SUBMIT_LEARNING_ANSWERS
+  target: LG-FE-TKT-FND-CSS-D01
+  reason: The ticket is authorized and its C3_APPLY checkpoint is open; observed learner answers are required before project application or analysis.
+  completion_condition: Learner answers Q1 through Q4 with computed-style predictions, selected choices, trade-offs, limitations and failure repairs at C3_APPLY.
+  on_success: REVIEW_CSS_FOUNDATION_ANSWERS
+  on_failure: REMEDIATE_CSS_FOUNDATION_GAPS
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-CCR-004 visual polish passed browser QA, local validation, publication and both PR 15 Linux consistency workflows."
+update_source: "Explicit reviewer authorization to begin FE-TKT-FND-CSS-D01 and its C3_APPLY learning gate after verified FE-CCR-004 handoff."

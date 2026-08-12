@@ -1,8 +1,8 @@
 # GENERATED FILE — run: npm run sync:frontend-control
 schema_version: 1
-ticket_id: FE-CCR-004
-candidate_ticket_id: FE-TKT-FND-CSS-D01
-action: AUTHORIZE_CANDIDATE_TICKET
-target: FE-TKT-FND-CSS-D01
-priority_reason: "FE-CCR-004 visual polish is VERIFIED and published; CSS foundations remain the first unmet prerequisite before FE Week 4."
-completion_condition: "Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED."
+ticket_id: FE-TKT-FND-CSS-D01
+candidate_ticket_id: FE-TKT-FND-CSS-D02
+action: SUBMIT_LEARNING_ANSWERS
+target: LG-FE-TKT-FND-CSS-D01
+priority_reason: "The ticket is authorized and its C3_APPLY checkpoint is open; observed learner answers are required before project application or analysis."
+completion_condition: "Learner answers Q1 through Q4 with computed-style predictions, selected choices, trade-offs, limitations and failure repairs at C3_APPLY."

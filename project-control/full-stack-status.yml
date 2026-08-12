@@ -8,11 +8,11 @@ backend:
   review_status: APPROVED
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
-  ticket_id: FE-CCR-004
-  stage: HANDOFF
-  review_status: VERIFIED
-  next_action: AUTHORIZE_CANDIDATE_TICKET
+  ticket_id: FE-TKT-FND-CSS-D01
+  stage: LEARNING
+  review_status: NOT_REVIEWED
+  next_action: SUBMIT_LEARNING_ANSWERS
 full_stack:
-  bootstrap_status: VERIFIED
+  bootstrap_status: IN_PROGRESS
   product_status: PARTIAL
   limitation: Application UI has not been scaffolded or verified.
