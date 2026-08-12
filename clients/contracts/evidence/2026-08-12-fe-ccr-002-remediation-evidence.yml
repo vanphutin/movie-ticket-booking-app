@@ -1,7 +1,7 @@
 schema_version: 1
 work_unit: FE-CCR-002
 finding: FE-BLOCKER-CCR-002-CI-DRIFT
-status: LOCAL_VERIFIED_REMOTE_PENDING
+status: VERIFIED
 environment: Windows PowerShell; Node.js repository toolchain
 root_cause: docs-viewer/build-data.js serialized filesystem modification times and raw source line endings, both checkout metadata that differ across Windows worktrees and Linux CI runners.
 entries:
@@ -28,8 +28,14 @@ entries:
     exit_code: 0
     observation: Frontend control plane, Mermaid 13 diagrams, generated projections, publication checkpoint and local references all passed.
     artifact: clients/contracts/state/current-work.yml
-    limitation: Remote CI is pending the remediation push.
+    limitation: Application behavior remains outside this control-plane remediation.
 post_push_observation:
   run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577298190
   result: FAILED
   finding: Stable dates removed mtime drift, but the first remediation run proved raw CRLF/LF source content still changed docs-data.js across platforms; LF normalization was then added before serialization.
+remote_verification:
+  head_sha: 679f8e74c7d633d666b18d3f088840c06fb1fbdb
+  push_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577382029
+  pull_request_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577385333
+  result: SUCCESS
+  observation: Both Linux workflows passed repository validation, consistency negative fixtures and the clean-regeneration no-diff proof.
