@@ -2,7 +2,7 @@ schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
 effective_baseline: FE-PC-2026.3
-current_stage: REVIEW
+current_stage: HANDOFF
 ticket_id: FE-CCR-004
 candidate_ticket_id: FE-TKT-FND-CSS-D01
 completed_ticket_ids:
@@ -33,7 +33,7 @@ statuses:
   implementation: COMPLETE
   evidence: OBSERVED
   review: VERIFIED
-  handoff: NOT_STARTED
+  handoff: COMPLETE
 learning_checkpoint:
   gate_id: LG-FE-CCR-004
   target_level: C6_DEFEND
@@ -48,13 +48,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-PUBLISH-CCR-004-DASHBOARD
-  type: PUBLISH_VERIFIED_DASHBOARD_POLISH
-  target: FE-CCR-004
-  reason: Visual acceptance and deterministic validation are VERIFIED; publication checkpoint remains required.
-  completion_condition: Scoped commits are pushed non-force, Draft PR is created, remote consistency passes and checkpoint is recorded.
-  on_success: COMPLETE_DASHBOARD_POLISH_HANDOFF
-  on_failure: REMEDIATE_PUBLICATION
+  id: FE-ACTION-AUTHORIZE-FND-CSS-D01
+  type: AUTHORIZE_CANDIDATE_TICKET
+  target: FE-TKT-FND-CSS-D01
+  reason: FE-CCR-004 visual polish is VERIFIED and published; CSS foundations remain the first unmet prerequisite before FE Week 4.
+  completion_condition: Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED.
+  on_success: BEGIN_CSS_FOUNDATION_LEARNING
+  on_failure: RETAIN_CANDIDATE_STATUS
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-CCR-004 visual polish passed browser QA, responsive overflow checks and deterministic dashboard validation."
+update_source: "FE-CCR-004 visual polish passed browser QA, local validation, publication and both PR 15 Linux consistency workflows."

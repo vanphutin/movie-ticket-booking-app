@@ -21,3 +21,8 @@ entries:
     observation: Dashboard counts, local assets, read-only boundary, drift fixtures, projections, Mermaid and repository consistency passed.
     artifact: tools/control-plane/validate-master-dashboard.mjs
     limitation: Planned product behavior remains outside this presentation change.
+remote_verification:
+  head_sha: d16b8a8e43a5f35e59530ddb5d5d3f8c53983764
+  push_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31579329750
+  pull_request_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31579334561
+  result: SUCCESS
