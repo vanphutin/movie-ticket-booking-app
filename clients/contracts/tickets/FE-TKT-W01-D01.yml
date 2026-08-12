@@ -1,6 +1,6 @@
 ticket_id: FE-TKT-W01-D01
 title: Learn browser, HTTP and semantic HTML foundations
-status: IN_PROGRESS
+status: COMPLETE
 target_level: C3_APPLY
 prerequisites:
   - FE-TKT-W00-D01 VERIFIED

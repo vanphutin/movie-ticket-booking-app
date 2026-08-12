@@ -9,10 +9,10 @@ backend:
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
   ticket_id: FE-TKT-W01-D01
-  stage: LEARNING
-  review_status: NOT_REVIEWED
-  next_action: AUTHOR_ANALYSIS_ARTIFACT
+  stage: REVIEW
+  review_status: VERIFIED
+  next_action: PUBLISH_VERIFIED_WORK_UNIT
 full_stack:
-  bootstrap_status: IN_PROGRESS
+  bootstrap_status: VERIFIED
   product_status: PARTIAL
   limitation: Application UI has not been scaffolded or verified.
