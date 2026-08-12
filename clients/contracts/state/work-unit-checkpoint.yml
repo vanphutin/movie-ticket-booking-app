@@ -1,0 +1,16 @@
+schema_version: 1
+status: VERIFIED
+outgoing_work_unit: FE-CCR-003
+incoming_work_unit: FE-TKT-FND-CSS-D01
+outgoing_branch: codex/fe-ccr-003-readonly-dashboard
+published_checkpoint_commit: 04c2dd37e6acf8084536b8eff99de5638be5a25a
+remote_tracking_ref: origin/codex/fe-ccr-003-readonly-dashboard
+draft_pr_url: https://github.com/vanphutin/movie-ticket-booking-app/pull/14
+verification:
+  command: git rev-parse HEAD; git rev-parse origin/codex/fe-ccr-003-readonly-dashboard; git merge-base --is-ancestor HEAD origin/codex/fe-ccr-003-readonly-dashboard
+  working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+  exit_code: 0
+  observation: Local and remote branch heads both resolved to 04c2dd37e6acf8084536b8eff99de5638be5a25a after a non-force push; push and pull-request consistency workflows passed; Draft PR 14 is OPEN and Draft.
+  limitation: The later canonical handoff commit is pushed after this outgoing checkpoint; merge and remote CI completion remain outside this checkpoint.
+verified_at: "2026-08-12"
+verified_by: Codex

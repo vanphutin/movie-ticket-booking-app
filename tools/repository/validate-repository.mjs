@@ -62,6 +62,8 @@ function checkReference(sourceFile, reference) {
 
 runNode("tools/control-plane/sync-control-plane.mjs", ["--check"]);
 runNode("tools/control-plane/validate-control-plane.mjs");
+runNode("tools/frontend-control-plane/validate-frontend-control-plane.mjs");
+runNode("tools/control-plane/validate-master-dashboard.mjs");
 runNode("tools/repository/validate-mermaid.mjs");
 runNode("tools/repository/validate-work-unit-transition.mjs");
 

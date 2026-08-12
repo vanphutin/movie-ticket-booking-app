@@ -4,23 +4,30 @@
 
 Before project work, read in this order:
 
-1. `AI-contracts/state/current-work.yml`.
-2. The authorized current ticket, when `ticket_id` is not `null`.
-3. Only the effective contracts and capability records referenced by that ticket.
-4. The real repository state: branch, status, recent log and relevant diff.
-5. The active artifact and evidence referenced by canonical state.
+1. `project-control/active-workstream.yml`.
+2. The selected workstream canonical state: backend uses
+   `AI-contracts/state/current-work.yml`; frontend uses
+   `clients/contracts/state/current-work.yml`.
+3. The selected workstream authorized ticket, when `ticket_id` is not `null`.
+4. Only the effective contracts and capability records referenced by that ticket.
+5. The real repository state: branch, status, recent log and relevant diff.
+6. The active artifact and evidence referenced by canonical state.
 
 Authority order:
 
 `approved CCR → effective contracts → authorized current ticket → code → observed test/evidence`
 
-`CODEX-CONTEXT.md` is a handoff projection, not a second source of truth. If it differs
-from `AI-contracts/state/current-work.yml`, stop delivery work, report drift and reconcile
-the projection from canonical state.
+`CODEX-CONTEXT.md` and `clients/CODEX-CONTEXT.md` are handoff projections, not sources of
+truth. If either differs from its canonical state, stop that workstream's delivery, report
+drift and reconcile the projection from canonical state.
 
 ## Mandatory workflow
 
-At most one primary ticket and one next action may be active.
+Each workstream may own at most one primary ticket and one next action. Read
+`project-control/active-workstream.yml` before delivery work; only the routed active
+workstream may advance. Backend authority remains under `AI-contracts/**`; frontend
+authority remains under `clients/contracts/**`. Neither workstream may infer or mutate the
+other's verdict.
 
 Use this lifecycle:
 

@@ -1,0 +1,33 @@
+ticket_id: FE-TKT-FND-CSS-D01
+title: Apply CSS cascade, box model and resilient sizing
+status: CANDIDATE
+track: FOUNDATION
+phase_id: FE-P1
+target_level: C3_APPLY
+capability_ids:
+  - FE-CAP-CSS
+prerequisites:
+  - FE-TKT-W01-D01 VERIFIED
+backend_gate: NONE_FOUNDATION_ONLY
+scope:
+  - cascade, inheritance and specificity
+  - box model, normal flow and sizing
+  - relative units and explainable base styles for the reviewed semantic auth shell
+out_of_scope:
+  - responsive Grid and Flexbox composition
+  - JavaScript behavior
+  - React or backend API integration
+learning_gate:
+  id: LG-FE-TKT-FND-CSS-D01
+  target_level: C3_APPLY
+  required_observation: Learner predicts and explains computed styles before applying them.
+project_application: Apply a small reviewed stylesheet to the semantic authentication shell without changing its HTML meaning.
+failure_and_security_boundary:
+  - do not hide labels or focus indicators
+  - do not use CSS to claim authentication behavior
+verification_boundary:
+  - reviewed learning checkpoint
+  - computed-style prediction exercise
+  - documentation validation
+completion_condition: Learner explains and applies cascade, inheritance, specificity, box model and resilient units to the reviewed static shell.
+next_ticket: FE-TKT-FND-CSS-D02

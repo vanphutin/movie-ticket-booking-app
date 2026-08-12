@@ -1,0 +1,222 @@
+schema_version: 1
+ticket_id: FE-TKT-W01-D01
+design_artifact: clients/contracts/designs/2026-08-12-fe-tkt-w01-d01-design.md
+status: APPROVED
+reviewed_by: Codex
+reviewed_at: "2026-08-12"
+files:
+  - path: clients/contracts/state/current-work.yml
+    action: MODIFY
+    responsibility: Canonical frontend workstream state tracking
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - current_stage update across lifecycle stages
+      - statuses block updates
+    forbidden_content:
+      - unverified VERIFIED claims
+    verification:
+      - node tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - path: clients/contracts/state/current-ticket.yml
+    action: MODIFY
+    responsibility: Generated current ticket projection
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - generated current ticket projection fields
+    forbidden_content:
+      - manual edits without running sync tool
+    verification:
+      - node tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - path: clients/contracts/state/next-action.yml
+    action: MODIFY
+    responsibility: Generated next action projection
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - generated next action projection fields
+    forbidden_content:
+      - manual edits without running sync tool
+    verification:
+      - node tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - path: clients/CODEX-CONTEXT.md
+    action: MODIFY
+    responsibility: Generated compact context handoff projection
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - generated handoff region content
+    forbidden_content:
+      - manual edits inside delimited generated regions
+    verification:
+      - node tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - path: project-control/full-stack-status.yml
+    action: MODIFY
+    responsibility: Generated full-stack status projection
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - generated full-stack workstream status fields
+    forbidden_content:
+      - manual edits without running sync tool
+    verification:
+      - node tools/frontend-control-plane/sync-frontend-control-plane.mjs
+  - path: docs-viewer/docs-data.js
+    action: MODIFY
+    responsibility: Generated documentation viewer payload
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - generated docs viewer data payload
+    forbidden_content:
+      - manual edits without running check:docs script
+    verification:
+      - node tools/control-plane/sync-control-plane.mjs
+  - path: clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-analysis.md
+    action: CREATE
+    responsibility: Analysis artifact for FE-TKT-W01-D01
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-DESIGN
+    permitted_content:
+      - analysis findings, scope boundaries, and failure cases
+    forbidden_content:
+      - unverified API endpoint assertions
+    verification:
+      - npm run check:docs
+  - path: clients/contracts/designs/2026-08-12-fe-tkt-w01-d01-design.md
+    action: CREATE
+    responsibility: Reviewed design note for static authentication shell
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-DESIGN
+    permitted_content:
+      - document landmarks and semantic form specifications
+      - explicit acceptance criteria definitions
+      - reproducible verification procedures
+    forbidden_content:
+      - unverified API endpoint assertions
+    verification:
+      - npm run check:docs
+  - path: clients/contracts/expected-files/2026-08-12-fe-tkt-w01-d01-expected-files.yml
+    action: CREATE
+    responsibility: Expected files manifest for FE-TKT-W01-D01
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-MANIFEST
+    permitted_content:
+      - full list of permitted files and actions across lifecycle stages
+    forbidden_content:
+      - scope expansion beyond ticket boundary
+      - unpermitted application code files under apps/client
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/readiness/2026-08-12-fe-tkt-w01-d01-readiness.yml
+    action: CREATE
+    responsibility: Readiness verdict artifact for FE-TKT-W01-D01
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-READINESS
+    permitted_content:
+      - readiness verdict fields and definition of ready checks
+    forbidden_content:
+      - readiness claims without approved design
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/audits/2026-08-12-fe-tkt-w01-d01-implementation-self-review.md
+    action: CREATE
+    responsibility: Scoped no-code implementation self-review artifact
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-DESIGN
+    permitted_content:
+      - implementation diff self-review findings and manifest compliance audit
+    forbidden_content:
+      - false compliance claims
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/evidence/2026-08-12-fe-tkt-w01-d01-evidence.yml
+    action: CREATE
+    responsibility: Verification evidence manifest for FE-TKT-W01-D01
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-EVIDENCE
+    permitted_content:
+      - observed verification execution logs and outputs
+    forbidden_content:
+      - fabricated command results or exit codes
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/reviews/2026-08-12-fe-tkt-w01-d01-review.md
+    action: CREATE
+    responsibility: Acceptance criteria review verdict artifact
+    contract_ids:
+      - FE-INT-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-REVIEW
+    permitted_content:
+      - reviewer acceptance review verdict and scope verification
+    forbidden_content:
+      - unverified acceptance claims
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/tickets/FE-TKT-W01-D01.yml
+    action: MODIFY
+    responsibility: Frontend authorized ticket definition and completion tracking
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - status update from IN_PROGRESS to COMPLETE after acceptance review VERIFIED
+    forbidden_content:
+      - unverified completion claims
+      - changes to scope, out_of_scope, prerequisites, completion_condition, expected_files, or references
+    verification:
+      - node tools/repository/validate-repository.mjs
+  - path: clients/contracts/state/work-unit-checkpoint.yml
+    action: MODIFY
+    responsibility: Publication checkpoint recording for completed frontend work unit
+    contract_ids:
+      - FE-LIFE-001
+    acceptance_criteria_ids:
+      - FE-AC-W01-D01-STATE
+    permitted_content:
+      - status
+      - outgoing_work_unit
+      - incoming_work_unit
+      - outgoing_branch
+      - published_checkpoint_commit
+      - remote_tracking_ref
+      - draft_pr_url
+      - verification.command
+      - verification.working_directory
+      - verification.exit_code
+      - verification.observation
+      - verification.limitation
+      - verified_at
+      - verified_by
+    forbidden_content:
+      - fake commits or unverified checkpoint updates
+      - commit, remote ref, PR URL, command output, or verification status recorded before direct observation
+    verification:
+      - node tools/repository/validate-repository.mjs
+unplanned_file_policy: RETURN_TO_DESIGN

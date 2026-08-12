@@ -1,0 +1,8 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+ticket_id: FE-CCR-003
+candidate_ticket_id: FE-TKT-FND-CSS-D01
+action: AUTHORIZE_CANDIDATE_TICKET
+target: FE-TKT-FND-CSS-D01
+priority_reason: "FE-CCR-003 dashboard is VERIFIED and published; CSS foundations remain the first unmet prerequisite before FE Week 4."
+completion_condition: "Reviewer authorizes FE-TKT-FND-CSS-D01 and its first C3_APPLY learning action after confirming FE-TKT-W01-D01 remains VERIFIED."
