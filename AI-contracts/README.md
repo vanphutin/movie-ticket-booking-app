@@ -5,11 +5,11 @@ Thư mục này là nguồn sự thật chuẩn cho cách AI và học viên đi
 ## Trạng thái baseline
 
 <!-- GENERATED:CURRENT-STATUS:START -->
-- Baseline đang có hiệu lực: `PC-2026.11` — `APPROVED_FOR_TRAINING`.
+- Baseline đang có hiệu lực: `PC-2026.12` — `APPROVED_FOR_TRAINING`.
 - Ticket hiện tại: `TKT-W04-D05`; candidate: `TKT-W05-D01`.
 - Stage hiện tại: `HANDOFF`; next action: `AUTHORIZE_CANDIDATE_TICKET`.
 - Open change requests: không có.
-- Approved change requests: `CCR-001` đến `CCR-013`.
+- Approved change requests: `CCR-001` đến `CCR-014`.
 <!-- GENERATED:CURRENT-STATUS:END -->
 
 Foundation Gate `FG-001` đã được reviewer xác minh trước khi `TKT-W04-D01` được hoàn

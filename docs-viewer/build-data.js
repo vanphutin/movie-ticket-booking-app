@@ -125,8 +125,9 @@ function buildDocsDataPayload(targetRoot) {
   allFilePaths.forEach((filePath) => {
     const relPath = path.relative(root, filePath).replace(/\\/g, '/');
     const ext = path.extname(filePath).toLowerCase();
-    const content = fs.readFileSync(filePath, 'utf-8');
-    const stat = fs.statSync(filePath);
+    // Repository text may be checked out as CRLF on Windows and LF on Linux. Embed a
+    // canonical LF representation so the generated index is byte-identical everywhere.
+    const content = fs.readFileSync(filePath, 'utf-8').replace(/\r\n?/g, '\n');
     const filename = path.basename(filePath);
     const { group, sub } = classify(relPath);
 
@@ -137,7 +138,9 @@ function buildDocsDataPayload(targetRoot) {
       group,
       sub,
       title: extractTitle(content, filename, ext),
-      mtime: stat.mtime.toISOString().substring(0, 10),
+      // Filesystem mtimes change on every clean checkout and differ between Windows and
+      // Linux runners. A date embedded in a versioned path is stable repository data.
+      mtime: relPath.match(/(?:^|\/)(\d{4}-\d{2}-\d{2})(?:[-_/]|$)/)?.[1] || '',
       words: content.split(/\s+/).filter(Boolean).length,
       content
     });

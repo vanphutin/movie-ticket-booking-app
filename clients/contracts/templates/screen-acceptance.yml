@@ -1,0 +1,26 @@
+screen_id: ""
+user_goal: ""
+route: ""
+product_flow_contract: ""
+backend_operations: []
+ui_states: []
+functional_ui:
+  semantic_structure: []
+  business_behaviors: []
+  validation_requirements: []
+  interaction_requirements: []
+  accessibility_foundations: []
+  tests: []
+  evidence: []
+  verdict: NOT_REVIEWED
+visual_ux:
+  unlock_condition: ALL_FUNCTIONAL_ACCEPTANCE_CRITERIA_PASS
+  design_reference: null
+  layout_requirements: []
+  responsive_viewports: []
+  visual_accessibility_requirements: []
+  motion_requirements: []
+  tests: []
+  evidence: []
+  verdict: LOCKED
+verdict: NOT_REVIEWED

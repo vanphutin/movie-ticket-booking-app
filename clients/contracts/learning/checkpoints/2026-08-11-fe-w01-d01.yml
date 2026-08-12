@@ -1,0 +1,69 @@
+gate_id: LG-FE-TKT-W01-D01
+ticket_id: FE-TKT-W01-D01
+status: PASSED
+target_level: C3_APPLY
+current_questions:
+  - id: LG-FE-TKT-W01-D01-Q1
+    dimension: EXPLAIN
+    prompt: Explain request, response and HTTP statelessness in your own words; then explain how a login session can still exist.
+  - id: LG-FE-TKT-W01-D01-Q2
+    dimension: APPLY
+    prompt: A user enters /login and sees HTML, CSS, a logo and JavaScript. Describe the likely resource requests and identify which response starts the document.
+  - id: LG-FE-TKT-W01-D01-Q3
+    dimension: COMPARE
+    prompt: Choose link, button or div for submit login, open a decorative panel and navigate to registration; defend each choice.
+  - id: LG-FE-TKT-W01-D01-Q4
+    dimension: FAILURE
+    prompt: A password input has only placeholder Password and no label. What fails after typing and for keyboard or assistive-technology users, and how would semantic HTML repair it?
+learner_answers:
+  - question_id: LG-FE-TKT-W01-D01-Q1
+    observation: Correctly distinguished request, response and stateless HTTP, and explained session evidence through cookies or tokens.
+    verdict: PARTIAL_PASS
+    limitation: Described Authorization as automatically attached by the browser; unlike matching cookies, bearer Authorization is normally attached explicitly by application code or a configured client mechanism.
+  - question_id: LG-FE-TKT-W01-D01-Q2
+    observation: Correctly identified the navigation GET HTML response as the document response and traced stylesheet, script and image references to additional resource requests.
+    verdict: PASS
+    limitation: Parsing was described sequentially; real browsers may discover and fetch independent resources concurrently.
+  - question_id: LG-FE-TKT-W01-D01-Q3
+    observation: Correctly selected submit button, in-page action button and registration link, with native semantics, keyboard behavior and navigation affordances.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-W01-D01-Q4
+    observation: Correctly explained placeholder disappearance, label association through for/id, accessible naming and the enlarged activation target.
+    verdict: PARTIAL_PASS
+    limitation: Stated that assistive-technology users cannot know the control purpose; some browser/AT combinations may expose placeholder text as a fallback, but it is unreliable and not a persistent substitute for a label.
+observed_gaps: []
+remediation_observations:
+  - question_id: LG-FE-TKT-W01-D01-Q1-R
+    verdict: PASS
+    observation: Learner correctly distinguished browser-managed Cookie attachment under cookie policy from application-controlled bearer Authorization headers.
+  - question_id: LG-FE-TKT-W01-D01-Q4-R
+    verdict: PASS
+    observation: Learner correctly explained placeholder fallback inconsistency, loss of persistent visual context and the label activation target.
+    limitation: A label is the standard reliable semantic relationship, but avoid universal compatibility claims such as 100 percent for every browser and assistive-technology combination.
+remediation_focus: []
+project_application: PASSED
+project_application_task:
+  id: LG-FE-TKT-W01-D01-APP-01
+  title: Semantic static authentication shell
+  constraints:
+    - HTML only; no CSS, JavaScript, React, TypeScript, Tailwind or live API call
+    - Use document landmarks and one coherent heading hierarchy
+    - Use a real form with explicitly associated visible labels
+    - Use suitable email and password input types and names
+    - Use a submit button for login and a link for registration
+    - Include a non-visual decorative image treatment or meaningful alternative text as appropriate
+  completion_condition: Learner submits the HTML and defends the semantic choices and one expected native failure behavior.
+project_application_review:
+  reviewed_at: "2026-08-12"
+  verdict: PASS
+  observations:
+    - Complete Vietnamese HTML document with header, navigation, main and footer landmarks and one coherent h1.
+    - Email and password controls use suitable types, names, autocomplete values, required constraints and explicitly associated visible labels.
+    - Submit uses a native submit button and registration uses a real link with correct action-versus-navigation reasoning.
+    - Learner correctly predicted required and email constraint-validation behavior.
+  non_blocking_findings:
+    - The static exercise action /api/login is not verified API authority and must not be carried into integration design without a verified public contract.
+    - Focus placement and localized validation messages are user-agent behavior and should not be specified as universally identical.
+    - Prefer alt text that names the brand without redundantly appending the word Logo when the image is meaningful.
+next_action: BEGIN_ANALYSIS

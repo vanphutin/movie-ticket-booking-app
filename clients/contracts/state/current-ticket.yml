@@ -1,0 +1,9 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+ticket_id: FE-CCR-002
+candidate_ticket_id: FE-TKT-FND-CSS-D01
+current_stage: HANDOFF
+learning_status: PASSED
+review_status: VERIFIED
+active_artifact: clients/contracts/reviews/2026-08-12-fe-ccr-002-review.md
+updated_at: "2026-08-12"

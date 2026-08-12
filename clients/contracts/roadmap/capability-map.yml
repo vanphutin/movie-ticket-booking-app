@@ -1,0 +1,25 @@
+schema_version: 2
+readiness_award: SENIOR_TECHNICAL_SCOPE_READY
+capabilities:
+  - { id: FE-CAP-WEB, name: Web platform, prerequisites: [], target_level: C3_APPLY, mandatory: true, covered_by: [FE-TKT-W01-D01] }
+  - { id: FE-CAP-HTML, name: Semantic HTML, prerequisites: [FE-CAP-WEB], target_level: C3_APPLY, mandatory: true, covered_by: [FE-TKT-W01-D01] }
+  - { id: FE-CAP-CSS, name: CSS layout and responsive design, prerequisites: [FE-CAP-HTML], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-FND-CSS-D01, FE-TKT-FND-CSS-D02] }
+  - { id: FE-CAP-JS, name: JavaScript browser and async, prerequisites: [FE-CAP-WEB], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-FND-JS-D01, FE-TKT-FND-JS-D02, FE-TKT-FND-JS-D03] }
+  - { id: FE-CAP-TS, name: TypeScript strict modeling, prerequisites: [FE-CAP-JS], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-FND-TS-D01] }
+  - { id: FE-CAP-RCT, name: React mental model, prerequisites: [FE-CAP-JS, FE-CAP-TS], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-FND-RCT-D01] }
+  - { id: FE-CAP-CMP, name: Component architecture, prerequisites: [FE-CAP-RCT], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W04-D03, FE-TKT-W05-D03] }
+  - { id: FE-CAP-ROU, name: Routing and URL state, prerequisites: [FE-CAP-RCT], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-W04-D02, FE-TKT-W05-D02] }
+  - { id: FE-CAP-STA, name: Redux Toolkit and Zustand client state, prerequisites: [FE-CAP-TS, FE-CAP-RCT], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W07-D02] }
+  - { id: FE-CAP-DAT, name: TanStack Query and API state, prerequisites: [FE-CAP-JS, FE-CAP-TS, FE-CAP-RCT], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W05-D02, FE-TKT-W06-D02] }
+  - { id: FE-CAP-FRM, name: Forms and Zod validation, prerequisites: [FE-CAP-TS, FE-CAP-RCT], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-W04-D02] }
+  - { id: FE-CAP-DSN, name: Tailwind Radix and design systems, prerequisites: [FE-CAP-CSS, FE-CAP-CMP], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W04-D05, FE-TKT-W05-D05] }
+  - { id: FE-CAP-A11Y, name: Accessibility, prerequisites: [FE-CAP-HTML, FE-CAP-CSS, FE-CAP-JS], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W04-D04, FE-TKT-W10-D03] }
+  - { id: FE-CAP-TST, name: Vitest RTL MSW and Playwright, prerequisites: [FE-CAP-TS, FE-CAP-RCT], target_level: C4_DEBUG, mandatory: true, covered_by: [FE-TKT-W04-D04, FE-TKT-W10-D02] }
+  - { id: FE-CAP-SEC, name: Frontend security, prerequisites: [FE-CAP-WEB, FE-CAP-JS], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W04-D01, FE-TKT-W08-D03, FE-TKT-W10-D03] }
+  - { id: FE-CAP-PERF, name: Performance engineering, prerequisites: [FE-CAP-RCT, FE-CAP-DAT], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W09-D01, FE-TKT-W10-D02] }
+  - { id: FE-CAP-REL, name: Reliability and realtime, prerequisites: [FE-CAP-DAT, FE-CAP-STA], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W06-D01, FE-TKT-W08-D02] }
+  - { id: FE-CAP-OBS, name: Observability, prerequisites: [FE-CAP-REL], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W09-D02] }
+  - { id: FE-CAP-DEL, name: Build CI CD and delivery, prerequisites: [FE-CAP-TST], target_level: C5_COMPARE, mandatory: true, covered_by: [FE-TKT-W09-D04, FE-TKT-W10-D04] }
+  - { id: FE-CAP-ARCH, name: Frontend system design, prerequisites: [FE-CAP-CMP, FE-CAP-DAT, FE-CAP-STA], target_level: C6_DEFEND, mandatory: true, covered_by: [FE-TKT-W07-D03, FE-TKT-W10-D01] }
+  - { id: FE-CAP-LEAD, name: Technical leadership, prerequisites: [FE-CAP-ARCH, FE-CAP-DEL], target_level: C7_LEAD, mandatory: true, covered_by: [FE-TKT-W10-D04, FE-TKT-W10-D05] }
+  - { id: FE-CAP-MKT, name: Market adaptability, prerequisites: [FE-CAP-ARCH], target_level: C6_DEFEND, mandatory: true, covered_by: [FE-TKT-W10-D05] }

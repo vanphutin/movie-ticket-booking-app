@@ -1,0 +1,41 @@
+schema_version: 1
+work_unit: FE-CCR-002
+finding: FE-BLOCKER-CCR-002-CI-DRIFT
+status: VERIFIED
+environment: Windows PowerShell; Node.js repository toolchain
+root_cause: docs-viewer/build-data.js serialized filesystem modification times and raw source line endings, both checkout metadata that differ across Windows worktrees and Linux CI runners.
+entries:
+  - id: EVI-FE-CCR-002-MTIME-DETERMINISM
+    prediction: Changing only a source file modification time cannot change generated docs data.
+    command: Temporarily move ticket-catalog.yml LastWriteTimeUtc by 30 days; run node tools/control-plane/sync-control-plane.mjs --check; compare SHA-256 before and after; restore original timestamp.
+    working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+    exit_code: 0
+    observation: Both docs-viewer/docs-data.js hashes were 8D5028EEA65E34C96E6853341C612BA4387F7F283DD0AC15FE41D3C7EE9F24E9 and projection check remained synchronized.
+    artifact: docs-viewer/build-data.js
+    limitation: Final Linux confirmation requires PR 13 GitHub Actions after publication.
+  - id: EVI-FE-CCR-002-TOPOLOGY
+    prediction: Complete valid mappings pass and five independent corruptions are rejected.
+    command: npm run check:frontend-roadmap
+    working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+    exit_code: 0
+    observation: 44 tickets, 22 capabilities, 7 backend gates and 7 weekly gates passed; unknown backend gate, broken next chain, wrong weekly return, unknown phase exit and missing backend-source ticket negative cases were rejected.
+    artifact: tools/frontend-control-plane/validate-frontend-roadmap.mjs
+    limitation: Planned rows remain forecasts and do not verify future application behavior.
+  - id: EVI-FE-CCR-002-LOCAL-CONSISTENCY
+    prediction: Corrected router, phases, agent guidance, projections and repository references remain synchronized.
+    command: npm run check:frontend-control; npm run check:docs; node tools/repository/validate-repository.mjs
+    working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+    exit_code: 0
+    observation: Frontend control plane, Mermaid 13 diagrams, generated projections, publication checkpoint and local references all passed.
+    artifact: clients/contracts/state/current-work.yml
+    limitation: Application behavior remains outside this control-plane remediation.
+post_push_observation:
+  run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577298190
+  result: FAILED
+  finding: Stable dates removed mtime drift, but the first remediation run proved raw CRLF/LF source content still changed docs-data.js across platforms; LF normalization was then added before serialization.
+remote_verification:
+  head_sha: 679f8e74c7d633d666b18d3f088840c06fb1fbdb
+  push_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577382029
+  pull_request_run: https://github.com/vanphutin/movie-ticket-booking-app/actions/runs/31577385333
+  result: SUCCESS
+  observation: Both Linux workflows passed repository validation, consistency negative fixtures and the clean-regeneration no-diff proof.
