@@ -20,6 +20,7 @@ allowed_paths:
   - tools/control-plane/build-master-dashboard.mjs
   - tools/control-plane/validate-master-dashboard.mjs
   - tools/control-plane/sync-control-plane.mjs
+  - tools/control-plane/test-consistency.mjs
   - tools/control-plane/generated-targets.json
   - tools/repository/validate-repository.mjs
   - package.json

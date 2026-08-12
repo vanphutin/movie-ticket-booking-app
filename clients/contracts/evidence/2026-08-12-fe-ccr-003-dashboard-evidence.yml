@@ -21,6 +21,15 @@ entries:
     observation: Dashboard, generated projections, frontend control plane, 13 Mermaid diagrams, publication checkpoint and local references passed.
     artifact: tools/control-plane/build-master-dashboard.mjs
     limitation: Application behavior is outside this documentation/control-plane work unit.
+  - id: EVI-FE-CCR-003-CI-FIXTURE-COMPATIBILITY
+    prediction: Existing isolated consistency fixtures include every new canonical source required by the full-file dashboard generator.
+    command: node tools/control-plane/test-consistency.mjs
+    working_directory: D:/back-end/EDUCATION-BACKEND/MovieTicketBookingApp
+    environment: Windows PowerShell; Node.js
+    exit_code: 0
+    observation: Clean isolated fixture passed and stale README, plan progress and active coding-checkpoint projections remained rejected.
+    artifact: tools/control-plane/test-consistency.mjs
+    limitation: Final Linux confirmation is recorded by PR 14 CI after publication.
   - id: EVI-FE-CCR-003-ROADMAP
     prediction: Dashboard work does not weaken the backend-first frontend roadmap.
     command: npm run check:frontend-roadmap; npm run check:frontend-control
