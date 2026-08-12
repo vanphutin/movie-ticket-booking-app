@@ -7,7 +7,8 @@ const paths = {
   integration: "clients/contracts/integration/backend-capability-map.yml",
   phases: "clients/contracts/roadmap/phases.yml",
   milestones: "clients/contracts/roadmap/milestones.yml",
-  candidate: "clients/contracts/tickets/FE-TKT-FND-CSS-D01.yml",
+  materializedTicket: "clients/contracts/tickets/FE-TKT-FND-CSS-D01.yml",
+  frontendState: "clients/contracts/state/current-work.yml",
   backendState: "AI-contracts/state/current-work.yml",
 };
 
@@ -105,13 +106,20 @@ function validate(inputs) {
   if (capabilityRows.length !== 22) errors.push(`Capability map must contain exactly 22 capabilities; found ${capabilityRows.length}`);
   if (dependencies.length !== 7 || gates.length !== 7) errors.push("Roadmap must contain exactly seven backend dependencies and seven frontend weekly gates");
 
-  const candidate = tickets.find((ticket) => ticket.id === scalar(inputs.candidate, "ticket_id"));
-  if (!candidate) errors.push("Materialized candidate is absent from the catalog");
+  const materializedId = scalar(inputs.materializedTicket, "ticket_id");
+  const materialized = tickets.find((ticket) => ticket.id === materializedId);
+  const currentId = scalar(inputs.frontendState, "ticket_id");
+  const candidateId = scalar(inputs.frontendState, "candidate_ticket_id");
+  if (!materialized) errors.push("Materialized ticket is absent from the catalog");
   else {
-    if (scalar(inputs.candidate, "status") !== "CANDIDATE") errors.push("Materialized successor must remain CANDIDATE before authorization");
-    if (scalar(inputs.candidate, "phase_id") !== candidate.phase) errors.push("Materialized candidate phase differs from catalog");
-    if (scalar(inputs.candidate, "backend_gate") !== candidate.backendGate) errors.push("Materialized candidate backend gate differs from catalog");
-    if (scalar(inputs.candidate, "next_ticket") !== candidate.next) errors.push("Materialized candidate next ticket differs from catalog");
+    const materializedStatus = scalar(inputs.materializedTicket, "status");
+    if (materializedId === candidateId && materializedStatus !== "CANDIDATE") errors.push("Materialized successor must remain CANDIDATE before authorization");
+    else if (materializedId === currentId && !["AUTHORIZED", "IN_PROGRESS", "COMPLETE"].includes(materializedStatus)) errors.push("Materialized current ticket has an invalid authorized status");
+    else if (materializedId !== currentId && materializedId !== candidateId) errors.push("Materialized ticket is neither canonical current nor candidate");
+    if (materializedStatus !== materialized.status && !(materializedStatus === "COMPLETE" && materialized.status === "VERIFIED")) errors.push("Materialized ticket status differs from catalog");
+    if (scalar(inputs.materializedTicket, "phase_id") !== materialized.phase) errors.push("Materialized ticket phase differs from catalog");
+    if (scalar(inputs.materializedTicket, "backend_gate") !== materialized.backendGate) errors.push("Materialized ticket backend gate differs from catalog");
+    if (scalar(inputs.materializedTicket, "next_ticket") !== materialized.next) errors.push("Materialized ticket next transition differs from catalog");
   }
   return { errors, ticketCount: tickets.length, capabilityCount: capabilityRows.length, backendGateCount: dependencies.length, weeklyGateCount: gates.length };
 }

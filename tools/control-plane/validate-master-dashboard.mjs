@@ -3,6 +3,8 @@ import { JSDOM } from "jsdom";
 import { buildDashboard } from "./build-master-dashboard.mjs";
 
 const path = "docs/plan/movie-ticket-booking-master-plan.html";
+const frontendState = fs.readFileSync("clients/contracts/state/current-work.yml", "utf8");
+const scalar = (text, key) => text.match(new RegExp(`^${key}:\\s*(.*?)\\s*$`, "m"))?.[1]?.replace(/^["']|["']$/g, "");
 const html = fs.readFileSync(path, "utf8");
 const errors = [];
 if (html !== buildDashboard()) errors.push("Dashboard differs from canonical generated output");
@@ -18,7 +20,8 @@ if (data) {
   if (data.dependencies.length !== 7 || data.coverage.length !== 7) errors.push("Expected seven dependency and coverage mappings");
   if (data.counts.total !== 79) errors.push(`Expected 79 total tickets, found ${data.counts.total}`);
   if (data.meta.activeWorkstream !== "frontend") errors.push("Dashboard active workstream differs from router");
-  if (data.meta.fe.candidate !== "FE-TKT-FND-CSS-D01") errors.push("Dashboard candidate differs from canonical frontend state");
+  if (data.meta.fe.ticket !== scalar(frontendState, "ticket_id")) errors.push("Dashboard current frontend ticket differs from canonical state");
+  if (data.meta.fe.candidate !== scalar(frontendState, "candidate_ticket_id")) errors.push("Dashboard candidate differs from canonical frontend state");
 }
 for (const selector of ["form", "input", "button", "select", "textarea", "[contenteditable]"]) if (document.querySelector(selector)) errors.push(`Read-only dashboard contains forbidden control ${selector}`);
 if (/\b(?:localStorage|sessionStorage|fetch\s*\(|XMLHttpRequest|method\s*:\s*["'](?:POST|PUT|PATCH|DELETE))/i.test(html)) errors.push("Dashboard contains a stateful or network mutation surface");
