@@ -1,0 +1,36 @@
+schema_version: 1
+required_fields:
+  - ticket_id
+  - track
+  - phase_id
+  - capability_ids
+  - prerequisites
+  - backend_gate
+  - target_level
+  - actor_outcome
+  - scope
+  - out_of_scope
+  - learning_gate
+  - project_application
+  - acceptance_criteria
+  - failure_security
+  - verification_boundary
+  - next
+eligibility_rule: ALL_PREREQUISITES_VERIFIED_AND_BACKEND_GATE_VERIFIED
+implementation_sequence: [FUNCTIONAL_UI, VISUAL_UX]
+evidence_rule: PREDICTION_COMMAND_WORKDIR_ENV_EXIT_OBSERVATION_ARTIFACT_LIMITATION
+materialization_rule: Only current or candidate planned rows become individual ticket files.
+planned_row_mapping:
+  id: ticket_id
+  phase: phase_id
+  capabilities: capability_ids
+  target: target_level
+  outcome: actor_outcome_and_scope_summary
+  acceptance: acceptance_criteria_summary
+  next: next_ticket
+materialized_defaults:
+  out_of_scope: Must be specialized before authorization.
+  learning_gate: LG-{ticket_id} at target_level with observed learner evidence.
+  project_application: Required before a product ticket can be VERIFIED.
+  failure_security: Must cover loading empty error unauthorized forbidden conflict and retry states applicable to the boundary.
+  verification_boundary: Must name exact commands environment exit codes observations artifacts and limitations.

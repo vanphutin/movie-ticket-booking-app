@@ -1,0 +1,8 @@
+schema_version: 1
+milestones:
+  - { id: FE-M0, outcome: Independent frontend control plane verified }
+  - { id: FE-M1, outcome: Browser HTML CSS JS TypeScript React foundations verified }
+  - { id: FE-M2, outcome: Authentication UI verified against backend W4 }
+  - { id: FE-M3, outcome: Catalog and scheduling UI verified against backend W5-W6 }
+  - { id: FE-M4, outcome: Booking and payment ticket UI verified against backend W7-W8 }
+  - { id: FE-M5, outcome: Operable release and Senior technical scope evidence verified }

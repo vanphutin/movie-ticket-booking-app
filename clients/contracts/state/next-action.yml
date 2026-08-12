@@ -1,8 +1,8 @@
 # GENERATED FILE — run: npm run sync:frontend-control
 schema_version: 1
-ticket_id: FE-TKT-W01-D01
-candidate_ticket_id: null
-action: AUTHORIZE_SUCCESSOR_TICKET
-target: FRONTEND_SUCCESSOR_TICKET
-priority_reason: "FE-TKT-W01-D01 acceptance is VERIFIED and its publication checkpoint is VERIFIED with Draft PR 12; no successor ticket is currently defined or authorized."
-completion_condition: "Reviewer selects and authorizes exactly one successor frontend ticket with prerequisites, scope, expected files and first learning action."
+ticket_id: FE-CCR-002
+candidate_ticket_id: FE-TKT-FND-CSS-D01
+action: PUBLISH_VERIFIED_ROADMAP
+target: FE-CCR-002
+priority_reason: "FE-CCR-002 acceptance is VERIFIED; publication checkpoint remains required before HANDOFF."
+completion_condition: "Authorized commits are pushed non-force, local and remote refs match, and a Draft PR plus VERIFIED checkpoint are recorded."

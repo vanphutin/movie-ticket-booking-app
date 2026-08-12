@@ -14,3 +14,5 @@ the Movie Ticket Booking frontend against verified backend public APIs.
 - `SENIOR_TECHNICAL_SCOPE_READY` requires all mandatory capability dimensions; real-team tenure and
   leadership remain independently observed.
 - React + TypeScript + Vite is the application stack. Next.js is outside current scope.
+- Product delivery is backend-first: each frontend W4-W10 slice waits for the matching verified
+  backend public capability, then returns control to the next backend week only after frontend verification.

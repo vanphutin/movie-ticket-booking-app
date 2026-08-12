@@ -1,60 +1,58 @@
 schema_version: 1
 project: Movie Ticket Booking Frontend
 workstream: frontend
-effective_baseline: FE-PC-2026.2
-current_stage: HANDOFF
-ticket_id: FE-TKT-W01-D01
-candidate_ticket_id: null
+effective_baseline: FE-PC-2026.3
+current_stage: REVIEW
+ticket_id: FE-CCR-002
+candidate_ticket_id: FE-TKT-FND-CSS-D01
 completed_ticket_ids:
   - FE-TKT-W00-D01
   - FE-TKT-W01-D01
-active_artifact: clients/contracts/reviews/2026-08-12-fe-tkt-w01-d01-review.md
+active_artifact: clients/contracts/designs/2026-08-12-fe-ccr-002-backend-first-roadmap.md
 ticket_projection:
-  phase_id: FE-P1
-  milestone_id: FE-M1
+  phase_id: FE-P0
+  milestone_id: FE-M0
   capability_ids:
     - FE-CAP-WEB
-    - FE-CAP-HTML
   contract_ids:
     - FE-CHARTER-001
     - FE-LIFE-001
     - FE-SENIOR-001
     - FE-INT-001
     - FE-CCR-001
+    - FE-CCR-002
   execution_status: COMPLETE
   evidence_confidence: HIGH
 statuses:
   learning: PASSED
   analysis: PASSED
-  design: PASSED
+  design: APPROVED
   readiness: READY
-  implementation: PASSED
+  implementation: COMPLETE
   evidence: OBSERVED
   review: VERIFIED
-  handoff: COMPLETE
+  handoff: NOT_STARTED
 learning_checkpoint:
-  gate_id: LG-FE-TKT-W01-D01
-  target_level: C3_APPLY
+  gate_id: LG-FE-CCR-002
+  target_level: C6_DEFEND
   status: PASSED
   current_unit: COMPLETE
   concepts_presented:
-    - browser as user agent and runtime
-    - HTTP request and response
-    - resource and document composition
-    - stateless protocol versus stateful session
-    - semantic HTML and native behavior
-    - explicit form labels
+    - backend-first alternating delivery
+    - separate foundation and product tracks joined by AND gates
+    - small learning tickets followed by vertical slices
+    - just-in-time ticket materialization from a validated catalog
   observed_gaps: []
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-AUTHORIZE-NEXT-FRONTEND-TICKET
-  type: AUTHORIZE_SUCCESSOR_TICKET
-  target: FRONTEND_SUCCESSOR_TICKET
-  reason: FE-TKT-W01-D01 acceptance is VERIFIED and its publication checkpoint is VERIFIED with Draft PR 12; no successor ticket is currently defined or authorized.
-  completion_condition: Reviewer selects and authorizes exactly one successor frontend ticket with prerequisites, scope, expected files and first learning action.
-  on_success: BEGIN_SUCCESSOR_STARTUP
-  on_failure: RETAIN_COMPLETED_HANDOFF
+  id: FE-ACTION-PUBLISH-CCR-002-ROADMAP
+  type: PUBLISH_VERIFIED_ROADMAP
+  target: FE-CCR-002
+  reason: FE-CCR-002 acceptance is VERIFIED; publication checkpoint remains required before HANDOFF.
+  completion_condition: Authorized commits are pushed non-force, local and remote refs match, and a Draft PR plus VERIFIED checkpoint are recorded.
+  on_success: COMPLETE_FE_CCR_002_HANDOFF
+  on_failure: REMEDIATE_PUBLICATION
 updated_at: "2026-08-12"
 updated_by: Codex
-update_source: "FE-TKT-W01-D01 was committed, pushed non-force, verified against its remote-tracking ref, represented by Draft PR 12 and completed through HANDOFF."
+update_source: "FE-CCR-002 explicitly approved the full backend-first alternating frontend roadmap and its candidate successor."

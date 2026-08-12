@@ -1,12 +1,16 @@
-schema_version: 1
+schema_version: 2
+policy: BACKEND_FIRST_ALTERNATING
 dependencies:
-  - backend_capability_ids: [CAP-IDN-01, CAP-SEC-01]
-    backend_ticket: TKT-W04-D05
-    backend_status: VERIFIED
-    verification_source: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml
-    frontend_target: FE-W04-AUTH
-    allowed_boundary: API Gateway public authentication API
-    forbidden_dependencies:
-      - apps/** source imports
-      - internal entity or persistence model
-      - internal gateway authentication headers
+  - { backend_gate: BE-W04-AUTH-VERIFIED, backend_tickets: [TKT-W04-D01, TKT-W04-D02, TKT-W04-D03, TKT-W04-D04, TKT-W04-D05], backend_status: VERIFIED, source: AI-contracts/evidence/2026-07-30-tkt-w04-d05-evidence.yml, frontend_week: FE-W04, public_boundary: API Gateway authentication APIs }
+  - { backend_gate: BE-W05-CATALOG-VERIFIED, backend_tickets: [TKT-W05-D01, TKT-W05-D02, TKT-W05-D03, TKT-W05-D04, TKT-W05-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W05, public_boundary: API Gateway movie and trailer APIs }
+  - { backend_gate: BE-W06-SCHEDULING-VERIFIED, backend_tickets: [TKT-W06-D01, TKT-W06-D02, TKT-W06-D03, TKT-W06-D04, TKT-W06-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W06, public_boundary: API Gateway cinema screen seat and showtime APIs }
+  - { backend_gate: BE-W07-BOOKING-VERIFIED, backend_tickets: [TKT-W07-D01, TKT-W07-D02, TKT-W07-D03, TKT-W07-D04, TKT-W07-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W07, public_boundary: API Gateway seat hold and booking APIs }
+  - { backend_gate: BE-W08-PAYMENT-VERIFIED, backend_tickets: [TKT-W08-D01, TKT-W08-D02, TKT-W08-D03, TKT-W08-D04, TKT-W08-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W08, public_boundary: API Gateway payment and ticket APIs }
+  - { backend_gate: BE-W09-OPS-VERIFIED, backend_tickets: [TKT-W09-D01, TKT-W09-D02, TKT-W09-D03, TKT-W09-D04, TKT-W09-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W09, public_boundary: public health error correlation and delivery behavior }
+  - { backend_gate: BE-W10-RELEASE-VERIFIED, backend_tickets: [TKT-W10-D01, TKT-W10-D02, TKT-W10-D03, TKT-W10-D04, TKT-W10-D05], backend_status: LOCKED, source: AI-contracts/roadmap/weeks-4-10.md, frontend_week: FE-W10, public_boundary: verified release contracts and end-to-end environment }
+forbidden_dependencies:
+  - apps/** source imports
+  - internal entity or persistence models
+  - service-local database access
+  - internal gateway authentication headers
+  - invented successful mock capability

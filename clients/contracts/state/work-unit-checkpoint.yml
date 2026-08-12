@@ -1,7 +1,7 @@
 schema_version: 1
 status: VERIFIED
 outgoing_work_unit: FE-TKT-W01-D01
-incoming_work_unit: null
+incoming_work_unit: FE-CCR-002
 outgoing_branch: codex/fe-tkt-w01-d01-learning-review
 published_checkpoint_commit: ea7daefcaafc2f4d688a79672c2b1df7e6cf584c
 remote_tracking_ref: origin/codex/fe-tkt-w01-d01-learning-review

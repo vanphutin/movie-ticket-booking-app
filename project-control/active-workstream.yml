@@ -8,7 +8,7 @@ workstreams:
   frontend:
     canonical_state: clients/contracts/state/current-work.yml
     status: ACTIVE
-selection_reason: Backend Week 4 authentication is complete; frontend foundations and matching UI follow next.
+selection_reason: Backend Week 4 authentication is VERIFIED; the approved backend-first roadmap keeps frontend active through its prerequisite foundations and matching Week 4 authentication slice.
 switch_condition: Frontend authentication capability is VERIFIED before backend Week 5 delivery starts.
-updated_at: "2026-08-11"
+updated_at: "2026-08-12"
 updated_by: Van Phu Tin / Reviewer and Codex
