@@ -17,7 +17,14 @@ const state = fs.readFileSync(path.join(root, statePath), "utf8");
 console.log(`ACTIVE WORKSTREAM: ${active.toUpperCase()}`);
 console.log(`CANONICAL STATE: ${statePath}`);
 console.log(`CURRENT TICKET: ${scalar(state, "ticket_id")}`);
+console.log(`CANDIDATE TICKET: ${scalar(state, "candidate_ticket_id")}`);
 console.log(`STAGE: ${scalar(state, "current_stage")}`);
 console.log(`NEXT ACTION: ${nested(state, "next_action", "type")}`);
 console.log(`TARGET: ${nested(state, "next_action", "target")}`);
 console.log(`COMPLETION: ${nested(state, "next_action", "completion_condition")}`);
+if (active === "frontend") {
+  const integration = fs.readFileSync(path.join(root, "clients/contracts/integration/backend-capability-map.yml"), "utf8");
+  const verifiedBackendGate = [...integration.matchAll(/backend_gate:\s*(BE-[^,}\s]+)[\s\S]*?status:\s*VERIFIED/g)][0]?.[1] ?? "NONE";
+  console.log(`VERIFIED BACKEND GATE: ${verifiedBackendGate}`);
+  console.log("DELIVERY ORDER: foundations -> FE W4 -> BE W5 -> FE W5 -> ... -> BE W10 -> FE W10");
+}

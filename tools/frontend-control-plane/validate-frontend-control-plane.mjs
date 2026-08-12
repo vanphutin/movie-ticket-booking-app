@@ -26,6 +26,10 @@ read("clients/contracts/tickets/FE-TKT-W00-D01.yml");
 read("clients/contracts/tickets/FE-TKT-W01-D01.yml");
 read("clients/AGENTS.md");
 const checkpoint = read("clients/contracts/state/work-unit-checkpoint.yml");
+read("clients/contracts/roadmap/ticket-catalog.yml");
+read("clients/contracts/roadmap/phases.yml");
+read("clients/contracts/roadmap/milestones.yml");
+read("clients/contracts/integration/coverage-matrix.yml");
 
 const active = scalar(router, "active_workstream");
 if (!new Set(["backend", "frontend"]).has(active)) errors.push(`Invalid active_workstream: ${active}`);
@@ -48,6 +52,12 @@ if (scalar(checkpoint, "incoming_work_unit") !== checkpointTarget) {
 if (fs.existsSync(path.join(root, "clients/package.json")) || fs.existsSync(path.join(root, "clients/src"))) {
   errors.push("CCR-014 forbids frontend application scaffolding");
 }
+
+const roadmap = spawnSync(process.execPath, ["tools/frontend-control-plane/validate-frontend-roadmap.mjs"], {
+  cwd: root,
+  encoding: "utf8"
+});
+if (roadmap.status !== 0) errors.push((roadmap.stderr || roadmap.stdout).trim());
 
 const sync = spawnSync(process.execPath, ["tools/frontend-control-plane/sync-frontend-control-plane.mjs", "--check"], {
   cwd: root,

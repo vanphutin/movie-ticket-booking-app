@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "sync:frontend-control": "node tools/frontend-control-plane/sync-frontend-control-plane.mjs",
+    "check:frontend-roadmap": "node tools/frontend-control-plane/validate-frontend-roadmap.mjs && node tools/frontend-control-plane/validate-frontend-roadmap.mjs --self-test",
     "check:frontend-control": "node tools/frontend-control-plane/sync-frontend-control-plane.mjs --check && node tools/frontend-control-plane/validate-frontend-control-plane.mjs",
     "status:work": "node tools/frontend-control-plane/status-work.mjs",
     "check:mermaid": "node tools/repository/validate-mermaid.mjs",
