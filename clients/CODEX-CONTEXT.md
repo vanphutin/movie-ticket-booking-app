@@ -14,7 +14,7 @@ candidate_ticket_id: FE-TKT-FND-CSS-D02
 active_artifact: clients/contracts/learning/checkpoints/2026-08-12-fe-fnd-css-d01.yml
 learning_status: IN_PROGRESS
 review_status: NOT_REVIEWED
-next_action: SUBMIT_LEARNING_ANSWERS
-completion_condition: Learner answers Q1 through Q4 with computed-style predictions, selected choices, trade-offs, limitations and failure repairs at C3_APPLY.
+next_action: SUBMIT_PROJECT_APPLICATION
+completion_condition: Learner predicts the important computed styles, applies a small stylesheet to the reviewed semantic authentication shell, and explains one cascade decision, one box-model decision and one resilient-unit decision without changing HTML meaning.
 ```
 <!-- GENERATED:FRONTEND-HANDOFF:END -->

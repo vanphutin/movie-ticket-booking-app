@@ -46,13 +46,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-ANSWER-FND-CSS-D01-C3
-  type: SUBMIT_LEARNING_ANSWERS
-  target: LG-FE-TKT-FND-CSS-D01
-  reason: The ticket is authorized and its C3_APPLY checkpoint is open; observed learner answers are required before project application or analysis.
-  completion_condition: Learner answers Q1 through Q4 with computed-style predictions, selected choices, trade-offs, limitations and failure repairs at C3_APPLY.
-  on_success: REVIEW_CSS_FOUNDATION_ANSWERS
-  on_failure: REMEDIATE_CSS_FOUNDATION_GAPS
-updated_at: "2026-08-12"
+  id: FE-ACTION-APPLY-FND-CSS-D01-C3
+  type: SUBMIT_PROJECT_APPLICATION
+  target: LG-FE-TKT-FND-CSS-D01-APP-01
+  reason: Learner answers Q1 through Q4 were observed and passed; the project application is now unlocked and must be reviewed before analysis.
+  completion_condition: Learner predicts the important computed styles, applies a small stylesheet to the reviewed semantic authentication shell, and explains one cascade decision, one box-model decision and one resilient-unit decision without changing HTML meaning.
+  on_success: REVIEW_CSS_PROJECT_APPLICATION
+  on_failure: REMEDIATE_CSS_PROJECT_APPLICATION
+updated_at: "2026-08-16"
 updated_by: Codex
-update_source: "Explicit reviewer authorization to begin FE-TKT-FND-CSS-D01 and its C3_APPLY learning gate after verified FE-CCR-004 handoff."
+update_source: "Observed learner answers for LG-FE-TKT-FND-CSS-D01 Q1 through Q4; all four received PASS and unlocked project application LG-FE-TKT-FND-CSS-D01-APP-01."

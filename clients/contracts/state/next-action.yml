@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-TKT-FND-CSS-D01
 candidate_ticket_id: FE-TKT-FND-CSS-D02
-action: SUBMIT_LEARNING_ANSWERS
-target: LG-FE-TKT-FND-CSS-D01
-priority_reason: "The ticket is authorized and its C3_APPLY checkpoint is open; observed learner answers are required before project application or analysis."
-completion_condition: "Learner answers Q1 through Q4 with computed-style predictions, selected choices, trade-offs, limitations and failure repairs at C3_APPLY."
+action: SUBMIT_PROJECT_APPLICATION
+target: LG-FE-TKT-FND-CSS-D01-APP-01
+priority_reason: "Learner answers Q1 through Q4 were observed and passed; the project application is now unlocked and must be reviewed before analysis."
+completion_condition: "Learner predicts the important computed styles, applies a small stylesheet to the reviewed semantic authentication shell, and explains one cascade decision, one box-model decision and one resilient-unit decision without changing HTML meaning."
