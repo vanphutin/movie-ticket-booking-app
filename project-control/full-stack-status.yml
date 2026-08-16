@@ -9,9 +9,9 @@ backend:
 frontend:
   canonical_state: clients/contracts/state/current-work.yml
   ticket_id: FE-TKT-FND-CSS-D01
-  stage: LEARNING
+  stage: ANALYSIS
   review_status: NOT_REVIEWED
-  next_action: AUTHOR_ANALYSIS_ARTIFACT
+  next_action: AUTHOR_DESIGN_AND_EXPECTED_FILES
 full_stack:
   bootstrap_status: IN_PROGRESS
   product_status: PARTIAL

@@ -2,7 +2,7 @@
 schema_version: 1
 ticket_id: FE-TKT-FND-CSS-D01
 candidate_ticket_id: FE-TKT-FND-CSS-D02
-action: AUTHOR_ANALYSIS_ARTIFACT
-target: FE-TKT-FND-CSS-D01-ANALYSIS
-priority_reason: "The C3_APPLY learning gate passed with a reviewed explainable base stylesheet; analysis is the next lifecycle stage."
-completion_condition: "A reviewed analysis artifact identifies the auth-shell styling goal, cascade and sizing requirements, failure cases, scope boundaries and verified-versus-unverified dependencies."
+action: AUTHOR_DESIGN_AND_EXPECTED_FILES
+target: FE-TKT-FND-CSS-D01-DESIGN
+priority_reason: "The reviewed analysis passed with explicit cascade, sizing, failure and dependency boundaries; design is the next lifecycle stage."
+completion_condition: "A reviewed design note defines the exact explainable stylesheet, acceptance and negative checks, and an approved expected-files manifest permits every remaining lifecycle artifact without application-code scope expansion."
