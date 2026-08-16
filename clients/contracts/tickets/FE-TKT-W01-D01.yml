@@ -1,0 +1,36 @@
+ticket_id: FE-TKT-W01-D01
+title: Learn browser, HTTP and semantic HTML foundations
+status: COMPLETE
+target_level: C3_APPLY
+prerequisites:
+  - FE-TKT-W00-D01 VERIFIED
+scope:
+  - browser and HTTP mental model
+  - semantic document and form structure
+  - accessible static authentication shell exercises
+out_of_scope:
+  - CSS layout implementation
+  - JavaScript behavior
+  - React, TypeScript, Tailwind and API integration
+completion_condition: Learner explains and applies browser/HTTP/semantic HTML foundations in reviewed exercises.
+expected_files:
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/CODEX-CONTEXT.md
+  - project-control/full-stack-status.yml
+  - clients/contracts/tickets/FE-TKT-W01-D01.yml
+  - clients/contracts/audits/2026-08-11-fe-tkt-w01-d01-startup.md
+  - clients/contracts/learning/lessons/FE-W01-D01-browser-http-semantic-html.md
+  - clients/contracts/learning/checkpoints/2026-08-11-fe-w01-d01.yml
+  - docs-viewer/docs-data.js
+references:
+  - title: Overview of HTTP
+    url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview
+    purpose: Client-server request/response and stateless HTTP mental model
+  - title: Semantic HTML
+    url: https://developer.mozilla.org/en-US/curriculum/core/semantic-html/
+    purpose: Meaningful document structure and native browser behavior
+  - title: How to structure a web form
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/How_to_structure_a_web_form
+    purpose: Form grouping, labels and accessible control relationships

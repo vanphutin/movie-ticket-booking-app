@@ -1,0 +1,56 @@
+gate_id: LG-FE-TKT-FND-CSS-D01
+ticket_id: FE-TKT-FND-CSS-D01
+status: PASSED
+target_level: C3_APPLY
+current_questions:
+  - id: LG-FE-TKT-FND-CSS-D01-Q1
+    dimension: EXPLAIN
+    prompt: Two rules target the same input: .auth-form input { color: navy; } and #login-email { color: red; }. Predict the computed color, explain why, and propose a maintainable way to avoid escalating specificity.
+  - id: LG-FE-TKT-FND-CSS-D01-Q2
+    dimension: APPLY
+    prompt: A form control has width 100%, padding 12px and border 1px inside a narrow container. Compare content-box with border-box, predict the overflow risk, and write the sizing rule you would choose.
+  - id: LG-FE-TKT-FND-CSS-D01-Q3
+    dimension: COMPARE
+    prompt: Choose between px, rem, em and percent for body text, component padding, a full-width input and a thin border. Defend each choice and state when you would change it.
+  - id: LG-FE-TKT-FND-CSS-D01-Q4
+    dimension: FAILURE
+    prompt: A designer uses fixed heights, removes outlines and hides visible labels to make the login form compact. Explain the failures and propose CSS that preserves resizing, focus visibility and semantic labeling.
+learner_answers:
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q1
+    observation: Learner correctly predicted red, separated inherited color from declarations directly targeting the input, compared specificity and source order, and selected low-specificity class-based component rules with explicit maintenance trade-offs and change conditions.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q2
+    observation: Learner correctly calculated a 346px content-box outer width and 26px overflow in a 320px container, derived the 294px border-box content width, selected a global border-box rule, and identified min-width, unbreakable content and transforms as independent overflow causes.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q3
+    observation: Learner selected rem for root-relative body text, em for component-relative padding, percent for container-relative input width and px for a stable thin border, with mechanisms, trade-offs, change conditions and a bounded responsive card alternative.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q4
+    observation: Learner correctly traced fixed-height, clipping, localization, validation, visible-label and keyboard-focus failures; proposed resilient sizing and visible focus CSS; and preserved the boundary between presentation and authentication behavior.
+    verdict: PASS
+    limitation: The proposed flex centering is illustrative only; responsive Flexbox composition remains outside this ticket and must not be carried into project application without the next CSS layout gate.
+observed_gaps: []
+remediation_focus: []
+project_application: PASSED
+project_application_task:
+  id: LG-FE-TKT-FND-CSS-D01-APP-01
+  title: Explainable base stylesheet for the semantic authentication shell
+  unlock_condition: Conceptual questions pass or remediation closes all observed gaps.
+  completion_condition: Learner predicts the important computed styles, applies the stylesheet, and explains one cascade decision, one box-model decision and one resilient-unit decision.
+project_application_review:
+  reviewed_at: "2026-08-16"
+  verdict: PASS
+  observations:
+    - Learner predicted bounded auth-card width, border-box form-control sizing, inherited font and color, adjacent-sibling spacing, visible focus and auto-height behavior before presenting the stylesheet.
+    - Stylesheet uses element defaults, low-specificity component classes and explicit inheritance without ID selectors or important declarations.
+    - Global border-box sizing keeps card and control padding and borders within their declared responsive widths; learner also identified independent overflow causes.
+    - Root-relative, component-relative, container-relative and fixed thin-detail units were selected with mechanisms, trade-offs and change conditions.
+    - Visible labels, keyboard focus indicators, normal flow and the presentation-versus-authentication boundary remain intact.
+  non_blocking_findings:
+    - The descendant selector .auth-card h1 has higher specificity than a single component class; the learner identified .auth-title as the change direction if the component grows, but the exercise did not permit changing semantic HTML.
+    - The illustrative /api/login form action remains unverified API authority and must not be carried into later integration work without a verified public contract.
+    - Responsive Flexbox or Grid composition remains outside FE-TKT-FND-CSS-D01 and is deferred to FE-TKT-FND-CSS-D02.
+next_action: BEGIN_ANALYSIS

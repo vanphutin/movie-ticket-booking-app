@@ -1,0 +1,18 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+active_workstream: frontend
+backend:
+  canonical_state: AI-contracts/state/current-work.yml
+  ticket_id: TKT-W04-D05
+  stage: HANDOFF
+  review_status: APPROVED
+frontend:
+  canonical_state: clients/contracts/state/current-work.yml
+  ticket_id: FE-TKT-FND-CSS-D01
+  stage: ANALYSIS
+  review_status: NOT_REVIEWED
+  next_action: AUTHOR_DESIGN_AND_EXPECTED_FILES
+full_stack:
+  bootstrap_status: IN_PROGRESS
+  product_status: PARTIAL
+  limitation: Application UI has not been scaffolded or verified.

@@ -1,0 +1,9 @@
+# GENERATED FILE — run: npm run sync:frontend-control
+schema_version: 1
+ticket_id: FE-TKT-FND-CSS-D01
+candidate_ticket_id: FE-TKT-FND-CSS-D02
+current_stage: ANALYSIS
+learning_status: PASSED
+review_status: NOT_REVIEWED
+active_artifact: clients/contracts/audits/2026-08-16-fe-tkt-fnd-css-d01-analysis.md
+updated_at: "2026-08-16"

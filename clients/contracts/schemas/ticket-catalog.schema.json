@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clients/contracts/schemas/ticket-catalog.schema.json",
+  "title": "Frontend planned ticket catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "ticket_profile", "status_values", "backend_gate_none", "catalog_semantics", "tickets", "weekly_gates"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "ticket_profile": { "const": "clients/contracts/templates/frontend-ticket-profile.yml" },
+    "status_values": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/status" } },
+    "backend_gate_none": { "const": "NONE_FOUNDATION_ONLY" },
+    "catalog_semantics": { "type": "object" },
+    "tickets": { "type": "array", "minItems": 44, "maxItems": 44, "items": { "$ref": "#/$defs/ticket" } },
+    "weekly_gates": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/weeklyGate" } }
+  },
+  "$defs": {
+    "status": { "enum": ["PLANNED", "ELIGIBLE", "AUTHORIZED", "IN_PROGRESS", "VERIFIED", "BLOCKED"] },
+    "target": { "enum": ["C3_APPLY", "C4_DEBUG", "C5_COMPARE", "C6_DEFEND", "C7_LEAD"] },
+    "ticket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "track", "phase", "capabilities", "prerequisites", "backend_gate", "target", "outcome", "acceptance", "next", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^FE-TKT-[A-Z0-9-]+$" },
+        "track": { "enum": ["GOVERNANCE", "FOUNDATION", "PRODUCT"] },
+        "phase": { "type": "string", "pattern": "^FE-P[0-5]$" },
+        "capabilities": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^FE-CAP-[A-Z0-9]+$" } },
+        "prerequisites": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^FE-(?:TKT-[A-Z0-9-]+|W(?:0[4-9]|10)-VERIFIED)$" } },
+        "backend_gate": { "type": "string", "pattern": "^(?:NONE_FOUNDATION_ONLY|BE-W(?:0[4-9]|10)-[A-Z-]+)$" },
+        "target": { "$ref": "#/$defs/target" },
+        "outcome": { "type": "string", "minLength": 1 },
+        "acceptance": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "next": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/status" }
+      }
+    },
+    "weeklyGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "requires", "returns_to"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^FE-W(?:0[4-9]|10)-VERIFIED$" },
+        "requires": { "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true, "items": { "type": "string", "pattern": "^FE-TKT-W(?:0[4-9]|10)-D0[1-5]$" } },
+        "returns_to": { "type": "string", "pattern": "^(?:BE-W(?:0[5-9]|10)|RELEASE-DECISION)$" }
+      }
+    }
+  }
+}

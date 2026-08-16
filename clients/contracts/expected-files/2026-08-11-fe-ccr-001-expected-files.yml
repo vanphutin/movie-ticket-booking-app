@@ -1,0 +1,30 @@
+schema_version: 1
+work_unit: FE-CCR-001
+status: REVIEWED
+reviewed_by: Van Phu Tin / Reviewer and Codex
+reviewed_at: "2026-08-11"
+allowed_paths:
+  - clients/contracts/README.md
+  - clients/contracts/01-learning-and-delivery-lifecycle.md
+  - clients/contracts/03-integration-and-design-standard.md
+  - clients/contracts/04-frontend-contract-change-policy.md
+  - clients/contracts/changes/FE-CCR-001-functional-ui-before-visual-ux.md
+  - clients/contracts/designs/2026-08-11-fe-ccr-001-functional-ui-before-visual-ux.md
+  - clients/contracts/expected-files/2026-08-11-fe-ccr-001-expected-files.yml
+  - clients/contracts/readiness/2026-08-11-fe-ccr-001-readiness.yml
+  - clients/contracts/evidence/2026-08-11-fe-ccr-001-evidence.yml
+  - clients/contracts/reviews/2026-08-11-fe-ccr-001-review.md
+  - clients/contracts/templates/frontend-contract-change-request.md
+  - clients/contracts/templates/screen-acceptance.yml
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/CODEX-CONTEXT.md
+  - project-control/full-stack-status.yml
+  - docs-viewer/docs-data.js
+forbidden_paths:
+  - apps/**
+  - clients/src/**
+  - clients/package.json
+  - docs/postman/**
+  - .vscode/**

@@ -1,0 +1,58 @@
+ticket_id: FE-TKT-FND-CSS-D01
+title: Apply CSS cascade, box model and resilient sizing
+status: IN_PROGRESS
+track: FOUNDATION
+phase_id: FE-P1
+target_level: C3_APPLY
+capability_ids:
+  - FE-CAP-CSS
+prerequisites:
+  - FE-TKT-W01-D01 VERIFIED
+backend_gate: NONE_FOUNDATION_ONLY
+scope:
+  - cascade, inheritance and specificity
+  - box model, normal flow and sizing
+  - relative units and explainable base styles for the reviewed semantic auth shell
+out_of_scope:
+  - responsive Grid and Flexbox composition
+  - JavaScript behavior
+  - React or backend API integration
+learning_gate:
+  id: LG-FE-TKT-FND-CSS-D01
+  target_level: C3_APPLY
+  required_observation: Learner predicts and explains computed styles before applying them.
+project_application: Apply a small reviewed stylesheet to the semantic authentication shell without changing its HTML meaning.
+failure_and_security_boundary:
+  - do not hide labels or focus indicators
+  - do not use CSS to claim authentication behavior
+verification_boundary:
+  - reviewed learning checkpoint
+  - computed-style prediction exercise
+  - documentation validation
+completion_condition: Learner explains and applies cascade, inheritance, specificity, box model and resilient units to the reviewed static shell.
+next_ticket: FE-TKT-FND-CSS-D02
+expected_files:
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/CODEX-CONTEXT.md
+  - project-control/full-stack-status.yml
+  - clients/contracts/tickets/FE-TKT-FND-CSS-D01.yml
+  - clients/contracts/roadmap/ticket-catalog.yml
+  - clients/contracts/audits/2026-08-12-fe-tkt-fnd-css-d01-startup.md
+  - clients/contracts/learning/lessons/FE-FND-CSS-D01-cascade-box-model-units.md
+  - clients/contracts/learning/checkpoints/2026-08-12-fe-fnd-css-d01.yml
+  - docs-viewer/docs-data.js
+  - docs/plan/movie-ticket-booking-master-plan.html
+  - tools/frontend-control-plane/validate-frontend-roadmap.mjs
+  - tools/control-plane/validate-master-dashboard.mjs
+references:
+  - title: CSS cascade
+    url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Introduction
+    purpose: Cascade origin, importance, specificity and order
+  - title: Introduction to the CSS box model
+    url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Box_model/Introduction
+    purpose: Content, padding, border, margin and box sizing
+  - title: CSS values and units
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Values_and_units
+    purpose: Relative and absolute sizing choices

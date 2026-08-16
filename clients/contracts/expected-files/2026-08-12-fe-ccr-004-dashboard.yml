@@ -1,0 +1,21 @@
+schema_version: 1
+work_unit: FE-CCR-004
+status: REVIEWED
+allowed_paths:
+  - clients/contracts/changes/FE-CCR-004-dashboard-visual-polish.md
+  - clients/contracts/expected-files/2026-08-12-fe-ccr-004-dashboard.yml
+  - clients/contracts/evidence/2026-08-12-fe-ccr-004-dashboard-evidence.yml
+  - clients/contracts/reviews/2026-08-12-fe-ccr-004-dashboard-review.md
+  - clients/contracts/state/current-work.yml
+  - clients/contracts/state/current-ticket.yml
+  - clients/contracts/state/next-action.yml
+  - clients/contracts/state/work-unit-checkpoint.yml
+  - clients/CODEX-CONTEXT.md
+  - project-control/full-stack-status.yml
+  - docs/plan/movie-ticket-booking-master-plan.html
+  - docs/plan/movie-ticket-booking-dashboard.css
+  - docs/plan/movie-ticket-booking-dashboard.js
+  - docs-viewer/docs-data.js
+  - tools/control-plane/build-master-dashboard.mjs
+  - tools/control-plane/validate-master-dashboard.mjs
+forbidden_paths: [apps/**, clients/src/**, docs/postman/**, .vscode/**]

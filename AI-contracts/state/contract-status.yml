@@ -1,7 +1,7 @@
 schema_version: 1
-effective_baseline: PC-2026.11
+effective_baseline: PC-2026.12
 effective_status: APPROVED_FOR_TRAINING
-superseded_baseline: PC-2026.10
+superseded_baseline: PC-2026.11
 proposed_baseline: null
 proposed_status: null
 approved_change_requests:
@@ -44,6 +44,9 @@ approved_change_requests:
   - id: CCR-013
     approved_by: "Van Phu Tin"
     approved_at: "2026-08-01"
+  - id: CCR-014
+    approved_by: "Van Phu Tin"
+    approved_at: "2026-08-11"
 open_change_requests: []
 drift_findings:
   - id: DRIFT-001
@@ -79,5 +82,5 @@ drift_findings:
   - id: DRIFT-011
     description: "Canonical state advanced from TKT-W04-D03 while its branch remained ahead of upstream and transition changes were uncommitted."
     disposition: "Resolved in PC-2026.8 by CCR-010 approved 2026-07-29: publication is a mandatory work-unit transition gate."
-updated_at: "2026-08-02"
+updated_at: "2026-08-11"
 updated_by: "Codex"
