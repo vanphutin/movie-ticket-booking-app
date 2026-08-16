@@ -11,7 +11,7 @@ frontend:
   ticket_id: FE-TKT-FND-CSS-D01
   stage: LEARNING
   review_status: NOT_REVIEWED
-  next_action: SUBMIT_PROJECT_APPLICATION
+  next_action: AUTHOR_ANALYSIS_ARTIFACT
 full_stack:
   bootstrap_status: IN_PROGRESS
   product_status: PARTIAL

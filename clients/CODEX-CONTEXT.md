@@ -12,9 +12,9 @@ current_stage: LEARNING
 ticket_id: FE-TKT-FND-CSS-D01
 candidate_ticket_id: FE-TKT-FND-CSS-D02
 active_artifact: clients/contracts/learning/checkpoints/2026-08-12-fe-fnd-css-d01.yml
-learning_status: IN_PROGRESS
+learning_status: PASSED
 review_status: NOT_REVIEWED
-next_action: SUBMIT_PROJECT_APPLICATION
-completion_condition: Learner predicts the important computed styles, applies a small stylesheet to the reviewed semantic authentication shell, and explains one cascade decision, one box-model decision and one resilient-unit decision without changing HTML meaning.
+next_action: AUTHOR_ANALYSIS_ARTIFACT
+completion_condition: A reviewed analysis artifact identifies the auth-shell styling goal, cascade and sizing requirements, failure cases, scope boundaries and verified-versus-unverified dependencies.
 ```
 <!-- GENERATED:FRONTEND-HANDOFF:END -->

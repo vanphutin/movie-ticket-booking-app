@@ -3,7 +3,7 @@ schema_version: 1
 ticket_id: FE-TKT-FND-CSS-D01
 candidate_ticket_id: FE-TKT-FND-CSS-D02
 current_stage: LEARNING
-learning_status: IN_PROGRESS
+learning_status: PASSED
 review_status: NOT_REVIEWED
 active_artifact: clients/contracts/learning/checkpoints/2026-08-12-fe-fnd-css-d01.yml
 updated_at: "2026-08-16"

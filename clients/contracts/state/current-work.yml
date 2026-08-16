@@ -24,7 +24,7 @@ ticket_projection:
   execution_status: NOT_STARTED
   evidence_confidence: MISSING
 statuses:
-  learning: IN_PROGRESS
+  learning: PASSED
   analysis: NOT_STARTED
   design: NOT_STARTED
   readiness: NOT_EVALUATED
@@ -35,8 +35,8 @@ statuses:
 learning_checkpoint:
   gate_id: LG-FE-TKT-FND-CSS-D01
   target_level: C3_APPLY
-  status: IN_PROGRESS
-  current_unit: CSS_CASCADE_BOX_MODEL_UNITS
+  status: PASSED
+  current_unit: COMPLETE
   concepts_presented:
     - cascade, inheritance, specificity and source order
     - content-box versus border-box sizing
@@ -46,13 +46,13 @@ learning_checkpoint:
   remediation_focus: []
 blockers: []
 next_action:
-  id: FE-ACTION-APPLY-FND-CSS-D01-C3
-  type: SUBMIT_PROJECT_APPLICATION
-  target: LG-FE-TKT-FND-CSS-D01-APP-01
-  reason: Learner answers Q1 through Q4 were observed and passed; the project application is now unlocked and must be reviewed before analysis.
-  completion_condition: Learner predicts the important computed styles, applies a small stylesheet to the reviewed semantic authentication shell, and explains one cascade decision, one box-model decision and one resilient-unit decision without changing HTML meaning.
-  on_success: REVIEW_CSS_PROJECT_APPLICATION
-  on_failure: REMEDIATE_CSS_PROJECT_APPLICATION
+  id: FE-ACTION-AUTHOR-FND-CSS-D01-ANALYSIS
+  type: AUTHOR_ANALYSIS_ARTIFACT
+  target: FE-TKT-FND-CSS-D01-ANALYSIS
+  reason: The C3_APPLY learning gate passed with a reviewed explainable base stylesheet; analysis is the next lifecycle stage.
+  completion_condition: A reviewed analysis artifact identifies the auth-shell styling goal, cascade and sizing requirements, failure cases, scope boundaries and verified-versus-unverified dependencies.
+  on_success: ENTER_DESIGN
+  on_failure: REMEDIATE_ANALYSIS_GAPS
 updated_at: "2026-08-16"
 updated_by: Codex
-update_source: "Observed learner answers for LG-FE-TKT-FND-CSS-D01 Q1 through Q4; all four received PASS and unlocked project application LG-FE-TKT-FND-CSS-D01-APP-01."
+update_source: "LG-FE-TKT-FND-CSS-D01 passed after observed Q1-Q4 answers and reviewed project application LG-FE-TKT-FND-CSS-D01-APP-01."
