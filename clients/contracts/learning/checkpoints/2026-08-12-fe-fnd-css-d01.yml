@@ -15,13 +15,29 @@ current_questions:
   - id: LG-FE-TKT-FND-CSS-D01-Q4
     dimension: FAILURE
     prompt: A designer uses fixed heights, removes outlines and hides visible labels to make the login form compact. Explain the failures and propose CSS that preserves resizing, focus visibility and semantic labeling.
-learner_answers: []
+learner_answers:
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q1
+    observation: Learner correctly predicted red, separated inherited color from declarations directly targeting the input, compared specificity and source order, and selected low-specificity class-based component rules with explicit maintenance trade-offs and change conditions.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q2
+    observation: Learner correctly calculated a 346px content-box outer width and 26px overflow in a 320px container, derived the 294px border-box content width, selected a global border-box rule, and identified min-width, unbreakable content and transforms as independent overflow causes.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q3
+    observation: Learner selected rem for root-relative body text, em for component-relative padding, percent for container-relative input width and px for a stable thin border, with mechanisms, trade-offs, change conditions and a bounded responsive card alternative.
+    verdict: PASS
+    limitation: none
+  - question_id: LG-FE-TKT-FND-CSS-D01-Q4
+    observation: Learner correctly traced fixed-height, clipping, localization, validation, visible-label and keyboard-focus failures; proposed resilient sizing and visible focus CSS; and preserved the boundary between presentation and authentication behavior.
+    verdict: PASS
+    limitation: The proposed flex centering is illustrative only; responsive Flexbox composition remains outside this ticket and must not be carried into project application without the next CSS layout gate.
 observed_gaps: []
 remediation_focus: []
-project_application: NOT_UNLOCKED
+project_application: UNLOCKED
 project_application_task:
   id: LG-FE-TKT-FND-CSS-D01-APP-01
   title: Explainable base stylesheet for the semantic authentication shell
   unlock_condition: Conceptual questions pass or remediation closes all observed gaps.
   completion_condition: Learner predicts the important computed styles, applies the stylesheet, and explains one cascade decision, one box-model decision and one resilient-unit decision.
-next_action: WAIT_FOR_LEARNER_ANSWERS
+next_action: SUBMIT_PROJECT_APPLICATION
