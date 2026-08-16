@@ -1,6 +1,6 @@
 gate_id: LG-FE-TKT-FND-CSS-D01
 ticket_id: FE-TKT-FND-CSS-D01
-status: IN_PROGRESS
+status: PASSED
 target_level: C3_APPLY
 current_questions:
   - id: LG-FE-TKT-FND-CSS-D01-Q1
@@ -34,10 +34,23 @@ learner_answers:
     limitation: The proposed flex centering is illustrative only; responsive Flexbox composition remains outside this ticket and must not be carried into project application without the next CSS layout gate.
 observed_gaps: []
 remediation_focus: []
-project_application: UNLOCKED
+project_application: PASSED
 project_application_task:
   id: LG-FE-TKT-FND-CSS-D01-APP-01
   title: Explainable base stylesheet for the semantic authentication shell
   unlock_condition: Conceptual questions pass or remediation closes all observed gaps.
   completion_condition: Learner predicts the important computed styles, applies the stylesheet, and explains one cascade decision, one box-model decision and one resilient-unit decision.
-next_action: SUBMIT_PROJECT_APPLICATION
+project_application_review:
+  reviewed_at: "2026-08-16"
+  verdict: PASS
+  observations:
+    - Learner predicted bounded auth-card width, border-box form-control sizing, inherited font and color, adjacent-sibling spacing, visible focus and auto-height behavior before presenting the stylesheet.
+    - Stylesheet uses element defaults, low-specificity component classes and explicit inheritance without ID selectors or important declarations.
+    - Global border-box sizing keeps card and control padding and borders within their declared responsive widths; learner also identified independent overflow causes.
+    - Root-relative, component-relative, container-relative and fixed thin-detail units were selected with mechanisms, trade-offs and change conditions.
+    - Visible labels, keyboard focus indicators, normal flow and the presentation-versus-authentication boundary remain intact.
+  non_blocking_findings:
+    - The descendant selector .auth-card h1 has higher specificity than a single component class; the learner identified .auth-title as the change direction if the component grows, but the exercise did not permit changing semantic HTML.
+    - The illustrative /api/login form action remains unverified API authority and must not be carried into later integration work without a verified public contract.
+    - Responsive Flexbox or Grid composition remains outside FE-TKT-FND-CSS-D01 and is deferred to FE-TKT-FND-CSS-D02.
+next_action: BEGIN_ANALYSIS
