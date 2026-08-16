@@ -122,4 +122,3 @@ The design stage must specify:
   - The design stage has concrete traceability, manifest and negative-check requirements.
 - **Limitation:** This is documentation-level analysis of a reviewed learning submission. It is not runtime CSS, computed-style capture or application implementation evidence.
 - **Status:** `PASSED`
-
